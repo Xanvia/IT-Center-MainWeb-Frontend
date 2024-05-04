@@ -40,39 +40,52 @@ export default function NavBar() {
         <div className="flex items-center">
           <ul className="flex">
             <li className="mr-5">
-              <Link href="/home" className="text-white hover:text-gray-300">
+              <Link href="/home" className="text-white hover:text-gray">
                 Home
               </Link>
             </li>
             <li className="mr-5">
-              <Link href="/home" className="text-white hover:text-gray-300">
+              <Link href="/home" className="text-white hover:text-gray">
                 Courses
               </Link>
             </li>
             <li className="mr-5 relative">
-              <a
-                className="text-white hover:text-gray-300 cursor-pointer"
+              <div
+                className="text-white hover:text-gray cursor-pointer"
                 onClick={toggleServicesDropdown}
               >
                 Services
-              </a>
+              </div>
               {showServicesDropdown && (
-                <div className="absolute top-full left-0 bg-white p-2 rounded shadow mt-1">
+                <div className="absolute top-full left-0 bg-white p-2 rounded shadow mt-1 text-md">
                   <ul>
-                    <li className="py-1">
-                      <Link href="/service1" className="text-gray-800">
-                        Service 1
+                    <li className="py-1 ">
+                      <Link href="/projects" className="text-black">
+                        Projects
                       </Link>
                     </li>
-
-                    {/* Add more services here */}
+                    <li className="py-1 ">
+                      <Link href="/consultations" className=" ">
+                        Consultations
+                      </Link>
+                    </li>
+                    <li className="py-1 ">
+                      <Link href="/logs" className="">
+                        Logs
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               )}
             </li>
+            <li className="mr-4">
+              <Link href="/news" className="text-white hover:text-gray">
+                News
+              </Link>
+            </li>
             <li className="mr-5 relative">
               <a
-                className="text-white hover:text-gray-300 cursor-pointer"
+                className="text-white hover:text-gray cursor-pointer"
                 onClick={toggleAboutDropdown}
               >
                 About Us
@@ -81,20 +94,18 @@ export default function NavBar() {
                 <div className="absolute top-full left-0 bg-white p-2 rounded shadow mt-1">
                   <ul>
                     <li className="py-1">
-                      <Link href="/about1" className="text-gray-800">
-                        About Us 1
+                      <Link href="/about1" className="text-gray">
+                        Staff
                       </Link>
                     </li>
-
-                    {/* Add more about us links here */}
+                    <li className="py-1">
+                      <Link href="/about1" className="text-gray">
+                        Staff
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               )}
-            </li>
-            <li className="mr-4">
-              <Link href="/news" className="text-white hover:text-gray-300">
-                News
-              </Link>
             </li>
           </ul>
         </div>

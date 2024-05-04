@@ -16,8 +16,13 @@ const config: Config = {
       colors: {
         maroon: "#4f0007",
         darkmaroon: "#270000",
-        gray: "#dddddd",
-        lightgray: "#eeeeee",
+        lightgray: "#dddddd",
+        lightergray: "#eeeeee",
+      },
+      fontFamily: {
+        sans: ["var(--font-inter)"],
+        mono: ["var(--font-roboto-mono)"],
+        vietnam: ["var(--font-be-vietnam-pro)"],
       },
     },
   },

@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Be_Vietnam_Pro, Inter } from "next/font/google";
 import "./globals.css";
+import NavBar from "./components/navbar";
 
+// font-families
 const inter = Inter({ subsets: ["latin"] });
+const vietnam = Be_Vietnam_Pro({
+  weight: "300",
+  subsets: ["latin"],
+  variable: "--font-be-vietnam-pro",
+});
 
 export const metadata: Metadata = {
   title: "CEIT",
@@ -16,7 +23,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} ${vietnam.variable}`}>
+        <NavBar />
+        {children}
+      </body>
     </html>
   );
 }
