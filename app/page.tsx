@@ -28,12 +28,12 @@ export default function Home() {
       {/* Main Quick Links */}
       <div className="flex justify-evenly items-center mt-5">
         <MainLink imgSrc="/animation/courses.jpg" heading="Courses" />
-        <MainLink imgSrc="/animation/reservation.jpg" heading="Reservations" />
+        <MainLink imgSrc="/animation/courses.jpg" heading="Reservations" />
         <MainLink
           imgSrc="/animation/consultation.jpg"
           heading="Consultations"
         />
-        <MainLink imgSrc="/logo/pera-logo.png" heading="M O O C" />
+        <MainLink imgSrc="/animation/consultation.jpg" heading="M O O C" />
       </div>
     </main>
   );
