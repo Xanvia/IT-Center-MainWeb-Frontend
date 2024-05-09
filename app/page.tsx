@@ -1,5 +1,4 @@
-import Image from "next/image";
-import Link from "next/link";
+import { MainLink } from "./components/mainLink";
 
 export default function Home() {
   return (
@@ -26,179 +25,15 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex justify-between">
-        <div className="max-w-xs grid justify-items-center">
-          <Link href="#">
-            <Image
-              src="/logo/pera-logo.png"
-              width={150}
-              height={150}
-              className=""
-              alt=""
-            />
-          </Link>
-          <div className="p-5">
-            <a href="#">
-              <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                Courses
-              </h5>
-            </a>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Here are the biggest enterprise technology acquisitions of 2021 so
-              far, in reverse chronological order.
-            </p>
-            <a
-              href="#"
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Read more
-              <svg
-                className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
-        <div className="max-w-xs grid justify-items-center">
-          <Link href="#">
-            <Image
-              src="/logo/pera-logo.png"
-              width={150}
-              height={150}
-              className=""
-              alt=""
-            />
-          </Link>
-          <div className="p-5">
-            <a href="#">
-              <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                Courses
-              </h5>
-            </a>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Here are the biggest enterprise technology acquisitions of 2021 so
-              far, in reverse chronological order.
-            </p>
-            <a
-              href="#"
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Read more
-              <svg
-                className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
-        <div className="max-w-xs grid justify-items-center">
-          <Link href="#">
-            <Image
-              src="/logo/pera-logo.png"
-              width={150}
-              height={150}
-              className=""
-              alt=""
-            />
-          </Link>
-          <div className="p-5">
-            <a href="#">
-              <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                Courses
-              </h5>
-            </a>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Here are the biggest enterprise technology acquisitions of 2021 so
-              far, in reverse chronological order.
-            </p>
-            <a
-              href="#"
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Read more
-              <svg
-                className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
-        <div className="max-w-xs grid justify-items-center">
-          <Link href="#">
-            <Image
-              src="/logo/pera-logo.png"
-              width={150}
-              height={150}
-              className=""
-              alt=""
-            />
-          </Link>
-          <div className="p-5">
-            <a href="#">
-              <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                Courses
-              </h5>
-            </a>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Here are the biggest enterprise technology acquisitions of 2021 so
-              far, in reverse chronological order.
-            </p>
-            <a
-              href="#"
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Read more
-              <svg
-                className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
+      {/* Main Quick Links */}
+      <div className="flex justify-evenly items-center mt-5">
+        <MainLink imgSrc="/animation/courses.jpg" heading="Courses" />
+        <MainLink imgSrc="/animation/reservation.jpg" heading="Reservations" />
+        <MainLink
+          imgSrc="/animation/consultation.jpg"
+          heading="Consultations"
+        />
+        <MainLink imgSrc="/logo/pera-logo.png" heading="M O O C" />
       </div>
     </main>
   );
