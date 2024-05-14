@@ -8,7 +8,7 @@ interface MainLinkProps {
 
 export const MainLink: React.FC<MainLinkProps> = ({ imgSrc, heading }) => {
   return (
-    <div className="max-w-xs grid justify-items-center">
+    <div className="max-w-xs grid justify-items-center pt-2">
       <Link href="#">
         <Image
           src={imgSrc}

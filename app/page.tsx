@@ -1,3 +1,4 @@
+import { Carousel } from "./components/carousal";
 import { MainLink } from "./components/mainLink";
 
 export default function Home() {
@@ -35,6 +36,22 @@ export default function Home() {
         />
         <MainLink imgSrc="/animation/consultation.jpg" heading="M O O C" />
       </div>
+
+      {/* Vision and Photo Slide */}
+
+      <div className="bg-maroon h-96 mt-6">
+        <div className="text-white text-center">
+          <h1>Innovative IT Solutions for Your Business</h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris.
+          </p>
+        </div>
+        {/* <PhotoSlide /> */}
+      </div>
+
+      <Carousel />
     </main>
   );
 }
