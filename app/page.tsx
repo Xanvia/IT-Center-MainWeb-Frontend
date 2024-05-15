@@ -57,6 +57,21 @@ export default function Home() {
           <Carousel />
         </div>
       </div>
+
+      {/* Course Section */}
+      <div className="m-10 text-center">
+        <h1 className="text-3xl">
+          We provide you the best of the best courses...
+        </h1>
+        <p className="m-10 text-lg mx-20 text-slate-400">
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
+          dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris."
+        </p>
+      </div>
     </main>
   );
 }
