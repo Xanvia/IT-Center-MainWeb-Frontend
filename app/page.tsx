@@ -27,7 +27,7 @@ export default function Home() {
       </div>
 
       {/* Main Quick Links */}
-      <div className="flex justify-evenly items-center mt-5">
+      <div className="flex justify-evenly items-center my-7">
         <MainLink imgSrc="/animation/courses.jpg" heading="Courses" />
         <MainLink imgSrc="/animation/courses.jpg" heading="Reservations" />
         <MainLink
@@ -39,19 +39,24 @@ export default function Home() {
 
       {/* Vision and Photo Slide */}
 
-      <div className="bg-maroon h-96 mt-6">
+      <div className="bg-maroon py-10">
         <div className="text-white text-center">
-          <h1>Innovative IT Solutions for Your Business</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          <h1 className="text-3xl ">
+            Innovative IT Solutions for Your Business
+          </h1>
+          <p className="m-10 text-lg mx-20 text-slate-400">
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris.
+            ad minim veniam, quis nostrud exercitation ullamco laboris.Lorem
+            ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+            veniam, quis nostrud exercitation ullamco laboris."
           </p>
         </div>
-        {/* <PhotoSlide /> */}
+        <div className="m-40">
+          <Carousel />
+        </div>
       </div>
-
-      <Carousel />
     </main>
   );
 }

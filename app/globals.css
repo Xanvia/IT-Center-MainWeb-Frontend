@@ -32,25 +32,24 @@ body {
   }
 }
 
-.slide img {
-  width: 20rem;
-  margin: 0 auto;
+.csl-slide Image {
+  margin: 0;
 }
 
-.slide {
-  transform: scale(0.2);
+.csl-slide {
+  transform: scale(0.5);
   transition: transform 300ms;
   opacity: 0.5;
 }
 
-.activeSlide {
-  transform: scale(1.1);
+.csl-activeSlide {
+  transform: scale(1.5);
   opacity: 1;
 }
 
 .arrow {
-  background-color: #fff;
   position: absolute;
+  color: white;
   cursor: pointer;
   z-index: 10;
 }
@@ -64,11 +63,11 @@ body {
 }
 
 .next {
-  right: 0%;
+  right: 5%;
   top: 50%;
 }
 
 .prev {
-  left: 0%;
+  left: 5%;
   top: 50%;
 }
