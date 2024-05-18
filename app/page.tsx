@@ -1,11 +1,15 @@
+"use client";
+import Image from "next/image";
 import { Carousel } from "./components/carousal";
 import { MainLink } from "./components/mainLink";
+import SvgComponent from "./components/animation";
+import { Player, Controls } from "@lottiefiles/react-lottie-player";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col ">
       {/* header body */}
-      <div className="bg-maroon h-96">
+      <div className="bg-maroon h-96 flex flex-row justify-between">
         <div className="ml-20 mt-20">
           <div>
             <h1 className="text-5xl text-white font-vietnam">
@@ -16,18 +20,33 @@ export default function Home() {
             </h3>
           </div>
           <div className="mt-10 space-x-5">
-            <button className="bg-yellow-400 hover:bg-yellow-700 text-gray-900 font-bold py-2 px-4 border border-yellow-300 rounded-lg">
+            <button className="bg-yellow-200 hover:bg-yellow-700 text-gray-900 font-bold py-2 px-4 border border-yellow-300 rounded-lg">
               Dashboard
             </button>
-            <button className="bg-transparent hover:bg-yellow-600 text-yellow-300 font-semibold hover:text-maroon py-2 px-4 border border-yellow-300 hover:border-transparent rounded-lg">
+            <button className="bg-transparent hover:bg-yellow-600 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg">
               Course Registration
             </button>
           </div>
         </div>
+        <div>
+          <Player
+            autoplay
+            loop
+            src="/animation/bot.json"
+            style={{ height: "400px", width: "400px", paddingBottom: "40px" }}
+          ></Player>
+
+          {/* <object
+            type="image/svg+xml"
+            data="/animation/anime.svg"
+            width={500}
+            height={500}
+          /> */}
+        </div>
       </div>
 
       {/* Main Quick Links */}
-      <div className="flex justify-evenly items-center my-7">
+      <div className="flex justify-evenly items-center my-7 bg-gray-200">
         <MainLink imgSrc="/animation/courses.jpg" heading="Courses" />
         <MainLink imgSrc="/animation/courses.jpg" heading="Reservations" />
         <MainLink
