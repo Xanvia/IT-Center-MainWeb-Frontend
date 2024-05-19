@@ -31,3 +31,43 @@ body {
     text-wrap: balance;
   }
 }
+
+.csl-slide Image {
+  margin: 0;
+}
+
+.csl-slide {
+  transform: scale(0.5);
+  transition: transform 300ms;
+  opacity: 0.5;
+}
+
+.csl-activeSlide {
+  transform: scale(1.5);
+  opacity: 1;
+}
+
+.arrow {
+  position: absolute;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.arrow svg {
+  transition: color 300ms;
+}
+
+.arrow svg:hover {
+  color: #68edff;
+}
+
+.next {
+  right: 5%;
+  top: 50%;
+}
+
+.prev {
+  left: 5%;
+  top: 50%;
+}
