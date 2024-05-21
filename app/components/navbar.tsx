@@ -58,7 +58,7 @@ export default function NavBar() {
           <Link href="/" className="flex items-center m-3">
             <Image
               src="/logo/pera-logo.png"
-              className="md:w-24 w-16 2xl:w-auto"
+              className="md:w-20 w-16 2xl:w-auto"
               width={80}
               height={80}
               alt="Logo"
@@ -90,12 +90,12 @@ export default function NavBar() {
                 : "transition-hidden md:max-h-max md:opacity-100"
             } `}
           >
-            <li className=" m-6 md:m-3">
+            <li className=" m-6 md:m-4 md:ml-0">
               <Link href="/home" className="text-white hover:text-yellow-100 ">
                 Home
               </Link>
             </li>
-            <li className=" m-6 md:m-3">
+            <li className=" m-6 md:m-4">
               <Link
                 href="/courses"
                 className="text-white hover:text-yellow-100"
@@ -103,7 +103,7 @@ export default function NavBar() {
                 Courses
               </Link>
             </li>
-            <li className="relative m-6 md:m-3">
+            <li className="relative m-6 md:m-4">
               <div ref={servicesDropdownRef}>
                 <div
                   className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
@@ -154,12 +154,12 @@ export default function NavBar() {
                 }
               </div>
             </li>
-            <li className="m-6 md:m-3">
+            <li className="m-6 md:m-4">
               <Link href="/news" className="text-white hover:text-yellow-100">
                 News
               </Link>
             </li>
-            <li className="relative m-6 md:m-3">
+            <li className="relative m-6 md:m-4">
               <div ref={aboutDropdownRef}>
                 <a
                   className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
