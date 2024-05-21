@@ -148,3 +148,17 @@ svg {
   transition: transform 400ms 100ms;
   transform: scale(1);
 }
+
+.transition-height {
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.transition-hidden {
+  max-height: 0;
+  opacity: 0;
+}
+
+.transition-visible {
+  max-height: 500px; /* Adjust this value as needed */
+  opacity: 1;
+}

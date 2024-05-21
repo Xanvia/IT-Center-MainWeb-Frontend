@@ -52,7 +52,7 @@ export default function NavBar() {
 
   return (
     <nav className="bg-maroon">
-      <div className="md:flex justify-between">
+      <div className="md:flex justify-between block">
         {/* left side  */}
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center m-3">
@@ -82,39 +82,50 @@ export default function NavBar() {
         </div>
 
         {/* right side  */}
-        <div className="md:flex items-center">
+        <div className="flex items-center">
           <ul
-            className={`md:flex items-center ${
-              isMobileMenuOpen ? "block" : "hidden"
+            className={`md:flex flex-col text-center w-full text-xl md:text-base md:w-auto md:flex-row items-center transition-height ${
+              isMobileMenuOpen
+                ? "transition-visible"
+                : "transition-hidden md:max-h-max md:opacity-100"
             } `}
           >
-            <li className="mr-6">
-              <Link href="/home" className="text-white hover:text-gray">
+            <li className="mr-6 m-6">
+              <Link href="/home" className="text-white hover:text-yellow-100 ">
                 Home
               </Link>
             </li>
-            <li className="mr-6">
-              <Link href="/courses" className="text-white hover:text-gray">
+            <li className="mr-6 m-6">
+              <Link
+                href="/courses"
+                className="text-white hover:text-yellow-100"
+              >
                 Courses
               </Link>
             </li>
-            <li className="mr-6 relative">
+            <li className="mr-6 relative m-6">
               <div ref={servicesDropdownRef}>
                 <div
-                  className="text-white hover:text-gray cursor-pointer flex items-center"
+                  className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
                   onClick={toggleServicesDropdown}
                 >
                   Services
                   <TiArrowSortedDown
-                    className={`w-5 h-5 relative  ${
+                    className={`w-5 h-5 relative  md:block hidden ${
                       showServicesDropdown ? "rotate-180 duration-300" : ""
                     }`}
                   />
                 </div>
-                {showServicesDropdown && (
-                  <div className="absolute top-full left-1 bg-white p-2 rounded shadow mt-1 text-md">
+                {
+                  <div
+                    className={`md:absolute top-full left-0 md:p-2 md:mt-1 bg-white rounded shadow block text-md transition-height ${
+                      showServicesDropdown
+                        ? "transition-visible"
+                        : "transition-hidden"
+                    }`}
+                  >
                     <ul>
-                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
+                      <li className="py-1 hover:scale-110  duration-300">
                         <Link
                           href="/projects"
                           className="text-black hover:text-gray-500 "
@@ -122,7 +133,7 @@ export default function NavBar() {
                           Projects
                         </Link>
                       </li>
-                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
+                      <li className="py-1 hover:scale-110  duration-300">
                         <Link
                           href="/consultations"
                           className="text-black  hover:text-gray-500"
@@ -130,7 +141,7 @@ export default function NavBar() {
                           Consultations
                         </Link>
                       </li>
-                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
+                      <li className="py-1 hover:scale-110 duration-300">
                         <Link
                           href="/logs"
                           className="text-black  hover:text-gray-500"
@@ -140,43 +151,48 @@ export default function NavBar() {
                       </li>
                     </ul>
                   </div>
-                )}
+                }
               </div>
             </li>
-            <li className="mr-6">
-              <Link href="/news" className="text-white hover:text-gray">
+            <li className="mr-6 m-6">
+              <Link href="/news" className="text-white hover:text-yellow-100">
                 News
               </Link>
             </li>
-            <li className="mr-6 relative">
+            <li className="mr-6 relative m-6">
               <div ref={aboutDropdownRef}>
                 <a
-                  className="text-white hover:text-gray cursor-pointer flex items-center"
+                  className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
                   onClick={toggleAboutDropdown}
                 >
-                  About Us
+                  AboutUs
                   <TiArrowSortedDown
-                    className={`w-5 h-5 relative  ${
-                      showAboutDropdown ? "rotate-180 duration-300" : ""
-                    }`}
+                    className={`w-5 h-5 relative md:block hidden
+                    ${showAboutDropdown ? "rotate-180 duration-300" : ""}`}
                   />
                 </a>
-                {showAboutDropdown && (
-                  <div className="absolute top-full left-0 bg-white p-2 rounded shadow mt-1 ">
+                {
+                  <div
+                    className={`md:absolute top-full left-0  md:p-2 md:mt-1 bg-white rounded shadow block text-md transition-height ${
+                      showAboutDropdown
+                        ? "transition-visible"
+                        : "transition-hidden  "
+                    }`}
+                  >
                     <ul>
-                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
+                      <li className="py-1 hover:scale-110 duration-300">
                         <Link href="/about1" className="text-gray">
                           Staff
                         </Link>
                       </li>
-                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
+                      <li className="py-1 hover:scale-110 duration-300">
                         <Link href="/about2" className="text-gray">
                           Company
                         </Link>
                       </li>
                     </ul>
                   </div>
-                )}
+                }
               </div>
             </li>
           </ul>
