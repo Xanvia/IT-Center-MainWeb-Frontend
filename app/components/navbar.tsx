@@ -90,12 +90,12 @@ export default function NavBar() {
                 : "transition-hidden md:max-h-max md:opacity-100"
             } `}
           >
-            <li className="mr-6 m-6">
+            <li className=" m-6 md:m-3">
               <Link href="/home" className="text-white hover:text-yellow-100 ">
                 Home
               </Link>
             </li>
-            <li className="mr-6 m-6">
+            <li className=" m-6 md:m-3">
               <Link
                 href="/courses"
                 className="text-white hover:text-yellow-100"
@@ -103,7 +103,7 @@ export default function NavBar() {
                 Courses
               </Link>
             </li>
-            <li className="mr-6 relative m-6">
+            <li className="relative m-6 md:m-3">
               <div ref={servicesDropdownRef}>
                 <div
                   className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
@@ -154,12 +154,12 @@ export default function NavBar() {
                 }
               </div>
             </li>
-            <li className="mr-6 m-6">
+            <li className="m-6 md:m-3">
               <Link href="/news" className="text-white hover:text-yellow-100">
                 News
               </Link>
             </li>
-            <li className="mr-6 relative m-6">
+            <li className="relative m-6 md:m-3">
               <div ref={aboutDropdownRef}>
                 <a
                   className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
