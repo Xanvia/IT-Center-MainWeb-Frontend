@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { HamButton } from "./buttons/HamButton";
+import { HamButton } from "./hamButton";
 import { TiArrowSortedDown } from "react-icons/ti";
 
 export default function NavBar() {
@@ -112,20 +112,29 @@ export default function NavBar() {
                   />
                 </div>
                 {showServicesDropdown && (
-                  <div className="absolute top-full left-0 bg-white p-2 rounded shadow mt-1 text-md">
+                  <div className="absolute top-full left-1 bg-white p-2 rounded shadow mt-1 text-md">
                     <ul>
-                      <li className="py-1">
-                        <Link href="/projects" className="text-black">
+                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
+                        <Link
+                          href="/projects"
+                          className="text-black hover:text-gray-500 "
+                        >
                           Projects
                         </Link>
                       </li>
-                      <li className="py-1">
-                        <Link href="/consultations" className="text-black">
+                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
+                        <Link
+                          href="/consultations"
+                          className="text-black  hover:text-gray-500"
+                        >
                           Consultations
                         </Link>
                       </li>
-                      <li className="py-1">
-                        <Link href="/logs" className="text-black">
+                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
+                        <Link
+                          href="/logs"
+                          className="text-black  hover:text-gray-500"
+                        >
                           Logs
                         </Link>
                       </li>
@@ -153,14 +162,14 @@ export default function NavBar() {
                   />
                 </a>
                 {showAboutDropdown && (
-                  <div className="absolute top-full left-0 bg-white p-2 rounded shadow mt-1">
+                  <div className="absolute top-full left-0 bg-white p-2 rounded shadow mt-1 ">
                     <ul>
-                      <li className="py-1">
+                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
                         <Link href="/about1" className="text-gray">
                           Staff
                         </Link>
                       </li>
-                      <li className="py-1">
+                      <li className="py-1 hover:scale-110 hover:translate-x-1 duration-300">
                         <Link href="/about2" className="text-gray">
                           Company
                         </Link>
