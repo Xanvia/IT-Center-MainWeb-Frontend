@@ -60,10 +60,10 @@ export default function Home() {
 
       <div className="bg-maroon py-10">
         <div className="text-white text-center">
-          <h1 className="text-3xl ">
+          <h1 className="md:text-3xl text-xl">
             Innovative IT Solutions for Your Business
           </h1>
-          <p className="m-10 text-lg mx-20 text-slate-400">
+          <p className="md:m-10 m-4 md:text-lg text-sm md:mx-20 text-slate-400">
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris.Lorem
@@ -72,7 +72,7 @@ export default function Home() {
             veniam, quis nostrud exercitation ullamco laboris."
           </p>
         </div>
-        <div className="m-40">
+        <div className="md:m-40 mx-2">
           <Carousel />
         </div>
       </div>
