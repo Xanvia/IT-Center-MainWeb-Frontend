@@ -9,25 +9,27 @@ export default function Home() {
     <main className="flex min-h-screen flex-col ">
       {/* header body */}
       <div className="bg-maroon h-96 flex flex-row justify-between">
-        <div className="ml-20 mt-20">
+        <div className="md:ml-20 md:mt-20 ml-5 mt-10">
           <div>
-            <h1 className="text-5xl text-white font-vietnam">
+            <h1 className="md:text-5xl sm:text-3xl text-2xl text-white font-vietnam">
               Welcome to Our IT Center
             </h1>
-            <h3 className="mt-3 ml-1 text-gray-300 font-sans text-xl">
+            <h3 className="mt-3 ml-1 text-gray-300 font-sans md:text-xl  sm:text-lg text-base">
               Empowering your digital journey
             </h3>
           </div>
-          <div className="mt-10 space-x-5">
-            <button className="bg-yellow-200 hover:bg-yellow-700 text-gray-900 font-bold py-2 px-4 border border-yellow-300 rounded-lg">
+          <div className="mt-10 md:space-x-5">
+            <button className="bg-yellow-200 hover:bg-yellow-700 text-gray-900 font-bold py-2 px-4 border border-yellow-300 rounded-lg sm:inline-block block w-52 md:w-auto">
               Dashboard
             </button>
-            <button className="bg-transparent hover:bg-yellow-600 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg">
+            <button className="bg-transparent hover:bg-yellow-600 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
               Course Registration
             </button>
           </div>
         </div>
-        <div>
+
+        {/* bot animation  */}
+        <div className="hidden sm:block">
           <Player
             autoplay
             loop
