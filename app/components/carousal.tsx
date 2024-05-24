@@ -27,6 +27,7 @@ const PrevArrow: React.FC<ArrowProps> = ({ onClick }) => {
   );
 };
 
+// Image array
 export const Carousel: React.FC = () => {
   const images = [
     "/Slide/first.png",
@@ -39,10 +40,14 @@ export const Carousel: React.FC = () => {
 
   return (
     <Slider
-      dots={true}
+      // remove dots if screen size is mobile
+      dots={!(typeof window !== "undefined" && window.innerWidth < 750)}
       autoplay={true}
       autoplaySpeed={5000}
-      slidesToShow={3}
+      // no of slides
+      slidesToShow={
+        typeof window !== "undefined" && window.innerWidth < 750 ? 1 : 3
+      }
       infinite={true}
       focusOnSelect={true}
       lazyLoad="ondemand"
@@ -86,7 +91,7 @@ export const Carousel: React.FC = () => {
             width={800}
             src={img}
             alt={`slide-${idx}`}
-            className="h-48 w-max"
+            className="h-48 object-cover"
           />
         </div>
       ))}
