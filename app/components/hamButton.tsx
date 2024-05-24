@@ -4,7 +4,7 @@ interface HamButtonProps {
 
 export const HamButton: React.FC<HamButtonProps> = ({ isClicked }) => {
   return (
-    <main>
+    <main className="hambutton">
       <svg>
         <defs>
           <filter id="gooeyness">

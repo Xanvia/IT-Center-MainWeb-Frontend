@@ -103,7 +103,7 @@ export default function NavBar() {
                 Courses
               </Link>
             </li>
-            <li className="relative m-6 md:m-4">
+            <li className="relative m-6 md:m-4 z-10">
               <div ref={servicesDropdownRef}>
                 <div
                   className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
@@ -159,7 +159,7 @@ export default function NavBar() {
                 News
               </Link>
             </li>
-            <li className="relative m-6 md:m-4">
+            <li className="relative m-6 md:m-4 z-10">
               <div ref={aboutDropdownRef}>
                 <a
                   className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
@@ -181,12 +181,12 @@ export default function NavBar() {
                   >
                     <ul>
                       <li className="py-1 hover:scale-110 duration-300">
-                        <Link href="/about1" className="text-gray">
+                        <Link href="/about1" className="text-gray-500">
                           Staff
                         </Link>
                       </li>
                       <li className="py-1 hover:scale-110 duration-300">
-                        <Link href="/about2" className="text-gray">
+                        <Link href="/about2" className="text-gray-500">
                           Company
                         </Link>
                       </li>

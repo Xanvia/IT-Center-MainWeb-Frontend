@@ -1,9 +1,8 @@
 "use client";
-import Image from "next/image";
+
 import { Carousel } from "./components/carousal";
 import { MainLink } from "./components/mainLink";
-import SvgComponent from "./components/animation";
-import { Player, Controls } from "@lottiefiles/react-lottie-player";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 export default function Home() {
   return (
@@ -33,15 +32,8 @@ export default function Home() {
             autoplay
             loop
             src="/animation/bot.json"
-            style={{ height: "400px", width: "400px", paddingBottom: "40px" }}
+            style={{ height: "350px", width: "350px" }}
           ></Player>
-
-          {/* <object
-            type="image/svg+xml"
-            data="/animation/anime.svg"
-            width={500}
-            height={500}
-          /> */}
         </div>
       </div>
 
