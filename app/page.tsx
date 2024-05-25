@@ -40,7 +40,7 @@ export default function Home() {
       </div>
 
       {/* Main Quick Links */}
-      <div className="flex justify-evenly items-center my-7 bg-gray-200">
+      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center my-7 mx-4 bg-gray-200 ">
         <MainLink imgSrc="/animation/courses.jpg" heading="Courses" />
         <MainLink imgSrc="/animation/courses.jpg" heading="Reservations" />
         <MainLink

@@ -8,7 +8,7 @@ interface MainLinkProps {
 
 export const MainLink: React.FC<MainLinkProps> = ({ imgSrc, heading }) => {
   return (
-    <div className="max-w-xs grid justify-items-center pt-2">
+    <div className="grid justify-items-center pt-2">
       <Link href="#">
         <Image
           src={imgSrc}
@@ -24,7 +24,7 @@ export const MainLink: React.FC<MainLinkProps> = ({ imgSrc, heading }) => {
             {heading}
           </h5>
         </Link>
-        <p className="mx-5 text-center font-light text-sm text-gray-700 dark:text-gray-400">
+        <p className="mx-5 text-center font-light text-sm text-gray-700 dark:text-gray-400 max-w-80">
           Here are the biggest enterprise technology acquisitions of 2021 so
           far, in reverse chronological order.
         </p>
