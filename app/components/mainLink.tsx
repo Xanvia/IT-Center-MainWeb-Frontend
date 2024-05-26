@@ -1,3 +1,4 @@
+import { Player } from "@lottiefiles/react-lottie-player";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,15 +9,21 @@ interface MainLinkProps {
 
 export const MainLink: React.FC<MainLinkProps> = ({ imgSrc, heading }) => {
   return (
-    <div className="grid justify-items-center pt-2">
+    <div className="grid justify-items-center">
       <Link href="#">
-        <Image
+        <Player
+          loop
+          hover
+          src={imgSrc}
+          style={{ height: "175px", stroke: "#000", objectFit: "cover" }}
+        ></Player>
+        {/* <Image
           src={imgSrc}
           width={150}
           height={150}
           alt="link"
           className="border rounded-2xl "
-        />
+        /> */}
       </Link>
       <div className="p-2 grid justify-items-center">
         <Link href="#">

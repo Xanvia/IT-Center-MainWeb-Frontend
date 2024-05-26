@@ -41,13 +41,13 @@ export default function Home() {
 
       {/* Main Quick Links */}
       <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center my-7 mx-4 bg-gray-200 ">
-        <MainLink imgSrc="/animation/courses.jpg" heading="Courses" />
-        <MainLink imgSrc="/animation/courses.jpg" heading="Reservations" />
+        <MainLink imgSrc="/animation/courses.json" heading="Courses" />
+        <MainLink imgSrc="/animation/reservation.json" heading="Reservations" />
         <MainLink
-          imgSrc="/animation/consultation.jpg"
+          imgSrc="/animation/consultation.json"
           heading="Consultations"
         />
-        <MainLink imgSrc="/animation/consultation.jpg" heading="M O O C" />
+        <MainLink imgSrc="/animation/opened.json" heading="O P E N E D" />
       </div>
 
       {/* Vision and Photo Slide */}
