@@ -1,3 +1,3 @@
 export default function Log() {
-  return <div>hello</div>;
+  return <div>hello there</div>;
 }
