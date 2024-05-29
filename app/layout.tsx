@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Be_Vietnam_Pro, Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "./components/navbar";
+import { NextUIProvider } from "@nextui-org/system";
 
 // font-families
 const inter = Inter({ subsets: ["latin"] });
@@ -24,8 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} ${vietnam.variable}`}>
-        <NavBar />
-        {children}
+        <NextUIProvider>
+          <NavBar />
+          {children}
+        </NextUIProvider>
       </body>
     </html>
   );

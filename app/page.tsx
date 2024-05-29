@@ -1,5 +1,6 @@
 "use client";
 
+import HCourseCard from "./components/cards/hCourseCard";
 import { Carousel } from "./components/carousal";
 import { MainLink } from "./components/mainLink";
 import { Player } from "@lottiefiles/react-lottie-player";
@@ -84,6 +85,12 @@ export default function Home() {
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris."
         </p>
+
+        <div className="flex space-x-5">
+          <HCourseCard />
+          <HCourseCard />
+          <HCourseCard />
+        </div>
       </div>
     </main>
   );
