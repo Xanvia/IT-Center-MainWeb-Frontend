@@ -21,16 +21,16 @@ export default function HCourseCard() {
     >
       <CardHeader className="absolute z-10 top-1 flex-col items-start">
         <p className="text-tiny text-black/60 uppercase font-bold">
-          Your day your way
+          course code
         </p>
         <h4 className="text-maroon/90 font-medium text-xl">
-          Your checklist for better sleep
+          Diploma in Information Technology
         </h4>
       </CardHeader>
       <Image
         removeWrapper
         alt="Relaxing app background"
-        className="z-0 w-full h-full object-cover brightness-90"
+        className="z-0 w-full h-full object-cover brightness-90 contrast-75"
         src="/dd.jpg"
       />
       <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">

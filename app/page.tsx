@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col ">
       {/* header body */}
-      <div className="bg-maroon h-96 flex flex-row justify-between">
+      <div className="bg-maroon h-80 flex flex-row justify-between">
         <div className="md:ml-20 md:mt-20 ml-5 mt-10">
           <div>
             <h1 className="md:text-5xl sm:text-3xl text-2xl text-white font-vietnam">
@@ -39,9 +39,10 @@ export default function Home() {
           ></Player>
         </div>
       </div>
+      <div className="shapedividers_com-5853 h-24 bg-gray-200 "></div>
 
       {/* Main Quick Links */}
-      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center my-7 mx-4 bg-gray-200 ">
+      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-2  pb-16 mx-4 bg-gray-200 ">
         <MainLink imgSrc="/animation/courses.json" heading="Courses" />
         <MainLink imgSrc="/animation/reservation.json" heading="Reservations" />
         <MainLink
@@ -86,7 +87,7 @@ export default function Home() {
           quis nostrud exercitation ullamco laboris."
         </p>
 
-        <div className="flex space-x-5">
+        <div className="flex space-x-5 my-10">
           <HCourseCard />
           <HCourseCard />
           <HCourseCard />
