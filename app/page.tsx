@@ -1,9 +1,28 @@
+"use client";
+import Image from "next/image";
 import Bot from "./components/bot";
 import HCourseCard from "./components/cards/hCourseCard";
 import { Carousel } from "./components/carousal";
 import { MainLink } from "./components/mainLink";
+import HNewsCard from "./components/cards/hNewsCard";
+import { useState } from "react";
+import {
+  FaGraduationCap,
+  FaLaptop,
+  FaUserGraduate,
+  FaUsers,
+} from "react-icons/fa";
 
 export default function Home() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [question, setQuestion] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission
+    console.log({ name, email, question });
+  };
   return (
     <main className="flex min-h-screen flex-col ">
       {/* header body */}
@@ -81,11 +100,151 @@ export default function Home() {
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris."
         </p>
-
         <div className="flex space-x-5 my-10">
           <HCourseCard />
           <HCourseCard />
           <HCourseCard />
+        </div>
+        see more
+      </div>
+
+      {/* Project section  */}
+      <section className="p-10 bg-gray-300">
+        <h1 className="text-5xl">Recent Project ...</h1>
+        <div className="grid grid-cols-2">
+          <div className="mt-5">
+            <h1 className="text-2xl">
+              Digitized Action Plan Tracking system for the University of
+              Peradeniya
+            </h1>
+            <p>
+              IT Center developed a Digitized Action Plan Tracking system for
+              the University of Peradeniya.IT Center developed a Digitized
+              Action Plan Tracking system for the University of Peradeniya.IT
+              Center developed a Digitized Action Plan Tracking system for the
+              University of Peradeniya.IT Center developed a Digitized Action
+              Plan Tracking system for the University of Peradeniya.
+            </p>
+            <button>See More</button>
+          </div>
+          <div>
+            <Image
+              src={"/image.png"}
+              height={800}
+              width={800}
+              alt="Project Image"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* News Section */}
+      <div className="m-10 text-center">
+        <h1 className="text-3xl">News & Events</h1>
+        <div className="grid grid-cols-4 my-10 gap-5">
+          <HNewsCard />
+          <HNewsCard />
+          <HNewsCard />
+          <HNewsCard />
+        </div>
+        see more
+      </div>
+
+      {/* FAQ Section */}
+      <div className="min-h-screen bg-blue-50 flex items-center justify-center p-6">
+        <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold mb-4">Common Questions</h2>
+            <p className="mb-4">
+              Here are some of the most common questions that we get.
+            </p>
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-medium">
+                  What services do you offer at the IT center?
+                </h3>
+                <p>
+                  We offer a wide range of services including network setup,
+                  software development, cyber-security solutions, and IT
+                  consulting.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-medium">
+                  How can I stay updated on the latest news and events?
+                </h3>
+                <p>
+                  You can visit our news and events section on our website or
+                  subscribe to our newsletter for regular updates.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold mb-4">Ask a Question</h2>
+            <p className="mb-4">Ask anything about the IT Center</p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block mb-1">Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">E-mail</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">Question</label>
+                <textarea
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                  rows={4}
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white rounded-lg p-2"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white py-12">
+        <h2 className="text-3xl font-semibold text-center mb-8">Statistics</h2>
+        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+          <div>
+            <FaGraduationCap className="mx-auto mb-2 text-4xl" />
+            <p className="text-xl font-medium">50+</p>
+            <p className="text-gray-600">Courses</p>
+          </div>
+          <div>
+            <FaLaptop className="mx-auto mb-2 text-4xl" />
+            <p className="text-xl font-medium">20+</p>
+            <p className="text-gray-600">Laboratories</p>
+          </div>
+          <div>
+            <FaUsers className="mx-auto mb-2 text-4xl" />
+            <p className="text-xl font-medium">35+</p>
+            <p className="text-gray-600">Academic Staff</p>
+          </div>
+          <div>
+            <FaUserGraduate className="mx-auto mb-2 text-4xl" />
+            <p className="text-xl font-medium">200+</p>
+            <p className="text-gray-600">Students</p>
+          </div>
         </div>
       </div>
     </main>
