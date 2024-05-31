@@ -56,19 +56,27 @@ export default function Home() {
       <div className="shapedividers_com-5853 h-24 bg-gray-200"></div>
 
       {/* Main Quick Links */}
-      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-1  pb-16 mx-4 bg-gray-200 ">
+      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-1  pb-20 mx-4 bg-gray-200 ">
         <MainLink imgSrc="/animation/courses.json" heading="Courses" />
-        <MainLink imgSrc="/animation/reservation.json" heading="Reservations" />
+        <MainLink
+          imgSrc="/animation/reservation.json"
+          heading="Reservations"
+          options="scale-110 -translate-y-3"
+        />
         <MainLink
           imgSrc="/animation/consultation.json"
           heading="Consultations"
+          options="translate-y-4 scale-110"
         />
-        <MainLink imgSrc="/animation/opened.json" heading="O P E N E D" />
+        <MainLink
+          imgSrc="/animation/opened.json"
+          heading="O P E N E D"
+          options="scale-150"
+        />
       </div>
 
       {/* Vision and Photo Slide */}
-
-      <div className="bg-maroon py-10">
+      <div className="bg-maroon py-10 scroll-smooth">
         <div className="text-white text-center">
           <h1 className="md:text-3xl text-xl">
             Innovative IT Solutions for Your Business

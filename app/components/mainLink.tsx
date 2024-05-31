@@ -6,29 +6,27 @@ import Link from "next/link";
 interface MainLinkProps {
   imgSrc: string;
   heading: string;
+  options?: string;
 }
 
-export const MainLink: React.FC<MainLinkProps> = ({ imgSrc, heading }) => {
+export const MainLink: React.FC<MainLinkProps> = ({
+  imgSrc,
+  heading,
+  options,
+}) => {
   return (
     <div className="grid justify-items-center">
       <Link href="#">
         <Player
+          className={`stroke-gray-600 stroke-1 drop-shadow-lg brightness-110 h-40 object-top object-none ${options}`}
           loop
           hover
           src={imgSrc}
-          style={{ height: "175px", stroke: "#000", objectFit: "cover" }}
         ></Player>
-        {/* <Image
-          src={imgSrc}
-          width={150}
-          height={150}
-          alt="link"
-          className="border rounded-2xl "
-        /> */}
       </Link>
       <div className="p-2 grid justify-items-center">
         <Link href="#">
-          <h5 className="mb-2 text-lg uppercase tracking-wider text-gray-600">
+          <h5 className="mb-2 text-lg uppercase tracking-wider text-gray-600 hover:text-yellow-600 relative z-10">
             {heading}
           </h5>
         </Link>
