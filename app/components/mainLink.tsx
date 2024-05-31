@@ -1,5 +1,6 @@
+"use client";
+
 import { Player } from "@lottiefiles/react-lottie-player";
-import Image from "next/image";
 import Link from "next/link";
 
 interface MainLinkProps {

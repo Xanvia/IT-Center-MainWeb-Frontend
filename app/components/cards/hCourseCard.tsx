@@ -1,24 +1,9 @@
+import { Card, CardFooter, CardHeader, Image } from "@nextui-org/react";
 import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Divider,
-  Link,
-  Image,
-  Button,
-} from "@nextui-org/react";
 
 export default function HCourseCard() {
   return (
-    <Card
-      isBlurred
-      isPressable
-      shadow="lg"
-      isFooterBlurred
-      className="w-full h-64 col-span-12 sm:col-span-7 "
-    >
+    <Card shadow="md" isPressable disableRipple isFooterBlurred>
       <CardHeader className="absolute z-10 top-1 flex-col items-start">
         <p className="text-tiny text-black/60 uppercase font-bold">
           course code
@@ -30,10 +15,10 @@ export default function HCourseCard() {
       <Image
         removeWrapper
         alt="Relaxing app background"
-        className="z-0 w-full h-full object-cover brightness-90 contrast-75"
+        className="z-0 w-full h-full object-cover brightness-95 contrast-75"
         src="/dd.jpg"
       />
-      <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
+      <CardFooter className="absolute bg-black/40 bottom-0 z-10">
         <div className="text-lightgray">
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad

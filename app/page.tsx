@@ -1,9 +1,7 @@
-"use client";
-
+import Bot from "./components/bot";
 import HCourseCard from "./components/cards/hCourseCard";
 import { Carousel } from "./components/carousal";
 import { MainLink } from "./components/mainLink";
-import { Player } from "@lottiefiles/react-lottie-player";
 
 export default function Home() {
   return (
@@ -31,14 +29,11 @@ export default function Home() {
 
         {/* bot animation  */}
         <div className="hidden sm:block">
-          <Player
-            autoplay
-            loop
-            src="/animation/bot.json"
-            style={{ height: "350px", width: "350px" }}
-          ></Player>
+          <Bot />
         </div>
       </div>
+
+      {/* curve line  */}
       <div className="shapedividers_com-5853 h-24 bg-gray-200 "></div>
 
       {/* Main Quick Links */}
