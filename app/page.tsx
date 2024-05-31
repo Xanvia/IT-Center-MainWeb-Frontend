@@ -37,10 +37,10 @@ export default function Home() {
             </h3>
           </div>
           <div className="mt-10 md:space-x-5">
-            <button className="bg-yellow-200 hover:bg-yellow-700 text-gray-900 font-bold py-2 px-4 border border-yellow-300 rounded-lg sm:inline-block block w-52 md:w-auto">
+            <button className="bg-yellow-200 hover:bg-maroon text-gray-900 hover:text-yellow-200 font-bold py-2 px-4 border border-yellow-200 rounded-lg sm:inline-block block w-52 md:w-auto">
               Dashboard
             </button>
-            <button className="bg-transparent hover:bg-yellow-600 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
+            <button className="bg-transparent hover:bg-yellow-200 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
               Course Registration
             </button>
           </div>
@@ -56,7 +56,7 @@ export default function Home() {
       <div className="shapedividers_com-5853 h-24 bg-gray-200"></div>
 
       {/* Main Quick Links */}
-      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-2  pb-16 mx-4 bg-gray-200 ">
+      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-1  pb-16 mx-4 bg-gray-200 ">
         <MainLink imgSrc="/animation/courses.json" heading="Courses" />
         <MainLink imgSrc="/animation/reservation.json" heading="Reservations" />
         <MainLink
