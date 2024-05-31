@@ -53,7 +53,7 @@ export default function Home() {
       </div>
 
       {/* curve line  */}
-      <div className="shapedividers_com-5853 h-24 bg-gray-200 "></div>
+      <div className="shapedividers_com-5853 h-24 bg-gray-200"></div>
 
       {/* Main Quick Links */}
       <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-2  pb-16 mx-4 bg-gray-200 ">
