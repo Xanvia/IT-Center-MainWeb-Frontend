@@ -15,8 +15,8 @@ export default function HCourseCard() {
       <Image
         removeWrapper
         alt="Relaxing app background"
-        className="z-0 w-full h-full object-cover brightness-95 contrast-75"
-        src="/dd.jpg"
+        className="z-0 w-full h-72 object-cover brightness-95 contrast-75 blur-sm"
+        src="/animation/reservation.jpg"
       />
       <CardFooter className="absolute bg-black/40 bottom-0 z-10">
         <div className="text-lightgray">

@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+
 import Bot from "./components/bot";
 import HCourseCard from "./components/cards/hCourseCard";
 import { Carousel } from "./components/carousal";
@@ -12,6 +12,8 @@ import {
   FaUserGraduate,
   FaUsers,
 } from "react-icons/fa";
+import { PiArrowRightBold } from "react-icons/pi";
+import { Image } from "@nextui-org/react";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -29,7 +31,7 @@ export default function Home() {
       <div className="bg-maroon h-80 flex flex-row justify-between">
         <div className="md:ml-20 md:mt-20 ml-5 mt-10">
           <div>
-            <h1 className="md:text-5xl sm:text-3xl text-2xl text-white font-vietnam">
+            <h1 className="md:text-5xl sm:text-3xl text-3xl text-white font-rubik">
               Welcome to Our IT Center
             </h1>
             <h3 className="mt-3 ml-1 text-gray-300 font-sans md:text-xl  sm:text-lg text-base">
@@ -99,7 +101,7 @@ export default function Home() {
       </div>
 
       {/* Course Section */}
-      <div className="m-10 text-center">
+      <div className="p-10 text-center bg-gray-100">
         <div className="text-6xl font-rubik mt-10 grid gird-cols-6 text-left text-darkmaroon">
           <div className="inline-block col-start-3 col-span-3 ">
             We Provide You The
@@ -114,7 +116,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <p className="md:m-10 m-4 md:text-lg text-sm md:mx-20 md:mt-10 mx-20 text-slate-400">
+        <p className="md:m-10 m-4 md:text-lg text-sm md:mx-20 md:mt-10 mx-20 text-maroon">
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
@@ -122,24 +124,54 @@ export default function Home() {
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris."
         </p>
-        <div className="flex space-x-5 my-14">
+        <div className="flex space-x-5 my-14 justify-center">
           <HCourseCard />
           <HCourseCard />
           <HCourseCard />
         </div>
-        see more
+        <button>
+          <div className="flex items-center justify-center group">
+            <span className="mr-0 text-2xl text-red-800 hover:text-red-700">
+              more courses
+            </span>
+            <PiArrowRightBold
+              color="maroon"
+              className="group-hover:translate-x-2 duration-300 text-xl"
+            />
+          </div>
+        </button>
       </div>
 
       {/* Project section  */}
-      <section className="p-10 bg-gray-300">
-        <h1 className="text-5xl">Recent Project ...</h1>
-        <div className="grid grid-cols-2">
-          <div className="mt-5">
-            <h1 className="text-2xl">
-              Digitized Action Plan Tracking system for the University of
-              Peradeniya
+      <section className="p-14 bg-gray-300 ">
+        <h1 className="text-6xl font-rubik mt-5 text-center">
+          <div>
+            Delivering{" "}
+            <span className="from-red-950 to-red-700 bg-clip-text text-transparent bg-gradient-to-t">
+              The Optimized
+            </span>{" "}
+          </div>
+          <div className="mt-3">Services and Projects</div>
+        </h1>
+        <p className="md:m-10 m-4 md:text-xl text-sm md:mx-20 md:mt-5 text-slate-500 text-center">
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
+        </p>
+        <div className="grid grid-cols-11 my-10">
+          <div className="mt-5 mr-5 col-span-6">
+            <h1 className="text-5xl font-rubik">
+              <span className="from-red-950 to-red-700 bg-clip-text text-transparent bg-gradient-to-t">
+                Digitized
+              </span>
+              <div className="from-blue-900 to-blue-600 bg-clip-text text-transparent bg-gradient-to-t py-2">
+                Action Plan Tracking system
+              </div>
+              <span className="from-red-950 to-red-700 bg-clip-text text-transparent bg-gradient-to-t">
+                for the University of Peradeniya
+              </span>
             </h1>
-            <p>
+            <p className="mt-10 text-justify text-slate-500 font-medium">
               IT Center developed a Digitized Action Plan Tracking system for
               the University of Peradeniya.IT Center developed a Digitized
               Action Plan Tracking system for the University of Peradeniya.IT
@@ -147,14 +179,22 @@ export default function Home() {
               University of Peradeniya.IT Center developed a Digitized Action
               Plan Tracking system for the University of Peradeniya.
             </p>
-            <button>See More</button>
+            <button className="mt-10">
+              <div className="flex items-center justify-center text-xl group">
+                <span className="mr-0 text-maroon">more projects</span>
+                <PiArrowRightBold className="group-hover:translate-x-1 duration-300" />
+              </div>
+            </button>
           </div>
-          <div>
+          <div className="m-4 items-center justify-center flex col-span-5 ">
             <Image
+              radius="sm"
+              isBlurred
               src={"/image.png"}
-              height={800}
-              width={800}
+              height={1024}
+              width={1024}
               alt="Project Image"
+              className="my-12 h-96 object-cover"
             />
           </div>
         </div>
@@ -162,7 +202,7 @@ export default function Home() {
 
       {/* News Section */}
       <div className="m-10 text-center">
-        <h1 className="text-3xl">News & Events</h1>
+        <h1 className="text-6xl font-rubik">News & Events</h1>
         <div className="grid grid-cols-4 my-10 gap-5">
           <HNewsCard />
           <HNewsCard />
@@ -173,7 +213,7 @@ export default function Home() {
       </div>
 
       {/* FAQ Section */}
-      <div className="min-h-screen bg-blue-50 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-maroon flex items-center justify-center p-6">
         <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-semibold mb-4">Common Questions</h2>
