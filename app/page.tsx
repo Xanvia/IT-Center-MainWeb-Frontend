@@ -56,7 +56,7 @@ export default function Home() {
       <div className="shapedividers_com-5853 h-24 bg-gray-200"></div>
 
       {/* Main Quick Links */}
-      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-1  pb-20 mx-4 bg-gray-200 ">
+      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-1  pb-20 px-4 bg-gray-200 ">
         <MainLink imgSrc="/animation/courses.json" heading="Courses" />
         <MainLink
           imgSrc="/animation/reservation.json"
@@ -76,12 +76,15 @@ export default function Home() {
       </div>
 
       {/* Vision and Photo Slide */}
-      <div className="bg-maroon py-10 scroll-smooth">
-        <div className="text-white text-center">
-          <h1 className="md:text-3xl text-xl">
-            Innovative IT Solutions for Your Business
+      <div className="bg-maroon py-20 scroll-smooth">
+        <div className="text-white text-center mt-10">
+          <h1 className="md:text-5xl  text-xl font-rubik">
+            Innovative IT Solutions for{" "}
+            <div className="inline-block from-yellow-500 to-yellow-200 bg-clip-text text-transparent bg-gradient-to-b">
+              Your Business
+            </div>
           </h1>
-          <p className="md:m-10 m-4 md:text-lg text-sm md:mx-20 text-slate-400">
+          <p className="md:m-10 m-4 md:text-xl text-sm md:mx-20 md:mt-10 text-slate-400">
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris.Lorem
@@ -90,17 +93,28 @@ export default function Home() {
             veniam, quis nostrud exercitation ullamco laboris."
           </p>
         </div>
-        <div className="md:m-40 mx-2">
+        <div className="md:m-28 mx-2">
           <Carousel />
         </div>
       </div>
 
       {/* Course Section */}
       <div className="m-10 text-center">
-        <h1 className="text-3xl">
-          We provide you the best of the best courses...
-        </h1>
-        <p className="m-10 text-lg mx-20 text-slate-400">
+        <div className="text-6xl font-rubik mt-10 grid gird-cols-6 text-left text-darkmaroon">
+          <div className="inline-block col-start-3 col-span-3 ">
+            We Provide You The
+          </div>
+          <div className="inline-block col-start-4 mt-3">
+            <div className="">
+              Best of{" "}
+              <div className="inline-block from-yellow-500 to-red-700 bg-clip-text text-transparent bg-gradient-to-b">
+                The Best
+              </div>{" "}
+              Courses...
+            </div>
+          </div>
+        </div>
+        <p className="md:m-10 m-4 md:text-lg text-sm md:mx-20 md:mt-10 mx-20 text-slate-400">
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
@@ -108,7 +122,7 @@ export default function Home() {
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris."
         </p>
-        <div className="flex space-x-5 my-10">
+        <div className="flex space-x-5 my-14">
           <HCourseCard />
           <HCourseCard />
           <HCourseCard />

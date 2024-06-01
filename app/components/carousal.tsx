@@ -68,16 +68,17 @@ export const Carousel: React.FC = () => {
           <div
             className="csl-dots"
             style={{
-              borderRadius: "10px",
+              borderRadius: "15px",
               width: "auto",
-              backgroundColor: "white",
+              backgroundColor: "gray",
               position: "inherit",
             }}
           >
-            <ul style={{ margin: "0px" }}> {dots} </ul>
+            <ul className={`m-2 flex`}> {dots} </ul>
           </div>
         </div>
       )}
+      className="h-96"
     >
       {images.map((img, idx) => (
         <div
@@ -87,11 +88,11 @@ export const Carousel: React.FC = () => {
           }
         >
           <Image
-            height={400}
-            width={800}
+            height={1024}
+            width={1024}
             src={img}
             alt={`slide-${idx}`}
-            className="h-48 object-cover"
+            className="h-60 object-cover rounded-lg shadow-lg"
           />
         </div>
       ))}

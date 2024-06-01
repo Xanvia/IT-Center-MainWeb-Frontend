@@ -25,6 +25,7 @@ const config: Config = {
         sans: ["var(--font-inter)"],
         mono: ["var(--font-roboto-mono)"],
         vietnam: ["var(--font-be-vietnam-pro)"],
+        rubik: ["var(--font-rubik)"],
       },
     },
   },
