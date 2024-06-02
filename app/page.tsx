@@ -181,8 +181,13 @@ export default function Home() {
             </p>
             <button className="mt-10">
               <div className="flex items-center justify-center text-xl group">
-                <span className="mr-0 text-maroon">more projects</span>
-                <PiArrowRightBold className="group-hover:translate-x-1 duration-300" />
+                <span className="mr-0 text-xl text-red-800 hover:text-red-700">
+                  more projects
+                </span>
+                <PiArrowRightBold
+                  color="maroon"
+                  className="group-hover:translate-x-1 duration-300"
+                />
               </div>
             </button>
           </div>
@@ -202,8 +207,13 @@ export default function Home() {
 
       {/* News Section */}
       <div className="p-10 text-center bg-gray-100">
-        <h1 className="text-6xl font-rubik my-10">News & Events</h1>
-        <div className="grid grid-cols-4 my-10 gap-5">
+        <h1 className="text-6xl font-rubik my-10">
+          <span className="from-red-600 to-yellow-500 bg-clip-text text-transparent bg-gradient-to-b">
+            News{" "}
+          </span>
+          & Events
+        </h1>
+        <div className="grid grid-cols-4 my-16 gap-5">
           <HNewsCard />
           <HNewsCard />
           <HNewsCard />
