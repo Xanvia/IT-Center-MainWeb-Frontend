@@ -14,8 +14,8 @@ import {
 } from "react-icons/fa";
 import { PiArrowRightBold } from "react-icons/pi";
 import { Image as ImageNU } from "@nextui-org/react";
-import BotFAQ from "./components/bots/faqBot";
 import Image from "next/image";
+import FAQ from "./components/sections/faq";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -256,33 +256,7 @@ export default function Home() {
             </div>
           </h1>
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 my-12">
-            <div className="bg-lightergray p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-4">Common Questions</h2>
-              <p className="mb-4">
-                Here are some of the most common questions that we get.
-              </p>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-medium">
-                    What services do you offer at the IT center?
-                  </h3>
-                  <p>
-                    We offer a wide range of services including network setup,
-                    software development, cyber-security solutions, and IT
-                    consulting.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-medium">
-                    How can I stay updated on the latest news and events?
-                  </h3>
-                  <p>
-                    You can visit our news and events section on our website or
-                    subscribe to our newsletter for regular updates.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <FAQ />
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-4">Ask a Question</h2>
               <p className="mb-4">Ask anything about the IT Center</p>
