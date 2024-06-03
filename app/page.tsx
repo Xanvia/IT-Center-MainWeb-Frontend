@@ -1,6 +1,6 @@
 "use client";
 
-import Bot from "./components/bot";
+import Bot from "./components/bots/bot";
 import HCourseCard from "./components/cards/hCourseCard";
 import { Carousel } from "./components/carousal";
 import { MainLink } from "./components/mainLink";
@@ -13,7 +13,9 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import { PiArrowRightBold } from "react-icons/pi";
-import { Image } from "@nextui-org/react";
+import { Image as ImageNU } from "@nextui-org/react";
+import BotFAQ from "./components/bots/faqBot";
+import Image from "next/image";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -192,7 +194,7 @@ export default function Home() {
             </button>
           </div>
           <div className="m-4 items-center justify-center flex col-span-5 ">
-            <Image
+            <ImageNU
               radius="sm"
               isBlurred
               src={"/image.png"}
@@ -220,7 +222,7 @@ export default function Home() {
           <HNewsCard />
         </div>
         <button>
-          <div className="flex items-center justify-center group">
+          <div className="flex items-center justify-center group mb-10">
             <span className="mr-0 text-2xl text-red-800 hover:text-red-700">
               more news
             </span>
@@ -233,73 +235,93 @@ export default function Home() {
       </div>
 
       {/* FAQ Section */}
-      <div className="min-h-screen bg-maroon flex items-center justify-center p-6">
-        <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4">Common Questions</h2>
-            <p className="mb-4">
-              Here are some of the most common questions that we get.
-            </p>
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-medium">
-                  What services do you offer at the IT center?
-                </h3>
-                <p>
-                  We offer a wide range of services including network setup,
-                  software development, cyber-security solutions, and IT
-                  consulting.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-medium">
-                  How can I stay updated on the latest news and events?
-                </h3>
-                <p>
-                  You can visit our news and events section on our website or
-                  subscribe to our newsletter for regular updates.
-                </p>
+      <div className="h-full bg-maroon grid grid-cols-3 p-6 relative">
+        <div className="absolute -left-80 -top-10">
+          <Image
+            src="/animation/robot.svg"
+            height={900}
+            width={900}
+            alt="robot"
+          />
+        </div>
+        <div className="w-max"></div>
+
+        <div className="col-span-2 mt-10">
+          <h1 className="text-5xl font-rubik my-7 text-white">
+            <div>
+              Your Questions{" "}
+              <div className="from-yellow-200 to-yellow-400 bg-clip-text text-transparent bg-gradient-to-t text-center">
+                Our Solutions...
+              </div>{" "}
+            </div>
+          </h1>
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 my-12">
+            <div className="bg-lightergray p-6 rounded-lg shadow-lg">
+              <h2 className="text-2xl font-bold mb-4">Common Questions</h2>
+              <p className="mb-4">
+                Here are some of the most common questions that we get.
+              </p>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-medium">
+                    What services do you offer at the IT center?
+                  </h3>
+                  <p>
+                    We offer a wide range of services including network setup,
+                    software development, cyber-security solutions, and IT
+                    consulting.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-medium">
+                    How can I stay updated on the latest news and events?
+                  </h3>
+                  <p>
+                    You can visit our news and events section on our website or
+                    subscribe to our newsletter for regular updates.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4">Ask a Question</h2>
-            <p className="mb-4">Ask anything about the IT Center</p>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block mb-1">Name</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg p-2"
-                />
-              </div>
-              <div>
-                <label className="block mb-1">E-mail</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg p-2"
-                />
-              </div>
-              <div>
-                <label className="block mb-1">Question</label>
-                <textarea
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg p-2"
-                  rows={4}
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white rounded-lg p-2"
-              >
-                Submit
-              </button>
-            </form>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-2xl font-semibold mb-4">Ask a Question</h2>
+              <p className="mb-4">Ask anything about the IT Center</p>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block mb-1">Name</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1">E-mail</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1">Question</label>
+                  <textarea
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg p-2"
+                    rows={4}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white rounded-lg p-2"
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
