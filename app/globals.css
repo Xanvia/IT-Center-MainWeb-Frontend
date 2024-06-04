@@ -223,25 +223,3 @@ body {
     background-size: 178% calc(2vw + 115px);
   }
 }
-
-/* Project side  */
-
-.shapedividers_com-9914 {
-  overflow: hidden;
-  position: relative;
-}
-.shapedividers_com-9914::before {
-  content: "";
-  font-family: "shape divider from ShapeDividers.com";
-  position: absolute;
-  z-index: 3;
-  pointer-events: none;
-  background-repeat: no-repeat;
-  bottom: -0.1vw;
-  left: 50px;
-  right: -0.1vw;
-  top: -0.1vw;
-  background-size: 173px 150%;
-  background-position: 100% 50%;
-  background-image: url('data:image/svg+xml;charset=utf8, <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 100.69 476.62"><path fill="%234f0007" d="M100.69 0H0l95.47 238.3L0 476.63h100.69Z"/></svg>');
-}
