@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Be_Vietnam_Pro, Inter, Rubik } from "next/font/google";
 import "./globals.css";
-import NavBar from "./components/navbar";
+import NavBar from "./components/sections/navbar";
 import { Providers } from "./providers";
 
 // font-families

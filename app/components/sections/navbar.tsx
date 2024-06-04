@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { HamButton } from "./hamButton";
+import { HamButton } from "../hamButton";
 import { TiArrowSortedDown } from "react-icons/ti";
 
 export default function NavBar() {
