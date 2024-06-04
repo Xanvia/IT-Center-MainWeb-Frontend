@@ -16,17 +16,9 @@ import { PiArrowRightBold } from "react-icons/pi";
 import { Image as ImageNU } from "@nextui-org/react";
 import Image from "next/image";
 import FAQ from "./components/sections/faq";
+import FAQForm from "./components/forms/faqForm";
 
 export default function Home() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [question, setQuestion] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log({ name, email, question });
-  };
   return (
     <main className="flex min-h-screen flex-col ">
       {/* header body */}
@@ -257,44 +249,10 @@ export default function Home() {
           </h1>
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 my-12">
             <FAQ />
-            <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="bg-gray-300 p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-4">Ask a Question</h2>
               <p className="mb-4">Ask anything about the IT Center</p>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block mb-1">Name</label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1">E-mail</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1">Question</label>
-                  <textarea
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg p-2"
-                    rows={4}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white rounded-lg p-2"
-                >
-                  Submit
-                </button>
-              </form>
+              <FAQForm />
             </div>
           </div>
         </div>

@@ -13,7 +13,7 @@ export default function FAQ() {
       <p className="mb-4 text-gray-600">
         Here are some of the most common questions that we get.
       </p>
-      <div className="space-y-4 overflow-scroll h-80">
+      <div className="space-y-4 overflow-scroll h-80 my-6">
         {Object.entries(qA).map(([q, a]) => (
           <div>
             <h3 className="font-medium">{q}</h3>
