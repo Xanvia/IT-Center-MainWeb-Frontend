@@ -64,15 +64,15 @@ export default function Home() {
       </div>
 
       {/* Vision and Photo Slide */}
-      <div className="bg-maroon py-20 scroll-smooth">
-        <div className="text-white text-center mt-10">
-          <h1 className="md:text-5xl  text-xl font-rubik">
+      <div className="bg-maroon md:py-20 pt-20 pb-14">
+        <div className="text-white text-center md:mt-10">
+          <h1 className="text-5xl font-rubik">
             Innovative IT Solutions for{" "}
             <div className="inline-block from-yellow-500 to-yellow-200 bg-clip-text text-transparent bg-gradient-to-b">
               Your Business
             </div>
           </h1>
-          <p className="md:m-10 m-4 md:text-xl text-sm md:mx-20 md:mt-10 text-slate-400">
+          <p className="md:m-10 m-5 md:text-xl text-sm md:mx-20 md:mt-10 text-slate-400">
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris.Lorem
@@ -81,7 +81,7 @@ export default function Home() {
             veniam, quis nostrud exercitation ullamco laboris."
           </p>
         </div>
-        <div className="md:m-28 mx-2">
+        <div className="md:mx-10 lg:mx-28 md:my-28 mt-12 mx-2">
           <Carousel />
         </div>
       </div>

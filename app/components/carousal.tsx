@@ -1,7 +1,7 @@
 "use client";
 
 import Slider from "react-slick";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
@@ -37,17 +37,20 @@ export const Carousel: React.FC = () => {
     "/Slide/second.png",
   ];
   const [imgIndex, setImgIndex] = useState(0);
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+  }, []);
 
   return (
     <Slider
       // remove dots if screen size is mobile
-      dots={!(typeof window !== "undefined" && window.innerWidth < 750)}
+      dots={width > 768}
       autoplay={true}
       autoplaySpeed={5000}
       // no of slides
-      slidesToShow={
-        typeof window !== "undefined" && window.innerWidth < 750 ? 1 : 3
-      }
+      slidesToShow={width < 768 ? 1 : 3}
       infinite={true}
       focusOnSelect={true}
       lazyLoad="ondemand"
