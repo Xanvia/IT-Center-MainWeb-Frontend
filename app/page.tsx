@@ -87,12 +87,12 @@ export default function Home() {
       </div>
 
       {/* Course Section */}
-      <div className="p-10 text-center bg-gray-100">
-        <div className="text-6xl font-rubik mt-10 grid gird-cols-6 text-left text-darkmaroon">
+      <div className="md:p-10 p-5 text-center bg-gray-100">
+        <div className="text-6xl font-rubik mt-10 lg:grid gird-cols-6 text-left text-darkmaroon">
           <div className="inline-block col-start-3 col-span-3 ">
             We Provide You The
           </div>
-          <div className="inline-block col-start-4 mt-3">
+          <div className="inline-block col-start-4 md:mt-3">
             <div className="">
               Best of{" "}
               <div className="inline-block from-yellow-500 to-red-700 bg-clip-text text-transparent bg-gradient-to-b">
@@ -102,7 +102,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <p className="md:m-10 m-4 md:text-lg text-sm md:mx-20 md:mt-10 mx-20 text-maroon">
+        <p className="md:m-10 m-5 md:text-lg text-medium md:mx-20 md:mt-10 mx-7 text-maroon">
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
@@ -110,7 +110,7 @@ export default function Home() {
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris."
         </p>
-        <div className="flex space-x-5 my-14 justify-center">
+        <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 sm:space-x-5 my-14 justify-center">
           <HCourseCard />
           <HCourseCard />
           <HCourseCard />
