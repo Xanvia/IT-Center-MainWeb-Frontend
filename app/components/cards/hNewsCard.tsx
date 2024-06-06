@@ -2,7 +2,7 @@ import { Card, CardHeader, Image } from "@nextui-org/react";
 
 export default function HNewsCard() {
   return (
-    <Card className="h-60">
+    <Card className="h-60 w-80 relative">
       <CardHeader className="absolute z-10 top-1 flex-col !items-start">
         <p className="text-tiny text-white/60 uppercase font-bold">
           Plant a tree

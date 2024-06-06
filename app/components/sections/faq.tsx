@@ -20,7 +20,7 @@ export default function FAQ() {
     },
   ];
   return (
-    <div className="bg-lightergray p-6 rounded-lg shadow-lg">
+    <div className="bg-lightergray p-6 rounded-lg shadow-lg relative z-10">
       <h2 className="text-2xl font-semibold mb-4">Common Questions</h2>
       <p className="mb-4 text-gray-600">
         Here are some of the most common questions that we get.

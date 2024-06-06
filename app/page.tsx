@@ -2,17 +2,17 @@ import Bot from "./components/bots/bot";
 import HCourseCard from "./components/cards/hCourseCard";
 import { Carousel } from "./components/carousal";
 import { MainLink } from "./components/sections/mainLink";
-import HNewsCard from "./components/cards/hNewsCard";
 import { PiArrowRightBold } from "react-icons/pi";
 import { Image as ImageNU } from "@nextui-org/react";
 import Image from "next/image";
 import FAQ from "./components/sections/faq";
 import FAQForm from "./components/forms/faqForm";
 import Statistics from "./components/forms/statistics";
+import NewsCards from "./components/sections/newsCards";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col ">
+    <main className="flex min-h-screen flex-col overflow-hidden">
       {/* header body */}
       <div className="bg-maroon h-80 flex flex-row justify-between">
         <div className="md:ml-20 md:mt-20 ml-5 mt-10">
@@ -88,7 +88,7 @@ export default function Home() {
 
       {/* Course Section */}
       <div className="md:p-10 p-5 text-center bg-gray-100">
-        <div className="text-6xl font-rubik mt-10 lg:grid gird-cols-6 text-left text-darkmaroon">
+        <div className="text-6xl font-rubik mt-5 sm:mt-10 lg:grid gird-cols-6 text-left text-darkmaroon">
           <div className="inline-block col-start-3 col-span-3 ">
             We Provide You The
           </div>
@@ -129,7 +129,7 @@ export default function Home() {
       </div>
 
       {/* Project section  */}
-      <section className="p-14 bg-gray-300 ">
+      <section className="md:p-14 py-10 px-5 bg-gray-300 ">
         <h1 className="text-6xl font-rubik mt-5 text-center">
           <div>
             Delivering{" "}
@@ -139,25 +139,26 @@ export default function Home() {
           </div>
           <div className="mt-3">Services and Projects</div>
         </h1>
-        <p className="md:m-10 m-4 md:text-xl text-sm md:mx-20 md:mt-5 text-slate-500 text-center">
+        <p className="md:m-10 m-3 md:text-xl text-lg md:mx-20 md:mt-5 text-slate-500 text-center">
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
         </p>
-        <div className="grid grid-cols-11 my-10">
-          <div className="mt-5 mr-5 col-span-6">
-            <h1 className="text-5xl font-rubik">
+        <div className="sm:grid grid-cols-11 md:my-10 my-6 flex flex-col-reverse justify-center">
+          <div className="md:mt-5 mt-2 md:mr-4 lg:mr-5 col-span-6">
+            <h1 className="md:text-5xl text-3xl font-rubik">
               <span className="from-red-950 to-red-700 bg-clip-text text-transparent bg-gradient-to-t">
                 Digitized
               </span>
-              <div className="from-blue-900 to-blue-600 bg-clip-text text-transparent bg-gradient-to-t py-2">
-                Action Plan Tracking system
-              </div>
+              <span className="md:inline-block from-blue-900 to-blue-600 bg-clip-text text-transparent bg-gradient-to-t py-2">
+                {" "}
+                Action Plan Tracking system{" "}
+              </span>
               <span className="from-red-950 to-red-700 bg-clip-text text-transparent bg-gradient-to-t">
                 for the University of Peradeniya
               </span>
             </h1>
-            <p className="mt-10 text-justify text-slate-500 font-medium">
+            <p className="md:mt-10 mt-7 text-justify text-slate-500 font-medium sm:font-normal">
               IT Center developed a Digitized Action Plan Tracking system for
               the University of Peradeniya.IT Center developed a Digitized
               Action Plan Tracking system for the University of Peradeniya.IT
@@ -165,7 +166,7 @@ export default function Home() {
               University of Peradeniya.IT Center developed a Digitized Action
               Plan Tracking system for the University of Peradeniya.
             </p>
-            <button className="mt-10">
+            <button className="mt-10 flex w-full sm:justify-normal justify-center">
               <div className="flex items-center justify-center text-xl group">
                 <span className="mr-0 text-xl text-red-800 hover:text-red-700">
                   more projects
@@ -177,7 +178,7 @@ export default function Home() {
               </div>
             </button>
           </div>
-          <div className="m-4 items-center justify-center flex col-span-5 ">
+          <div className="sm:m-4 items-center justify-center flex col-span-5 ">
             <ImageNU
               radius="sm"
               isBlurred
@@ -192,22 +193,19 @@ export default function Home() {
       </section>
 
       {/* News Section */}
-      <div className="p-10 text-center bg-gray-100">
-        <h1 className="text-6xl font-rubik my-10">
+      <div className="py-10 md:p-7 px-2 text-center bg-gray-100">
+        <h1 className="text-6xl font-rubik sm:my-10 my-5">
           <span className="from-red-600 to-yellow-500 bg-clip-text text-transparent bg-gradient-to-b">
             News{" "}
           </span>
           & Events
         </h1>
-        <div className="grid grid-cols-4 my-16 gap-5">
-          <HNewsCard />
-          <HNewsCard />
-          <HNewsCard />
-          <HNewsCard />
-        </div>
+
+        <NewsCards />
+
         <button>
           <div className="flex items-center justify-center group mb-10">
-            <span className="mr-0 text-2xl text-red-800 hover:text-red-700">
+            <span className="mr-0 sm:text-2xl text-xl text-red-800 hover:text-red-700">
               more news
             </span>
             <PiArrowRightBold
@@ -219,8 +217,8 @@ export default function Home() {
       </div>
 
       {/* FAQ Section */}
-      <div className="h-full bg-maroon grid grid-cols-3 p-6 relative">
-        <div className="absolute -left-80 -top-10">
+      <div className="h-full bg-maroon lg:grid grid-cols-3 p-6 relative">
+        <div className="absolute -left-80 -top-10 z-10 lg:block hidden ">
           <Image
             src="/animation/robot.svg"
             height={900}
@@ -230,8 +228,8 @@ export default function Home() {
         </div>
         <div className="w-max"></div>
 
-        <div className="col-span-2 mt-10">
-          <h1 className="text-5xl font-rubik my-7 text-white">
+        <div className="col-span-2 mt-10 flex md:block flex-col items-center">
+          <h1 className="text-5xl font-rubik my-7 text-white sm:text-left text-center">
             <div>
               Your Questions{" "}
               <div className="from-yellow-200 to-yellow-400 bg-clip-text text-transparent bg-gradient-to-t text-center">
@@ -239,7 +237,7 @@ export default function Home() {
               </div>{" "}
             </div>
           </h1>
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 my-12">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-8 my-12 sm:max-w-max max-w-md">
             <FAQ />
             <div className="bg-gray-300 p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-4">Ask a Question</h2>
