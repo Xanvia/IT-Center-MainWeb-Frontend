@@ -30,7 +30,10 @@ const NewsCards = () => {
   }, []);
   return (
     <div className="relative my-16">
-      <div className="flex overflow-x-scroll space-x-2 lg:justify-between snap-x snap-mandatory scrollbar-hide">
+      <div
+        className="flex overflow-x-scroll space-x-2 lg:justify-between snap-x snap-mandatory scrollbar-hide"
+        ref={scrollContainerRef}
+      >
         <div className="snap-start">
           <HNewsCard />
         </div>
@@ -44,16 +47,15 @@ const NewsCards = () => {
           <HNewsCard />
         </div>
       </div>
-      {/* Left shadow */}
-      <div className="absolute top-0 left-0 h-full w-12 pointer-events-none">
-        <div className="h-full w-full bg-gradient-to-r from-gray-800 to-transparent"></div>
-      </div>
+
       {/* Right shadow */}
-      {!isScrolledToEnd && (
-        <div className="absolute top-0 right-0 h-full w-12 pointer-events-none">
-          <div className="h-full w-full bg-gradient-to-l from-gray-300 to-transparent"></div>
-        </div>
-      )}
+      <div
+        className={`${
+          isScrolledToEnd ? "opacity-0" : "opacity-100"
+        } transition-opacity duration-300 absolute top-0 right-0 h-full w-12 pointer-events-none`}
+      >
+        <div className="h-full w-full bg-gradient-to-l from-gray-400 to-transparent"></div>
+      </div>
     </div>
   );
 };
