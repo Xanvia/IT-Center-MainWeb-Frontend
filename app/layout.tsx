@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro, Inter } from "next/font/google";
+import { Be_Vietnam_Pro, Inter, Rubik } from "next/font/google";
 import "./globals.css";
-import NavBar from "./components/navbar";
+import NavBar from "./components/sections/navbar";
+import { Providers } from "./providers";
 
 // font-families
 const inter = Inter({ subsets: ["latin"] });
@@ -9,6 +10,12 @@ const vietnam = Be_Vietnam_Pro({
   weight: "300",
   subsets: ["latin"],
   variable: "--font-be-vietnam-pro",
+});
+
+const rubik = Rubik({
+  weight: "500",
+  subsets: ["latin"],
+  variable: "--font-rubik",
 });
 
 export const metadata: Metadata = {
@@ -23,9 +30,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${vietnam.variable}`}>
-        <NavBar />
-        {children}
+      <body
+        className={`${inter.className} ${vietnam.variable} ${rubik.variable}`}
+      >
+        <Providers>
+          <NavBar />
+          {children}
+        </Providers>
       </body>
     </html>
   );
