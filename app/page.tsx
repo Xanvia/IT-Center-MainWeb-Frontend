@@ -1,6 +1,7 @@
 "use client";
 
 import { Carousel } from "./components/carousal";
+import Footer from "./components/footer/Footer";
 import { MainLink } from "./components/mainLink";
 import { Player } from "@lottiefiles/react-lottie-player";
 
@@ -85,6 +86,9 @@ export default function Home() {
           quis nostrud exercitation ullamco laboris."
         </p>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </main>
   );
 }
