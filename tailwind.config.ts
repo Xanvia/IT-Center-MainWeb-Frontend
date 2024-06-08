@@ -29,7 +29,7 @@ const config: Config = {
       },
     },
   },
+  plugins: [require('daisyui'),nextui()],
   darkMode: "class",
-  plugins: [nextui()],
 };
 export default config;

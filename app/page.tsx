@@ -1,6 +1,7 @@
 import Bot from "./components/bots/bot";
 import HCourseCard from "./components/cards/hCourseCard";
 import { Carousel } from "./components/carousal";
+import Footer from "./components/footer/Footer";
 import { MainLink } from "./components/sections/mainLink";
 import { PiArrowRightBold } from "react-icons/pi";
 import { Image as ImageNU } from "@nextui-org/react";
@@ -252,6 +253,9 @@ export default function Home() {
       <div className="bg-white py-12">
         <Statistics />
       </div>
+
+      {/* Footer */}
+      <Footer />
     </main>
   );
 }
