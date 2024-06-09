@@ -1,15 +1,15 @@
-import Bot from "../components/bots/bot";
-import HCourseCard from "../components/cards/hCourseCard";
-import { Carousel } from "../components/sections/carousal";
-import Footer from "../components/footer/Footer";
-import { MainLink } from "../components/sections/mainLink";
+import Bot from "../components/mainWeb/bots/bot";
+import HCourseCard from "../components/mainWeb/cards/hCourseCard";
+import { Carousel } from "../components/mainWeb/sections/carousal";
+import Footer from "../components/mainWeb/footer/Footer";
+import { MainLink } from "../components/mainWeb/sections/mainLink";
 import { PiArrowRightBold } from "react-icons/pi";
 import { Image as ImageNU } from "@nextui-org/react";
 import Image from "next/image";
-import FAQ from "../components/sections/faq";
+import FAQ from "../components/mainWeb/sections/faq";
 import FAQForm from "../components/forms/faqForm";
-import Statistics from "../components/sections/statistics";
-import NewsCards from "../components/sections/newsCards";
+import Statistics from "../components/mainWeb/sections/statistics";
+import NewsCards from "../components/mainWeb/sections/newsCards";
 
 export default function Home() {
   return (
