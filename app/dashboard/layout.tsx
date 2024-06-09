@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Header from "../components/Header";
-import Sidebar from "../components/dashboard/sidebar";
+import { Sidebar } from "../components/dashboard/sidebar";
 
 export default function DashboardLayout({
   children,
