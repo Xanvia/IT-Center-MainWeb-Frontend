@@ -1,12 +1,12 @@
 import Link from "next/link";
-import DropdownMessage from "./messageBar";
 import DropdownNotification from "./notification";
 import DropdownProfile from "./profile";
 import Image from "next/image";
-import { HamButton } from "./hamButton";
+import { HamButton } from "../../buttons/hamButton";
+// import { HamButton } from "./hamButton";
 
 const Header = (props: {
-  sidebarOpen: string | boolean | undefined;
+  sidebarOpen: boolean;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
   return (
@@ -20,17 +20,17 @@ const Header = (props: {
               e.stopPropagation();
               props.setSidebarOpen(!props.sidebarOpen);
             }}
-            className="block p-1.5 lg:hidden"
+            className="block p-1.5 lg:hidden "
           >
-            <HamButton sidebarOpen={props.sidebarOpen} />
+            <HamButton isBlack isClicked={props.sidebarOpen} />
           </button>
 
           {/* logo  */}
           <Link href="/" className="block flex-shrink-0 lg:hidden">
             <Image
-              width={100}
-              height={100}
-              src={"/logo.png"}
+              width={75}
+              height={75}
+              src={"/logo/pera-logo.png"}
               alt="Logo"
               priority
             />
@@ -39,7 +39,6 @@ const Header = (props: {
         <div className="flex items-center gap-3 lg:gap-7">
           <ul className="flex items-center gap-2 sm:gap-4">
             <DropdownNotification />
-            <DropdownMessage />
           </ul>
           <DropdownProfile />
         </div>

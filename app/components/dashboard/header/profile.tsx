@@ -44,17 +44,15 @@ const DropdownProfile = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-primary-2x dark:text-white">
-            Vidusha Sanidu
+            Upul Jayasinghe
           </span>
-          <span className="block text-xs dark:text-gray-300">
-            Full Stack Developer
-          </span>
+          <span className="block text-xs dark:text-gray-300">Director</span>
         </span>
 
         <Image
           width={112}
           height={112}
-          src={"/profile.png"}
+          src={"/users/drUpul.png"}
           alt="User"
           className="h-12 w-12 rounded-full object-cover object-top"
         />

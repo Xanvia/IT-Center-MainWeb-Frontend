@@ -1,9 +1,8 @@
-"use client";
-
 import React, { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+
 import {
   MdOutlineDashboard,
   MdOutlineInsertChartOutlined,
@@ -11,6 +10,7 @@ import {
   MdOutlinePieChart,
   MdPhonelinkSetup,
 } from "react-icons/md";
+import { HamButton } from "../../buttons/hamButton";
 // import { HamButton } from "../header/hamButton";
 
 interface SidebarProps {
@@ -55,7 +55,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-20 flex h-screen w-72 flex-col overflow-y-hidden bg-primary-2x duration-300 ease-linear lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-20 flex h-screen w-72 flex-col overflow-y-hidden bg-maroon duration-300 ease-linear lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -63,9 +63,9 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       <div className="flex items-center justify-between px-6 py-5 lg:py-6">
         <Link href="/dashboard">
           <Image
-            width={100}
-            height={100}
-            src={"/logo.png"}
+            width={75}
+            height={75}
+            src={"/logo/pera-logo.png"}
             alt="Logo"
             priority
           />
@@ -78,11 +78,11 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           aria-expanded={sidebarOpen}
           className="block lg:hidden"
         >
-          {/* <HamButton sidebarOpen={sidebarOpen} /> */}
+          <HamButton isClicked={sidebarOpen} />
         </button>
       </div>
 
-      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear text-gray-300 dark:text-white">
+      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear text-gray-300">
         {/* sidebar tab */}
         <nav className=" px-4 py-4 lg:mt-7 lg:px-6">
           {/*  Menu Group */}
@@ -93,7 +93,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 href="/"
                 className={`flex items-center gap-2 rounded-md px-4 py-2 duration-300 ease-in-out  ${
                   pathname === "/" || pathname.includes("dashboard")
-                    ? "bg-primary-sm text-black"
+                    ? "bg-yellow-400 text-black"
                     : "hover:bg-gray-400 hover:text-black"
                 }`}
               >
