@@ -1,6 +1,6 @@
 "use client";
-import { ReactNode, useState } from "react";
 
+import { ReactNode, useState } from "react";
 interface SidebarLinkGroupProps {
   children: (handleClick: () => void, open: boolean) => ReactNode;
   activeCondition: boolean;
@@ -20,3 +20,7 @@ const SidebarLinkGroup = ({
 };
 
 export default SidebarLinkGroup;
+
+// Each instance of SidebarLinkGroup handles its own open/close state.
+// Instead of having separate useState hooks for each group in the main sidebar component,
+// each group maintains its state internally.

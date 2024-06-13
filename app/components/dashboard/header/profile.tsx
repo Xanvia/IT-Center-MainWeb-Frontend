@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const DropdownUser = () => {
+const DropdownProfile = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -26,8 +26,8 @@ const DropdownUser = () => {
 
   // close if the esc key is pressed
   useEffect(() => {
-    const keyHandler = ({ keyCode }: KeyboardEvent) => {
-      if (!dropdownOpen || keyCode !== 27) return;
+    const keyHandler = ({ key }: KeyboardEvent) => {
+      if (!dropdownOpen || key !== "Escape") return;
       setDropdownOpen(false);
     };
     document.addEventListener("keydown", keyHandler);
@@ -39,31 +39,28 @@ const DropdownUser = () => {
       <Link
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}
-        className="flex items-center gap-4"
+        className="flex items-center gap-3"
         href="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+          <span className="block text-sm font-medium text-primary-2x dark:text-white">
+            Vidusha Sanidu
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs dark:text-gray-300">
+            Full Stack Developer
+          </span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
-          <Image
-            width={112}
-            height={112}
-            src={"/images/user/user-01.png"}
-            style={{
-              width: "auto",
-              height: "auto",
-            }}
-            alt="User"
-          />
-        </span>
+        <Image
+          width={112}
+          height={112}
+          src={"/profile.png"}
+          alt="User"
+          className="h-12 w-12 rounded-full object-cover object-top"
+        />
 
         <svg
-          className="hidden fill-current sm:block"
+          className="hidden fill-current sm:block dark:text-white"
           width="12"
           height="8"
           viewBox="0 0 12 8"
@@ -82,17 +79,16 @@ const DropdownUser = () => {
       {/* <!-- Dropdown Start --> */}
       <div
         ref={dropdown}
-        onFocus={() => setDropdownOpen(true)}
-        onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
-          dropdownOpen === true ? "block" : "hidden"
+        onClick={() => setDropdownOpen(!dropdownOpen)}
+        className={`absolute -right-4 sm:right-0 mt-3 overflow-hidden flex w-60 flex-col rounded-sm text-sm font-normal text-gray-700 dark:text-gray-400 bg-white shadow-sm dark:border-gray-500  dark:bg-gray-700 dropdown-menu ${
+          dropdownOpen ? "border h-56 opacity-100" : "h-0 opacity-0"
         }`}
       >
-        <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
+        <ul className="flex flex-col gap-5 border-b px-6 py-7 dark:border-gray-500">
           <li>
             <Link
               href="/profile"
-              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              className="flex items-center gap-3.5 duration-300 ease-in-out hover:text-gray-500 lg:text-base"
             >
               <svg
                 className="fill-current"
@@ -117,7 +113,7 @@ const DropdownUser = () => {
           <li>
             <Link
               href="#"
-              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              className="flex items-center gap-3.5 duration-300 ease-in-out hover:text-gray-500 lg:text-base"
             >
               <svg
                 className="fill-current"
@@ -138,7 +134,7 @@ const DropdownUser = () => {
           <li>
             <Link
               href="/settings"
-              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              className="flex items-center gap-3.5 duration-300 ease-in-out hover:text-gray-500 lg:text-base"
             >
               <svg
                 className="fill-current"
@@ -161,7 +157,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button className="flex items-center gap-3 px-6 py-3 duration-300 ease-in-out hover:text-gray-500 lg:text-base">
           <svg
             className="fill-current"
             width="22"
@@ -182,9 +178,8 @@ const DropdownUser = () => {
           Log Out
         </button>
       </div>
-      {/* <!-- Dropdown End --> */}
     </div>
   );
 };
 
-export default DropdownUser;
+export default DropdownProfile;
