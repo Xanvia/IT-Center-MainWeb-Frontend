@@ -11,7 +11,7 @@ const Header = (props: {
 }) => {
   return (
     <header className="sticky flex top-0 z-10 w-full bg-white drop-shadow-md dark:bg-primary-dark dark:drop-shadow-none">
-      <div className="flex flex-grow items-center justify-between lg:justify-end  px-4 py-4 shadow-lg md:px-6 2xl:px-11">
+      <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-lg md:px-6 2xl:px-11">
         <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
           {/* ham button  */}
           <button
@@ -35,6 +35,11 @@ const Header = (props: {
               priority
             />
           </Link>
+        </div>
+        <div className="hidden sm:block">
+          <h1 className="font-rubik text-2xl">
+            IT CENTER <span>Dashboard</span>
+          </h1>
         </div>
         <div className="flex items-center gap-3 lg:gap-7">
           <ul className="flex items-center gap-2 sm:gap-4">
