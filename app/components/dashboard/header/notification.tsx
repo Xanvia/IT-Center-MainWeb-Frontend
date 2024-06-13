@@ -45,14 +45,14 @@ const DropdownNotification = () => {
           setDropdownOpen(!dropdownOpen);
         }}
         href="#"
-        className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 hover:text-cyan-600 dark:bg-cyan-600 dark:text-white"
+        className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 hover:text-red-700"
       >
         <span
-          className={`absolute -top-0.5 right-0 z-10 h-2 w-2 rounded-full bg-gray-300 ${
+          className={`absolute -top-0.5 right-0 z-10 h-2 w-2 rounded-full bg-red-600 ${
             notifying === false ? "hidden" : "inline"
           }`}
         >
-          <span className="absolute -z-10 inline-flex h-full w-full animate-ping rounded-full bg-gray-700 opacity-75"></span>
+          <span className="absolute -z-10 inline-flex h-full w-full animate-ping rounded-full bg-red-700 opacity-75"></span>
         </span>
 
         <svg
@@ -75,7 +75,7 @@ const DropdownNotification = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute -right-10 mt-2.5 flex h-96 w-72 flex-col rounded-sm border dark:border-none bg-white shadow-sm dark:bg-gray-700 sm:right-0 sm:w-80 ${
+        className={`absolute -right-10 mt-2.5 flex h-96 w-72 flex-col rounded-sm border bg-white shadow-sm sm:right-0 sm:w-80 ${
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
@@ -88,7 +88,7 @@ const DropdownNotification = () => {
         <ul className="flex h-auto flex-col overflow-y-auto">
           <li>
             <Link
-              className="flex flex-col gap-2.5 border-t px-4 py-3 hover:bg-gray-200  dark:hover:bg-gray-600"
+              className="flex flex-col gap-2.5 border-t px-4 py-3 hover:bg-gray-200"
               href="#"
             >
               <p className="text-sm text-black dark:text-white">
@@ -101,15 +101,15 @@ const DropdownNotification = () => {
           </li>
           <li>
             <Link
-              className="flex flex-col gap-2.5 border-t px-4 py-3 hover:bg-gray-200 dark:hover:bg-gray-600"
+              className="flex flex-col gap-2.5 border-t px-4 py-3 hover:bg-gray-200"
               href="#"
             >
-              <p className="text-sm text-black dark:text-white">
+              <p className="text-sm text-black">
                 It is a long established fact that a reader will be distracted
                 by the readable.
               </p>
 
-              <p className="text-xs dark:text-gray-400">24 Feb, 2025</p>
+              <p className="text-xs">24 Feb, 2025</p>
             </Link>
           </li>
         </ul>

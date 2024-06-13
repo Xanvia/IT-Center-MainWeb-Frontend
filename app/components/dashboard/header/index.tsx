@@ -38,7 +38,7 @@ const Header = (props: {
         </div>
         <div className="hidden sm:block">
           <h1 className="font-rubik text-2xl">
-            IT CENTER <span>Dashboard</span>
+            IT CENTER <span className="text-red-700">Dashboard</span>
           </h1>
         </div>
         <div className="flex items-center gap-3 lg:gap-7">

@@ -43,10 +43,10 @@ const DropdownProfile = () => {
         href="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-primary-2x dark:text-white">
+          <span className="block text-sm font-medium text-red-800">
             Upul Jayasinghe
           </span>
-          <span className="block text-xs dark:text-gray-300">Director</span>
+          <span className="block text-xs">Director</span>
         </span>
 
         <Image
@@ -58,7 +58,9 @@ const DropdownProfile = () => {
         />
 
         <svg
-          className="hidden fill-current sm:block dark:text-white"
+          className={`hidden fill-current sm:block duration-300 ${
+            dropdownOpen && "rotate-180"
+          }`}
           width="12"
           height="8"
           viewBox="0 0 12 8"
@@ -78,11 +80,11 @@ const DropdownProfile = () => {
       <div
         ref={dropdown}
         onClick={() => setDropdownOpen(!dropdownOpen)}
-        className={`absolute -right-4 sm:right-0 mt-3 overflow-hidden flex w-60 flex-col rounded-sm text-sm font-normal text-gray-700 dark:text-gray-400 bg-white shadow-sm dark:border-gray-500  dark:bg-gray-700 dropdown-menu ${
+        className={`absolute -right-4 sm:right-0 mt-3 overflow-hidden flex w-60 flex-col rounded-sm text-sm font-normal text-gray-700 bg-white shadow-sm dropdown-menu ${
           dropdownOpen ? "border h-56 opacity-100" : "h-0 opacity-0"
         }`}
       >
-        <ul className="flex flex-col gap-5 border-b px-6 py-7 dark:border-gray-500">
+        <ul className="flex flex-col gap-5 border-b px-6 py-7">
           <li>
             <Link
               href="/profile"
@@ -155,7 +157,7 @@ const DropdownProfile = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3 px-6 py-3 duration-300 ease-in-out hover:text-gray-500 lg:text-base">
+        <button className="flex items-center gap-3 px-6 py-3 duration-300 ease-in-out hover:text-red-800 lg:text-base">
           <svg
             className="fill-current"
             width="22"
