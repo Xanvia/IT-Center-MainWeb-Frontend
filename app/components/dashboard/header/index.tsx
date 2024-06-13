@@ -11,8 +11,8 @@ const Header = (props: {
 }) => {
   return (
     <header className="sticky flex top-0 z-10 w-full bg-white drop-shadow-md dark:bg-primary-dark dark:drop-shadow-none">
-      <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-lg md:px-6 2xl:px-11">
-        <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
+      <div className="flex flex-grow items-center justify-between px-2 py-4 shadow-lg md:px-6 2xl:px-11">
+        <div className="flex items-center gap-2 lg:hidden">
           {/* ham button  */}
           <button
             aria-controls="sidebar"
@@ -20,13 +20,13 @@ const Header = (props: {
               e.stopPropagation();
               props.setSidebarOpen(!props.sidebarOpen);
             }}
-            className="block p-1.5 lg:hidden "
+            className="block lg:hidden "
           >
             <HamButton isBlack isClicked={props.sidebarOpen} />
           </button>
 
           {/* logo  */}
-          <Link href="/" className="block flex-shrink-0 lg:hidden">
+          <Link href="/" className="hidden sm:block flex-shrink-0 lg:hidden">
             <Image
               width={75}
               height={75}
@@ -36,10 +36,10 @@ const Header = (props: {
             />
           </Link>
         </div>
-        <div className="hidden sm:block">
-          <h1 className="font-rubik text-2xl">
+        <div className="">
+          <div className="font-rubik text-2xl">
             IT CENTER <span className="text-red-700">Dashboard</span>
-          </h1>
+          </div>
         </div>
         <div className="flex items-center gap-3 lg:gap-7">
           <ul className="flex items-center gap-2 sm:gap-4">
