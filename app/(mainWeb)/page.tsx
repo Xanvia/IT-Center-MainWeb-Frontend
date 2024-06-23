@@ -10,6 +10,7 @@ import FAQ from "./components/sections/faq";
 import FAQForm from "./components/forms/faqForm";
 import Statistics from "./components/sections/statistics";
 import NewsCards from "./components/sections/newsCardSection";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -26,12 +27,17 @@ export default function Home() {
             </h3>
           </div>
           <div className="mt-10 md:space-x-5">
-            <button className="bg-yellow-200 hover:bg-maroon text-gray-900 hover:text-yellow-200 font-bold py-2 px-4 border border-yellow-200 rounded-lg sm:inline-block block w-52 md:w-auto">
-              Dashboard
-            </button>
-            <button className="bg-transparent hover:bg-yellow-200 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
-              Course Registration
-            </button>
+            <Link href={"/dashboard"}>
+              <button className="bg-yellow-200 hover:bg-maroon text-gray-900 hover:text-yellow-200 font-bold py-2 px-4 border border-yellow-200 rounded-lg sm:inline-block block w-52 md:w-auto">
+                Dashboard
+              </button>
+            </Link>
+
+            <Link href={"/courseReg"}>
+              <button className="bg-transparent hover:bg-yellow-200 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
+                Course Registration
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -46,22 +52,7 @@ export default function Home() {
 
       {/* Main Quick Links */}
       <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-1  pb-20 px-4 bg-gray-200 ">
-        <MainLink imgSrc="/animation/courses.json" heading="Courses" />
-        <MainLink
-          imgSrc="/animation/reservation.json"
-          heading="Reservations"
-          options="scale-110 -translate-y-3"
-        />
-        <MainLink
-          imgSrc="/animation/consultation.json"
-          heading="Consultations"
-          options="translate-y-4 scale-110"
-        />
-        <MainLink
-          imgSrc="/animation/opened.json"
-          heading="O P E N E D"
-          options="scale-150"
-        />
+        <MainLink />
       </div>
 
       {/* Vision and Photo Slide */}
