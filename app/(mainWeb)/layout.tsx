@@ -1,5 +1,5 @@
 import { Be_Vietnam_Pro, Rubik } from "next/font/google";
-import NavBar from "../components/sections/navbar";
+import NavBar from "./components/sections/navbar";
 
 // font-families
 const vietnam = Be_Vietnam_Pro({

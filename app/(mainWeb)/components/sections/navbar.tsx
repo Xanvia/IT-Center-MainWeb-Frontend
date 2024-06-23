@@ -91,7 +91,7 @@ export default function NavBar() {
             } `}
           >
             <li className=" m-6 md:m-4 md:ml-0">
-              <Link href="/home" className="text-white hover:text-yellow-100 ">
+              <Link href="/" className="text-white hover:text-yellow-100 ">
                 Home
               </Link>
             </li>
