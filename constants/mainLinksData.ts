@@ -1,4 +1,4 @@
-export type mainLinkDataTypes = {
+type mainLinkDataTypes = {
   url: string;
   headline: string;
   imgsrc: string;

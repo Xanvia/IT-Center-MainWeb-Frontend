@@ -11,6 +11,12 @@ import FAQForm from "./components/forms/faqForm";
 import Statistics from "./components/sections/statistics";
 import NewsCards from "./components/sections/newsCardSection";
 import Link from "next/link";
+import {
+  aboutCoursePara,
+  aboutServicePara,
+  introductionPara,
+  projectDetails,
+} from "@/constants/homePageData";
 
 export default function Home() {
   return (
@@ -65,12 +71,7 @@ export default function Home() {
             </div>
           </h1>
           <p className="md:m-10 m-5 md:text-xl text-sm md:mx-20 md:mt-10 text-slate-400">
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris.Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris."
+            {introductionPara}
           </p>
         </div>
         <div className="md:mx-10 lg:mx-28 md:my-28 mt-12 mx-2">
@@ -95,12 +96,7 @@ export default function Home() {
           </div>
         </div>
         <p className="md:m-10 m-5 md:text-lg text-medium md:mx-20 md:mt-10 mx-7 text-maroon">
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
-          dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris."
+          {aboutCoursePara}
         </p>
         <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 sm:space-x-5 my-14 justify-center">
           <HCourseCard />
@@ -132,9 +128,7 @@ export default function Home() {
           <div className="mt-3">Services and Projects</div>
         </h1>
         <p className="md:m-10 m-3 md:text-xl text-lg md:mx-20 md:mt-5 text-slate-500 text-center">
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
+          {aboutServicePara}
         </p>
         <div className="sm:grid grid-cols-11 md:my-10 my-6 flex flex-col-reverse justify-center">
           <div className="md:mt-5 mt-2 md:mr-4 lg:mr-5 col-span-6">
@@ -151,12 +145,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="md:mt-10 mt-7 text-justify text-slate-500 font-medium sm:font-normal">
-              IT Center developed a Digitized Action Plan Tracking system for
-              the University of Peradeniya.IT Center developed a Digitized
-              Action Plan Tracking system for the University of Peradeniya.IT
-              Center developed a Digitized Action Plan Tracking system for the
-              University of Peradeniya.IT Center developed a Digitized Action
-              Plan Tracking system for the University of Peradeniya.
+              {projectDetails}
             </p>
             <button className="mt-10 flex w-full sm:justify-normal justify-center">
               <div className="flex items-center justify-center text-xl group">

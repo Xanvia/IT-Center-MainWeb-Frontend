@@ -19,6 +19,7 @@ const NewsCards = () => {
     const scrollContainer = scrollContainerRef.current;
     if (scrollContainer) {
       scrollContainer.addEventListener("scroll", handleScroll);
+      handleScroll();
     }
 
     // Cleanup the event listener on component unmount
