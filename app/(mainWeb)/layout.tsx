@@ -22,7 +22,7 @@ export default function MainWebLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className={`${vietnam.variable} ${rubik.variable}`}>
+    <main>
       <NavBar />
       {children}
       <Footer />

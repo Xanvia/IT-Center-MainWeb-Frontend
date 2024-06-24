@@ -108,6 +108,7 @@ body {
   max-height: 160px;
   width: 640px;
 }
+
 @media (max-width: 640px) {
   .hambutton .plates {
     width: 320px;
