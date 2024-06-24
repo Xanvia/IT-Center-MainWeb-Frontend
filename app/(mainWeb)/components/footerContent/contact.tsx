@@ -3,11 +3,11 @@ import React from "react";
 const Contact = () => {
   return (
     <div className="flex md:flex-col md:mx-8 pt-2 md:pl-20 pl-10 text-gray-400">
-      <div className="grid md:grid-cols-2 gap-1 min-w-40 pt-4">
-        <div>
-          <p className="w-1/2 text-sm">Phone :</p>
+      <div className="grid md:grid-cols-3  min-w-40 pt-4">
+        <div className="col-span-1">
+          <p className="w-1/4 text-sm text-yellow-600">Telephone:</p>
         </div>
-        <div>
+        <div className="col-span-2 text-right">
           <p className="text-sm">
             +94 (0) 81 2384848
             <br />

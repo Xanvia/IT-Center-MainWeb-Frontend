@@ -1,6 +1,6 @@
 import { Be_Vietnam_Pro, Rubik } from "next/font/google";
 import NavBar from "./components/sections/navbar";
-import Footer from "./components/footer/Footer";
+import Footer from "./components/sections/footer";
 
 // font-families
 const vietnam = Be_Vietnam_Pro({

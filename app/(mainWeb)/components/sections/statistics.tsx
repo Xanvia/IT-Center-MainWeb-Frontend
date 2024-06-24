@@ -8,10 +8,10 @@ import { IoStatsChart } from "react-icons/io5";
 
 export default function Statistics() {
   return (
-    <div className="pb-10 ">
-      <h2 className="text-5xl font-semibold text-center mb-14 text-maroon drop-shadow-md">
+    <div className="md:pb-10 ">
+      <h2 className="md:text-5xl text-4xl font-semibold text-center md:mb-14 mb-10 text-maroon drop-shadow-md">
         Statistics{" "}
-        <span className="inline-block text-yellow-700">
+        <span className="inline-block text-yellow-600">
           <IoStatsChart />
         </span>
       </h2>
