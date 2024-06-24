@@ -26,7 +26,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/components/mainWeb/footer/Footer.tsx"
+    "app/(mainWeb)/components/sections/footer.tsx"
   ],
   "exclude": ["node_modules"]
 }

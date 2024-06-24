@@ -182,7 +182,7 @@ body {
 }
 
 .transition-visible {
-  max-height: 500px; /* Adjust this value as needed */
+  max-height: 500px;
   opacity: 1;
 }
 

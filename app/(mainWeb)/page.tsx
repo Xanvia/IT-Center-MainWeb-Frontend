@@ -1,15 +1,21 @@
-import Bot from "../components/mainWeb/bots/bot";
-import HCourseCard from "../components/mainWeb/cards/hCourseCard";
-import { Carousel } from "../components/mainWeb/sections/carousal";
-import Footer from "../components/mainWeb/footer/Footer";
-import { MainLink } from "../components/mainWeb/sections/mainLink";
+import Bot from "./components/bots/bot";
+import HCourseCard from "./components/cards/hCourseCard";
+import { Carousel } from "./components/sections/carousal";
+import { MainLink } from "./components/sections/mainLink";
 import { PiArrowRightBold } from "react-icons/pi";
 import { Image as ImageNU } from "@nextui-org/react";
 import Image from "next/image";
-import FAQ from "../components/mainWeb/sections/faq";
-import FAQForm from "../components/forms/faqForm";
-import Statistics from "../components/mainWeb/sections/statistics";
-import NewsCards from "../components/mainWeb/sections/newsCards";
+import FAQ from "./components/sections/faq";
+import FAQForm from "./components/forms/faqForm";
+import Statistics from "./components/sections/statistics";
+import NewsCards from "./components/sections/newsCardSection";
+import Link from "next/link";
+import {
+  aboutCoursePara,
+  aboutServicePara,
+  introductionPara,
+  projectDetails,
+} from "@/constants/homePageData";
 
 export default function Home() {
   return (
@@ -26,12 +32,17 @@ export default function Home() {
             </h3>
           </div>
           <div className="mt-10 md:space-x-5">
-            <button className="bg-yellow-200 hover:bg-maroon text-gray-900 hover:text-yellow-200 font-bold py-2 px-4 border border-yellow-200 rounded-lg sm:inline-block block w-52 md:w-auto">
-              Dashboard
-            </button>
-            <button className="bg-transparent hover:bg-yellow-200 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
-              Course Registration
-            </button>
+            <Link href={"/dashboard"}>
+              <button className="bg-yellow-200 hover:bg-maroon text-gray-900 hover:text-yellow-200 font-bold py-2 px-4 border border-yellow-200 rounded-lg sm:inline-block block w-52 md:w-auto">
+                Dashboard
+              </button>
+            </Link>
+
+            <Link href={"/courseReg"}>
+              <button className="bg-transparent hover:bg-yellow-200 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
+                Course Registration
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -46,22 +57,7 @@ export default function Home() {
 
       {/* Main Quick Links */}
       <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-y-5 justify-center pt-1  pb-20 px-4 bg-gray-200 ">
-        <MainLink imgSrc="/animation/courses.json" heading="Courses" />
-        <MainLink
-          imgSrc="/animation/reservation.json"
-          heading="Reservations"
-          options="scale-110 -translate-y-3"
-        />
-        <MainLink
-          imgSrc="/animation/consultation.json"
-          heading="Consultations"
-          options="translate-y-4 scale-110"
-        />
-        <MainLink
-          imgSrc="/animation/opened.json"
-          heading="O P E N E D"
-          options="scale-150"
-        />
+        <MainLink />
       </div>
 
       {/* Vision and Photo Slide */}
@@ -74,12 +70,7 @@ export default function Home() {
             </div>
           </h1>
           <p className="md:m-10 m-5 md:text-xl text-sm md:mx-20 md:mt-10 text-slate-400">
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris.Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris."
+            {introductionPara}
           </p>
         </div>
         <div className="md:mx-10 lg:mx-28 md:my-28 mt-12 mx-2">
@@ -104,12 +95,7 @@ export default function Home() {
           </div>
         </div>
         <p className="md:m-10 m-5 md:text-lg text-medium md:mx-20 md:mt-10 mx-7 text-maroon">
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
-          dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris."
+          {aboutCoursePara}
         </p>
         <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 sm:space-x-5 my-14 justify-center">
           <HCourseCard />
@@ -141,9 +127,7 @@ export default function Home() {
           <div className="mt-3">Services and Projects</div>
         </h1>
         <p className="md:m-10 m-3 md:text-xl text-lg md:mx-20 md:mt-5 text-slate-500 text-center">
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris.Lorem ipsum
+          {aboutServicePara}
         </p>
         <div className="sm:grid grid-cols-11 md:my-10 my-6 flex flex-col-reverse justify-center">
           <div className="md:mt-5 mt-2 md:mr-4 lg:mr-5 col-span-6">
@@ -160,12 +144,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="md:mt-10 mt-7 text-justify text-slate-500 font-medium sm:font-normal">
-              IT Center developed a Digitized Action Plan Tracking system for
-              the University of Peradeniya.IT Center developed a Digitized
-              Action Plan Tracking system for the University of Peradeniya.IT
-              Center developed a Digitized Action Plan Tracking system for the
-              University of Peradeniya.IT Center developed a Digitized Action
-              Plan Tracking system for the University of Peradeniya.
+              {projectDetails}
             </p>
             <button className="mt-10 flex w-full sm:justify-normal justify-center">
               <div className="flex items-center justify-center text-xl group">
@@ -220,12 +199,7 @@ export default function Home() {
       {/* FAQ Section */}
       <div className="h-full bg-maroon lg:grid grid-cols-3 p-6 relative">
         <div className="absolute -left-80 -top-10 z-10 lg:block hidden ">
-          <Image
-            src="/animation/robot.svg"
-            height={900}
-            width={900}
-            alt="robot"
-          />
+          <Image src="/common/robot.svg" height={900} width={900} alt="robot" />
         </div>
         <div className="w-max"></div>
 
@@ -250,12 +224,9 @@ export default function Home() {
       </div>
 
       {/* statistics  */}
-      <div className="bg-white py-12">
+      <div className="bg-white py-10">
         <Statistics />
       </div>
-
-      {/* Footer */}
-      <Footer />
     </main>
   );
 }
