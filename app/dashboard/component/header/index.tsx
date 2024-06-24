@@ -2,8 +2,7 @@ import Link from "next/link";
 import DropdownNotification from "./notification";
 import DropdownProfile from "./profile";
 import Image from "next/image";
-import { HamButton } from "../../buttons/hamButton";
-// import { HamButton } from "./hamButton";
+import { HamButton } from "@/app/(mainWeb)/components/buttons/hamButton";
 
 const Header = (props: {
   sidebarOpen: boolean;

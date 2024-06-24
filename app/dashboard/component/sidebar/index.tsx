@@ -10,8 +10,7 @@ import {
   MdOutlinePieChart,
   MdPhonelinkSetup,
 } from "react-icons/md";
-import { HamButton } from "../../buttons/hamButton";
-// import { HamButton } from "../header/hamButton";
+import { HamButton } from "@/app/(mainWeb)/components/buttons/hamButton";
 
 interface SidebarProps {
   sidebarOpen: boolean;
