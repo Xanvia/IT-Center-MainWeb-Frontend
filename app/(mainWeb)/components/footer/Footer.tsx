@@ -5,8 +5,8 @@ import Contact from "./Contact";
 
 const Footer = () => {
   return (
-    <div className="bg-maroon">
-      <div className="flex flex-col md:flex-row items-center md:py-10 py-4">
+    <footer className="bg-maroon">
+      <div className="flex flex-col md:flex-row items-center md:py-24 py-4">
         <div className="flex-auto flex-col md:pl-10 mx-6">
           <div className="h-3/4">
             <LogoTagLine />
@@ -43,7 +43,7 @@ const Footer = () => {
       <p className="footer footer-center py-3 text-gray-500 text-sm">
         Copyright © 2024 - All right reserved by Information Technology Center
       </p>
-    </div>
+    </footer>
   );
 };
 

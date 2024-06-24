@@ -4,30 +4,36 @@ import {
   FaUserGraduate,
   FaUsers,
 } from "react-icons/fa6";
+import { IoStatsChart } from "react-icons/io5";
 
 export default function Statistics() {
   return (
-    <div className="my-5">
-      <h2 className="text-3xl font-semibold text-center mb-14">Statistics</h2>
-      <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+    <div className="pb-10 ">
+      <h2 className="text-5xl font-semibold text-center mb-14 text-maroon drop-shadow-md">
+        Statistics{" "}
+        <span className="inline-block text-yellow-700">
+          <IoStatsChart />
+        </span>
+      </h2>
+      <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-10 text-center text-maroon">
         <div>
-          <FaGraduationCap className="mx-auto mb-2 text-4xl" />
-          <p className="text-xl font-medium">50+</p>
+          <FaGraduationCap className="mx-auto mb-5 text-5xl" />
+          <p className="text-4xl font-medium text-yellow-600">50+</p>
           <p className="text-gray-600">Courses</p>
         </div>
         <div>
-          <FaLaptop className="mx-auto mb-2 text-4xl" />
-          <p className="text-xl font-medium">20+</p>
+          <FaLaptop className="mx-auto mb-5 text-5xl" />
+          <p className="text-4xl font-medium text-yellow-600">20+</p>
           <p className="text-gray-600">Laboratories</p>
         </div>
         <div>
-          <FaUsers className="mx-auto mb-2 text-4xl" />
-          <p className="text-xl font-medium">35+</p>
+          <FaUsers className="mx-auto mb-5 text-5xl" />
+          <p className="text-4xl font-medium text-yellow-600">35+</p>
           <p className="text-gray-600">Academic Staff</p>
         </div>
         <div>
-          <FaUserGraduate className="mx-auto mb-2 text-4xl" />
-          <p className="text-xl font-medium">200+</p>
+          <FaUserGraduate className="mx-auto mb-5 text-5xl" />
+          <p className="text-4xl font-medium text-yellow-600">200+</p>
           <p className="text-gray-600">Students</p>
         </div>
       </div>

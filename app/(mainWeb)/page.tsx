@@ -224,7 +224,7 @@ export default function Home() {
       </div>
 
       {/* statistics  */}
-      <div className="bg-white py-12">
+      <div className="bg-white py-10">
         <Statistics />
       </div>
     </main>
