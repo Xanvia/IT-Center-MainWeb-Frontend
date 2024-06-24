@@ -91,7 +91,7 @@ export default function NavBar() {
             } `}
           >
             <li className=" m-6 md:m-4 md:ml-0">
-              <Link href="/home" className="text-white hover:text-yellow-100 ">
+              <Link href="/" className="text-white hover:text-yellow-100 ">
                 Home
               </Link>
             </li>
@@ -182,7 +182,7 @@ export default function NavBar() {
                     <ul>
                       <li className="py-1 hover:scale-110 duration-300">
                         <Link
-                          href="/about1"
+                          href="/staff"
                           className="text-black  hover:text-gray-500"
                         >
                           Staff
@@ -190,10 +190,10 @@ export default function NavBar() {
                       </li>
                       <li className="py-1 hover:scale-110 duration-300">
                         <Link
-                          href="/about2"
+                          href="/aboutUs"
                           className="text-black  hover:text-gray-500"
                         >
-                          Company
+                          AboutUs
                         </Link>
                       </li>
                     </ul>
