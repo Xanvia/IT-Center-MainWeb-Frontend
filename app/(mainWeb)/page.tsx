@@ -1,7 +1,6 @@
 import Bot from "./components/bots/bot";
 import HCourseCard from "./components/cards/hCourseCard";
 import { Carousel } from "./components/sections/carousal";
-import Footer from "./components/footer/Footer";
 import { MainLink } from "./components/sections/mainLink";
 import { PiArrowRightBold } from "react-icons/pi";
 import { Image as ImageNU } from "@nextui-org/react";
@@ -200,12 +199,7 @@ export default function Home() {
       {/* FAQ Section */}
       <div className="h-full bg-maroon lg:grid grid-cols-3 p-6 relative">
         <div className="absolute -left-80 -top-10 z-10 lg:block hidden ">
-          <Image
-            src="/animation/robot.svg"
-            height={900}
-            width={900}
-            alt="robot"
-          />
+          <Image src="/common/robot.svg" height={900} width={900} alt="robot" />
         </div>
         <div className="w-max"></div>
 
@@ -233,9 +227,6 @@ export default function Home() {
       <div className="bg-white py-12">
         <Statistics />
       </div>
-
-      {/* Footer */}
-      <Footer />
     </main>
   );
 }

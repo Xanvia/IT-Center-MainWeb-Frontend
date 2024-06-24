@@ -1,5 +1,6 @@
 import { Be_Vietnam_Pro, Rubik } from "next/font/google";
 import NavBar from "./components/sections/navbar";
+import Footer from "./components/footer/Footer";
 
 // font-families
 const vietnam = Be_Vietnam_Pro({
@@ -24,6 +25,7 @@ export default function MainWebLayout({
     <main className={`${vietnam.variable} ${rubik.variable}`}>
       <NavBar />
       {children}
+      <Footer />
     </main>
   );
 }
