@@ -1,54 +1,60 @@
-import HCourseCard from "@/app/components/cards/hCourseCard";
 import React from "react";
+import CourseCard from "./courseCard";
+import cardList from "./courseData";
+import { divider } from "@nextui-org/react";
 
 const Home: React.FC = () => {
   return (
     <div className="p-10">
       <h1 className="text-gray-600 font-sans md:text-xl sm:text-lg text-base">
-        Course Overview{" "}
+        Course Overview
       </h1>
-      <div role="tablist" className="tabs tabs-lifted">
+      <br />
+      <div role="tablist" className="tabs tabs-lifted h-11">
         <input
           type="radio"
           name="my_tabs_2"
           role="tab"
-          className="tab"
-          aria-label="Tab 1"
-        />
-        <div
-          role="tabpanel"
-          className="tab-content bg-base-100 border-base-300 rounded-box p-6"
-        >
-          Tab content 1
-        </div>
-
-        <input
-          type="radio"
-          name="my_tabs_2"
-          role="tab"
-          className="tab"
-          aria-label="Tab 2"
+          className="tab h-10"
+          aria-label="Undergraduate Courses"
           defaultChecked
         />
         <div
           role="tabpanel"
           className="tab-content bg-base-100 border-base-300 rounded-box p-6"
         >
-          Tab content 2
+          <div className="grid grid-rows-3 grid-flow-col gap-6">
+            <div className="flex flex-row justify-start px-4 space-x-7">
+              <CourseCard />
+              <CourseCard />
+              <CourseCard />
+            </div>
+
+            <div className="flex flex-row justify-start px-4 space-x-7">
+              <CourseCard />
+              <CourseCard />
+            </div>
+          </div>
         </div>
 
         <input
           type="radio"
           name="my_tabs_2"
           role="tab"
-          className="tab"
-          aria-label="Tab 3"
+          className="tab h-10"
+          aria-label="OPENED Courses"
         />
         <div
           role="tabpanel"
           className="tab-content bg-base-100 border-base-300 rounded-box p-6"
         >
-          Tab content 3
+          <div className="grid grid-rows-3 grid-flow-col gap-6">
+            <div className="flex flex-row justify-start px-4 space-x-7">
+              <CourseCard />
+              <CourseCard />
+            </div>
+          </div>
+          Tab content 2
         </div>
       </div>
     </div>
@@ -56,46 +62,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-/*
-<div className="mt-5">
-        <div className="font-sans text-base">
-          <div
-            role="tablist"
-            aria-label="tabs"
-            className="tabs tabs-lifted relative w-max grid grid-cols-2 items-center overflow-hidden bg-gray-900/20 shadow-2xl shadow-900/20 rounded-t-xl transition"
-          >
-            <input
-              type="radio"
-              role="tab"
-              aria-selected="true"
-              aria-controls="panel-1"
-              id="tab-1"
-              tabIndex={0}
-              className="relative block tab rounded-t-xl h-10 px-6"
-            >
-              <span className="text-gray-800 font-sans text-bas">
-                IT Center Courses
-              </span>
-            </input>
-            <div
-              role="tabpanel"
-              className="tab-content rounded-b-xl h-40 bg-gray-500"
-            >
-              hello
-            </div>
-            <input
-              type="radio"
-              role="tab"
-              aria-selected="false"
-              aria-controls="panel-2"
-              id="tab-2"
-              tabIndex={-1}
-              className="relative block tab rounded-t-xl-full h-10 px-6"
-            >
-              <span className="text-gray-800 font-sans">OPENED Courses</span>
-            </input>
-          </div>
-        </div>
-      </div>
- */
