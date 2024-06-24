@@ -108,6 +108,7 @@ body {
   max-height: 160px;
   width: 640px;
 }
+
 @media (max-width: 640px) {
   .hambutton .plates {
     width: 320px;
@@ -181,7 +182,7 @@ body {
 }
 
 .transition-visible {
-  max-height: 500px; /* Adjust this value as needed */
+  max-height: 500px;
   opacity: 1;
 }
 
