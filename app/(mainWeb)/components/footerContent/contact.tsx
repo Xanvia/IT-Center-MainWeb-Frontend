@@ -7,7 +7,7 @@ const Contact = () => {
         <div className="col-span-1">
           <p className="w-1/4 text-sm text-yellow-600">Telephone:</p>
         </div>
-        <div className="col-span-2 text-right">
+        <div className="col-span-2 md:text-right translate-y-4">
           <p className="text-sm">
             +94 (0) 81 2384848
             <br />
