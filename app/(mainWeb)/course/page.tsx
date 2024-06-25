@@ -2,6 +2,8 @@ import React from "react";
 import CourseCard from "./courseCard";
 import cardList from "./courseData";
 import { divider } from "@nextui-org/react";
+import { Span } from "next/dist/trace";
+import { Options } from "./options";
 
 const Home: React.FC = () => {
   return (
@@ -10,51 +12,67 @@ const Home: React.FC = () => {
         Course Overview
       </h1>
       <br />
-      <div role="tablist" className="tabs tabs-lifted h-11">
+
+      <div role="tablist" className="tabs tabs-lifted">
         <input
           type="radio"
           name="my_tabs_2"
           role="tab"
           className="tab h-10"
-          aria-label="Undergraduate Courses"
+          aria-label="Undergraduate"
           defaultChecked
         />
         <div
           role="tabpanel"
           className="tab-content bg-base-100 border-base-300 rounded-box p-6"
         >
-          <div className="grid grid-rows-3 grid-flow-col gap-6">
-            <div className="flex flex-row justify-start px-4 space-x-7">
-              <CourseCard />
-              <CourseCard />
+          <Options />
+          <br />
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 p-5">
+            <div className="">
               <CourseCard />
             </div>
-
-            <div className="flex flex-row justify-start px-4 space-x-7">
+            <div className="">
               <CourseCard />
+            </div>
+            <div className="">
+              <CourseCard />
+            </div>
+            <div className="">
+              <CourseCard />
+            </div>
+            <div className="">
               <CourseCard />
             </div>
           </div>
         </div>
-
         <input
           type="radio"
           name="my_tabs_2"
           role="tab"
           className="tab h-10"
-          aria-label="OPENED Courses"
+          aria-label="OPENED"
         />
         <div
           role="tabpanel"
           className="tab-content bg-base-100 border-base-300 rounded-box p-6"
         >
-          <div className="grid grid-rows-3 grid-flow-col gap-6">
-            <div className="flex flex-row justify-start px-4 space-x-7">
+          <Options />
+          <br />
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 p-5">
+            <div className="">
               <CourseCard />
+            </div>
+            <div className="">
+              <CourseCard />
+            </div>
+            <div className="">
+              <CourseCard />
+            </div>
+            <div className="">
               <CourseCard />
             </div>
           </div>
-          Tab content 2
         </div>
       </div>
     </div>
