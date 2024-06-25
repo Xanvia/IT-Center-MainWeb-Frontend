@@ -4,6 +4,7 @@ import cardList from "./courseData";
 import { divider } from "@nextui-org/react";
 import { Span } from "next/dist/trace";
 import { Options } from "./options";
+import HCourseCard from "../components/cards/hCourseCard";
 
 const Home: React.FC = () => {
   return (
@@ -30,19 +31,19 @@ const Home: React.FC = () => {
           <br />
           <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 p-5">
             <div className="">
-              <CourseCard />
+              <HCourseCard />
             </div>
             <div className="">
-              <CourseCard />
+              <HCourseCard />
             </div>
             <div className="">
-              <CourseCard />
+              <HCourseCard />
             </div>
             <div className="">
-              <CourseCard />
+              <HCourseCard />
             </div>
             <div className="">
-              <CourseCard />
+              <HCourseCard />
             </div>
           </div>
         </div>
@@ -61,16 +62,16 @@ const Home: React.FC = () => {
           <br />
           <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 p-5">
             <div className="">
-              <CourseCard />
+              <HCourseCard />
             </div>
             <div className="">
-              <CourseCard />
+              <HCourseCard />
             </div>
             <div className="">
-              <CourseCard />
+              <HCourseCard />
             </div>
             <div className="">
-              <CourseCard />
+              <HCourseCard />
             </div>
           </div>
         </div>
