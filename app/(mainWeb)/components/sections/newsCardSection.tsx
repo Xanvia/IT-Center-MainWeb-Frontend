@@ -19,6 +19,7 @@ const NewsCards = () => {
     const scrollContainer = scrollContainerRef.current;
     if (scrollContainer) {
       scrollContainer.addEventListener("scroll", handleScroll);
+      handleScroll();
     }
 
     // Cleanup the event listener on component unmount
@@ -31,7 +32,7 @@ const NewsCards = () => {
   return (
     <div className="relative my-16">
       <div
-        className="flex overflow-x-scroll space-x-2 lg:justify-between snap-x snap-mandatory scrollbar-hide"
+        className="flex overflow-x-scroll space-x-2 lg:justify-between snap-x snap-mandatory scrollbar-hide touch-pan-x"
         ref={scrollContainerRef}
       >
         <div className="snap-start">

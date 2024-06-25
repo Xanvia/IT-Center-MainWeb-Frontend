@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
+import { Carousalimages } from "@/constants/homePageData";
 
 interface ArrowProps {
   onClick?: () => void;
@@ -29,13 +30,6 @@ const PrevArrow: React.FC<ArrowProps> = ({ onClick }) => {
 
 // Image array
 export const Carousel: React.FC = () => {
-  const images = [
-    "/Slide/first.png",
-    "/Slide/second.png",
-    "/Slide/third.png",
-    "/Slide/first.png",
-    "/Slide/second.png",
-  ];
   const [imgIndex, setImgIndex] = useState(0);
   const [width, setWidth] = useState(0);
 
@@ -71,6 +65,7 @@ export const Carousel: React.FC = () => {
           <div
             className="csl-dots"
             style={{
+              scale: "110%",
               borderRadius: "15px",
               width: "auto",
               backgroundColor: "gray",
@@ -83,7 +78,7 @@ export const Carousel: React.FC = () => {
       )}
       className="h-96"
     >
-      {images.map((img, idx) => (
+      {Carousalimages.map((img, idx) => (
         <div
           key={idx}
           className={
