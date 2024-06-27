@@ -1,6 +1,4 @@
 import React from "react";
-import { Phone } from "./phone";
-import { Card } from "./card";
 
 const Home: React.FC = () => {
   return (
