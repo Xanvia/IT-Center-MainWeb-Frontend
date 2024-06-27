@@ -182,7 +182,7 @@ export default function NavBar() {
                     <ul>
                       <li className="py-1 hover:scale-110 duration-300">
                         <Link
-                          href="/staff"
+                          href="/staffDetails"
                           className="text-black  hover:text-gray-500"
                         >
                           Staff
