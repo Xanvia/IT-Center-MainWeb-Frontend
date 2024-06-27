@@ -1,4 +1,5 @@
 import React from "react";
+import ReqServicesForm from "./form";
 
 const Home: React.FC = () => {
   return (
@@ -22,7 +23,7 @@ const Home: React.FC = () => {
           technology in achieving their business objectives.
         </p>
         <h2 className="text-base text-center pt-10">OUR SERVICES</h2>
-        <div className="grid md:grid-cols-4 sm:grid-cols-2 xs:grid-row gap-4 m-8 justify-center  pb-10">
+        <div className="grid md:grid-cols-4 sm:grid-cols-2 xs:grid-row gap-4 m-8 justify-center pb-10">
           <div className="bg-slate-100 rounded-box mx-6 shadow-md border-1 border-blue-950 hover:bg-cyan-100">
             <p className="text-center justify-center p-3 mx-4">
               Identifying Business Needs
@@ -44,10 +45,10 @@ const Home: React.FC = () => {
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 pt-10 bg-blue-300">
-          <div className="bg-blue-600">01</div>
 
-          <div className="bg-blue-800">09</div>
+        <div className=" border-1 m-14 rounded-box bg-slate-300 shadow-lg p-14">
+          <h2 className="text-base pb-10">REQUESTING SERVICES</h2>
+          <ReqServicesForm />
         </div>
       </div>
     </div>
