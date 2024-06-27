@@ -5,7 +5,7 @@ import MainPanel from '../details/mainPanel';
 export default function mapMainPanel() {
   return (
   <div className='flex justify-center items-center'>
-    <div className='flex justify-between w-4/5'>
+    <div className='flex justify-between w-11/12'>
    
 
         {MainPanel.map((panel, index) => (

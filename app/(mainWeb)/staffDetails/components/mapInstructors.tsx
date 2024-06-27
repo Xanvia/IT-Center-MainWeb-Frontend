@@ -8,7 +8,7 @@ export default function mapInstructors() {
   return (
     <div> 
     <div className='flex justify-center items-center'>
-      <div className='flex justify-between w-4/5'>
+      <div className='flex justify-between w-11/12'>
 
         {Instructors.map((instructor, index) => (
             <ContactListItem
