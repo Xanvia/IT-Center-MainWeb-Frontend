@@ -23,7 +23,7 @@ const App: React.FC = () => {
           </div>
            
           <div className={styles.SelItem}>
-            <div>
+            <div className={styles.head}>
               <CustomAccordion
                 onItemSelected={setContent}
                 onPhotosSelected={setPhotos}
