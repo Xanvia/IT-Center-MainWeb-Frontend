@@ -6,11 +6,12 @@
   position: relative;
 }
 
-.Headline{
+.pageName{
   text-align: left;
   font-size: 30px;
   color: #333;
   margin-left: 20px;
+  margin-bottom: 50px;
 }
 
 .ContentWrapper{
@@ -24,7 +25,7 @@
 .ContentHeadline{
     position: absolute;
     top: -50px; 
-    left: 0px; 
+  
     font-size: 24px;
     color:white ;
     background-color: #0000ff;
@@ -36,7 +37,7 @@
     margin-left: 350px;
 }
 
-.SelItem{
+.itemBox{
   flex: 1;
   padding: 20px;
   border: 2px solid #ccc;
@@ -47,14 +48,14 @@
   margin-left: 20px;
 }
 
-.head{
+.headLine{
   color: rgb(0, 0, 0);
   font-size: 20px;
   text-align: left;
 
 }
 
-.Content{
+.ContentBox{
   flex: 1;
   padding: 20px;
   border: 2px solid #ccc;

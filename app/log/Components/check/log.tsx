@@ -16,14 +16,14 @@ const App: React.FC = () => {
   return (
     <NextUIProvider>
       <div className={styles.Container}>
-        <div className={styles.Headline}>Logs</div>
+        <div className={styles.pageName}>Logs</div>
         <div className={styles.ContentWrapper}>
           <div className={styles.ContentHeadline}>
             {content}
           </div>
            
-          <div className={styles.SelItem}>
-            <div className={styles.head}>
+          <div className={styles.itemBox}>
+            <div className={styles.headLine}>
               <CustomAccordion
                 onItemSelected={setContent}
                 onPhotosSelected={setPhotos}
@@ -32,7 +32,7 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          <div className={styles.Content}>
+          <div className={styles.ContentBox}>
             <div className={styles.Photos}>
               {photos.map((photo, index) => (
                 <img className={styles.Photo} key={index} src={photo} alt={`Photo ${index + 1}`} />
