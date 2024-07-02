@@ -2,30 +2,23 @@ import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-
-import {
-  MdNotifications,
-  MdOutlineDashboard,
-  MdOutlinePieChart,
-  MdOutlineSchool,
-  MdOutlineSettings,
-  MdPhonelinkSetup,
-} from "react-icons/md";
 import { HamButton } from "@/app/(mainWeb)/components/buttons/hamButton";
 import SidebarLinkGroup from "./linkGroup";
 import { Tab } from "./tab";
 import { ArrowIcon } from "./arrowIcon";
+
 import {
-  FaComputer,
-  FaPeopleArrows,
-  FaPeopleGroup,
-  FaRegPaste,
-} from "react-icons/fa6";
+  MdNotifications,
+  MdOutlineDashboard,
+  MdOutlineSchool,
+  MdOutlineSettings,
+  MdPhonelinkSetup,
+} from "react-icons/md";
+import { FaPeopleArrows, FaPeopleGroup, FaRegPaste } from "react-icons/fa6";
 import {
   BsBuildingFill,
   BsBuildingFillAdd,
   BsBuildingFillGear,
-  BsGraphUpArrow,
 } from "react-icons/bs";
 import { FaUserCog } from "react-icons/fa";
 import { PiStudentBold } from "react-icons/pi";
@@ -113,7 +106,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         </button>
       </div>
 
-      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear text-gray-300">
+      <div className="scrollbar-hide flex flex-col overflow-y-auto duration-300 ease-linear text-gray-300">
         {/* sidebar tab */}
         <nav className=" px-4 py-4 lg:mt-7 lg:px-6">
           {/*  Menu Group */}
@@ -135,8 +128,8 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* Registration */}
               <li>
                 <Tab pathname="/courses/registration">
-                  <div>
-                    <FaRegPaste size={20} />
+                  <div className="flex justify-center w-5">
+                    <FaRegPaste size={18} />
                   </div>
                   Registration
                 </Tab>
@@ -144,8 +137,8 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* Enrolled Courses */}
               <li>
                 <Tab pathname="/courses">
-                  <div>
-                    <MdOutlineSchool size={22} />
+                  <div className="flex justify-center w-5">
+                    <MdOutlineSchool size={20} />
                   </div>
                   Enrolled Courses
                 </Tab>
@@ -159,7 +152,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* Profile */}
               <li>
                 <Tab pathname="/profile">
-                  <div>
+                  <div className="flex justify-center w-5">
                     <MdPhonelinkSetup size={22} />
                   </div>
                   Profile
@@ -173,12 +166,12 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <h3 className="mb-4 ml-4 text-sm font-semibold text-gray-100">
               OTHERS
             </h3>
-            <ul className="mb-6 flex flex-col gap-1.5">
+            <ul className="mb-6 flex flex-col gap-1.5 font-medium">
               {/* Notification  */}
               <li>
                 <Tab pathname="/notification">
-                  <div>
-                    <MdNotifications size={22} />
+                  <div className="flex justify-center w-5">
+                    <MdNotifications size={20} />
                   </div>
                   Notification
                 </Tab>
@@ -186,8 +179,8 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* Account Settings  */}
               <li>
                 <Tab pathname="/settings">
-                  <div>
-                    <MdOutlineSettings size={22} />
+                  <div className="flex justify-center w-5">
+                    <MdOutlineSettings size={20} />
                   </div>
                   Account Settings
                 </Tab>
@@ -200,7 +193,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <h3 className="mb-4 ml-4 text-sm font-semibold text-gray-100">
               ADMIN
             </h3>
-            <ul className="mb-6 flex flex-col gap-1.5">
+            <ul className="mb-6 flex flex-col gap-1.5 font-medium">
               <SidebarLinkGroup
                 activeCondition={pathname.includes("reservations")}
               >
@@ -220,28 +213,30 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             : setSidebarExpanded(true);
                         }}
                       >
-                        <BsBuildingFill />
+                        <div className="flex justify-center w-5">
+                          <BsBuildingFill size={18} />
+                        </div>
                         Reservations
                         <ArrowIcon open={open} />
                       </div>
                       <div
                         className={` overflow-hidden dropdown-menu  ${
-                          open ? "h-32 opacity-100" : "h-0 opacity-0"
+                          open ? "h-24 opacity-100" : "h-0 opacity-0"
                         }`}
                       >
-                        <ul className="mb-5 mt-4 flex flex-col gap-2 pl-6">
+                        <ul className="mb-5 mt-2 flex flex-col gap-2 pl-6">
                           <li>
                             <Tab pathname="/admin/reservations/requests">
-                              <div>
-                                <BsBuildingFillAdd />
+                              <div className="flex justify-center w-5">
+                                <BsBuildingFillAdd size={18} />
                               </div>
                               Requests
                             </Tab>
                           </li>
                           <li>
                             <Tab pathname="/admin/reservations/halls">
-                              <div>
-                                <BsBuildingFillGear />
+                              <div className="flex justify-center w-5">
+                                <BsBuildingFillGear size={18} />
                               </div>
                               Labs & Halls
                             </Tab>
@@ -255,7 +250,9 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
               <li>
                 <Tab pathname="/admin/courses">
-                  <MdOutlineSchool size={22} />
+                  <div className="flex justify-center w-5">
+                    <MdOutlineSchool size={20} />
+                  </div>
                   Courses
                 </Tab>
               </li>
@@ -267,10 +264,10 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   return (
                     <>
                       <div
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === "/forms" ||
-                            pathname.includes("forms")) &&
-                          "bg-graydark dark:bg-meta-4"
+                        className={`group relative flex items-center gap-2 rounded-md px-4 py-2 duration-300 ease-in-out  ${
+                          pathname === "/admin/reservations"
+                            ? "bg-yellow-400 text-black"
+                            : "hover:bg-gray-400 hover:text-black"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -279,37 +276,39 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             : setSidebarExpanded(true);
                         }}
                       >
-                        <FaPeopleArrows />
+                        <div className="flex justify-center w-5">
+                          <FaPeopleArrows size={22} />
+                        </div>
                         Services
                         <ArrowIcon open={open} />
                       </div>
                       {/* <!-- Dropdown Menu Start --> */}
                       <div
-                        className={`translate transform overflow-hidden ${
-                          !open && "hidden"
+                        className={` overflow-hidden dropdown-menu  ${
+                          open ? "h-36 opacity-100" : "h-0 opacity-0"
                         }`}
                       >
-                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                        <ul className="mb-5 mt-1 flex flex-col gap-2 pl-6">
                           <li>
                             <Tab pathname="/admin/services/log">
-                              <div>
-                                <FaPeopleGroup />
+                              <div className="flex justify-center w-5">
+                                <FaPeopleGroup size={20} />
                               </div>
                               Logs
                             </Tab>
                           </li>
                           <li>
                             <Tab pathname="/admin/services/news">
-                              <div>
-                                <FaPeopleGroup />
+                              <div className="flex justify-center w-5">
+                                <FaPeopleGroup size={20} />
                               </div>
                               News
                             </Tab>
                           </li>
                           <li>
                             <Tab pathname="/admin/services/project">
-                              <div>
-                                <FaPeopleGroup />
+                              <div className="flex justify-center w-5">
+                                <FaPeopleGroup size={20} />
                               </div>
                               Project
                             </Tab>
@@ -328,9 +327,10 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   return (
                     <>
                       <div
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          pathname.includes("/admin/users") &&
-                          "bg-graydark dark:bg-meta-4"
+                        className={`group relative flex items-center gap-2 rounded-md px-4 py-2 duration-300 ease-in-out  ${
+                          pathname === "/admin/reservations"
+                            ? "bg-yellow-400 text-black"
+                            : "hover:bg-gray-400 hover:text-black"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -339,37 +339,39 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             : setSidebarExpanded(true);
                         }}
                       >
-                        <FaUserCog />
+                        <div className="flex justify-center w-5">
+                          <FaUserCog size={20} />
+                        </div>
                         Users
                         <ArrowIcon open={open} />
                       </div>
                       {/* <!-- Dropdown Menu Start --> */}
                       <div
-                        className={`translate transform overflow-hidden ${
-                          !open && "hidden"
+                        className={` overflow-hidden dropdown-menu  ${
+                          open ? "h-36 opacity-100" : "h-0 opacity-0"
                         }`}
                       >
-                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                        <ul className="mb-5 mt-1 flex flex-col gap-2 pl-6">
                           <li>
                             <Tab pathname="/admin/users/student">
-                              <div>
-                                <PiStudentBold />
+                              <div className="flex justify-center w-5">
+                                <PiStudentBold size={20} />
                               </div>
                               Student
                             </Tab>
                           </li>
                           <li>
                             <Tab pathname="/admin/users/staff">
-                              <div>
-                                <GrUserManager />
+                              <div className="flex justify-center w-5">
+                                <GrUserManager size={20} />
                               </div>
                               Staff
                             </Tab>
                           </li>
                           <li>
                             <Tab pathname="/admin/users/admin">
-                              <div>
-                                <RiAdminFill />
+                              <div className="flex justify-center w-5">
+                                <RiAdminFill size={20} />
                               </div>
                               Admin
                             </Tab>
@@ -383,7 +385,9 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
               <li>
                 <Tab pathname="/admin/analysis">
-                  <BiSolidReport />
+                  <div className="flex justify-center w-5">
+                    <BiSolidReport size={20} />
+                  </div>
                   Analysis
                 </Tab>
               </li>
