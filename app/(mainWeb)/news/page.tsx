@@ -6,7 +6,7 @@ const Home: React.FC = () => {
     <div className="p-10">
       <h1 className=" font-sans md:text-xl sm:text-lg text-base">News</h1>
       <br />
-      <div className="">
+      <div className="pb-10">
         <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1">
           <NCard />
           <NCard />
