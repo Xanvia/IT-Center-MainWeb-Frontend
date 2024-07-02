@@ -1,0 +1,79 @@
+.Container{
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  margin: auto;
+  position: relative;
+}
+
+.Headline{
+  text-align: left;
+  font-size: 30px;
+  color: #333;
+  margin-left: 20px;
+}
+
+.ContentWrapper{
+  display: flex;
+  gap: 20px;
+  margin-top: 40px;
+  position: relative;
+  }
+
+
+.ContentHeadline{
+    position: absolute;
+    top: -50px; 
+    left: 0px; 
+    font-size: 24px;
+    color:white ;
+    background-color: #0000ff;
+    padding:0px 20px;
+    border-radius: 10px;
+    z-index: 1;
+    display: inline-block;
+    min-width: 500px;
+    margin-left: 350px;
+}
+
+.SelItem{
+  flex: 1;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  position: relative;
+  min-width:290px;
+  max-width: 290px;
+  margin-left: 20px;
+}
+
+
+.Content{
+  flex: 1;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  min-width: 500px;
+  position: relative;
+  margin-left: 20px;
+}
+
+.Photos{
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.Photo{
+  width: calc(33.333% - 10px);
+  border-radius: 8px;
+  object-fit: contain;
+  max-width: 400px;
+}
+
+.Paragraph{
+  margin-top: 20px;
+  font-size: 16px;
+  color: #333;
+}
