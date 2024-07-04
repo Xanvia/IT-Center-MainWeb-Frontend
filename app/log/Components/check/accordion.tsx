@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../check/log.module.css';
+import styles from '../check/log.module.css'
 
 interface AccordionProps {
   onItemSelected: (title: string) => void;
@@ -24,27 +24,22 @@ const CustomAccordion: React.FC<AccordionProps> = ({ onItemSelected, onPhotosSel
   return (
     <div className={styles.accordion}>
       {[{
-        title: 'title for paragraph 1',
+        title: 'Item 1',
         photos: ["/logjpg/im1.jpg", "/logjpg/im2.jpg", "/logjpg/im3.jpg"],
         paragraph: ["1 This is the paragraph for Item 1Some essay samples below are by students who chose to write about a challenge, while other examples may be helpful if you’re looking to write about yourself more generally. And yes, a few of these essays did help these students get accepted into the Ivy League (I’m not telling you which!) though these are all great essays regardless of where (or if) students were admitted to their top choice school."]
       }, {
-        title: 'title for paragraph 2',
+        title: 'Item 2',
         photos: ["/logjpg/im2.jpg", "/logjpg/im1.jpg", "/logjpg/im4.jpg"],
         paragraph: ['2 This is the paragraph for Item 1 Some essay samples below are by students who chose to write about a challenge, while other examples may be helpful if you’re looking to write about yourself more generally. And yes, a few of these essays did help these students get accepted into the Ivy League (I’m not telling you which!) though these are all great essays regardless of where (or if) students were admitted to their top choice school.']
       }, {
-        title: 'title for paragraph 3',
+        title: 'Item 3',
         photos: ["/logjpg/im4.jpg", "/logjpg/im2.jpg", "/logjpg/im1.jpg"],
         paragraph: ['3 This is the paragraph for Item 1 Some essay samples below are by students who chose to write about a challenge, while other examples may be helpful if you’re looking to write about yourself more generally. And yes, a few of these essays did help these students get accepted into the Ivy League (I’m not telling you which!) though these are all great essays regardless of where (or if) students were admitted to their top choice school.']
       }].map((item, index) => (
         <div key={index}>
-          <div className={styles.accordion_title} onClick={() => handleItemClick(index, item.title, item.photos, item.paragraph)}>
+          <div className={styles.accordion_title } onClick={() => handleItemClick(index, item.title, item.photos, item.paragraph)}>
             {item.title}
-          </div>
-          {activeIndex === index && (
-            <div className={styles.accordion_content}>
-              {/* The actual content is set by parent, no need to render here */}
-            </div>
-          )}
+          </div> 
         </div>
       ))}
     </div>
