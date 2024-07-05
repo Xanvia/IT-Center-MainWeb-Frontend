@@ -40,7 +40,7 @@ export const HamButton: React.FC<HamButtonProps> = ({ isClicked, isBlack }) => {
           <path
             className="line line1"
             d="M 50,35 H 30"
-            style={{ stroke: "black" }}
+            style={isBlack ? black : {}}
           />
           <path
             className="line line2"

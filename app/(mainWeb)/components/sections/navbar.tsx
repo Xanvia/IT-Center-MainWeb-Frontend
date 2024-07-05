@@ -53,6 +53,7 @@ export default function NavBar() {
 
   // close by path change
   useEffect(() => {
+    setIsMobileMenuOpen(false);
     setShowServicesDropdown(false);
     setShowAboutDropdown(false);
   }, [path]);
@@ -91,11 +92,11 @@ export default function NavBar() {
         {/* right side  */}
         <div className="flex items-center">
           <ul
-            className={`md:flex flex-col text-center w-full text-xl md:text-base md:w-auto md:flex-row items-center transition-height ${
+            className={`md:flex flex-col text-center w-full text-xl md:text-base md:w-auto md:flex-row items-center dropdown-menu ${
               isMobileMenuOpen
-                ? "transition-visible"
-                : "transition-hidden md:max-h-max md:opacity-100"
-            } `}
+                ? "h-72 opacity-100"
+                : "h-0 opacity-0 md:max-h-max md:opacity-100"
+            } ${showServicesDropdown || showAboutDropdown ? " h-96" : ""} `}
           >
             <li className=" m-6 md:m-4 md:ml-0">
               <Link href="/" className="text-white hover:text-yellow-100 ">
