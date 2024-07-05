@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { HamButton } from "../buttons/hamButton";
 import { TiArrowSortedDown } from "react-icons/ti";
+import { usePathname } from "next/navigation";
 
 export default function NavBar() {
+  const path = usePathname();
   // dropdown use states
   const [showServicesDropdown, setShowServicesDropdown] =
     useState<boolean>(false);
@@ -95,10 +97,14 @@ export default function NavBar() {
                 Home
               </Link>
             </li>
-            <li className=" m-6 md:m-4">
+            <li className="m-6 md:m-4">
               <Link
                 href="/courses"
-                className="text-white hover:text-yellow-100"
+                className={`${
+                  path === "/courses"
+                    ? "text-yellow-200"
+                    : "text-white hover:text-yellow-100"
+                }`}
               >
                 Courses
               </Link>
@@ -106,7 +112,11 @@ export default function NavBar() {
             <li className="relative m-6 md:m-4 z-10">
               <div ref={servicesDropdownRef}>
                 <div
-                  className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
+                  className={` cursor-pointer flex items-center justify-center ${
+                    path.includes("/services")
+                      ? "text-yellow-200"
+                      : "text-white hover:text-yellow-100"
+                  }`}
                   onClick={toggleServicesDropdown}
                 >
                   Services
@@ -127,7 +137,7 @@ export default function NavBar() {
                     <ul>
                       <li className="py-1 hover:scale-110  duration-300">
                         <Link
-                          href="/projects"
+                          href="/services/projects"
                           className="text-black hover:text-gray-500 "
                         >
                           Projects
@@ -135,7 +145,7 @@ export default function NavBar() {
                       </li>
                       <li className="py-1 hover:scale-110  duration-300">
                         <Link
-                          href="/consultations"
+                          href="/services/consultations"
                           className="text-black  hover:text-gray-500"
                         >
                           Consultations
@@ -143,7 +153,7 @@ export default function NavBar() {
                       </li>
                       <li className="py-1 hover:scale-110 duration-300">
                         <Link
-                          href="/logs"
+                          href="/services/logs"
                           className="text-black  hover:text-gray-500"
                         >
                           Logs
@@ -155,14 +165,25 @@ export default function NavBar() {
               </div>
             </li>
             <li className="m-6 md:m-4">
-              <Link href="/news" className="text-white hover:text-yellow-100">
+              <Link
+                href="/news"
+                className={` ${
+                  path === "/news"
+                    ? "text-yellow-200"
+                    : "text-white hover:text-yellow-100"
+                }`}
+              >
                 News
               </Link>
             </li>
             <li className="relative m-6 md:m-4 z-10">
               <div ref={aboutDropdownRef}>
                 <div
-                  className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
+                  className={` cursor-pointer flex items-center justify-center ${
+                    path.includes("/aboutus")
+                      ? "text-yellow-200"
+                      : "text-white hover:text-yellow-100"
+                  }`}
                   onClick={toggleAboutDropdown}
                 >
                   AboutUs
@@ -182,7 +203,7 @@ export default function NavBar() {
                     <ul>
                       <li className="py-1 hover:scale-110 duration-300">
                         <Link
-                          href="/staff"
+                          href="/aboutus/staff"
                           className="text-black  hover:text-gray-500"
                         >
                           Staff
@@ -190,7 +211,7 @@ export default function NavBar() {
                       </li>
                       <li className="py-1 hover:scale-110 duration-300">
                         <Link
-                          href="/aboutUs"
+                          href="/aboutus/aboutUs"
                           className="text-black  hover:text-gray-500"
                         >
                           AboutUs

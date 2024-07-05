@@ -4,8 +4,8 @@ import ReqServicesForm from "./form";
 const Home: React.FC = () => {
   return (
     <div className="p-10">
-      <h1 className="text-gray-600 font-sans md:text-xl sm:text-lg text-base">
-        Consultation
+      <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl sm:text-lg text-center gird">
+        Consultations
       </h1>
       <div className="py-4">
         <figure>

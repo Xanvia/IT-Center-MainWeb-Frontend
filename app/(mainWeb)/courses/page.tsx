@@ -18,7 +18,7 @@ const Home: React.FC = () => {
           type="radio"
           name="my_tabs_2"
           role="tab"
-          className="tab h-10 text-lg text-maroon"
+          className="tab h-12 text-lg text-maroon"
           aria-label="Undergraduate"
           defaultChecked
         />
@@ -50,13 +50,10 @@ const Home: React.FC = () => {
           type="radio"
           name="my_tabs_2"
           role="tab"
-          className="tab h-10 text-lg"
+          className="tab h-12 text-lg"
           aria-label="External"
         />
-        <div
-          role="tabpanel"
-          className="tab-content border-base-300 rounded-box p-6 bg-white"
-        >
+        <div role="tabpanel" className="tab-content rounded-box p-6 bg-white">
           <Options />
           <br />
           <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 p-5">
