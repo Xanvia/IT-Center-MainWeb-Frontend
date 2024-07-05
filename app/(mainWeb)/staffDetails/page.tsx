@@ -1,9 +1,9 @@
-import ContactList from './components/contactList';
+import React from "react";
 
 export default function contact() {
-  return (<div>
-    <ContactList/>
-
-  </div>
-  )
+  return (
+    <div>
+      <h1>Hello</h1>
+    </div>
+  );
 }
