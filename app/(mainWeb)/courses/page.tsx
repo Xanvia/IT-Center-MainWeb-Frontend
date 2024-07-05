@@ -1,8 +1,4 @@
 import React from "react";
-import CourseCard from "./courseCard";
-import cardList from "./courseData";
-import { divider } from "@nextui-org/react";
-import { Span } from "next/dist/trace";
 import { Options } from "./options";
 import HCourseCard from "../components/cards/hCourseCard";
 
