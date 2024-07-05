@@ -5,11 +5,11 @@ import HCourseCard from "../components/cards/hCourseCard";
 const Home: React.FC = () => {
   return (
     <div className="p-10">
-      <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-4xl sm:text-lg text-center gird">
+      <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl sm:text-lg text-center gird">
         Course Overview
       </h1>
       <div className="flex justify-center mt-1">
-        <div className="bg-yellow-600 h-1 w-1/6 rounded-md"></div>
+        <div className="bg-yellow-600 h-1 w-36 rounded-md"></div>
       </div>
       <br />
 
