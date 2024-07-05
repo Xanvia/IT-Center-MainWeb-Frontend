@@ -53,6 +53,21 @@ export default function contact() {
           </div>
         </div>
       </div>
+      {/* Other-staff Section */}
+      <div className="  py-5">
+        <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
+          OTHER STAFF
+        </h2>
+        <br />
+        <div className=" py-10 grid lg:grid-cols-3 gap-10 sm:grid-cols-1">
+          <div className=" justify-center flex">
+            <StaffCard />
+          </div>
+          <div className=" justify-center flex">
+            <StaffCard />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
