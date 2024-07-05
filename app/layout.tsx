@@ -8,12 +8,14 @@ const vietnam = Be_Vietnam_Pro({
   weight: "300",
   subsets: ["latin"],
   variable: "--font-be-vietnam-pro",
+  display: "swap",
 });
 
 const rubik = Rubik({
   weight: "500",
   subsets: ["latin"],
   variable: "--font-rubik",
+  display: "swap",
 });
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
