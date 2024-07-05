@@ -2,7 +2,7 @@ import React from "react";
 
 export const StaffCard = () => {
   return (
-    <div className="bg-white shadow-xl rounded-lg w-96 border-slate-700 border-1">
+    <div className="bg-white shadow-xl rounded-lg w-96 border-slate-500 border-1">
       <h4 className="text-center p-1">Director</h4>
       <hr className="h-divider w-80 mx-auto bg-gray-200 border-0" />
       <div className=" rounded-lg flex flex-row px-4 py-2 gap-2">

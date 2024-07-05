@@ -4,6 +4,10 @@ import { StaffCard } from "./staffCard";
 export default function contact() {
   return (
     <div className="p-10">
+      <h1 className="text-gray-600 font-sans md:text-xl sm:text-lg text-base">
+        Staff
+      </h1>
+      {/* Admin Section */}
       <div className="  py-5">
         <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
           ADMINISTRATION
@@ -17,6 +21,33 @@ export default function contact() {
             <StaffCard />
           </div>
 
+          <div className=" justify-center flex">
+            <StaffCard />
+          </div>
+        </div>
+      </div>
+      {/* Instructors Section */}
+      <div className="  py-5">
+        <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
+          INSTRUCTORS
+        </h2>
+        <br />
+        <div className=" py-10 grid lg:grid-cols-3 gap-10 sm:grid-cols-1">
+          <div className=" justify-center flex">
+            <StaffCard />
+          </div>
+          <div className=" justify-center flex">
+            <StaffCard />
+          </div>
+          <div className=" justify-center flex">
+            <StaffCard />
+          </div>
+          <div className=" justify-center flex">
+            <StaffCard />
+          </div>
+          <div className=" justify-center flex">
+            <StaffCard />
+          </div>
           <div className=" justify-center flex">
             <StaffCard />
           </div>
