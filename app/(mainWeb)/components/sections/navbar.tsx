@@ -46,11 +46,16 @@ export default function NavBar() {
       }
     };
     document.addEventListener("mousedown", handler);
-
     return () => {
       document.removeEventListener("mousedown", handler);
     };
   });
+
+  // close by path change
+  useEffect(() => {
+    setShowServicesDropdown(false);
+    setShowAboutDropdown(false);
+  }, [path]);
 
   return (
     <nav className="bg-maroon">
@@ -128,10 +133,10 @@ export default function NavBar() {
                 </div>
                 {
                   <div
-                    className={`md:absolute top-full left-0 md:p-2 md:mt-1 bg-white rounded shadow block text-md transition-height ${
+                    className={`md:absolute top-full left-0 md:p-2 md:mt-1 bg-white rounded shadow block text-md dropdown-menu ${
                       showServicesDropdown
-                        ? "transition-visible"
-                        : "transition-hidden"
+                        ? "h-28 opacity-100"
+                        : "h-0 opacity-0 pointer-events-none"
                     }`}
                   >
                     <ul>
@@ -194,10 +199,10 @@ export default function NavBar() {
                 </div>
                 {
                   <div
-                    className={`md:absolute top-full left-0  md:p-2 md:mt-1 bg-white rounded shadow block text-md transition-height ${
+                    className={`md:absolute left-0  md:p-2 md:mt-1 bg-white rounded shadow block text-md dropdown-menu ${
                       showAboutDropdown
-                        ? "transition-visible"
-                        : "transition-hidden  "
+                        ? " h-20 opacity-100"
+                        : " h-0 opacity-0 pointer-events-none"
                     }`}
                   >
                     <ul>
