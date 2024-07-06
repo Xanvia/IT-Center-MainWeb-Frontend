@@ -1,12 +1,13 @@
-.Container{
+.Container {
   display: flex;
   gap: 20px;
   flex-direction: column;
   margin: auto;
   position: relative;
+  background-color: #dce0e1;
 }
 
-.pageName{
+.pageName {
   text-align: left;
   font-size: 30px;
   color: #333;
@@ -14,88 +15,68 @@
   margin-bottom: 50px;
 }
 
-.ContentWrapper{
+.ContentWrapper {
   display: flex;
-  gap: 20px;
-  margin-top: 40px;
+  gap: 0.5rem;
   position: relative;
-  }
-
-
-.ContentHeadline{
-    position: absolute;
-    top: -50px; 
-  
-    font-size: 24px;
-    color:white ;
-    background-color: #0000ff;
-    padding:0px 20px;
-    border-radius: 10px;
-    z-index: 1;
-    display: inline-block;
-    
-    margin-left: 350px;
+  margin-bottom: 1rem;
 }
 
-.itemBox{
+.ContentHeadline {
+  width: 100%;
+  font-size: 18px;
+  color: black;
+  background-color: #a4a4a4;
+  padding: 5px 20px;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+}
+
+.itemBox {
   flex: 1;
-  padding: 20px;
+  padding: 15px;
   border: 2px solid #ccc;
   border-radius: 8px;
   position: relative;
-  min-width:290px;
   max-width: 290px;
-  margin-left: 20px;
+  margin-left: 1rem;
 }
 
-.headLine{
+.headLine {
   color: rgb(0, 0, 0);
-  font-size: 20px;
+  font-size: 15px;
   text-align: left;
-
 }
 
-.ContentBox{
+.ContentBox {
   flex: 1;
-  padding: 20px;
+  padding: 15px;
   border: 2px solid #ccc;
   border-radius: 8px;
-  min-width: 500px;
+  min-width: 400px;
   position: relative;
-  margin-left: 20px;
+  margin-right: 1rem;
 }
-
-.Photos{
+.Photos {
   flex: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.Photo{
+.Photo {
   width: calc(33.333% - 10px);
   border-radius: 8px;
-  object-fit: contain;
+  object-fit: cover;
   max-width: 400px;
+  height: 400px;
 }
 
-.Paragraph{
+.Paragraph {
   margin-top: 20px;
   font-size: 16px;
   color: #333;
 }
-
-/*.accordion .accordion_title {
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin-bottom: 5px;
-  border-radius: 8px;
-}
-*/
-
 
 .accordion {
   display: flex;
@@ -103,8 +84,8 @@
 }
 
 .accordion_title {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 15px;
+  font-weight: semi-bold;
   cursor: pointer;
   padding: 10px;
   border-radius: 8px;
@@ -114,11 +95,7 @@
 }
 
 .accordion_title.active {
-  background-color: #0070f3; /* Highlight color */
-  color: white;
-  border-color: #0070f3;
+  background-color: #4f0007; /* Highlight color */
+  color: #ccc;
+  font-weight: bold;
 }
-
-
-
-
