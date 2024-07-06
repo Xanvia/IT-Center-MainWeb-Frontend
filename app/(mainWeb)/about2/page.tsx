@@ -15,7 +15,7 @@ const Home: React.FC = () => {
           (I’m not telling you which!) though these are all great essays regardless of where (or if) 
           students were admitted to their top choice school."
         />
-        <Contacts/>
+        
     </div>
        
     
@@ -24,3 +24,5 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+//<Contacts/>
