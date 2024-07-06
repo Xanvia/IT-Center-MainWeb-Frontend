@@ -29,9 +29,10 @@ const config: Config = {
       },
     },
   },
+
   plugins: [require("daisyui"), nextui()],
   daisyui: {
-    themes: ["light"]
+    themes: ["light"],
   },
   darkMode: "class",
 };
