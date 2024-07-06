@@ -96,7 +96,11 @@ export default function NavBar() {
               isMobileMenuOpen
                 ? "h-72 opacity-100"
                 : "h-0 opacity-0 md:max-h-max md:opacity-100"
-            } ${showServicesDropdown || showAboutDropdown ? " h-96" : ""} `}
+            } ${
+              isMobileMenuOpen && (showServicesDropdown || showAboutDropdown)
+                ? " h-96"
+                : ""
+            } `}
           >
             <li className=" m-6 md:m-4 md:ml-0">
               <Link href="/" className="text-white hover:text-yellow-100 ">
