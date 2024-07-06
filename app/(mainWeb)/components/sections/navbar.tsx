@@ -3,10 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { HamButton } from "./hamButton";
+import { HamButton } from "../buttons/hamButton";
 import { TiArrowSortedDown } from "react-icons/ti";
+import { usePathname } from "next/navigation";
 
 export default function NavBar() {
+  const path = usePathname();
   // dropdown use states
   const [showServicesDropdown, setShowServicesDropdown] =
     useState<boolean>(false);
@@ -44,11 +46,17 @@ export default function NavBar() {
       }
     };
     document.addEventListener("mousedown", handler);
-
     return () => {
       document.removeEventListener("mousedown", handler);
     };
   });
+
+  // close by path change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setShowServicesDropdown(false);
+    setShowAboutDropdown(false);
+  }, [path]);
 
   return (
     <nav className="bg-maroon">
@@ -84,21 +92,29 @@ export default function NavBar() {
         {/* right side  */}
         <div className="flex items-center">
           <ul
-            className={`md:flex flex-col text-center w-full text-xl md:text-base md:w-auto md:flex-row items-center transition-height ${
+            className={`md:flex flex-col text-center w-full text-xl md:text-base md:w-auto md:flex-row items-center dropdown-menu ${
               isMobileMenuOpen
-                ? "transition-visible"
-                : "transition-hidden md:max-h-max md:opacity-100"
+                ? "h-72 opacity-100"
+                : "h-0 opacity-0 md:max-h-max md:opacity-100"
+            } ${
+              isMobileMenuOpen && (showServicesDropdown || showAboutDropdown)
+                ? " h-96"
+                : ""
             } `}
           >
             <li className=" m-6 md:m-4 md:ml-0">
-              <Link href="/home" className="text-white hover:text-yellow-100 ">
+              <Link href="/" className="text-white hover:text-yellow-100 ">
                 Home
               </Link>
             </li>
-            <li className=" m-6 md:m-4">
+            <li className="m-6 md:m-4">
               <Link
                 href="/courses"
-                className="text-white hover:text-yellow-100"
+                className={`${
+                  path === "/courses"
+                    ? "text-yellow-200"
+                    : "text-white hover:text-yellow-100"
+                }`}
               >
                 Courses
               </Link>
@@ -106,7 +122,11 @@ export default function NavBar() {
             <li className="relative m-6 md:m-4 z-10">
               <div ref={servicesDropdownRef}>
                 <div
-                  className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
+                  className={` cursor-pointer flex items-center justify-center ${
+                    path.includes("/services")
+                      ? "text-yellow-200"
+                      : "text-white hover:text-yellow-100"
+                  }`}
                   onClick={toggleServicesDropdown}
                 >
                   Services
@@ -118,16 +138,16 @@ export default function NavBar() {
                 </div>
                 {
                   <div
-                    className={`md:absolute top-full left-0 md:p-2 md:mt-1 bg-white rounded shadow block text-md transition-height ${
+                    className={`md:absolute top-full left-0 md:p-2 md:mt-1 bg-white rounded shadow block text-md dropdown-menu ${
                       showServicesDropdown
-                        ? "transition-visible"
-                        : "transition-hidden"
+                        ? "h-28 opacity-100"
+                        : "h-0 opacity-0 pointer-events-none"
                     }`}
                   >
                     <ul>
                       <li className="py-1 hover:scale-110  duration-300">
                         <Link
-                          href="/projects"
+                          href="/services/projects"
                           className="text-black hover:text-gray-500 "
                         >
                           Projects
@@ -135,7 +155,7 @@ export default function NavBar() {
                       </li>
                       <li className="py-1 hover:scale-110  duration-300">
                         <Link
-                          href="/consultations"
+                          href="/services/consultations"
                           className="text-black  hover:text-gray-500"
                         >
                           Consultations
@@ -143,7 +163,7 @@ export default function NavBar() {
                       </li>
                       <li className="py-1 hover:scale-110 duration-300">
                         <Link
-                          href="/logs"
+                          href="/services/logs"
                           className="text-black  hover:text-gray-500"
                         >
                           Logs
@@ -155,14 +175,25 @@ export default function NavBar() {
               </div>
             </li>
             <li className="m-6 md:m-4">
-              <Link href="/news" className="text-white hover:text-yellow-100">
+              <Link
+                href="/news"
+                className={` ${
+                  path === "/news"
+                    ? "text-yellow-200"
+                    : "text-white hover:text-yellow-100"
+                }`}
+              >
                 News
               </Link>
             </li>
             <li className="relative m-6 md:m-4 z-10">
               <div ref={aboutDropdownRef}>
                 <div
-                  className="text-white hover:text-yellow-100 cursor-pointer flex items-center justify-center"
+                  className={` cursor-pointer flex items-center justify-center ${
+                    path.includes("/aboutus")
+                      ? "text-yellow-200"
+                      : "text-white hover:text-yellow-100"
+                  }`}
                   onClick={toggleAboutDropdown}
                 >
                   AboutUs
@@ -173,16 +204,16 @@ export default function NavBar() {
                 </div>
                 {
                   <div
-                    className={`md:absolute top-full left-0  md:p-2 md:mt-1 bg-white rounded shadow block text-md transition-height ${
+                    className={`md:absolute left-0  md:p-2 md:mt-1 bg-white rounded shadow block text-md dropdown-menu ${
                       showAboutDropdown
-                        ? "transition-visible"
-                        : "transition-hidden  "
+                        ? " h-20 opacity-100"
+                        : " h-0 opacity-0 pointer-events-none"
                     }`}
                   >
                     <ul>
                       <li className="py-1 hover:scale-110 duration-300">
                         <Link
-                          href="/about1"
+                          href="/aboutus/staff"
                           className="text-black  hover:text-gray-500"
                         >
                           Staff
@@ -190,10 +221,10 @@ export default function NavBar() {
                       </li>
                       <li className="py-1 hover:scale-110 duration-300">
                         <Link
-                          href="/about2"
+                          href="/aboutus/aboutUs"
                           className="text-black  hover:text-gray-500"
                         >
-                          Company
+                          AboutUs
                         </Link>
                       </li>
                     </ul>
