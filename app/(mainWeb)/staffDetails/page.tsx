@@ -8,7 +8,7 @@ export default function contact() {
         Staff
       </h1>
       {/* Admin Section */}
-      <div className="  py-5">
+      <div className="py-10">
         <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
           ADMINISTRATION
         </h2>
@@ -27,7 +27,7 @@ export default function contact() {
         </div>
       </div>
       {/* Instructors Section */}
-      <div className="  py-5">
+      <div className="  py-10">
         <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
           INSTRUCTORS
         </h2>
@@ -54,7 +54,7 @@ export default function contact() {
         </div>
       </div>
       {/* Other-staff Section */}
-      <div className="  py-5">
+      <div className="  py-10">
         <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
           OTHER STAFF
         </h2>
