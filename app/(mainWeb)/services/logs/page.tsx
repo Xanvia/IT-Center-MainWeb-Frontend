@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       <div className={styles.Container}>
-        <div className="p-2 md:pt-8 pb-2">
+        <div className="p-2 md:pt-10 pb-2">
           <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl text-xl text-center gird">
             Service Log
           </h1>
