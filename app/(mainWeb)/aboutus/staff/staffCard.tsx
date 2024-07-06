@@ -6,10 +6,10 @@ export const StaffCard = () => {
       <span className="indicator-item badge border-1 border-slate-500 indicator-bottom indicator-center text-xs">
         Ext 2901
       </span>
-      <div className="bg-white shadow-xl rounded-lg w-96 border-slate-500 border-1">
+      <div className="bg-white shadow-xl rounded-lg h-52 w-96 border-slate-500 border-1">
         <h4 className="text-center p-1">Director</h4>
         <hr className="h-divider w-80 mx-auto bg-gray-200 border-0" />
-        <div className=" rounded-lg flex flex-row px-4 py-2 gap-2">
+        <div className=" rounded-lg flex flex-row h-44 px-4 py-2 gap-2">
           <div className="avatar flex-none">
             <div className="w-28 h-28 rounded-full">
               <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
@@ -17,7 +17,7 @@ export const StaffCard = () => {
           </div>
           <div className=" w-max">
             <p className="text-sm">Dr. Upul Jayasinghe</p>
-            <div className="">
+            <div className=" ">
               <p className="text-xs text-left">
                 Ph.D (UK), M.Eng (Thailand), B.Sc (Moratuwa)
               </p>

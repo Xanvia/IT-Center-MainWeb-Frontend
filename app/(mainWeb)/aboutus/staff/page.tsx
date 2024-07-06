@@ -4,9 +4,12 @@ import { StaffCard } from "./staffCard";
 export default function contact() {
   return (
     <div className="p-10">
-      <h1 className="text-gray-600 font-sans md:text-xl sm:text-lg text-base">
-        Staff
+      <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl sm:text-lg text-center gird">
+        Our Staff Members
       </h1>
+      <div className="flex justify-center mt-1">
+        <div className="bg-yellow-600 h-1 md:w-36 rounded-md"></div>
+      </div>
       {/* Admin Section */}
       <div className="py-10">
         <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
