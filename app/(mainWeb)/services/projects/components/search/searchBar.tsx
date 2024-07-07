@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from "react";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState<string>("");
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -28,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       />
       <button
         onClick={handleSearch}
-        className="px-4 py-2 text-white bg-red-600 shadow-md shadow-red-500/50 rounded-md hover:bg-red-500"
+        className="px-4 py-2 text-white bg-maroon shadow-md shadow-yellow-500/50 rounded-md hover:bg-red-600"
       >
         Search
       </button>

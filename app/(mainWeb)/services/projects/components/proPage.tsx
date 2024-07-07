@@ -1,4 +1,3 @@
-import InfoCard from "./infoCard";
 import CardArray from "./cardArray";
 
 export default function ProPage() {
