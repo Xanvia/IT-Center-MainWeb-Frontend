@@ -172,18 +172,8 @@ body {
   transform: scale(1);
 }
 
-.transition-height {
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.transition-hidden {
-  max-height: 0;
-  opacity: 0;
-}
-
-.transition-visible {
-  max-height: 500px;
-  opacity: 1;
+.dropdown-menu {
+  transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 /* header bottom */
