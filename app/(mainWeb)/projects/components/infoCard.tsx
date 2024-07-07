@@ -9,15 +9,15 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
   const isEvenId = props.id % 2 === 0;
   return (
     <div>
-      <div className="hero bg-base-200 h-1/4 w-11/12 border-2 border-none border-red-500 mx-auto my-4 shadow-lg shadow-red-500/100">
+      <div className=" mx-auto my-4 h-1/4 w-9/12 hero bg-base-200  border-2 border-none border-red-500 shadow-lg shadow-red-500/100 rounded-lg">
         <div className={`hero-content ${isEvenId ? 'flex-col lg:flex-row' : 'flex-col lg:flex-row-reverse'}`}>
           <img
             src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
             className="max-w-sm rounded-lg shadow-2xl"
           />
           <div>
-            <h1 className="text-5xl font-bold">Defined Networking (SDN)</h1>
-            <p className="py-6">
+           <h1 className="text-justify justify-start">Defined Networking (SDN)</h1>
+            <p className="text-sm text-justify py-6">
               {props.text}
             </p>
           </div>

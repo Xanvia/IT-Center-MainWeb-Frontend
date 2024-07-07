@@ -21,7 +21,7 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto mt-4">
+    <div className="container mx-auto mt-4" style={{ marginRight: '32px' }}>
       <div className="flex justify-end">
         <SearchBar onSearch={handleSearch} />
       </div>
