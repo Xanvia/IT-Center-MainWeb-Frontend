@@ -18,7 +18,7 @@ const Home: React.FC = () => {
           type="radio"
           name="my_tabs_2"
           role="tab"
-          className="tab h-12 text-lg text-maroon"
+          className="tab h-12 text-lg text-maroon w-96"
           aria-label="Undergraduate"
           defaultChecked
         />
