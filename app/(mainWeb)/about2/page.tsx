@@ -1,6 +1,7 @@
 import React from 'react';
 import Pictures from '../about2/components/pic/pictures';
 import Contacts from './components/card/cardcont';
+import Directers from './components/directers/directers'
 
 
 const Home: React.FC = () => {
@@ -15,7 +16,7 @@ const Home: React.FC = () => {
           (I’m not telling you which!) though these are all great essays regardless of where (or if) 
           students were admitted to their top choice school."
         />
-        
+      <Directers/>
     </div>
        
     

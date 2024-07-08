@@ -5,7 +5,7 @@ export default function Cardcont() {
   return (
     <div className="py-20 flex justify-center ... ">
       <Card className="px-20"  >
-        <CardHeader className="flex gap-3 flex justify-center ...">
+        <CardHeader className="flex gap-3 justify-center ...">
           <Image
             alt="nextui logo"
             height={40}
