@@ -2,11 +2,13 @@ import React from 'react';
 import Pictures from '../about2/components/pic/pictures';
 import Directers from './components/directers/directers'
 import Para from './components/para/para' 
+import Obj from './components/obj/obj';
+import Content from './components/dropdown/content'
 
 const Home: React.FC = () => {
   return (
-    <div className='bg-white p-4'>
-      <div className="flex justify-between items-start">
+    <div className='bg-white '>
+      <div className="flex justify-between items-start p-4">
         
         <Pictures
           imageUrl="/aboutus2img/aboutus.jpg"
@@ -18,8 +20,9 @@ const Home: React.FC = () => {
           students were admitted to their top choice school."
         />
       </div>
-      <div className='bg-cyan-200 my-10'><Para/></div>
-      <Directers/>
+      <div className='py-32'><Content/></div>
+      <div className='bg-cyan-200 py-10'><Para/></div>
+      <div className='py-10'><Directers/></div>
     </div>
   );
 };
