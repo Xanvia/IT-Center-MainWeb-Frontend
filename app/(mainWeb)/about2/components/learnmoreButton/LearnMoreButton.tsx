@@ -11,21 +11,20 @@ const LearnMoreContent = () => {
   };
 
   return (
-    <div style={{  }}>
-      {!isExpanded && (
+    <div>
+      {!isExpanded ? (
         <Button color="primary" onClick={handleToggle}>
           Learn More
         </Button>
-      )}
-      {isExpanded && (
+      ) : (
         <>
-          <p style={{paddingTop:"1rem", margin: '0 auto' }}>
+          <p style={{ paddingTop: "1rem" }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec felis libero. Sed viverra lorem sit amet
             nisi dictum, ac vestibulum arcu egestas. Integer eget eros tincidunt, feugiat turpis non, varius massa. Nullam
             at quam vitae erat volutpat auctor.
           </p>
-          <Button  color="primary" onClick={handleToggle} >
-            Show Less 
+          <Button color="primary" onClick={handleToggle}>
+            Show Less
           </Button>
         </>
       )}
@@ -34,4 +33,3 @@ const LearnMoreContent = () => {
 };
 
 export default LearnMoreContent;
-//

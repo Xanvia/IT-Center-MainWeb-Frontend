@@ -1,34 +1,32 @@
 .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100vh;
-    padding: 20px;
-  }
-  
-  .textSection {
-    flex: 1;
-    padding-right: 20px;
-  }
-  
-  .heading {
-    font-size: 4rem; 
-  }
-  
-  .description {
-    font-size: 1rem;
-  }
-  
-  .imageSection {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .image {
-    max-width: 100%;
-    height: auto;
-    
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+}
+
+.textSection {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.heading {
+  font-size: 4rem;
+}
+
+.description {
+  font-size: 1rem;
+}
+
+.imageSection {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+}
