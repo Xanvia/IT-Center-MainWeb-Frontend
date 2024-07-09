@@ -2,7 +2,6 @@ import React from 'react';
 import Pictures from '../about2/components/pic/pictures';
 import Directers from './components/directers/directers'
 import Para from './components/para/para' 
-import Obj from './components/obj/obj';
 import Content from './components/dropdown/content'
 
 const Home: React.FC = () => {
