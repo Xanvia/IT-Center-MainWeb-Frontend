@@ -18,7 +18,7 @@ const cardData = [
     name: "Dr. Upul Jayasinghe",
     edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
     mail:"director.ceit@gs.pdn.ac.lk",
-    mobno1:"+94 81 2384848/ ",
+    mobno1:"+94 81 2384848",
     
   },
   {
@@ -50,7 +50,7 @@ export default function App() {
       <div className="flex justify-center items-center gap-6 p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {cardData.map((card) => (
-            <Card key={card.id} className="w-[300px] bg-gray-200 shadow-md rounded-lg">
+            <Card key={card.id} className="w-[400px] bg-gray-200 shadow-md rounded-lg">
               <CardHeader className="flex gap-3 p-4">
                 <Image
                   alt="nextui logo"
@@ -71,9 +71,9 @@ export default function App() {
                   </div>
                   <div className="flex items-center gap-2">
                     <ImPhone style={{ fontSize: 20 }}/>
-                    <div className="flex flex-col">
-                      <p className="text-sm">{card.mobno1}</p>
-                      <p className="text-sm">{card.mobno2}</p>
+                    <div className="flex flex-col text-sm">
+                      <p>{card.mobno1}</p>
+                      <p>{card.mobno2}</p>
                     </div>
                   </div>
                 </div>
