@@ -60,11 +60,9 @@ export default function App() {
                   width={50}
                 />
                 <div className="flex flex-col">
-                  <div className="flex items-center gap-2">
-                    <ImMail2 style={{ fontSize: 20 }} />
-                    <p className="text-md font-bold">{card.name}</p>
-                  </div>
-                    <p className="text-sm text-gray-500">{card.edu}</p>
+                  <p className="text-md font-bold">{card.name}</p>
+                  <p className="text-sm text-gray-500">{card.edu}</p>
+                  
                   <div className="flex items-center gap-2">
                     <ImMail2 style={{ fontSize: 20 }} />
                     <p className="text-sm">{card.mail}</p>
