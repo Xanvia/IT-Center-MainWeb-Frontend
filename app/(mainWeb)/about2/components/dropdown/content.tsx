@@ -2,6 +2,7 @@
 import { FC } from 'react';
 import HeadlineWithDropdown from './stuc';
 
+
 const niomi: FC = () => {
   return (
     <div className="flex flex-wrap justify-center">
