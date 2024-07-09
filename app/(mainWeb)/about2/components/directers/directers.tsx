@@ -5,7 +5,7 @@ import { ImMail2,ImPhone } from "react-icons/im";
 const cardData = [
   {
     id: 1,
-    imgSrc: "https://avatars.githubusercontent.com/u/86160567?s=200&v=4",
+    imgSrc: "/aboutus2img/directors.jpg",
     name: "Dr. Upul Jayasinghe",
     edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
     mail:"director.ceit@gs.pdn.ac.lk",
@@ -14,7 +14,7 @@ const cardData = [
   },
   {
     id: 2,
-    imgSrc: "https://avatars.githubusercontent.com/u/86160567?s=200&v=4",
+    imgSrc: "/aboutus2img/directors.jpg",
     name: "Dr. Upul Jayasinghe",
     edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
     mail:"director.ceit@gs.pdn.ac.lk",
@@ -23,7 +23,7 @@ const cardData = [
   },
   {
     id: 3,
-    imgSrc: "https://avatars.githubusercontent.com/u/86160567?s=200&v=4",
+    imgSrc: "/aboutus2img/directors.jpg",
     name: "Dr. Upul Jayasinghe",
     edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
     mail:"director.ceit@gs.pdn.ac.lk",
@@ -32,7 +32,7 @@ const cardData = [
   },
   {
     id: 4,
-    imgSrc: "https://avatars.githubusercontent.com/u/86160567?s=200&v=4",
+    imgSrc: "/aboutus2img/directors.jpg",
     name: "Dr. Upul Jayasinghe",
     edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
     mail:"director.ceit@gs.pdn.ac.lk",
