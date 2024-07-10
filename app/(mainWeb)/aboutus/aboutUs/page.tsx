@@ -18,10 +18,10 @@ const Home: React.FC = () => {
           students were admitted to their top choice school."
         />
       </div>
-      <div className="py-32">
+      <div className="py-12">
         <Content />
       </div>
-      <div className="bg-cyan-200 py-10">
+      <div className="bg-yellow-100 py-10 my-10">
         <Para />
       </div>
       <div className="py-10">
