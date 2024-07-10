@@ -214,3 +214,7 @@ body {
     background-size: 178% calc(2vw + 115px);
   }
 }
+
+.dropdown-menu {
+  transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}

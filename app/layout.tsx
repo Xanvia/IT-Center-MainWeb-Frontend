@@ -15,7 +15,6 @@ const rubik = Rubik({
   weight: "500",
   subsets: ["latin"],
   variable: "--font-rubik",
-  display: "swap",
 });
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
