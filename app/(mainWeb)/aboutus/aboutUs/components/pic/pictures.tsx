@@ -1,7 +1,7 @@
-import React from 'react';
-import styles from './pictures.module.css';
+import React from "react";
+import styles from "./pictures.module.css";
 import { Image } from "@nextui-org/react";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
 interface PicturesProps {
   imageUrl: string;
@@ -9,18 +9,33 @@ interface PicturesProps {
   description: string;
 }
 
-const LearnMore = dynamic(() => import('../learnmoreButton/LearnMoreButton'), { ssr: false });
+const LearnMore = dynamic(() => import("../learnmoreButton/LearnMoreButton"), {
+  ssr: false,
+});
 
-const Pictures: React.FC<PicturesProps> = ({ imageUrl, heading, description }) => {
+const Pictures: React.FC<PicturesProps> = ({
+  imageUrl,
+  heading,
+  description,
+}) => {
   return (
     <div className={styles.container}>
       <div className={styles.textSection}>
-        <h1 className={styles.heading}>{heading}</h1>
+        <h1
+          className={`${styles.heading} from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-semibold`}
+        >
+          {heading}
+        </h1>
         <p className={styles.description}>{description}</p>
         <LearnMore />
       </div>
       <div className={styles.imageSection}>
-        <Image isZoomed src={imageUrl} alt="About us" className={styles.image} />
+        <Image
+          isZoomed
+          src={imageUrl}
+          alt="About us"
+          className={styles.image}
+        />
       </div>
     </div>
   );

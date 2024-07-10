@@ -9,7 +9,7 @@ const Home: React.FC = () => {
     <div className="bg-white ">
       <div className="flex justify-between items-start p-4">
         <Pictures
-          imageUrl="/aboutus2img/aboutus.jpg"
+          imageUrl="/aboutus/aboutus.jpg"
           heading="About Us"
           description="Some essay samples below are by students who chose to write about a challenge, 
           while other examples may be helpful if you’re looking to write about yourself more generally. 
