@@ -26,7 +26,7 @@ export const InputWithIcon: React.FC<Props> = ({
           className={`w-full rounded-lg border bg-transparent py-3 pl-6 pr-10  outline-none ${
             errors
               ? "border-red-500 text-red-500 placeholder:text-red-500"
-              : "focus:border-primary active:border-primary border-primary-border text-gray-500 dark:text-gray-300"
+              : "focus:border-yellow-500 active:border-yellow-500 border-primary-border text-gray-500"
           }`}
         />
         <span className="absolute right-0 -bottom-5 text-sm text-red-500 ">

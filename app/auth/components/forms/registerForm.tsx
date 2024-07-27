@@ -116,7 +116,7 @@ export default function RegisterForm() {
         <input
           type="submit"
           value="Create account"
-          className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-3 text-white transition hover:bg-opacity-90"
+          className="w-full cursor-pointer rounded-lg bg-yellow-400 p-3 text-gray-700 transition hover:bg-opacity-80"
         />
       </div>
 
@@ -165,7 +165,7 @@ export default function RegisterForm() {
       <div className="mt-3 text-center">
         <p>
           Already have an account?{" "}
-          <Link href="/auth/signin" className="text-primary">
+          <Link href="/auth/signin" className="text-yellow-600">
             Sign in
           </Link>
         </p>
