@@ -6,7 +6,7 @@ export const NCard = () => {
       <figure>
         <img
           className="rounded-t-lg"
-          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
+          src="https://circulareconomy.europa.eu/sites/default/files/home_news.jpg"
           alt="Shoes"
         />
       </figure>
