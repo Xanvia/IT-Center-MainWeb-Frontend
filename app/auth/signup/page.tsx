@@ -27,7 +27,7 @@ const SignUp: React.FC = () => {
 
       <div className="w-full border-primary-border my-10 dark:border-primary-border-dark xl:w-1/2 xl:border-l-1">
         <div className="w-full p-3 py-5 sm:px-12 xl:px-16 ">
-          <span className="mb-1.5 block font-medium text-yellow-500">
+          <span className="mb-1.5 block font-medium text-yellow-600">
             Start your IT journey!
           </span>
           <h2 className="mb-5 text-2xl font-bold text-maroon">

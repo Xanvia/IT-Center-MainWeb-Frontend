@@ -29,7 +29,7 @@ export const TextInput: React.FC<textInputProps> = ({
         className={`w-full text-sm rounded border-[1.5px] bg-transparent px-3 outline-none transition ${
           errors?.message
             ? "border-red-500 text-red-500 placeholder:text-red-500"
-            : "focus:border-primary active:border-primary border-primary-border text-gray-500 dark:text-gray-300"
+            : "focus:border-yellow-500 active:border-yellow-500 border-primary-border text-gray-500 dark:text-gray-300"
         } ${isSmall ? "py-1.5" : "py-2"} `}
       />
 

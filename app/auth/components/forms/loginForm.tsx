@@ -83,7 +83,7 @@ export default function LoginForm() {
         <input
           type="submit"
           value="Sign In"
-          className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-3 text-white transition hover:bg-opacity-90"
+          className="w-full cursor-pointer rounded-lg bg-yellow-500 p-3 text-gray-700 transition hover:bg-opacity-80"
         />
       </div>
 
@@ -129,7 +129,7 @@ export default function LoginForm() {
       <div className="mt-6 text-center">
         <p>
           Don’t have any account?{" "}
-          <Link href="/auth/signup" className="text-primary">
+          <Link href="/auth/signup" className="text-yellow-600">
             Sign Up
           </Link>
         </p>
