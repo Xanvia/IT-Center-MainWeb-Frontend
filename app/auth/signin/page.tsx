@@ -10,8 +10,7 @@ const SignIn: React.FC = () => {
         <div className="px-28 py-16 text-center">
           <Link className="mb-5 inline-block" href="/">
             <Image
-              className=""
-              src={"/logo.png"}
+              src={"/logo/ceitlogo.png"}
               alt="Logo"
               width={176}
               height={32}
@@ -32,7 +31,7 @@ const SignIn: React.FC = () => {
             Welcome Back!
           </span>
           <h2 className="mb-8 text-2xl font-bold text-maroon">
-            Sign In to BisDos.com
+            Sign In to IT Center
           </h2>
 
           <LoginForm />
