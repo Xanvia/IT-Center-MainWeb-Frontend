@@ -1,0 +1,80 @@
+import {
+  BookOpen,
+  Globe,
+  Calendar,
+  UserPlus,
+  Users,
+  User,
+  BookmarkPlus,
+  CalendarRange,
+} from "lucide-react";
+
+export const shortcuts = [
+  {
+    name: "Course Registration",
+    icon: BookOpen,
+    href: "/courseRegistration",
+    visual: "/common/courseReg.jpg",
+    primary: true,
+  },
+  {
+    name: "Main Website",
+    icon: Globe,
+    href: "/main-website",
+    visual: "/placeholder.svg?height=200&width=200",
+    primary: true,
+  },
+  {
+    name: "Lab Reservation",
+    icon: Calendar,
+    href: "/lab-reservation",
+    visual: "/placeholder.svg?height=200&width=200",
+    primary: true,
+  },
+  {
+    name: "Register as Student",
+    icon: UserPlus,
+    href: "/register-student",
+    visual: "/placeholder.svg?height=100&width=100",
+  },
+  {
+    name: "Register as Staff",
+    icon: Users,
+    href: "/register-staff",
+    visual: "/placeholder.svg?height=100&width=100",
+  },
+  {
+    name: "Profile",
+    icon: User,
+    href: "/profile",
+    visual: "/placeholder.svg?height=100&width=100",
+  },
+  {
+    name: "Manage Users",
+    icon: Users,
+    href: "/manage-users",
+    visual: "/placeholder.svg?height=100&width=100",
+    adminOnly: true,
+  },
+  {
+    name: "Manage Courses",
+    icon: BookmarkPlus,
+    href: "/manage-courses",
+    visual: "/placeholder.svg?height=100&width=100",
+    adminOnly: true,
+  },
+  {
+    name: "Manage Services",
+    icon: User,
+    href: "/manage-services",
+    visual: "/placeholder.svg?height=100&width=100",
+    adminOnly: true,
+  },
+  {
+    name: "Manage Reservations",
+    icon: CalendarRange,
+    href: "/manage-reservations",
+    visual: "/placeholder.svg?height=100&width=100",
+    adminOnly: true,
+  },
+];
