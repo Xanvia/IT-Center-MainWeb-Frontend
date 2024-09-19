@@ -1,6 +1,6 @@
 "use server";
 
-import { registerSchemaType } from "../auth/components/schema/registerFormSchema";
+import { registerSchemaType } from "../(system)/auth/components/schema/registerFormSchema";
 
 export async function signup(data: registerSchemaType) {
   const { rePassword, ...postData } = data;
