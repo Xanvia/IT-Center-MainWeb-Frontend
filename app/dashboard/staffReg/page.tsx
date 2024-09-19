@@ -3,34 +3,9 @@
 import React, { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { PlusIcon, TrashIcon } from "lucide-react";
-
-const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/;
-
-const staffSchema = z.object({
-  designation: z.string().min(1, "Designation is required"),
-  displayName: z.string().min(1, "Display name is required"),
-  nominal: z.string().min(1, "Nominal is required"),
-  extNumber: z.string().min(1, "Extension number is required"),
-  emails: z
-    .array(
-      z.object({
-        value: z.string().email("Invalid email address"),
-      })
-    )
-    .min(1, "At least one email is required"),
-  phoneNumbers: z
-    .array(
-      z.object({
-        value: z.string().regex(phoneRegex, "Invalid phone number"),
-      })
-    )
-    .min(1, "At least one phone number is required"),
-});
-
-type StaffFormData = z.infer<typeof staffSchema>;
+import { StaffFormData, staffSchema } from "@/schemas/staffSchema";
 
 export default function StaffRegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
