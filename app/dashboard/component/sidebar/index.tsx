@@ -151,7 +151,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <ul className="mb-6 flex flex-col gap-1.5 font-medium">
               {/* Profile */}
               <li>
-                <Tab pathname="/profile">
+                <Tab pathname="/dashboard/profile">
                   <div className="flex justify-center w-5">
                     <MdPhonelinkSetup size={22} />
                   </div>
