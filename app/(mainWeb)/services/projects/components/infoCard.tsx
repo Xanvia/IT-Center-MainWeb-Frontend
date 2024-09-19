@@ -16,7 +16,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
           }`}
         >
           <img
-            src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
+            src="https://media.licdn.com/dms/image/D5612AQFJ-aNtL0ODJw/article-cover_image-shrink_600_2000/0/1679422597271?e=2147483647&v=beta&t=BQVHkjmUhUBaY-rvHIVrQ8AZqolbed4GKB_r4qCJwmE"
             className="max-w-sm rounded-lg shadow-2xl"
           />
           <div>

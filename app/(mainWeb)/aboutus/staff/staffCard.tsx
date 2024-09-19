@@ -12,7 +12,7 @@ export const StaffCard = () => {
         <div className=" rounded-lg flex flex-row h-44 px-4 py-2 gap-2">
           <div className="avatar flex-none">
             <div className="w-28 h-28 rounded-full">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+              <img src="/users/drUpul.png" />
             </div>
           </div>
           <div className=" w-max">

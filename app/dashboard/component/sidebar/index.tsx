@@ -113,7 +113,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <div>
             {/* Dashboard */}
             <div className="mb-6 flex flex-col gap-1.5 font-medium">
-              <Tab pathname="/">
+              <Tab pathname="/dashboard">
                 <div>
                   <MdOutlineDashboard size={22} />
                 </div>
