@@ -3,6 +3,8 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { PenSquare, Camera, Check, X, Plus } from "lucide-react";
+import Staffprofile from "./staff/profile";
+import Studentprofile from "./student/profile";
 
 type FieldType = {
   label: string;
@@ -11,6 +13,22 @@ type FieldType = {
 };
 
 export default function profile() {
+  const userType = "Staff";
+
+  // 1. Copy All code inside this function to staff/profile.tsx
+  // 2. Uncomment the function
+
+  // if (userType == "Staff") return <Staffprofile />;
+  // else return <Studentprofile />;
+
+  // 3. Add following fields
+  // display name
+  // designation eg: director
+  // nominal eg: bsc (hons) in Engineering
+  // ext no
+  // email (should be able to add multiple)
+  // phone (should be able to add multiple)
+
   const [profileImage, setProfileImage] = useState("/placeholder.svg");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fields, setFields] = useState<FieldType[]>([
