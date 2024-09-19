@@ -1,9 +1,8 @@
 import Link from "next/link";
-import DropdownNotification from "./notification";
-import DropdownProfile from "./profile";
+
 import Image from "next/image";
 import { HamButton } from "@/app/(mainWeb)/components/buttons/hamButton";
-import { SignButtons } from "./signButtons";
+import Selection from "./selection";
 
 const Header = (props: {
   sidebarOpen: boolean;
@@ -42,11 +41,7 @@ const Header = (props: {
           </div>
         </div>
         <div className="flex items-center gap-3 lg:gap-7">
-          {/* <ul className="flex items-center gap-2 sm:gap-4">
-            <DropdownNotification />
-          </ul>
-          <DropdownProfile /> */}
-          <SignButtons />
+          <Selection />
         </div>
       </div>
     </header>
