@@ -3,7 +3,7 @@ import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import Link from "next/link";
 import { shortcuts } from "@/constants/dashboardShortcuts";
 
-const isAdmin = () => true; // Set to false to see non-admin view
+const isAdmin = () => false; // Set to false to see non-admin view
 
 export default function Home() {
   const primaryShortcuts = shortcuts.filter((s) => s.primary);
