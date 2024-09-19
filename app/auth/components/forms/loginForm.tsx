@@ -6,6 +6,7 @@ import { loginSchema, loginSchemaType } from "../schema/loginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputWithIcon } from "../feilds/InputwithIcon";
 import { EmailIcon, LockIcon } from "@/constants/icons";
+import { signIn, SignInResponse } from "next-auth/react";
 
 export default function LoginForm() {
   const {
@@ -20,12 +21,10 @@ export default function LoginForm() {
 
   const submitData = async (data: loginSchemaType) => {
     try {
-      const response = await fetch("http://localhost:3001/auth/signin", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-type": "application/json",
-        },
+      const response = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
       });
 
       if (!response.ok) {
