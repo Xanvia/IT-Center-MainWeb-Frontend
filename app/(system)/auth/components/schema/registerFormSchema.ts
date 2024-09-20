@@ -13,15 +13,15 @@ const reTypePasswordSchema = z
 
 export const registerSchema = z
   .object({
-    username: z.string().min(1, { message: "Name is required" }),
+    name: z.string().min(1, { message: "Name is required" }),
     email: z
       .string()
       .min(1, "Email is reqiured")
       .email({ message: "Invalid email address" }),
-    password: passwordSchema,
+    hashedPassword: passwordSchema,
     rePassword: reTypePasswordSchema,
   })
-  .refine((data) => data.password === data.rePassword, {
+  .refine((data) => data.hashedPassword === data.rePassword, {
     message: "Passwords do not match",
     path: ["rePassword"],
   });

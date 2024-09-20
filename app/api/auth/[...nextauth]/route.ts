@@ -30,6 +30,7 @@ export const authOptions: NextAuthOptions = {
         if (!res.ok) {
           const error: InvalidLoginError = new Error(user.message);
           error.field = user.field;
+          return error;
         }
 
         return user;
@@ -38,6 +39,23 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/auth/signin",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) return { ...token, ...user };
+
+      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
+
+      return await refreshToken(token);
+    },
+
+    async session({ token, session }) {
+      session.user = token.user;
+      session.access_token = token.access_token;
+      session.refresh_token = token.refresh_token;
+
+      return session;
+    },
   },
 };
 

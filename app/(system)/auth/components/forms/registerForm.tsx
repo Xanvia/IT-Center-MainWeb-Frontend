@@ -21,7 +21,35 @@ export default function RegisterForm() {
     resolver: zodResolver(registerSchema),
   });
 
-  const submitData = async (data: registerSchemaType) => {};
+  const submitData = async (data: registerSchemaType) => {
+    const { rePassword, ...postData } = data;
+    console.log(postData);
+    try {
+      const response = await fetch("http://localhost:3001/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(postData),
+        headers: {
+          "Content-type": "application/json",
+        },
+        mode: "cors",
+      });
+
+      if (!response.ok) {
+        const errorData: any = await response.json();
+
+        setError(errorData.field, { message: errorData.message });
+        return;
+      }
+      const result = await response.json();
+      console.log(result);
+      alert("Registration successful!");
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+      setError("root.server", {
+        message: "An error occurred. Please try again.",
+      });
+    }
+  };
 
   const onSubmitForm: SubmitHandler<registerSchemaType> = (data) =>
     submitData(data);
@@ -34,8 +62,8 @@ export default function RegisterForm() {
         </label>
         <InputWithIcon
           type="text"
-          register={register("username")}
-          errors={errors.username}
+          register={register("name")}
+          errors={errors.name}
           placeholder="Enter your name"
           Icon={<UserIcon />}
         />
@@ -63,8 +91,8 @@ export default function RegisterForm() {
         <div className="relative">
           <InputWithIcon
             type="password"
-            register={register("password")}
-            errors={errors.password}
+            register={register("hashedPassword")}
+            errors={errors.hashedPassword}
             placeholder="Enter your password"
             Icon={<LockIcon />}
           />

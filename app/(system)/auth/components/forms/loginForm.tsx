@@ -6,7 +6,7 @@ import { loginSchema, loginSchemaType } from "../schema/loginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputWithIcon } from "../feilds/InputwithIcon";
 import { EmailIcon, LockIcon } from "@/constants/icons";
-import { signIn, SignInResponse } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 export default function LoginForm() {
   const {
@@ -27,8 +27,8 @@ export default function LoginForm() {
         redirect: false,
       });
 
-      if (!response.ok) {
-        const errorData: any = await response.json();
+      if (!response?.ok) {
+        const errorData: any = await response?.json();
         console.log(errorData);
         setError(errorData.field, { message: errorData.message });
         return;
