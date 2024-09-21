@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const DropdownProfile = () => {
+  const { data: session } = useSession();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -44,9 +47,9 @@ const DropdownProfile = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-red-800">
-            Upul Jayasinghe
+            {session?.user.name}
           </span>
-          <span className="block text-xs">Director</span>
+          <span className="block text-xs">{session?.user.role}</span>
         </span>
 
         <Image

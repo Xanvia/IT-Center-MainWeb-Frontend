@@ -7,18 +7,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InputWithIcon } from "../feilds/InputwithIcon";
 import { EmailIcon, LockIcon } from "@/constants/icons";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const {
     handleSubmit,
     register,
     setError,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<loginSchemaType>({
     mode: "onTouched",
     resolver: zodResolver(loginSchema),
   });
-
+  const router = useRouter();
   const submitData = async (data: loginSchemaType) => {
     try {
       const response = await signIn("credentials", {
@@ -35,7 +36,7 @@ export default function LoginForm() {
         setError("email", { message: "User not found!" });
         console.log(response);
       } else {
-        alert("Login successful!");
+        router.push("/dashboard");
       }
     } catch (error) {
       console.error("Error submitting the form:", error);
@@ -81,9 +82,10 @@ export default function LoginForm() {
 
       <div className="mb-5">
         <input
+          disabled={isSubmitting}
           type="submit"
           value="Sign In"
-          className="w-full cursor-pointer rounded-lg bg-yellow-500 p-3 text-gray-700 transition hover:bg-opacity-80"
+          className="w-full cursor-pointer rounded-lg bg-yellow-500 p-3 text-gray-700 transition hover:bg-opacity-80 disabled:bg-slate-500"
         />
       </div>
 

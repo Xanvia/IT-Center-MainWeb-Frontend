@@ -9,6 +9,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputWithIcon } from "../feilds/InputwithIcon";
 import { EmailIcon, LockIcon, UserIcon } from "@/constants/icons";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
   const {
@@ -20,6 +21,7 @@ export default function RegisterForm() {
     mode: "onTouched",
     resolver: zodResolver(registerSchema),
   });
+  const router = useRouter();
 
   const submitData = async (data: registerSchemaType) => {
     const { rePassword, ...postData } = data;
@@ -42,7 +44,7 @@ export default function RegisterForm() {
       }
       const result = await response.json();
       console.log(result);
-      alert("Registration successful!");
+      router.push("/auth/signin");
     } catch (error) {
       console.error("Error submitting the form:", error);
       setError("root.server", {
