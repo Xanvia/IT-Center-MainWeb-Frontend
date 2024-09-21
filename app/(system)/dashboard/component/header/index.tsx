@@ -9,7 +9,7 @@ const Header = (props: {
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
   return (
-    <header className="sticky flex top-0 z-10 w-full bg-white drop-shadow-md dark:bg-primary-dark dark:drop-shadow-none">
+    <header className="sticky flex top-0 z-30 w-full bg-white drop-shadow-md dark:bg-primary-dark dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between px-2 py-4 shadow-lg md:px-6 2xl:px-11">
         <div className="flex items-center gap-2 lg:hidden">
           {/* ham button  */}

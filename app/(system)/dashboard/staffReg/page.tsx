@@ -49,7 +49,7 @@ export default function StaffRegistrationForm() {
     setIsSubmitting(true);
     // Here you would typically send the data to your API
     console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulating API call
+
     setIsSubmitting(false);
     alert("Staff member registered successfully!");
   };
