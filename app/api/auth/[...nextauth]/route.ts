@@ -1,9 +1,23 @@
 import { NextAuthOptions } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-interface InvalidLoginError extends Error {
-  field?: string;
+async function refreshToken(token: JWT): Promise<JWT> {
+  const res = await fetch("http://localhost:3001/auth/refresh", {
+    method: "POST",
+    headers: {
+      authorization: `Refresh ${token.refresh_token}`,
+    },
+  });
+  console.log("refreshed");
+
+  const response = await res.json();
+
+  return {
+    ...token,
+    ...response,
+  };
 }
 
 export const authOptions: NextAuthOptions = {
@@ -15,22 +29,24 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const res = await fetch("http://localhost:3001/auth/login", {
+        const res = await fetch("http://localhost:3001/auth/signin", {
           method: "POST",
           body: JSON.stringify({
             email: credentials?.email,
-            password: credentials?.password,
+            hashedPassword: credentials?.password,
           }),
           headers: {
             "Content-Type": "application/json",
           },
+          mode: "cors",
         });
 
         const user = await res.json();
         if (!res.ok) {
-          const error: InvalidLoginError = new Error(user.message);
-          error.field = user.field;
-          return error;
+          console.log(user.message);
+          if (user.field == "password") throw Error("password");
+          else throw Error("email");
+          // return null;
         }
 
         return user;
@@ -44,7 +60,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
 
-      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
+      if (new Date().getTime() < token.expiresIn) return token;
 
       return await refreshToken(token);
     },

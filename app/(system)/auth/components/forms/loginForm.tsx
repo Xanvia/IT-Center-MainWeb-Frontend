@@ -27,15 +27,16 @@ export default function LoginForm() {
         redirect: false,
       });
 
-      if (!response?.ok) {
-        const errorData: any = await response?.json();
-        console.log(errorData);
-        setError(errorData.field, { message: errorData.message });
-        return;
+      if (!response?.ok && response?.error) {
+        if (response.error === "password") {
+          setError("password", { message: "Password does not match!" });
+          return;
+        }
+        setError("email", { message: "User not found!" });
+        console.log(response);
+      } else {
+        alert("Login successful!");
       }
-      const result = await response.json();
-      console.log(result);
-      alert("Login successful!");
     } catch (error) {
       console.error("Error submitting the form:", error);
       setError("root.server", {
