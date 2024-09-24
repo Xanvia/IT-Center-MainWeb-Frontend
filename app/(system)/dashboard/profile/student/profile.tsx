@@ -17,8 +17,8 @@ export default function Component() {
   const fields: FieldType[] = [
     { label: "Student Name", value: "student_name" },
     { label: "Undergraduate/Visiting Student", value: "Undergraduate" },
-    { label: "Student No", value: "2000-12-25" },
-    { label: "Date Of Birth", value: "Bsc(Hons)" },
+    { label: "Student No", value: "s62718" },
+    { label: "Date Of Birth", value: "2000-12-25" },
     { label: "Email", value: "sfssfs@vhh.com" },
     { label: "Phone No", value: "070288191" },
   ]
