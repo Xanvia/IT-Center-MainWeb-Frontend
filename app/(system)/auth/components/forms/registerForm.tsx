@@ -2,41 +2,49 @@
 
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { loginSchema, loginSchemaType } from "../schema/loginFormSchema";
+import {
+  registerSchema,
+  registerSchemaType,
+} from "../schema/registerFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputWithIcon } from "../feilds/InputwithIcon";
-import { EmailIcon, LockIcon } from "@/constants/icons";
+import { EmailIcon, LockIcon, UserIcon } from "@/constants/icons";
+import { useRouter } from "next/navigation";
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const {
     handleSubmit,
     register,
     setError,
     formState: { errors },
-  } = useForm<loginSchemaType>({
+  } = useForm<registerSchemaType>({
     mode: "onTouched",
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(registerSchema),
   });
+  const router = useRouter();
 
-  const submitData = async (data: loginSchemaType) => {
+  const submitData = async (data: registerSchemaType) => {
+    const { rePassword, ...postData } = data;
+    console.log(postData);
     try {
-      const response = await fetch("http://localhost:3001/auth/signin", {
+      const response = await fetch("http://localhost:3001/auth/signup", {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify(postData),
         headers: {
           "Content-type": "application/json",
         },
+        mode: "cors",
       });
 
       if (!response.ok) {
         const errorData: any = await response.json();
-        console.log(errorData);
+
         setError(errorData.field, { message: errorData.message });
         return;
       }
       const result = await response.json();
       console.log(result);
-      alert("Login successful!");
+      router.push("/auth/signin");
     } catch (error) {
       console.error("Error submitting the form:", error);
       setError("root.server", {
@@ -45,12 +53,26 @@ export default function LoginForm() {
     }
   };
 
-  const onSubmitForm: SubmitHandler<loginSchemaType> = (data) =>
+  const onSubmitForm: SubmitHandler<registerSchemaType> = (data) =>
     submitData(data);
+
   return (
     <form onSubmit={handleSubmit(onSubmitForm)}>
       <div className="mb-4">
-        <label className="mb-2.5 block font-medium text-black dark:text-white">
+        <label className="mb-2 block font-medium text-black dark:text-white">
+          Name
+        </label>
+        <InputWithIcon
+          type="text"
+          register={register("name")}
+          errors={errors.name}
+          placeholder="Enter your name"
+          Icon={<UserIcon />}
+        />
+      </div>
+
+      <div className="mb-5">
+        <label className="mb-2 block font-medium text-black dark:text-white">
           Email
         </label>
         <div className="relative">
@@ -64,31 +86,49 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <div className="mb-6">
-        <label className="mb-2.5 block font-medium text-black dark:text-white">
+      <div className="mb-5">
+        <label className="mb-2 block font-medium text-black dark:text-white">
           Password
         </label>
         <div className="relative">
           <InputWithIcon
             type="password"
-            register={register("password")}
-            errors={errors.password}
+            register={register("hashedPassword")}
+            errors={errors.hashedPassword}
             placeholder="Enter your password"
             Icon={<LockIcon />}
           />
         </div>
       </div>
 
-      <div className="mb-5">
+      <div className="mb-10">
+        <label className="mb-2 block font-medium text-black dark:text-white">
+          Re-type Password
+        </label>
+        <div className="relative">
+          <InputWithIcon
+            type="password"
+            register={register("rePassword")}
+            errors={errors.rePassword}
+            placeholder="Enter your password again"
+            Icon={<LockIcon />}
+          />
+        </div>
+      </div>
+
+      <div className="mb-4">
         <input
           type="submit"
-          value="Sign In"
-          className="w-full cursor-pointer rounded-lg bg-yellow-500 p-3 text-gray-700 transition hover:bg-opacity-80"
+          value="Create account"
+          className="w-full cursor-pointer rounded-lg bg-yellow-400 p-3 text-gray-700 transition hover:bg-opacity-80"
         />
       </div>
 
       <Link href={"http://localhost:3001/auth/google"}>
-        <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray-200 p-3 hover:bg-opacity-50 dark:border-primary-border-dark dark:bg-primary-dark dark:hover:bg-opacity-50">
+        <button
+          type="button"
+          className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-primary-border bg-gray-200 p-3 hover:bg-opacity-50 dark:border-primary-border-dark dark:bg-primary-dark dark:hover:bg-opacity-50"
+        >
           <span>
             <svg
               width="20"
@@ -122,15 +162,15 @@ export default function LoginForm() {
               </defs>
             </svg>
           </span>
-          Sign in with Google
+          Sign up with Google
         </button>
       </Link>
 
-      <div className="mt-6 text-center">
+      <div className="mt-3 text-center">
         <p>
-          Don’t have any account?{" "}
-          <Link href="/auth/signup" className="text-yellow-600">
-            Sign Up
+          Already have an account?{" "}
+          <Link href="/auth/signin" className="text-yellow-600">
+            Sign in
           </Link>
         </p>
       </div>

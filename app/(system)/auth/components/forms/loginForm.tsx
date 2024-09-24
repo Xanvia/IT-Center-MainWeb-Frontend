@@ -2,45 +2,42 @@
 
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  registerSchema,
-  registerSchemaType,
-} from "../schema/registerFormSchema";
+import { loginSchema, loginSchemaType } from "../schema/loginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputWithIcon } from "../feilds/InputwithIcon";
-import { EmailIcon, LockIcon, UserIcon } from "@/constants/icons";
+import { EmailIcon, LockIcon } from "@/constants/icons";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const {
     handleSubmit,
     register,
     setError,
-    formState: { errors },
-  } = useForm<registerSchemaType>({
+    formState: { errors, isSubmitting },
+  } = useForm<loginSchemaType>({
     mode: "onTouched",
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(loginSchema),
   });
-
-  const submitData = async (data: registerSchemaType) => {
-    const { rePassword, ...postData } = data;
+  const router = useRouter();
+  const submitData = async (data: loginSchemaType) => {
     try {
-      const response = await fetch("http://localhost:3001/auth/signup", {
-        method: "POST",
-        body: JSON.stringify(postData),
-        headers: {
-          "Content-type": "application/json",
-        },
+      const response = await signIn("credentialsLocal", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
       });
 
-      if (!response.ok) {
-        const errorData: any = await response.json();
-
-        setError(errorData.field, { message: errorData.message });
-        return;
+      if (!response?.ok && response?.error) {
+        if (response.error === "password") {
+          setError("password", { message: "Password does not match!" });
+          return;
+        }
+        setError("email", { message: "User not found!" });
+        console.log(response);
+      } else {
+        router.push("/dashboard");
       }
-      const result = await response.json();
-      console.log(result);
-      alert("Registration successful!");
     } catch (error) {
       console.error("Error submitting the form:", error);
       setError("root.server", {
@@ -49,26 +46,12 @@ export default function RegisterForm() {
     }
   };
 
-  const onSubmitForm: SubmitHandler<registerSchemaType> = (data) =>
+  const onSubmitForm: SubmitHandler<loginSchemaType> = (data) =>
     submitData(data);
-
   return (
     <form onSubmit={handleSubmit(onSubmitForm)}>
       <div className="mb-4">
-        <label className="mb-2 block font-medium text-black dark:text-white">
-          Name
-        </label>
-        <InputWithIcon
-          type="text"
-          register={register("username")}
-          errors={errors.username}
-          placeholder="Enter your name"
-          Icon={<UserIcon />}
-        />
-      </div>
-
-      <div className="mb-5">
-        <label className="mb-2 block font-medium text-black dark:text-white">
+        <label className="mb-2.5 block font-medium text-black dark:text-white">
           Email
         </label>
         <div className="relative">
@@ -82,8 +65,8 @@ export default function RegisterForm() {
         </div>
       </div>
 
-      <div className="mb-5">
-        <label className="mb-2 block font-medium text-black dark:text-white">
+      <div className="mb-6">
+        <label className="mb-2.5 block font-medium text-black dark:text-white">
           Password
         </label>
         <div className="relative">
@@ -97,34 +80,17 @@ export default function RegisterForm() {
         </div>
       </div>
 
-      <div className="mb-10">
-        <label className="mb-2 block font-medium text-black dark:text-white">
-          Re-type Password
-        </label>
-        <div className="relative">
-          <InputWithIcon
-            type="password"
-            register={register("rePassword")}
-            errors={errors.rePassword}
-            placeholder="Enter your password again"
-            Icon={<LockIcon />}
-          />
-        </div>
-      </div>
-
-      <div className="mb-4">
+      <div className="mb-5">
         <input
+          disabled={isSubmitting}
           type="submit"
-          value="Create account"
-          className="w-full cursor-pointer rounded-lg bg-yellow-400 p-3 text-gray-700 transition hover:bg-opacity-80"
+          value="Sign In"
+          className="w-full cursor-pointer rounded-lg bg-yellow-500 p-3 text-gray-700 transition hover:bg-opacity-80 disabled:bg-slate-500"
         />
       </div>
 
-      <Link href={"http://localhost:3001/auth/google"}>
-        <button
-          type="button"
-          className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-primary-border bg-gray-200 p-3 hover:bg-opacity-50 dark:border-primary-border-dark dark:bg-primary-dark dark:hover:bg-opacity-50"
-        >
+      <Link href={"http://localhost:3001/auth/google/sign"}>
+        <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray-200 p-3 hover:bg-opacity-50 dark:border-primary-border-dark dark:bg-primary-dark dark:hover:bg-opacity-50">
           <span>
             <svg
               width="20"
@@ -158,15 +124,15 @@ export default function RegisterForm() {
               </defs>
             </svg>
           </span>
-          Sign up with Google
+          Sign in with Google
         </button>
       </Link>
 
-      <div className="mt-3 text-center">
+      <div className="mt-6 text-center">
         <p>
-          Already have an account?{" "}
-          <Link href="/auth/signin" className="text-yellow-600">
-            Sign in
+          Don’t have any account?{" "}
+          <Link href="/auth/signup" className="text-yellow-600">
+            Sign Up
           </Link>
         </p>
       </div>
