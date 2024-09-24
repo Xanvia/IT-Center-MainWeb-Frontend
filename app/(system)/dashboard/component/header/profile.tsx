@@ -59,7 +59,7 @@ const DropdownProfile = () => {
         <Image
           width={112}
           height={112}
-          src={"/users/drUpul.png"}
+          src={session?.user.image || "/users/generalUser.png"}
           alt="User"
           className="h-12 w-12 rounded-full object-cover object-top"
         />

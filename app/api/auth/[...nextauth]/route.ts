@@ -23,7 +23,7 @@ async function refreshToken(token: JWT): Promise<JWT> {
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: "credentialsLocal",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
@@ -49,6 +49,26 @@ export const authOptions: NextAuthOptions = {
           // return null;
         }
 
+        return user;
+      },
+    }),
+    CredentialsProvider({
+      name: "credentialsGoogle",
+      credentials: {
+        token: { label: "token", type: "text" },
+      },
+      async authorize(credentials, req) {
+        console.log("im here");
+        const res = await fetch("http://localhost:3001/auth/refresh", {
+          method: "POST",
+          headers: {
+            authorization: `Refresh ${credentials?.token}`,
+          },
+        });
+        const user = await res.json();
+        if (!res.ok) {
+          return null;
+        }
         return user;
       },
     }),
