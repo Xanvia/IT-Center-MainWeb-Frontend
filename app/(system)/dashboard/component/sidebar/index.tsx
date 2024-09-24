@@ -290,7 +290,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <ul className="mb-5 mt-1 flex flex-col gap-2 pl-6">
                           <li>
-                            <Tab pathname="/admin/services/log">
+                            <Tab pathname="/dashboard/admin/services/log">
                               <div className="flex justify-center w-5">
                                 <FaPeopleGroup size={20} />
                               </div>
@@ -298,7 +298,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </Tab>
                           </li>
                           <li>
-                            <Tab pathname="/admin/services/news">
+                            <Tab pathname="/dashboard/admin/services/news">
                               <div className="flex justify-center w-5">
                                 <FaPeopleGroup size={20} />
                               </div>
@@ -306,7 +306,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </Tab>
                           </li>
                           <li>
-                            <Tab pathname="/admin/services/project">
+                            <Tab pathname="/dashboard/admin/services/project">
                               <div className="flex justify-center w-5">
                                 <FaPeopleGroup size={20} />
                               </div>
@@ -353,7 +353,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <ul className="mb-5 mt-1 flex flex-col gap-2 pl-6">
                           <li>
-                            <Tab pathname="/admin/users/student">
+                            <Tab pathname="/dashboard/admin/users/student">
                               <div className="flex justify-center w-5">
                                 <PiStudentBold size={20} />
                               </div>
@@ -361,7 +361,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </Tab>
                           </li>
                           <li>
-                            <Tab pathname="/admin/users/staff">
+                            <Tab pathname="/dashboard/admin/users/staff">
                               <div className="flex justify-center w-5">
                                 <GrUserManager size={20} />
                               </div>
@@ -369,7 +369,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </Tab>
                           </li>
                           <li>
-                            <Tab pathname="/admin/users/admin">
+                            <Tab pathname="/dashboard/admin/users/admin">
                               <div className="flex justify-center w-5">
                                 <RiAdminFill size={20} />
                               </div>
@@ -384,7 +384,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </SidebarLinkGroup>
 
               <li>
-                <Tab pathname="/admin/analysis">
+                <Tab pathname="/dashboard/admin/analysis">
                   <div className="flex justify-center w-5">
                     <BiSolidReport size={20} />
                   </div>
