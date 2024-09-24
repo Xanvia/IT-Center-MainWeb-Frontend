@@ -1,214 +1,290 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Card, CardBody, CardHeader, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea, Image } from "@nextui-org/react"
-import { Trash2, Edit3, Plus, Upload } from 'lucide-react'
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { PlusCircle, X, Edit, Eye, Calendar } from "lucide-react"
 
 interface Log {
   id: number
   name: string
   description: string
-  image: string
+  imageUrl: string
+  date: string
 }
 
-export default function Component() {
-  const [logs, setLogs] = useState<Log[]>([])
-  const [editingLog, setEditingLog] = useState<Log | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+export default function InteractiveLogRow() {
+  const [logs, setLogs] = useState<Log[]>([
+    {
+      id: 1,
+      name: "Log Alpha",
+      description: "A cutting-edge web application for task management. This log aims to revolutionize how teams collaborate and manage their workflows. With intuitive interfaces and powerful features, Log Alpha streamlines task allocation, progress tracking, and team communication.",
+      imageUrl: "/placeholder.svg?height=200&width=300",
+      date: "2023-06-15"
+    }
+  ])
+
+  const [isAdding, setIsAdding] = useState(false)
+  const [viewingLog, setViewingLog] = useState<Log | null>(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [newLog, setNewLog] = useState({
+    name: '',
+    description: '',
+    imageUrl: '',
+    date: ''
+  })
 
   const addLog = () => {
-    const newLog: Log = {
-      id: Date.now(),
-      name: '',
-      description: '',
-      image: ''
+    if (newLog.name && newLog.description && newLog.date) {
+      setLogs([...logs, {
+        id: Date.now(),
+        name: newLog.name,
+        description: newLog.description,
+        imageUrl: newLog.imageUrl || "/placeholder.svg?height=200&width=300",
+        date: newLog.date
+      }])
+      setNewLog({ name: '', description: '', imageUrl: '', date: '' })
+      setIsAdding(false)
     }
-    setLogs([...logs, newLog])
-    setEditingLog(newLog)
-    setIsModalOpen(true)
   }
 
-  const updateLog = (updatedLog: Log) => {
-    setLogs(logs.map(p => p.id === updatedLog.id ? updatedLog : p))
-    setEditingLog(null)
-    setIsModalOpen(false)
+  const removeLog = (id: number) => {
+    setLogs(logs.filter(log => log.id !== id))
   }
 
-  const deleteLog = (logId: number) => {
-    setLogs(logs.filter(p => p.id !== logId))
-  }
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, logId: number) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        const updatedLog = logs.find(p => p.id === logId)
-        if (updatedLog) {
-          setEditingLog({ ...updatedLog, image: reader.result as string })
-        }
-      }
-      reader.readAsDataURL(file)
+  const startEditing = () => {
+    if (viewingLog) {
+      setNewLog({
+        name: viewingLog.name,
+        description: viewingLog.description,
+        imageUrl: viewingLog.imageUrl,
+        date: viewingLog.date
+      })
+      setIsEditing(true)
     }
+  }
+
+  const saveEdit = () => {
+    if (viewingLog && newLog.name && newLog.description && newLog.date) {
+      setLogs(logs.map(log => 
+        log.id === viewingLog.id 
+          ? { ...log, ...newLog, imageUrl: newLog.imageUrl || log.imageUrl }
+          : log
+      ))
+      setViewingLog({ ...viewingLog, ...newLog })
+      setIsEditing(false)
+    }
+  }
+
+  const truncateDescription = (description: string, maxLength: number) => {
+    if (description.length <= maxLength) return description;
+    return description.substr(0, maxLength) + '...';
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-7xl">
-      <div className="mb-6 flex justify-start">
-        <Button 
-          onClick={addLog} 
-          color="primary"
-          endContent={<Plus size={20} />}
-        >
-          Add New Log
-        </Button>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="max-w-7xl mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6">Log Row</h2>
+      <div className="grid grid-cols-3 gap-6">
         {logs.map(log => (
-          <Card key={log.id} className="w-full h-[200px]">
-            <CardHeader className="flex justify-between items-center p-4">
-              <h4 className="text-lg font-semibold truncate mr-4">{log.name || 'New Log'}</h4>
-              <div className="flex gap-2 flex-shrink-0">
-                <Button 
-                  isIconOnly 
-                  color="primary" 
-                  aria-label="Edit" 
-                  size="sm"
-                  onClick={() => {
-                    setEditingLog(log)
-                    setIsModalOpen(true)
-                  }}
-                >
-                  <Edit3 size={18} />
-                </Button>
-                <Button 
-                  isIconOnly 
-                  color="danger" 
-                  aria-label="Delete" 
-                  size="sm"
-                  onClick={() => deleteLog(log.id)}
-                >
-                  <Trash2 size={18} />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardBody className="overflow-hidden p-0">
-              {log.image ? (
-                <Image
-                  src={log.image}
-                  alt={log.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-                  <p className="text-gray-500 dark:text-gray-400">No image</p>
-                </div>
-              )}
-              {log.description && (
-                <div className="absolute bottom-0 left-0 right-0 p-2 bg-black bg-opacity-50 text-white">
-                  <p className="text-sm truncate">{log.description}</p>
-                </div>
-              )}
-            </CardBody>
+          <Card key={log.id} className="overflow-hidden flex flex-col">
+            <div className="aspect-video relative">
+              <img 
+                src={log.imageUrl} 
+                alt={log.name} 
+                className="w-full h-full object-cover"
+              />
+              <Button 
+                variant="destructive" 
+                size="icon" 
+                className="absolute top-2 right-2"
+                onClick={() => removeLog(log.id)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <CardContent className="p-4 flex-grow">
+              <h3 className="font-bold text-lg mb-2">{log.name}</h3>
+              <p className="text-gray-600 text-sm mb-2">{truncateDescription(log.description, 100)}</p>
+              <p className="text-gray-500 text-sm flex items-center">
+                <Calendar className="w-4 h-4 mr-2" />
+                {log.date}
+              </p>
+            </CardContent>
+            <CardFooter className="bg-gray-50 p-4">
+              <Button variant="outline" className="w-full" onClick={() => setViewingLog(log)}>
+                <Eye className="w-4 h-4 mr-2" />
+                View Log
+              </Button>
+            </CardFooter>
           </Card>
         ))}
+        {logs.length < 3 && !isAdding && (
+          <Card 
+            className="flex flex-col justify-center items-center p-6 border-2 border-dashed border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors"
+            onClick={() => setIsAdding(true)}
+          >
+            <PlusCircle className="w-12 h-12 text-gray-400 mb-4" />
+            <p className="text-gray-500 text-center">Add a new log</p>
+          </Card>
+        )}
+        {isAdding && (
+          <Card className="overflow-hidden flex flex-col">
+            <CardContent className="p-4 flex-grow">
+              <form onSubmit={(e) => { e.preventDefault(); addLog(); }} className="space-y-4">
+                <div>
+                  <Label htmlFor="newLogName">Log Name</Label>
+                  <Input
+                    id="newLogName"
+                    value={newLog.name}
+                    onChange={(e) => setNewLog({...newLog, name: e.target.value})}
+                    placeholder="Enter log name"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="newLogDescription">Description</Label>
+                  <Textarea
+                    id="newLogDescription"
+                    value={newLog.description}
+                    onChange={(e) => setNewLog({...newLog, description: e.target.value})}
+                    placeholder="Enter log description"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="newLogDate">Log Date</Label>
+                  <Input
+                    id="newLogDate"
+                    type="date"
+                    value={newLog.date}
+                    onChange={(e) => setNewLog({...newLog, date: e.target.value})}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="newLogImage">Log Image</Label>
+                  <Input
+                    id="newLogImage"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        const reader = new FileReader()
+                        reader.onloadend = () => {
+                          setNewLog({...newLog, imageUrl: reader.result as string})
+                        }
+                        reader.readAsDataURL(file)
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex space-x-2">
+                  <Button type="submit" className="flex-1">Add Log</Button>
+                  <Button type="button" variant="outline" onClick={() => setIsAdding(false)} className="flex-1">Cancel</Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
-      <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
-        size="2xl"
-        backdrop="blur"
-        classNames={{
-          backdrop: "bg-gray-900/50 backdrop-opacity-40",
-          base: "border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-700",
-          header: "border-b border-gray-100 dark:border-gray-700",
-          footer: "border-t border-gray-100 dark:border-gray-700",
-          closeButton: "hover:bg-white/5 active:bg-white/10",
-        }}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                {editingLog?.name ? 'Edit Log' : 'New Log'}
-              </ModalHeader>
-              <ModalBody>
-                <form className="space-y-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                      Log Name
-                    </label>
-                    <Input
-                      placeholder="Enter the name of your log"
-                      value={editingLog?.name || ''}
-                      onChange={(e) => setEditingLog(prev => prev ? {...prev, name: e.target.value} : null)}
-                      variant="bordered"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                      Log Description
-                    </label>
-                    <Textarea
-                      placeholder="Provide a brief description of your log"
-                      value={editingLog?.description || ''}
-                      onChange={(e) => setEditingLog(prev => prev ? {...prev, description: e.target.value} : null)}
-                      variant="bordered"
-                      minRows={3}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                      Log Image
-                    </label>
-                    <div className="flex items-center">
-                      <label htmlFor="log-image" className="cursor-pointer">
-                        <Button
-                          color="primary"
-                          variant="flat"
-                          startContent={<Upload size={18} />}
-                        >
-                          Upload Image
-                        </Button>
-                        <input
-                          id="log-image"
-                          type="file"
-                          className="sr-only"
-                          accept="image/*"
-                          onChange={(e) => editingLog && handleImageUpload(e, editingLog.id)}
-                        />
-                      </label>
-                    </div>
-                  </div>
-                  {editingLog?.image && (
-                    <Image
-                      src={editingLog.image}
-                      alt="Log preview"
-                      className="mt-2 max-w-full h-48 object-cover rounded-md"
-                    />
-                  )}
-                </form>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Cancel
-                </Button>
-                <Button 
-                  color="primary" 
-                  onPress={() => {
-                    if (editingLog) updateLog(editingLog)
-                    onClose()
-                  }}
-                >
-                  Save Changes
-                </Button>
-              </ModalFooter>
-            </>
+      <Dialog open={viewingLog !== null} onOpenChange={(open) => {
+        if (!open) {
+          setViewingLog(null)
+          setIsEditing(false)
+        }
+      }}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{isEditing ? 'Edit Log' : viewingLog?.name}</DialogTitle>
+          </DialogHeader>
+          {viewingLog && !isEditing && (
+            <div className="space-y-4">
+              <img 
+                src={viewingLog.imageUrl} 
+                alt={viewingLog.name} 
+                className="w-full h-48 object-cover rounded-md"
+              />
+              <p className="text-sm text-gray-600">{viewingLog.description}</p>
+              <p className="text-sm text-gray-500 flex items-center">
+                <Calendar className="w-4 h-4 mr-2" />
+                {viewingLog.date}
+              </p>
+            </div>
           )}
-        </ModalContent>
-      </Modal>
+          {isEditing && (
+            <form onSubmit={(e) => { e.preventDefault(); saveEdit(); }} className="space-y-4">
+              <div>
+                <Label htmlFor="editLogName">Log Name</Label>
+                <Input
+                  id="editLogName"
+                  value={newLog.name}
+                  onChange={(e) => setNewLog({...newLog, name: e.target.value})}
+                  placeholder="Enter log name"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="editLogDescription">Description</Label>
+                <Textarea
+                  id="editLogDescription"
+                  value={newLog.description}
+                  onChange={(e) => setNewLog({...newLog, description: e.target.value})}
+                  placeholder="Enter log description"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="editLogDate">Log Date</Label>
+                <Input
+                  id="editLogDate"
+                  type="date"
+                  value={newLog.date}
+                  onChange={(e) => setNewLog({...newLog, date: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="editLogImage">Log Image</Label>
+                <Input
+                  id="editLogImage"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      const reader = new FileReader()
+                      reader.onloadend = () => {
+                        setNewLog({...newLog, imageUrl: reader.result as string})
+                      }
+                      reader.readAsDataURL(file)
+                    }
+                  }}
+                />
+              </div>
+            </form>
+          )}
+          <DialogFooter>
+            {!isEditing && (
+              <Button onClick={startEditing}>
+                <Edit className="w-4 h-4 mr-2" />
+                Edit Log
+              </Button>
+            )}
+            {isEditing && (
+              <div className="flex space-x-2">
+                <Button onClick={saveEdit}>Save Changes</Button>
+                <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
+              </div>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
