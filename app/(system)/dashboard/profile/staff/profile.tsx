@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import { useState, useRef } from "react"
-import Image from "next/image"
-import { useForm, Controller } from "react-hook-form"
-import { PenSquare, Camera, Check, X, Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useState, useRef } from "react";
+import Image from "next/image";
+import { useForm, Controller } from "react-hook-form";
+import { PenSquare, Camera, Check, X, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 type FieldType = {
-  label: string
-  name: string
-  value: string
-  isEditing: boolean
-}
+  label: string;
+  name: string;
+  value: string;
+  isEditing: boolean;
+};
 
 type FormData = {
-  staffName: string
-  designation: string
-  nominal: string
-  extNo: string
-  email: string
-  phoneNo: string
-}
+  staffName: string;
+  designation: string;
+  nominal: string;
+  extNo: string;
+  email: string;
+  phoneNo: string;
+};
 
 export default function Component() {
-  const [profileImage, setProfileImage] = useState("/placeholder.svg")
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [profileImage, setProfileImage] = useState("/placeholder.svg");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [fields, setFields] = useState<FieldType[]>([
     { label: "Staff Name", name: "staffName", value: "", isEditing: false },
     { label: "Designation", name: "designation", value: "", isEditing: false },
@@ -34,53 +34,56 @@ export default function Component() {
     { label: "Ext No", name: "extNo", value: "", isEditing: false },
     { label: "Email", name: "email", value: "", isEditing: false },
     { label: "Phone No", name: "phoneNo", value: "", isEditing: false },
-  ])
+  ]);
 
-  const { control, handleSubmit, setValue } = useForm<FormData>()
+  const { control, handleSubmit, setValue } = useForm<FormData>();
 
   const handleImageClick = () => {
-    fileInputRef.current?.click()
-  }
+    fileInputRef.current?.click();
+  };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onload = (e) => {
-        setProfileImage(e.target?.result as string)
-      }
-      reader.readAsDataURL(file)
+        setProfileImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const toggleEdit = (index: number) => {
     setFields(
       fields.map((field, i) =>
         i === index ? { ...field, isEditing: !field.isEditing } : field
       )
-    )
-  }
+    );
+  };
 
   const handleChange = (name: string, newValue: string) => {
     setFields(
       fields.map((field) =>
         field.name === name ? { ...field, value: newValue } : field
       )
-    )
-    setValue(name as keyof FormData, newValue)
-  }
+    );
+    setValue(name as keyof FormData, newValue);
+  };
 
   const handleSave = (index: number) => {
-    toggleEdit(index)
-  }
+    toggleEdit(index);
+  };
 
   const onSubmit = (data: FormData) => {
-    console.log("Submitting profile data:", data)
+    console.log("Submitting profile data:", data);
     // Here you would typically submit the data to your backend
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden"
+    >
       <div className="bg-primary h-32"></div>
       <div className="relative px-4 pt-16 pb-8">
         <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
@@ -119,7 +122,10 @@ export default function Component() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {fields.map((field, index) => (
             <div key={index} className="relative">
-              <Label htmlFor={field.name} className="block text-sm font-medium text-foreground mb-1">
+              <Label
+                htmlFor={field.name}
+                className="block text-sm font-medium text-foreground mb-1"
+              >
                 {field.label}
               </Label>
               <Controller
@@ -134,9 +140,9 @@ export default function Component() {
                           type="text"
                           id={field.name}
                           value={value}
-                          onChange={(e) => {
-                            onChange(e)
-                            handleChange(field.name, e.target.value)
+                          onChange={(e: any) => {
+                            onChange(e);
+                            handleChange(field.name, e.target.value);
                           }}
                           className="w-full"
                           placeholder={`Enter ${field.label}`}
@@ -200,5 +206,5 @@ export default function Component() {
         </div>
       </div>
     </form>
-  )
+  );
 }

@@ -22,7 +22,6 @@ export default function profile() {
     { label: "student no", value: "s19636", isEditing: false },
     { label: "Email", value: "sfssfs@vhh.com", isEditing: false },
     { label: "Phone No", value: "070288191", isEditing: false },
-    
   ]);
 
   const handleImageClick = () => {
