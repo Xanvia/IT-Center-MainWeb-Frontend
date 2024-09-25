@@ -191,7 +191,7 @@ export default function InteractiveLogRow() {
           <Card key={log.id} className="overflow-hidden flex flex-col">
             <div className="aspect-video relative">
               <img
-                src={log.imageUrl}
+                src={log.imageUrl[0]}
                 alt={log.name}
                 className="w-full h-full object-cover"
               />
@@ -328,7 +328,7 @@ export default function InteractiveLogRow() {
           {viewingLog && !isEditing && (
             <div className="space-y-4">
               <img
-                src={viewingLog.imageUrl}
+                src={viewingLog.imageUrl[0]}
                 alt={viewingLog.name}
                 className="w-full h-48 object-cover rounded-md"
               />
@@ -390,7 +390,7 @@ export default function InteractiveLogRow() {
                   type="file"
                   accept="image/*"
                   onChange={(e) => {
-                    const file = e.target.files?.[0];
+                    const file = e.target.files?;
                     if (file) {
                       const reader = new FileReader();
                       reader.onloadend = () => {
