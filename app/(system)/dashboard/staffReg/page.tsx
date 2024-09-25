@@ -80,29 +80,32 @@ export default function StaffRegistrationForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Designation</span>
+              <span className="label-text">Title</span>
             </label>
             <Controller
-              name="designation"
+              name="title"
               control={control}
               render={({ field }) => (
                 <Select
                   {...field}
-                  placeholder="Select designation"
+                  placeholder="Select title"
                   className="w-full"
-                  errorMessage={errors.designation?.message}
+                  errorMessage={errors.title?.message}
                 >
-                  <SelectItem key="manager" value="manager">
-                    Manager
+                  <SelectItem key="dr" value="manager">
+                    Dr
                   </SelectItem>
-                  <SelectItem key="developer" value="developer">
-                    Developer
+                  <SelectItem key="mr" value="mr">
+                    Mr
                   </SelectItem>
-                  <SelectItem key="designer" value="designer">
-                    Designer
+                  <SelectItem key="Mrs" value="Mrs">
+                    Mrs
                   </SelectItem>
-                  <SelectItem key="hr" value="hr">
-                    HR
+                  <SelectItem key="Miss" value="Miss">
+                    Miss
+                  </SelectItem>
+                  <SelectItem key="Dev" value="Dev">
+                    Dev
                   </SelectItem>
                 </Select>
               )}
@@ -121,6 +124,23 @@ export default function StaffRegistrationForm() {
                   {...field}
                   placeholder="Enter display name"
                   errorMessage={errors.displayName?.message}
+                />
+              )}
+            />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Designation</span>
+            </label>
+            <Controller
+              name="displayDesignation"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  placeholder="Enter display Designation"
+                  errorMessage={errors.displayDesignation?.message}
                 />
               )}
             />
@@ -190,14 +210,16 @@ export default function StaffRegistrationForm() {
                 )}
               </div>
             ))}
-            <Button
-              type="button"
-              onClick={() => appendEmail({ value: "" })}
-              color="primary"
-              className="mt-2"
-            >
-              <PlusIcon className="h-4 w-4 mr-2" /> Add Email
-            </Button>
+            {emailFields.length < 2 && (
+              <Button
+                type="button"
+                onClick={() => appendEmail({ value: "" })}
+                color="primary"
+                className="mt-2"
+              >
+                <PlusIcon className="h-4 w-4 mr-2" /> Add Email
+              </Button>
+            )}
           </div>
 
           <div className="form-control">
@@ -232,20 +254,22 @@ export default function StaffRegistrationForm() {
                 )}
               </div>
             ))}
-            <Button
-              type="button"
-              onClick={() => appendPhone({ value: "" })}
-              color="primary"
-              className="mt-2"
-            >
-              <PlusIcon className="h-4 w-4 mr-2" /> Add Phone Number
-            </Button>
+            {phoneFields.length < 2 && (
+              <Button
+                type="button"
+                onClick={() => appendPhone({ value: "" })}
+                color="primary"
+                className="mt-2"
+              >
+                <PlusIcon className="h-4 w-4 mr-2" /> Add Phone Number
+              </Button>
+            )}
           </div>
 
           <Button
             type="submit"
             color="success"
-            className="w-full"
+            className="w-full  bg-red-900 hover hover:bg-gray-600 text-white"
             isLoading={isSubmitting}
           >
             {isSubmitting ? "Registering..." : "Submit Registration"}
