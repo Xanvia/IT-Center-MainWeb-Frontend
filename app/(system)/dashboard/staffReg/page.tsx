@@ -6,14 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { PlusIcon, TrashIcon } from "lucide-react";
 import { StaffFormData, staffSchema } from "@/schemas/staffSchema";
-
-// move validation schema into different file in student reg
-// remove designation selection and make it a text input
-// limit emails and phones upto maximum 3 from frontend
-// Add profile picture section
+import { useRouter } from "next/navigation";
 
 export default function StaffRegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const {
     control,
@@ -47,11 +44,31 @@ export default function StaffRegistrationForm() {
 
   const onSubmit = async (data: StaffFormData) => {
     setIsSubmitting(true);
-    // Here you would typically send the data to your API
-    console.log(data);
+
+    // Backend Integration
+    try {
+      const response = await fetch("http://localhost:3001/staff-profile", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json",
+        },
+        mode: "cors",
+      });
+
+      if (!response.ok) {
+        console.log(response.statusText);
+        return;
+      }
+      const result = await response.json();
+      console.log(result);
+      alert("Request Sent Successfully");
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    }
 
     setIsSubmitting(false);
-    alert("Staff member registered successfully!");
   };
 
   return (
