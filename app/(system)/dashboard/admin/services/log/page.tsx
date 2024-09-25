@@ -1,19 +1,13 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { PlusCircle, X, Edit, Eye, Calendar } from "lucide-react";
+import { useState } from 'react'
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react"
 
 interface Log {
   id: string;
@@ -144,9 +138,9 @@ export default function InteractiveLogRow() {
         name: viewingLog.name,
         description: viewingLog.description,
         imageUrl: viewingLog.imageUrl,
-        date: viewingLog.date,
-      });
-      setIsEditing(true);
+        date: viewingLog.date
+      })
+      setIsEditing(true)
     }
   };
 
@@ -178,10 +172,10 @@ export default function InteractiveLogRow() {
     }
   };
 
-  const truncateDescription = (description: string, maxLength: number) => {
-    if (description.length <= maxLength) return description;
-    return description.substr(0, maxLength) + "...";
-  };
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.substr(0, maxLength) + '...';
+  }
 
   return (
     <div className="max-w-7xl mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
@@ -195,31 +189,28 @@ export default function InteractiveLogRow() {
                 alt={log.name}
                 className="w-full h-full object-cover"
               />
-              <Button
-                variant="destructive"
-                size="icon"
+              <Button 
+                variant="destructive" 
+                size="icon" 
                 className="absolute top-2 right-2"
                 onClick={() => removeLog(log.id)}
               >
                 <X className="h-4 w-4" />
+                <span className="sr-only">Remove log</span>
               </Button>
             </div>
-            <CardContent className="p-4 flex-grow">
-              <h3 className="font-bold text-lg mb-2">{log.name}</h3>
-              <p className="text-gray-600 text-sm mb-2">
-                {truncateDescription(log.description, 100)}
-              </p>
-              <p className="text-gray-500 text-sm flex items-center">
-                <Calendar className="w-4 h-4 mr-2" />
-                {log.date}
-              </p>
+            <CardContent className="p-4 flex-grow overflow-hidden">
+              <h3 className="font-bold text-lg mb-2">{truncateText(log.name, 30)}</h3>
+              <p className="text-gray-600 text-sm mb-4">{truncateText(log.description, 100)}</p>
+              <div className="space-y-2">
+                <p className="text-gray-500 text-sm flex items-center">
+                  <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
+                  {log.date || <span className="text-red-500 flex items-center"><AlertCircle className="w-4 h-4 mr-1" /> Date not set</span>}
+                </p>
+              </div>
             </CardContent>
-            <CardFooter className="bg-gray-50 p-4">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => setViewingLog(log)}
-              >
+            <CardFooter className="bg-gray-50 p-4 mt-auto">
+              <Button variant="outline" className="w-full" onClick={() => setViewingLog(log)}>
                 <Eye className="w-4 h-4 mr-2" />
                 View Log
               </Button>
@@ -310,20 +301,15 @@ export default function InteractiveLogRow() {
         )}
       </div>
 
-      <Dialog
-        open={viewingLog !== null}
-        onOpenChange={(open) => {
-          if (!open) {
-            setViewingLog(null);
-            setIsEditing(false);
-          }
-        }}
-      >
+      <Dialog open={viewingLog !== null} onOpenChange={(open) => {
+        if (!open) {
+          setViewingLog(null)
+          setIsEditing(false)
+        }
+      }}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>
-              {isEditing ? "Edit Log" : viewingLog?.name}
-            </DialogTitle>
+            <DialogTitle>{isEditing ? 'Edit Log' : viewingLog?.name}</DialogTitle>
           </DialogHeader>
           {viewingLog && !isEditing && (
             <div className="space-y-4">
@@ -335,26 +321,18 @@ export default function InteractiveLogRow() {
               <p className="text-sm text-gray-600">{viewingLog.description}</p>
               <p className="text-sm text-gray-500 flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
-                {viewingLog.date}
+                {viewingLog.date || <span className="text-red-500">Date not set</span>}
               </p>
             </div>
           )}
           {isEditing && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                saveEdit();
-              }}
-              className="space-y-4"
-            >
+            <form onSubmit={(e) => { e.preventDefault(); saveEdit(); }} className="space-y-4">
               <div>
                 <Label htmlFor="editLogName">Log Name</Label>
                 <Input
                   id="editLogName"
                   value={newLog.name}
-                  onChange={(e) =>
-                    setNewLog({ ...newLog, name: e.target.value })
-                  }
+                  onChange={(e) => setNewLog({...newLog, name: e.target.value})}
                   placeholder="Enter log name"
                   required
                 />
@@ -364,9 +342,7 @@ export default function InteractiveLogRow() {
                 <Textarea
                   id="editLogDescription"
                   value={newLog.description}
-                  onChange={(e) =>
-                    setNewLog({ ...newLog, description: e.target.value })
-                  }
+                  onChange={(e) => setNewLog({...newLog, description: e.target.value})}
                   placeholder="Enter log description"
                   required
                 />
@@ -377,9 +353,7 @@ export default function InteractiveLogRow() {
                   id="editLogDate"
                   type="date"
                   value={newLog.date}
-                  onChange={(e) =>
-                    setNewLog({ ...newLog, date: e.target.value })
-                  }
+                  onChange={(e) => setNewLog({...newLog, date: e.target.value})}
                   required
                 />
               </div>
@@ -392,14 +366,11 @@ export default function InteractiveLogRow() {
                   onChange={(e) => {
                     const file = e.target.files?;
                     if (file) {
-                      const reader = new FileReader();
+                      const reader = new FileReader()
                       reader.onloadend = () => {
-                        setNewLog({
-                          ...newLog,
-                          imageUrl: reader.result as string,
-                        });
-                      };
-                      reader.readAsDataURL(file);
+                        setNewLog({...newLog, imageUrl: reader.result as string})
+                      }
+                      reader.readAsDataURL(file)
                     }
                   }}
                 />
@@ -416,14 +387,12 @@ export default function InteractiveLogRow() {
             {isEditing && (
               <div className="flex space-x-2">
                 <Button onClick={saveEdit}>Save Changes</Button>
-                <Button variant="outline" onClick={() => setIsEditing(false)}>
-                  Cancel
-                </Button>
+                <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
               </div>
             )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }
