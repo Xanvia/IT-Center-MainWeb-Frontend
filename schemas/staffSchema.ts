@@ -3,10 +3,12 @@ import { z } from "zod";
 const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/;
 
 export const staffSchema = z.object({
-  designation: z.string().min(1, "Designation is required"),
+  title: z.string().min(1, "Title is required"),
   displayName: z.string().min(1, "Display name is required"),
+  displayDesignation: z.string().min(1, "Display designation is required"),
   nominal: z.string().min(1, "Nominal is required"),
   extNumber: z.string().min(1, "Extension number is required"),
+
   emails: z
     .array(
       z.object({
