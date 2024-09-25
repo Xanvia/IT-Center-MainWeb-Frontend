@@ -16,21 +16,19 @@ import {
 import { PlusCircle, X, Edit, Eye, Calendar } from "lucide-react";
 
 interface Log {
-  id: number;
   name: string;
   description: string;
-  imageUrl: string;
+  imageUrl: string[];
   date: string;
 }
 
 export default function InteractiveLogRow() {
   const [logs, setLogs] = useState<Log[]>([
     {
-      id: 1,
       name: "Log Alpha",
       description:
         "A cutting-edge web application for task management. This log aims to revolutionize how teams collaborate and manage their workflows. With intuitive interfaces and powerful features, Log Alpha streamlines task allocation, progress tracking, and team communication.",
-      imageUrl: "/placeholder.svg?height=200&width=300",
+      imageUrl: ["/placeholder.svg?height=200&width=300"],
       date: "2023-06-15",
     },
   ]);
@@ -38,26 +36,65 @@ export default function InteractiveLogRow() {
   const [isAdding, setIsAdding] = useState(false);
   const [viewingLog, setViewingLog] = useState<Log | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [newLog, setNewLog] = useState({
     name: "",
     description: "",
-    imageUrl: "",
+    imageUrl: [""],
     date: "",
   });
 
-  const addLog = () => {
+  // Handle file input change
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setSelectedFiles(Array.from(event.target.files)); // Convert FileList to Array
+    }
+  };
+
+  // Submit the files to the server
+  const handleUpload = async () => {
+    const formData = new FormData();
+
+    selectedFiles.forEach((file) => {
+      formData.append("images", file); // Append each file with the same field name
+    });
+
+    try {
+      const response = await fetch("http://localhost:3001/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Response:", data);
+        return data;
+      } else {
+        alert("File upload failed");
+        console.error("Error:", data);
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
+  };
+
+  const addLog = async () => {
+    setNewLog({ name: "", description: "", imageUrl: [""], date: "" });
+    if (selectedFiles && selectedFiles.length > 0) {
+      newLog.imageUrl = await handleUpload();
+    }
+    console.log(newLog.imageUrl);
+
     if (newLog.name && newLog.description && newLog.date) {
       setLogs([
         ...logs,
         {
-          id: Date.now(),
           name: newLog.name,
           description: newLog.description,
-          imageUrl: newLog.imageUrl || "/placeholder.svg?height=200&width=300",
+          imageUrl: newLog.imageUrl,
           date: newLog.date,
         },
       ]);
-      setNewLog({ name: "", description: "", imageUrl: "", date: "" });
       setIsAdding(false);
     }
   };
@@ -140,7 +177,7 @@ export default function InteractiveLogRow() {
             </CardFooter>
           </Card>
         ))}
-        {logs.length < 3 && !isAdding && (
+        {!isAdding && (
           <Card
             className="flex flex-col justify-center items-center p-6 border-2 border-dashed border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors"
             onClick={() => setIsAdding(true)}
@@ -201,19 +238,8 @@ export default function InteractiveLogRow() {
                     id="newLogImage"
                     type="file"
                     accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setNewLog({
-                            ...newLog,
-                            imageUrl: reader.result as string,
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
+                    multiple
+                    onChange={handleFileChange}
                   />
                 </div>
                 <div className="flex space-x-2">

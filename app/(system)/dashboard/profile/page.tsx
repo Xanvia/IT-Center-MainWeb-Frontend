@@ -4,5 +4,5 @@ import Staffprofile from "./staff/profile";
 import Studentprofile from "./student/profile";
 
 export default function profile() {
-  return <Staffprofile />;
+  return <Studentprofile />;
 }
