@@ -7,11 +7,6 @@ import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { PlusIcon, TrashIcon } from "lucide-react";
 import { StaffFormData, staffSchema } from "@/schemas/staffSchema";
 
-// move validation schema into different file in student reg
-// remove designation selection and make it a text input
-// limit emails and phones upto maximum 3 from frontend
-// Add profile picture section
-
 export default function StaffRegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
