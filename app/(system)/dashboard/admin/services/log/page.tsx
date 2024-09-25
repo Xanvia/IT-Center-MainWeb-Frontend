@@ -14,6 +14,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react";
+import { PhotoSlide } from "../../../component/admin/photoSlide";
 
 interface Log {
   id: string;
@@ -30,7 +31,7 @@ export default function InteractiveLogRow() {
       name: "Log Alpha",
       description:
         "A cutting-edge web application for task management. This log aims to revolutionize how teams collaborate and manage their workflows. With intuitive interfaces and powerful features, Log Alpha streamlines task allocation, progress tracking, and team communication.",
-      imageUrl: ["/placeholder.svg?height=200&width=300"],
+      imageUrl: ["/Slide/first.png", "/Slide/second.png"],
       date: "2023-06-15",
     },
   ]);
@@ -185,20 +186,16 @@ export default function InteractiveLogRow() {
 
   return (
     <div className="max-w-7xl mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Log</h2>
+      <h2 className="text-2xl font-bold mb-6">Logs</h2>
       <div className="grid grid-cols-3 gap-6">
-        {logs.map((log) => (
-          <Card key={log.id} className="overflow-hidden flex flex-col">
-            <div className="aspect-video relative">
-              <img
-                src={log.imageUrl[0]}
-                alt={log.name}
-                className="w-full h-full object-cover"
-              />
+        {logs.map((log, index) => (
+          <Card key={index} className="overflow-hidden flex flex-col">
+            <div className="aspect-video relative justify-center">
+              <PhotoSlide images={log.imageUrl} />
               <Button
                 variant="destructive"
                 size="icon"
-                className="absolute top-2 right-2"
+                className="absolute top-1 right-1"
                 onClick={() => removeLog(log.id)}
               >
                 <X className="h-4 w-4" />
