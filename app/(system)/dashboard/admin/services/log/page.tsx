@@ -95,13 +95,47 @@ export default function InteractiveLogRow() {
           date: newLog.date,
         },
       ]);
-      setIsAdding(false);
-    }
-  };
+  const addLog = async () => {
+  if (newLog.name && newLog.description && newLog.date) {
+    // API call to send log data to the backend
+    const response = await fetch("http;//localhost:3001/logs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: newLog.name,
+        description: newLog.description,
+        imageUrl: newLog.imageUrl || "/placeholder.svg?height=200&width=300",
+        date: newLog.date,
+      }),
+    });
 
-  const removeLog = (id: number) => {
+    if (response.ok) {
+      const savedLog = await response.json();
+      // Update the state with the newly created log
+      setLogs([...logs, savedLog]);
+      setNewLog({ name: "", description: "", imageUrl: "", date: "" });
+      setIsAdding(false);
+    } else {
+      // Handle error response
+      console.error("Failed to add log");
+    }
+  }
+};
+
+
+  const removeLog = async (id: number) => {
+  const response = await fetch(`/api/logs/${id}`, {
+    method: "DELETE",
+  });
+
+  if (response.ok) {
     setLogs(logs.filter((log) => log.id !== id));
-  };
+  } else {
+    console.error("Failed to delete log");
+  }
+};
 
   const startEditing = () => {
     if (viewingLog) {
@@ -115,19 +149,36 @@ export default function InteractiveLogRow() {
     }
   };
 
-  const saveEdit = () => {
-    if (viewingLog && newLog.name && newLog.description && newLog.date) {
+  const saveEdit = async () => {
+  if (viewingLog && newLog.name && newLog.description && newLog.date) {
+    const response = await fetch(`/api/logs/${viewingLog.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: newLog.name,
+        description: newLog.description,
+        imageUrl: newLog.imageUrl || viewingLog.imageUrl,
+        date: newLog.date,
+      }),
+    });
+
+    if (response.ok) {
+      const updatedLog = await response.json();
       setLogs(
         logs.map((log) =>
-          log.id === viewingLog.id
-            ? { ...log, ...newLog, imageUrl: newLog.imageUrl || log.imageUrl }
-            : log
+          log.id === viewingLog.id ? updatedLog : log
         )
       );
-      setViewingLog({ ...viewingLog, ...newLog });
+      setViewingLog(updatedLog);
       setIsEditing(false);
+    } else {
+      console.error("Failed to update log");
     }
-  };
+  }
+};
+
 
   const truncateDescription = (description: string, maxLength: number) => {
     if (description.length <= maxLength) return description;
@@ -136,7 +187,7 @@ export default function InteractiveLogRow() {
 
   return (
     <div className="max-w-7xl mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Log Row</h2>
+      <h2 className="text-2xl font-bold mb-6">Log</h2>
       <div className="grid grid-cols-3 gap-6">
         {logs.map((log) => (
           <Card key={log.id} className="overflow-hidden flex flex-col">
