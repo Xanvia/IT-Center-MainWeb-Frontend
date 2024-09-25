@@ -84,7 +84,7 @@ export default function Component() {
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden"
     >
-      <div className="bg-primary h-32"></div>
+      <div className="bg-red-900 h-32"></div>
       <div className="relative px-4 pt-16 pb-8">
         <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
           <div className="relative w-32 h-32 bg-muted rounded-full overflow-hidden group">
@@ -199,9 +199,9 @@ export default function Component() {
             </div>
           ))}
         </div>
-        <div className="mt-8 flex justify-center">
-          <Button type="submit" className="w-full md:w-auto">
-            Submit Profile
+        <div className="mt-8 flex justify-end">
+          <Button type="submit" className="w-full md:w-auto bg-red-900 hover hover:bg-gray-600">
+            Save Changes
           </Button>
         </div>
       </div>
