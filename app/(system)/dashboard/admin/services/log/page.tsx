@@ -16,6 +16,7 @@ import {
 import { PlusCircle, X, Edit, Eye, Calendar } from "lucide-react";
 
 interface Log {
+  id: string;
   name: string;
   description: string;
   imageUrl: string[];
@@ -25,6 +26,7 @@ interface Log {
 export default function InteractiveLogRow() {
   const [logs, setLogs] = useState<Log[]>([
     {
+      id: "vvb",
       name: "Log Alpha",
       description:
         "A cutting-edge web application for task management. This log aims to revolutionize how teams collaborate and manage their workflows. With intuitive interfaces and powerful features, Log Alpha streamlines task allocation, progress tracking, and team communication.",
@@ -38,6 +40,7 @@ export default function InteractiveLogRow() {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [newLog, setNewLog] = useState({
+    id: "default",
     name: "",
     description: "",
     imageUrl: [""],
@@ -79,67 +82,65 @@ export default function InteractiveLogRow() {
   };
 
   const addLog = async () => {
-    setNewLog({ name: "", description: "", imageUrl: [""], date: "" });
+    setIsAdding(true);
+
+    // upload files
     if (selectedFiles && selectedFiles.length > 0) {
       newLog.imageUrl = await handleUpload();
     }
     console.log(newLog.imageUrl);
 
     if (newLog.name && newLog.description && newLog.date) {
-      setLogs([
-        ...logs,
-        {
+      // API call to send log data to the backend
+      const response = await fetch("http;//localhost:3001/logs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           name: newLog.name,
           description: newLog.description,
           imageUrl: newLog.imageUrl,
           date: newLog.date,
-        },
-      ]);
-  const addLog = async () => {
-  if (newLog.name && newLog.description && newLog.date) {
-    // API call to send log data to the backend
-    const response = await fetch("http;//localhost:3001/logs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: newLog.name,
-        description: newLog.description,
-        imageUrl: newLog.imageUrl || "/placeholder.svg?height=200&width=300",
-        date: newLog.date,
-      }),
+        }),
+      });
+
+      if (response.ok) {
+        const savedLog = await response.json();
+        // Update the state with the newly created log
+        setLogs([...logs, savedLog]);
+      } else {
+        // Handle error response
+        console.error("Failed to add log");
+      }
+    }
+    // erase log
+    setNewLog({
+      id: "default",
+      name: "",
+      description: "",
+      imageUrl: [""],
+      date: "",
+    });
+    setIsAdding(false);
+  };
+
+  const removeLog = async (id: string) => {
+    const response = await fetch(`/api/logs/${id}`, {
+      method: "DELETE",
     });
 
     if (response.ok) {
-      const savedLog = await response.json();
-      // Update the state with the newly created log
-      setLogs([...logs, savedLog]);
-      setNewLog({ name: "", description: "", imageUrl: "", date: "" });
-      setIsAdding(false);
+      setLogs(logs.filter((log) => log.id !== id));
     } else {
-      // Handle error response
-      console.error("Failed to add log");
+      console.error("Failed to delete log");
     }
-  }
-};
-
-
-  const removeLog = async (id: number) => {
-  const response = await fetch(`/api/logs/${id}`, {
-    method: "DELETE",
-  });
-
-  if (response.ok) {
-    setLogs(logs.filter((log) => log.id !== id));
-  } else {
-    console.error("Failed to delete log");
-  }
-};
+  };
 
   const startEditing = () => {
     if (viewingLog) {
       setNewLog({
+        id: "",
         name: viewingLog.name,
         description: viewingLog.description,
         imageUrl: viewingLog.imageUrl,
@@ -150,35 +151,32 @@ export default function InteractiveLogRow() {
   };
 
   const saveEdit = async () => {
-  if (viewingLog && newLog.name && newLog.description && newLog.date) {
-    const response = await fetch(`/api/logs/${viewingLog.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: newLog.name,
-        description: newLog.description,
-        imageUrl: newLog.imageUrl || viewingLog.imageUrl,
-        date: newLog.date,
-      }),
-    });
+    if (viewingLog && newLog.name && newLog.description && newLog.date) {
+      const response = await fetch(`/api/logs/${viewingLog.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: newLog.name,
+          description: newLog.description,
+          imageUrl: newLog.imageUrl || viewingLog.imageUrl,
+          date: newLog.date,
+        }),
+      });
 
-    if (response.ok) {
-      const updatedLog = await response.json();
-      setLogs(
-        logs.map((log) =>
-          log.id === viewingLog.id ? updatedLog : log
-        )
-      );
-      setViewingLog(updatedLog);
-      setIsEditing(false);
-    } else {
-      console.error("Failed to update log");
+      if (response.ok) {
+        const updatedLog = await response.json();
+        setLogs(
+          logs.map((log) => (log.id === viewingLog.id ? updatedLog : log))
+        );
+        setViewingLog(updatedLog);
+        setIsEditing(false);
+      } else {
+        console.error("Failed to update log");
+      }
     }
-  }
-};
-
+  };
 
   const truncateDescription = (description: string, maxLength: number) => {
     if (description.length <= maxLength) return description;
