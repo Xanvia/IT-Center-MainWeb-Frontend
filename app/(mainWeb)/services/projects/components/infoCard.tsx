@@ -21,10 +21,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
         >
           <img src={props.img} className="max-w-sm rounded-lg shadow-2xl" />
           <div>
-            <h1 className="text-justify justify-start">
-              Defined Networking (SDN)
-            </h1>
-            <p className="text-sm text-justify py-6">{props.title}</p>
+            <h1 className="text-justify justify-start">{props.title}</h1>
             <p className="text-sm text-justify py-6">{props.des}</p>
             <p className="text-sm text-justify py-6">{props.date}</p>
           </div>
