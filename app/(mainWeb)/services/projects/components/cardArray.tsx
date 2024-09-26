@@ -34,10 +34,16 @@ export default function cardArray() {
 
   return (
     <div className="flex flex-col lg:flex-col">
-      {data &&
-        data.map((item) => (
-          <InfoCard text={item.title} key={item.id} id={item.id} />
-        ))}
+      {Info.map((item) => (
+        <InfoCard
+          key={item.id}
+          id={item.id}
+          title={item.Title}
+          des={item.Description}
+          date={item.Date}
+          img={item.Image}
+        />
+      ))}
     </div>
   );
 }
