@@ -200,7 +200,10 @@ export default function Component() {
           ))}
         </div>
         <div className="mt-8 flex justify-end">
-          <Button type="submit" className="w-full md:w-auto bg-red-900 hover hover:bg-gray-600">
+          <Button
+            type="submit"
+            className="w-full md:w-auto bg-red-900 hover hover:bg-gray-600"
+          >
             Save Changes
           </Button>
         </div>
