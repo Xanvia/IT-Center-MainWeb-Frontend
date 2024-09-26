@@ -143,11 +143,14 @@ export default function Component() {
   const onSubmit = async (data: FormData) => {
     console.log("Submitting profile data:", data);
     const res = await fetch(
-      `http://localhost:3001/staff-profile?id=8d5d9ab6-6394-4378-a9f2-fab7f0922de3`,
+      `http://localhost:3001/staff-profile/8d5d9ab6-6394-4378-a9f2-fab7f0922de3`,
       {
         method: "PATCH",
         body: JSON.stringify({
-          data,
+          displayName: data.displayName,
+          designation: data.designation,
+          nominal: data.nominal,
+          extNo: data.extNo,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -159,7 +162,9 @@ export default function Component() {
     const user = await res.json();
     if (!res.ok) {
       alert("update failed");
+      return;
     }
+    alert("Update Success");
   };
 
   return (
