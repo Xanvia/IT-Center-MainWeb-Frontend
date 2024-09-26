@@ -25,7 +25,7 @@ type FormData = {
 };
 
 export default function Component() {
-  const [profileImage, setProfileImage] = useState("/placeholder.svg");
+  const [profileImage, setProfileImage] = useState("/users/generalUser.png");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fields, setFields] = useState<FieldType[]>([
     { label: "Staff Name", name: "staffName", value: "", isEditing: false },
@@ -76,7 +76,7 @@ export default function Component() {
 
   const onSubmit = (data: FormData) => {
     console.log("Submitting profile data:", data);
-    // Here you would typically submit the data to your backend
+    // submit the data to your backend
   };
 
   return (
@@ -200,7 +200,10 @@ export default function Component() {
           ))}
         </div>
         <div className="mt-8 flex justify-end">
-          <Button type="submit" className="w-full md:w-auto bg-red-900 hover hover:bg-gray-600">
+          <Button
+            type="submit"
+            className="w-full md:w-auto bg-red-900 hover hover:bg-gray-600"
+          >
             Save Changes
           </Button>
         </div>
