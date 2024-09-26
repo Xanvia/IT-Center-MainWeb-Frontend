@@ -34,7 +34,7 @@ export default function cardArray() {
 
   return (
     <div className="flex flex-col lg:flex-col">
-      {Info.map((item) => (
+      {data.map((item) => (
         <InfoCard
           key={item.id}
           id={item.id}
