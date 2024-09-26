@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -27,7 +27,7 @@ const staffSchema = z.object({
 type StaffMember = z.infer<typeof staffSchema>;
 
 // Mock data for demonstration
-const mockStaffRequests: StaffMember[] = [
+/*const mockStaffRequests: StaffMember[] = [
   {
     title: "Mr.",
     displayName: "John Doe",
@@ -46,11 +46,42 @@ const mockStaffRequests: StaffMember[] = [
     emails: ["jane.smith@example.com", "jane.work@example.com"],
     telephones: ["987-654-3210", "555-123-4567"],
   },
-];
+];*/
+
+interface StaffFormData {
+  title: string;
+  displayName: string;
+  designationName: string;
+  nominal: string;
+  extNumber: string;
+  emails: string[];
+  telephones: string[];
+}
 
 export default function StaffRequests() {
-  const [staffRequests, setStaffRequests] = useState(mockStaffRequests);
+  // State to hold the fetched staff requests
+  const [staffRequests, setStaffRequests] = useState<StaffFormData[]>([]);
   const [expandedRequest, setExpandedRequest] = useState<string | null>(null);
+
+  // Fetch the data from the backend when the component loads
+  useEffect(() => {
+    const fetchStaffRequests = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/staff-profile/requests"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch staff requests");
+        }
+        const data: StaffFormData[] = await response.json();
+        setStaffRequests(data);
+      } catch (error: any) {
+        console.error("Error fetching staff requests:", error);
+      }
+    };
+
+    fetchStaffRequests();
+  }, []);
 
   const handleApprove = (displayName: string) => {
     // Implement approval logic here
@@ -70,72 +101,76 @@ export default function StaffRequests() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Staff Registration Requests</h1>
       <div className="space-y-4">
-        {staffRequests.map((staff) => (
-          <Card key={staff.displayName} className="shadow-lg rounded-lg">
-            <CardBody className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Button
-                    isIconOnly
-                    size="sm"
-                    variant="light"
-                    onClick={() => toggleExpand(staff.displayName)}
-                    aria-expanded={expandedRequest === staff.displayName}
-                    aria-controls={`details-${staff.displayName}`}
-                  >
-                    <ChevronDownIcon
-                      className={`transform transition-transform ${
-                        expandedRequest === staff.displayName
-                          ? "rotate-180"
-                          : ""
-                      }`}
-                    />
-                    <span className="sr-only">Toggle details</span>
-                  </Button>
-                  <span className="font-semibold">{staff.displayName}</span>
+        {staffRequests.length === 0 ? (
+          <p>No staff requests available.</p>
+        ) : (
+          staffRequests.map((staff) => (
+            <Card key={staff.displayName} className="shadow-lg rounded-lg">
+              <CardBody className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="light"
+                      onClick={() => toggleExpand(staff.displayName)}
+                      aria-expanded={expandedRequest === staff.displayName}
+                      aria-controls={`details-${staff.displayName}`}
+                    >
+                      <ChevronDownIcon
+                        className={`transform transition-transform ${
+                          expandedRequest === staff.displayName
+                            ? "rotate-180"
+                            : ""
+                        }`}
+                      />
+                      <span className="sr-only">Toggle details</span>
+                    </Button>
+                    <span className="font-semibold">{staff.displayName}</span>
+                  </div>
+                  <div className="space-x-2">
+                    <Button
+                      color="success"
+                      onClick={() => handleApprove(staff.displayName)}
+                      className="font-semibold"
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      color="danger"
+                      onClick={() => handleDecline(staff.displayName)}
+                      className="font-semibold"
+                    >
+                      Decline
+                    </Button>
+                  </div>
                 </div>
-                <div className="space-x-2">
-                  <Button
-                    color="success"
-                    onClick={() => handleApprove(staff.displayName)}
-                    className="font-semibold"
+                {expandedRequest === staff.displayName && (
+                  <div
+                    id={`details-${staff.displayName}`}
+                    className="mt-4 pl-8 space-y-2 bg-gray-50 p-4 rounded-lg"
                   >
-                    Approve
-                  </Button>
-                  <Button
-                    color="danger"
-                    onClick={() => handleDecline(staff.displayName)}
-                    className="font-semibold"
-                  >
-                    Decline
-                  </Button>
-                </div>
-              </div>
-              {expandedRequest === staff.displayName && (
-                <div
-                  id={`details-${staff.displayName}`}
-                  className="mt-4 pl-8 space-y-2 bg-gray-50 p-4 rounded-lg"
-                >
-                  <p>
-                    <strong>Designation:</strong> {staff.designationName}
-                  </p>
-                  <p>
-                    <strong>Nominal:</strong> {staff.nominal}
-                  </p>
-                  <p>
-                    <strong>Ext Number:</strong> {staff.extNumber}
-                  </p>
-                  <p>
-                    <strong>Emails:</strong> {staff.emails.join(", ")}
-                  </p>
-                  <p>
-                    <strong>Telephones:</strong> {staff.telephones.join(", ")}
-                  </p>
-                </div>
-              )}
-            </CardBody>
-          </Card>
-        ))}
+                    <p>
+                      <strong>Designation:</strong> {staff.designationName}
+                    </p>
+                    <p>
+                      <strong>Nominal:</strong> {staff.nominal}
+                    </p>
+                    <p>
+                      <strong>Ext Number:</strong> {staff.extNumber}
+                    </p>
+                    <p>
+                      <strong>Emails:</strong> {staff.emails.join(", ")}
+                    </p>
+                    <p>
+                      <strong>Telephones:</strong> {staff.telephones.join(", ")}
+                    </p>
+                  </div>
+                )}
+              </CardBody>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );
