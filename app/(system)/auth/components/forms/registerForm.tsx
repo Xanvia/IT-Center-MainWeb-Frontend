@@ -124,7 +124,7 @@ export default function RegisterForm() {
         />
       </div>
 
-      <Link href={"http://localhost:3001/auth/google"}>
+      <Link href={"http://localhost:3001/auth/google/sign"}>
         <button
           type="button"
           className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-primary-border bg-gray-200 p-3 hover:bg-opacity-50 dark:border-primary-border-dark dark:bg-primary-dark dark:hover:bg-opacity-50"
