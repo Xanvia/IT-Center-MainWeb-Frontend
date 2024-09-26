@@ -1,6 +1,5 @@
 "use client";
-
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useForm, Controller } from "react-hook-form";
 import { PenSquare, Camera, Check, X, Plus } from "lucide-react";
@@ -16,27 +15,94 @@ type FieldType = {
 };
 
 type FormData = {
-  staffName: string;
+  displayName: string;
+  title?: string;
   designation: string;
   nominal: string;
   extNo: string;
-  email: string;
-  phoneNo: string;
+  isApproved?: boolean;
+  emails: { id: string; email: string }[];
+  telephones: { id: string; phoneNumber: string }[];
 };
 
 export default function Component() {
+  const [data, setData] = useState<FormData | null>(null);
+  const [fields, setFields] = useState<FieldType[]>([]); // Set fields to empty initially
+  const { control, handleSubmit, setValue } = useForm<FormData>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/staff-profile/8d5d9ab6-6394-4378-a9f2-fab7f0922de3`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const result = await response.json();
+        setData(result);
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Update fields when data is fetched
+  useEffect(() => {
+    if (data) {
+      setFields([
+        {
+          label: "Staff Name",
+          name: "staffName",
+          value: data.displayName || "",
+          isEditing: false,
+        },
+        {
+          label: "Designation",
+          name: "designation",
+          value: data.designation || "",
+          isEditing: false,
+        },
+        {
+          label: "Nominal",
+          name: "nominal",
+          value: data.nominal || "",
+          isEditing: false,
+        },
+        {
+          label: "Ext No",
+          name: "extNo",
+          value: data.extNo || "",
+          isEditing: false,
+        },
+        {
+          label: "Email",
+          name: "email",
+          value: data.emails[0].email || "",
+          isEditing: false,
+        },
+        {
+          label: "Phone No",
+          name: "phoneNo",
+          value: data.telephones[0].phoneNumber || "",
+          isEditing: false,
+        },
+      ]);
+
+      // Set form default values
+      setValue("displayName", data.displayName);
+      setValue("designation", data.designation);
+      setValue("nominal", data.nominal);
+      setValue("extNo", data.extNo);
+      setValue("emails", data.emails);
+      setValue("telephones", data.telephones);
+    }
+  }, [data, setValue]);
+
   const [profileImage, setProfileImage] = useState("/users/generalUser.png");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [fields, setFields] = useState<FieldType[]>([
-    { label: "Staff Name", name: "staffName", value: "", isEditing: false },
-    { label: "Designation", name: "designation", value: "", isEditing: false },
-    { label: "Nominal", name: "nominal", value: "", isEditing: false },
-    { label: "Ext No", name: "extNo", value: "", isEditing: false },
-    { label: "Email", name: "email", value: "", isEditing: false },
-    { label: "Phone No", name: "phoneNo", value: "", isEditing: false },
-  ]);
-
-  const { control, handleSubmit, setValue } = useForm<FormData>();
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -74,9 +140,26 @@ export default function Component() {
     toggleEdit(index);
   };
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log("Submitting profile data:", data);
-    // submit the data to your backend
+    const res = await fetch(
+      `http://localhost:3001/staff-profile?id=8d5d9ab6-6394-4378-a9f2-fab7f0922de3`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          data,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+      }
+    );
+
+    const user = await res.json();
+    if (!res.ok) {
+      alert("update failed");
+    }
   };
 
   return (
@@ -114,10 +197,10 @@ export default function Component() {
           </div>
         </div>
         <h2 className="text-2xl font-bold text-center mb-1">
-          {fields[0].value || "Add Name"}
+          {fields[0]?.value || "Add Name"}
         </h2>
         <p className="text-muted-foreground text-center mb-6">
-          {fields[1].value || "Add designation"}
+          {fields[1]?.value || "Add designation"}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {fields.map((field, index) => (
@@ -131,7 +214,7 @@ export default function Component() {
               <Controller
                 name={field.name as keyof FormData}
                 control={control}
-                defaultValue=""
+                defaultValue={field.value} // Ensure default value is set
                 render={({ field: { value, onChange } }) => (
                   <div className="flex">
                     {field.isEditing ? (
@@ -180,17 +263,20 @@ export default function Component() {
                             onClick={() => toggleEdit(index)}
                             className="w-full bg-muted text-muted-foreground border border-input rounded-md py-2 px-3 text-left hover:bg-muted/80 focus:outline-none focus:ring-2 focus:ring-ring"
                           >
-                            Add {field.label}
+                            <Plus size={16} className="inline-block mr-2" />
+                            {field.label}
                           </button>
                         )}
-                        <button
-                          type="button"
-                          onClick={() => toggleEdit(index)}
-                          className="ml-2 text-primary hover:text-primary/80"
-                          aria-label={value ? "Edit" : "Add"}
-                        >
-                          {value ? <PenSquare size={20} /> : <Plus size={20} />}
-                        </button>
+                        {value && (
+                          <button
+                            type="button"
+                            onClick={() => toggleEdit(index)}
+                            className="ml-2 text-muted-foreground hover:text-muted-foreground/80"
+                            aria-label="Edit"
+                          >
+                            <PenSquare size={20} />
+                          </button>
+                        )}
                       </>
                     )}
                   </div>
@@ -199,13 +285,8 @@ export default function Component() {
             </div>
           ))}
         </div>
-        <div className="mt-8 flex justify-end">
-          <Button
-            type="submit"
-            className="w-full md:w-auto bg-red-900 hover hover:bg-gray-600"
-          >
-            Save Changes
-          </Button>
+        <div className="mt-6 flex justify-end">
+          <Button type="submit">Save changes</Button>
         </div>
       </div>
     </form>
