@@ -31,7 +31,7 @@ export default function InteractiveLogRow() {
       name: "Log Alpha",
       description:
         "A cutting-edge web application for task management. This log aims to revolutionize how teams collaborate and manage their workflows. With intuitive interfaces and powerful features, Log Alpha streamlines task allocation, progress tracking, and team communication.",
-      imageUrl: ["/Slide/first.png", "/Slide/second.png"],
+      imageUrl: [""],
       date: "2023-06-15",
     },
   ]);
@@ -51,7 +51,7 @@ export default function InteractiveLogRow() {
   // Handle file input change
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      setSelectedFiles(Array.from(event.target.files)); // Convert FileList to Array
+      setSelectedFiles(Array.from(event.target.files));
     }
   };
 
@@ -60,7 +60,7 @@ export default function InteractiveLogRow() {
     const formData = new FormData();
 
     selectedFiles.forEach((file) => {
-      formData.append("images", file); // Append each file with the same field name
+      formData.append("image", file); // Append each file with the same field name
     });
 
     try {
@@ -72,7 +72,7 @@ export default function InteractiveLogRow() {
       const data = await response.json();
       if (response.ok) {
         console.log("Response:", data);
-        return data;
+        return data.paths;
       } else {
         alert("File upload failed");
         console.error("Error:", data);
@@ -89,30 +89,38 @@ export default function InteractiveLogRow() {
     if (selectedFiles && selectedFiles.length > 0) {
       newLog.imageUrl = await handleUpload();
     }
-    console.log(newLog.imageUrl);
+    console.log(newLog);
 
     if (newLog.name && newLog.description && newLog.date) {
-      // API call to send log data to the backend
-      const response = await fetch("http;//localhost:3001/logs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: newLog.name,
-          description: newLog.description,
-          imageUrl: newLog.imageUrl,
-          date: newLog.date,
-        }),
-      });
-
-      if (response.ok) {
+      try {
+        // API call to send log data to the backend
+        const response = await fetch("http://localhost:3001/logs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: newLog.name,
+            description: newLog.description,
+            images: newLog.imageUrl,
+            date: newLog.date,
+          }),
+        });
         const savedLog = await response.json();
-        // Update the state with the newly created log
-        setLogs([...logs, savedLog]);
-      } else {
-        // Handle error response
-        console.error("Failed to add log");
+        if (response.ok) {
+          const { id, title, description, date, images } = savedLog;
+          // Update the state with the newly created log
+          setLogs([
+            ...logs,
+            { id, name: title, description, date, imageUrl: images },
+          ]);
+        } else {
+          console.log(savedLog.message);
+          // Handle error response
+          alert("Failed to add log");
+        }
+      } catch (error) {
+        alert("Failed to add log");
       }
     }
     // erase log
@@ -180,6 +188,7 @@ export default function InteractiveLogRow() {
   };
 
   const truncateText = (text: string, maxLength: number) => {
+    if (!text) return;
     if (text.length <= maxLength) return text;
     return text.substr(0, maxLength) + "...";
   };
