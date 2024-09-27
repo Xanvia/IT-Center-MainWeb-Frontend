@@ -18,10 +18,10 @@ export default function StaffRegistrationForm() {
     formState: { errors },
   } = useForm<StaffFormData>({
     resolver: zodResolver(staffSchema),
-    defaultValues: {
-      emails: [{ value: "" }],
-      phoneNumbers: [{ value: "" }],
-    },
+    // defaultValues: {
+    //   emails: [""],
+    //   telephones: [""],
+    // },
   });
 
   const {
@@ -39,36 +39,36 @@ export default function StaffRegistrationForm() {
     remove: removePhone,
   } = useFieldArray({
     control,
-    name: "phoneNumbers",
+    name: "telephones",
   });
 
   const onSubmit = async (data: StaffFormData) => {
     setIsSubmitting(true);
 
-    // Backend Integration
     try {
       const response = await fetch("http://localhost:3001/staff-profile", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
-          "Content-type": "application/json",
+          "Content-Type": "application/json",
         },
         mode: "cors",
       });
-
+      console.log(JSON.stringify(data));
       if (!response.ok) {
-        console.log(response.statusText);
-        return;
+        throw new Error(`Failed to submit: ${response.statusText}`);
       }
+
       const result = await response.json();
       console.log(result);
       alert("Request Sent Successfully");
       router.push("/dashboard");
     } catch (error) {
       console.error("Error submitting the form:", error);
+      alert("Failed to submit the form. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
@@ -92,19 +92,19 @@ export default function StaffRegistrationForm() {
                   className="w-full"
                   errorMessage={errors.title?.message}
                 >
-                  <SelectItem key="dr" value="manager">
+                  <SelectItem key="dr" value="DR">
                     Dr
                   </SelectItem>
-                  <SelectItem key="mr" value="mr">
+                  <SelectItem key="mr" value="MR">
                     Mr
                   </SelectItem>
-                  <SelectItem key="Mrs" value="Mrs">
+                  <SelectItem key="mrs" value="MRS">
                     Mrs
                   </SelectItem>
-                  <SelectItem key="Miss" value="Miss">
+                  <SelectItem key="miss" value="MISS">
                     Miss
                   </SelectItem>
-                  <SelectItem key="Dev" value="Dev">
+                  <SelectItem key="dev" value="REV">
                     Dev
                   </SelectItem>
                 </Select>
@@ -134,13 +134,13 @@ export default function StaffRegistrationForm() {
               <span className="label-text">Designation</span>
             </label>
             <Controller
-              name="displayDesignation"
+              name="designation"
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
-                  placeholder="Enter display Designation"
-                  errorMessage={errors.displayDesignation?.message}
+                  placeholder="Enter display designation"
+                  errorMessage={errors.designation?.message}
                 />
               )}
             />
@@ -168,13 +168,13 @@ export default function StaffRegistrationForm() {
               <span className="label-text">Extension Number</span>
             </label>
             <Controller
-              name="extNumber"
+              name="extNo"
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
                   placeholder="Enter extension number"
-                  errorMessage={errors.extNumber?.message}
+                  errorMessage={errors.extNo?.message}
                 />
               )}
             />
@@ -187,13 +187,13 @@ export default function StaffRegistrationForm() {
             {emailFields.map((field, index) => (
               <div key={field.id} className="flex items-center space-x-2 mb-2">
                 <Controller
-                  name={`emails.${index}.value`}
+                  name={`emails.${index}`}
                   control={control}
                   render={({ field }) => (
                     <Input
                       {...field}
                       placeholder="Enter email address"
-                      errorMessage={errors.emails?.[index]?.value?.message}
+                      errorMessage={errors.emails?.[index]?.message}
                       className="flex-grow"
                     />
                   )}
@@ -229,15 +229,13 @@ export default function StaffRegistrationForm() {
             {phoneFields.map((field, index) => (
               <div key={field.id} className="flex items-center space-x-2 mb-2">
                 <Controller
-                  name={`phoneNumbers.${index}.value`}
+                  name={`telephones.${index}`}
                   control={control}
                   render={({ field }) => (
                     <Input
                       {...field}
                       placeholder="Enter phone number"
-                      errorMessage={
-                        errors.phoneNumbers?.[index]?.value?.message
-                      }
+                      errorMessage={errors.telephones?.[index]?.message}
                       className="flex-grow"
                     />
                   )}
@@ -269,7 +267,7 @@ export default function StaffRegistrationForm() {
           <Button
             type="submit"
             color="success"
-            className="w-full  bg-red-900 hover hover:bg-gray-600 text-white"
+            className="w-full bg-red-900 hover:bg-gray-600 text-white"
             isLoading={isSubmitting}
           >
             {isSubmitting ? "Registering..." : "Submit Registration"}
