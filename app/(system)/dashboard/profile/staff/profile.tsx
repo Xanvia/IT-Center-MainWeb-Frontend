@@ -92,12 +92,12 @@ export default function Component() {
       ]);
 
       // Set form default values
-      setValue("displayName", data.displayName);
-      setValue("designation", data.designation);
-      setValue("nominal", data.nominal);
-      setValue("extNo", data.extNo);
-      setValue("emails", data.emails);
-      setValue("telephones", data.telephones);
+      // setValue("displayName", data.displayName);
+      // setValue("designation", data.designation);
+      // setValue("nominal", data.nominal);
+      // setValue("extNo", data.extNo);
+      // setValue("emails", data.emails);
+      // setValue("telephones", data.telephones);
     }
   }, [data, setValue]);
 
