@@ -2,11 +2,11 @@ import React from "react";
 import Info from "../information/info";
 
 interface InfoCardProps {
-  id: number;
+  id: string;
   title: string;
   des: string;
-  date: string;
-  img: string;
+  date?: string;
+  img?: string;
 }
 
 const InfoCard: React.FC<InfoCardProps> = (props) => {

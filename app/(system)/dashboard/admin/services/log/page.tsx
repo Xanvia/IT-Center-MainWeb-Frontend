@@ -13,19 +13,10 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  PlusCircle,
-  X,
-  Edit,
-  Eye,
-  Calendar,
-  AlertCircle,
-  AlertCircle,
-} from "lucide-react";
-import { PhotoSlide } from "../../../component/admin/photoSlide";
+import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react";
 
 interface Log {
-  id: number;
+  id: string;
   name: string;
   description: string;
   imageUrl: string;
@@ -87,17 +78,17 @@ export default function InteractiveLogRow() {
     }
   };
 
-  const removeLog = (id: number) => {
+  const removeLog = (id: string) => {
     setLogs(logs.filter((log) => log.id !== id));
   };
 
   const startEditing = () => {
     if (viewingLog) {
       setNewLog({
-        id: "",
-        name: viewingLog.name,
+        id: "one",
+        title: viewingLog.name,
         description: viewingLog.description,
-        imageUrl: viewingLog.imageUrl,
+        images: viewingLog.imageUrl,
         date: viewingLog.date,
       });
       setIsEditing(true);
