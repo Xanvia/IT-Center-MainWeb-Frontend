@@ -1,26 +1,20 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react";
+import { useState } from 'react'
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react"
 
 interface Project {
-  id: number;
-  name: string;
-  description: string;
-  imageUrl: string;
-  date: string;
+  id: number
+  name: string
+  description: string
+  imageUrl: string
+  date: string
 }
 
 export default function InteractiveProjectRow() {
@@ -28,62 +22,45 @@ export default function InteractiveProjectRow() {
     {
       id: 1,
       name: "Project Alpha",
-      description:
-        "A cutting-edge web application for task management. This project aims to revolutionize how teams collaborate and manage their workflows.",
+      description: "A cutting-edge web application for task management. This project aims to revolutionize how teams collaborate and manage their workflows.",
       imageUrl: "/placeholder.svg?height=200&width=300",
-      date: "2023-06-15",
-    },
-  ]);
+      date: "2023-06-15"
+    }
+  ])
 
-  const [isAdding, setIsAdding] = useState(false);
-  const [viewingProject, setViewingProject] = useState<Project | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isAdding, setIsAdding] = useState(false)
+  const [viewingProject, setViewingProject] = useState<Project | null>(null)
+  const [isEditing, setIsEditing] = useState(false)
   const [newProject, setNewProject] = useState({
     name: "",
     description: "",
     imageUrl: "",
     date: "",
   });
-  //addProject function
-  const addProject = async () => {
+
+  const addProject = () => {
     if (newProject.name && newProject.description && newProject.date) {
-      // Prepare the new project data
-      const projectData = {
-        id: Date.now(), // You might want to let the server handle ID generation
-        ...newProject,
-        imageUrl:
-          newProject.imageUrl || "/placeholder.svg?height=200&width=300",
-      };
-
-      try {
-        // Send POST request to server
-        const response = await fetch("YOUR_API_ENDPOINT/projects", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(projectData),
-        });
-
-        if (response.ok) {
-          // If the request is successful, update the state with the new project
-          const savedProject = await response.json(); // Assuming the server returns the saved project
-          setProjects([...projects, savedProject]);
-          setNewProject({ name: "", description: "", imageUrl: "", date: "" });
-          setIsAdding(false);
-        } else {
-          // Handle errors if needed
-          console.error("Failed to add project:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error while adding project:", error);
-      }
+      setProjects([
+        ...projects,
+        {
+          id: Date.now(),
+          name: newProject.name,
+          description: newProject.description,
+          imageUrl:
+            newProject.imageUrl || "/placeholder.svg?height=200&width=300",
+          date: newProject.date,
+        },
+      ]);
+      setNewProject({ name: "", description: "", imageUrl: "", date: "" });
+      setIsAdding(false);
     }
-  };
+  }
+};
+
 
   const removeProject = (id: number) => {
-    setProjects(projects.filter((project) => project.id !== id));
-  };
+    setProjects(projects.filter(project => project.id !== id))
+  }
 
   const startEditing = () => {
     if (viewingProject) {
@@ -91,11 +68,13 @@ export default function InteractiveProjectRow() {
         name: viewingProject.name,
         description: viewingProject.description,
         imageUrl: viewingProject.imageUrl,
-        date: viewingProject.date,
-      });
-      setIsEditing(true);
+        date: viewingProject.date
+      })
+      setIsEditing(true)
     }
-  };
+  }
+
+//saveEdit
 
   //saveEdit
 
@@ -158,37 +137,38 @@ export default function InteractiveProjectRow() {
               <img
                 src={project.imageUrl}
                 alt={project.name}
+      <h2 className="text-2xl font-bold mb-6">Projects</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects.map(project => (
+          <Card key={project.id} className="flex flex-col h-[400px]">
+            <div className="h-[200px] relative">
+              <img 
+                src={project.imageUrl} 
+                alt={project.name} 
                 className="w-full h-full object-cover"
               />
-              <Button
-                variant="destructive"
-                size="icon"
+              <Button 
+                variant="destructive" 
+                size="icon" 
                 className="absolute top-2 right-2"
                 onClick={() => removeProject(project.id)}
               >
                 <X className="h-4 w-4" />
                 <span className="sr-only">Remove project</span>
+                <span className="sr-only">Remove project</span>
               </Button>
             </div>
             <CardContent className="p-4 flex-grow overflow-hidden">
-              <h3 className="font-bold text-lg mb-2">
-                {truncateText(project.name, 30)}
-              </h3>
-              <p className="text-gray-600 text-sm mb-4">
-                {truncateText(project.description, 100)}
-              </p>
+              <h3 className="font-bold text-lg mb-2">{truncateText(project.name, 30)}</h3>
+              <p className="text-gray-600 text-sm mb-4">{truncateText(project.description, 100)}</p>
               <div className="space-y-2">
                 <p className="text-gray-500 text-sm flex items-center">
                   <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
-                  {project.date || (
-                    <span className="text-red-500 flex items-center">
-                      <AlertCircle className="w-4 h-4 mr-1" /> Date not set
-                    </span>
-                  )}
+                  {project.date || <span className="text-red-500 flex items-center"><AlertCircle className="w-4 h-4 mr-1" /> Date not set</span>}
                 </p>
               </div>
             </CardContent>
-            <CardFooter className="bg-gray-50 p-4 mt-auto">
+            <CardFooter className="bg-gray-50 p-4">
               <Button
                 variant="outline"
                 className="w-full"
@@ -290,31 +270,24 @@ export default function InteractiveProjectRow() {
         </DialogContent>
       </Dialog>
 
-      <Dialog
-        open={viewingProject !== null}
-        onOpenChange={(open) => {
-          if (!open) {
-            setViewingProject(null);
-            setIsEditing(false);
-          }
-        }}
-      >
+      <Dialog open={viewingProject !== null} onOpenChange={(open) => {
+        if (!open) {
+          setViewingProject(null)
+          setIsEditing(false)
+        }
+      }}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>
-              {isEditing ? "Edit Project" : viewingProject?.name}
-            </DialogTitle>
+            <DialogTitle>{isEditing ? 'Edit Project' : viewingProject?.name}</DialogTitle>
           </DialogHeader>
           {viewingProject && !isEditing && (
             <div className="space-y-4">
-              <img
-                src={viewingProject.imageUrl}
-                alt={viewingProject.name}
+              <img 
+                src={viewingProject.imageUrl} 
+                alt={viewingProject.name} 
                 className="w-full h-48 object-cover rounded-md"
               />
-              <p className="text-sm text-gray-600">
-                {viewingProject.description}
-              </p>
+              <p className="text-sm text-gray-600">{viewingProject.description}</p>
               <p className="text-sm text-gray-500 flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
                 {viewingProject.date || (
@@ -324,21 +297,13 @@ export default function InteractiveProjectRow() {
             </div>
           )}
           {isEditing && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                saveEdit();
-              }}
-              className="space-y-4"
-            >
+            <form onSubmit={(e) => { e.preventDefault(); saveEdit(); }} className="space-y-4">
               <div>
                 <Label htmlFor="editProjectName">Project Name</Label>
                 <Input
                   id="editProjectName"
                   value={newProject.name}
-                  onChange={(e) =>
-                    setNewProject({ ...newProject, name: e.target.value })
-                  }
+                  onChange={(e) => setNewProject({...newProject, name: e.target.value})}
                   placeholder="Enter project name"
                   required
                 />
@@ -348,12 +313,7 @@ export default function InteractiveProjectRow() {
                 <Textarea
                   id="editProjectDescription"
                   value={newProject.description}
-                  onChange={(e) =>
-                    setNewProject({
-                      ...newProject,
-                      description: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setNewProject({...newProject, description: e.target.value})}
                   placeholder="Enter project description"
                   required
                 />
@@ -364,9 +324,7 @@ export default function InteractiveProjectRow() {
                   id="editProjectDate"
                   type="date"
                   value={newProject.date}
-                  onChange={(e) =>
-                    setNewProject({ ...newProject, date: e.target.value })
-                  }
+                  onChange={(e) => setNewProject({...newProject, date: e.target.value})}
                   required
                 />
               </div>
@@ -377,16 +335,13 @@ export default function InteractiveProjectRow() {
                   type="file"
                   accept="image/*"
                   onChange={(e) => {
-                    const file = e.target.files?.[0];
+                    const file = e.target.files?.[0]
                     if (file) {
-                      const reader = new FileReader();
+                      const reader = new FileReader()
                       reader.onloadend = () => {
-                        setNewProject({
-                          ...newProject,
-                          imageUrl: reader.result as string,
-                        });
-                      };
-                      reader.readAsDataURL(file);
+                        setNewProject({...newProject, imageUrl: reader.result as string})
+                      }
+                      reader.readAsDataURL(file)
                     }
                   }}
                 />
@@ -403,14 +358,12 @@ export default function InteractiveProjectRow() {
             {isEditing && (
               <div className="flex space-x-2">
                 <Button onClick={saveEdit}>Save Changes</Button>
-                <Button variant="outline" onClick={() => setIsEditing(false)}>
-                  Cancel
-                </Button>
+                <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
               </div>
             )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }
