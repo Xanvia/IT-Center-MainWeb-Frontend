@@ -30,7 +30,7 @@ export default function InteractiveProjectRow() {
       name: "Project Alpha",
       description:
         "A cutting-edge web application for task management. This project aims to revolutionize how teams collaborate and manage their workflows.",
-      imageUrl: "/placeholder.svg?height=200&width=300",
+      imageUrl: "/common/mainWeb.jpg",
       date: "2023-06-15",
     },
   ]);
