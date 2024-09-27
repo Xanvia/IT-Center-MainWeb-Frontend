@@ -39,10 +39,10 @@ export default function cardArray() {
           <InfoCard
             key={item.id}
             id={item.id}
-            title={item.Title}
-            des={item.Description}
-            date={item.Date}
-            img={item.Image}
+            title={item.title}
+            des={item.description}
+            date={item.date}
+            img="/common/courseReg.jpg"
           />
         ))}
     </div>
