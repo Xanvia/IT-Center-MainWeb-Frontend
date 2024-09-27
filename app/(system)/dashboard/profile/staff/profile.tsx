@@ -227,7 +227,7 @@ export default function Component() {
                         <Input
                           type="text"
                           id={field.name}
-                          value={value}
+                          value={value as string}
                           onChange={(e: any) => {
                             onChange(e);
                             handleChange(field.name, e.target.value);
@@ -258,7 +258,7 @@ export default function Component() {
                           <Input
                             type="text"
                             id={field.name}
-                            value={value}
+                            value={value as string}
                             readOnly
                             className="w-full bg-muted"
                           />
