@@ -26,28 +26,6 @@ const staffSchema = z.object({
 
 type StaffMember = z.infer<typeof staffSchema>;
 
-// Mock data for demonstration
-/*const mockStaffRequests: StaffMember[] = [
-  {
-    title: "Mr.",
-    displayName: "John Doe",
-    designationName: "Software Engineer",
-    nominal: "JD001",
-    extNumber: "1234",
-    emails: ["john.doe@example.com"],
-    telephones: ["123-456-7890"],
-  },
-  {
-    title: "Ms.",
-    displayName: "Jane Smith",
-    designationName: "Project Manager",
-    nominal: "JS002",
-    extNumber: "5678",
-    emails: ["jane.smith@example.com", "jane.work@example.com"],
-    telephones: ["987-654-3210", "555-123-4567"],
-  },
-];*/
-
 interface StaffFormData {
   title: string;
   displayName: string;
