@@ -17,43 +17,21 @@ import { ChevronDownIcon } from "lucide-react";
 const staffSchema = z.object({
   title: z.string(),
   displayName: z.string(),
-  designationName: z.string(),
+  designation: z.string(),
   nominal: z.string(),
-  extNumber: z.string(),
+  extNo: z.string(),
   emails: z.array(z.string().email()),
   telephones: z.array(z.string()),
 });
 
 type StaffMember = z.infer<typeof staffSchema>;
 
-// Mock data for demonstration
-/*const mockStaffRequests: StaffMember[] = [
-  {
-    title: "Mr.",
-    displayName: "John Doe",
-    designationName: "Software Engineer",
-    nominal: "JD001",
-    extNumber: "1234",
-    emails: ["john.doe@example.com"],
-    telephones: ["123-456-7890"],
-  },
-  {
-    title: "Ms.",
-    displayName: "Jane Smith",
-    designationName: "Project Manager",
-    nominal: "JS002",
-    extNumber: "5678",
-    emails: ["jane.smith@example.com", "jane.work@example.com"],
-    telephones: ["987-654-3210", "555-123-4567"],
-  },
-];*/
-
 interface StaffFormData {
   title: string;
   displayName: string;
-  designationName: string;
+  designation: string;
   nominal: string;
-  extNumber: string;
+  extNo: string;
   emails: string[];
   telephones: string[];
 }
@@ -151,13 +129,13 @@ export default function StaffRequests() {
                     className="mt-4 pl-8 space-y-2 bg-gray-50 p-4 rounded-lg"
                   >
                     <p>
-                      <strong>Designation:</strong> {staff.designationName}
+                      <strong>Designation:</strong> {staff.designation}
                     </p>
                     <p>
                       <strong>Nominal:</strong> {staff.nominal}
                     </p>
                     <p>
-                      <strong>Ext Number:</strong> {staff.extNumber}
+                      <strong>Ext Number:</strong> {staff.extNo}
                     </p>
                     <p>
                       <strong>Emails:</strong> {staff.emails.join(", ")}
