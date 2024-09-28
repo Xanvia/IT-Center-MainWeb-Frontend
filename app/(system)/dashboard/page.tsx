@@ -2,10 +2,14 @@ import React from "react";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import Link from "next/link";
 import { shortcuts } from "@/constants/dashboardShortcuts";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/config/nextAuth";
 
-const isAdmin = () => true; // Set to false to see non-admin view
+export default async function Home() {
+  const session = await getServerSession(authOptions);
 
-export default function Home() {
+  const isAdmin = () => session?.user.role === "ADMIN";
+
   const primaryShortcuts = shortcuts.filter((s) => s.primary);
   const secondaryShortcuts = shortcuts.filter(
     (s) => !s.primary && (!s.adminOnly || isAdmin())

@@ -13,10 +13,10 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { PlusCircle, X, Edit, Eye, Calendar } from "lucide-react";
+import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react";
 
 interface Project {
-  id: number;
+  id: string;
   name: string;
   description: string;
   imageUrl: string;
@@ -26,11 +26,11 @@ interface Project {
 export default function InteractiveProjectRow() {
   const [projects, setProjects] = useState<Project[]>([
     {
-      id: 1,
+      id: "1",
       name: "Project Alpha",
       description:
-        "A cutting-edge web application for task management. This project aims to revolutionize how teams collaborate and manage their workflows. With intuitive interfaces and powerful features, Project Alpha streamlines task allocation, progress tracking, and team communication.",
-      imageUrl: "/placeholder.svg?height=200&width=300",
+        "A cutting-edge web application for task management. This project aims to revolutionize how teams collaborate and manage their workflows.",
+      imageUrl: "/common/mainWeb.jpg",
       date: "2023-06-15",
     },
   ]);
@@ -39,81 +39,123 @@ export default function InteractiveProjectRow() {
   const [viewingProject, setViewingProject] = useState<Project | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [newProject, setNewProject] = useState({
-    name: "",
+    title: "",
     description: "",
-    imageUrl: "",
+    images: "",
     date: "",
   });
 
-  const addProject = () => {
-    if (newProject.name && newProject.description && newProject.date) {
-      setProjects([
-        ...projects,
-        {
-          id: Date.now(),
-          name: newProject.name,
-          description: newProject.description,
-          imageUrl:
-            newProject.imageUrl || "/placeholder.svg?height=200&width=300",
-          date: newProject.date,
-        },
-      ]);
-      setNewProject({ name: "", description: "", imageUrl: "", date: "" });
-      setIsAdding(false);
+  //addProject function
+  const addProject = async () => {
+    if (newProject.title && newProject.description && newProject.date) {
+      // Prepare the new project data
+      const projectData = {
+        title: newProject.title,
+        description: newProject.description,
+        date: newProject.date,
+      };
+
+      try {
+        // Send POST request to server
+        const response = await fetch("http://localhost:3001/projects", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(projectData),
+        });
+
+        if (response.ok) {
+          const savedProject = await response.json(); // Assuming the server returns the saved project
+          setProjects([...projects, savedProject]);
+          setNewProject({ title: "", description: "", images: "", date: "" });
+          setIsAdding(false);
+        } else {
+          // Handle errors if needed
+          const res = await response.json();
+          console.error("Failed to add project:", res);
+        }
+      } catch (error) {
+        console.error("Error while adding project:", error);
+      }
     }
   };
 
-  const removeProject = (id: number) => {
+  const removeProject = (id: string) => {
     setProjects(projects.filter((project) => project.id !== id));
   };
 
   const startEditing = () => {
     if (viewingProject) {
       setNewProject({
-        name: viewingProject.name,
+        title: viewingProject.name,
         description: viewingProject.description,
-        imageUrl: viewingProject.imageUrl,
+        images: viewingProject.imageUrl,
         date: viewingProject.date,
       });
       setIsEditing(true);
     }
   };
 
-  const saveEdit = () => {
+  //saveEdit
+
+  const saveEdit = async () => {
     if (
       viewingProject &&
-      newProject.name &&
+      newProject.title &&
       newProject.description &&
       newProject.date
     ) {
-      setProjects(
-        projects.map((project) =>
-          project.id === viewingProject.id
-            ? {
-                ...project,
-                ...newProject,
-                imageUrl: newProject.imageUrl || project.imageUrl,
-              }
-            : project
-        )
-      );
-      setViewingProject({ ...viewingProject, ...newProject });
-      setIsEditing(false);
+      const updatedProject = {
+        ...viewingProject,
+        ...newProject,
+        imageUrl: newProject.images || viewingProject.imageUrl,
+      };
+
+      try {
+        // Send PUT request to server
+        const response = await fetch(
+          `http://localhost:3001/projects/${viewingProject.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedProject),
+          }
+        );
+
+        if (response.ok) {
+          const savedProject = await response.json();
+          setProjects(
+            projects.map((project) =>
+              project.id === savedProject.id ? savedProject : project
+            )
+          );
+          setViewingProject(savedProject);
+          setIsEditing(false);
+        } else {
+          console.error("Failed to update project:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error while updating project:", error);
+      }
     }
   };
 
-  const truncateDescription = (description: string, maxLength: number) => {
-    if (description.length <= maxLength) return description;
-    return description.substr(0, maxLength) + "...";
+  const truncateText = (text: string, maxLength: number) => {
+    if (!text) return;
+    if (text.length <= maxLength) return text;
+    return text.substr(0, maxLength) + "...";
   };
 
   return (
     <div className="max-w-7xl mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Project Row</h2>
-      <div className="grid grid-cols-3 gap-6">
+      <h2 className="text-2xl font-bold mb-6">Projects</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project) => (
-          <Card key={project.id} className="overflow-hidden flex flex-col">
-            <div className="aspect-video relative">
+          <Card key={project.id} className="flex flex-col h-[400px]">
+            <div className="h-[200px] relative">
               <img
                 src={project.imageUrl}
                 alt={project.name}
@@ -126,19 +168,28 @@ export default function InteractiveProjectRow() {
                 onClick={() => removeProject(project.id)}
               >
                 <X className="h-4 w-4" />
+                <span className="sr-only">Remove project</span>
               </Button>
             </div>
-            <CardContent className="p-4 flex-grow">
-              <h3 className="font-bold text-lg mb-2">{project.name}</h3>
-              <p className="text-gray-600 text-sm mb-2">
-                {truncateDescription(project.description, 100)}
+            <CardContent className="p-4 flex-grow overflow-hidden">
+              <h3 className="font-bold text-lg mb-2">
+                {truncateText(project.name, 30)}
+              </h3>
+              <p className="text-gray-600 text-sm mb-4">
+                {truncateText(project.description, 100)}
               </p>
-              <p className="text-gray-500 text-sm flex items-center">
-                <Calendar className="w-4 h-4 mr-2" />
-                {project.date}
-              </p>
+              <div className="space-y-2">
+                <p className="text-gray-500 text-sm flex items-center">
+                  <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
+                  {project.date || (
+                    <span className="text-red-500 flex items-center">
+                      <AlertCircle className="w-4 h-4 mr-1" /> Date not set
+                    </span>
+                  )}
+                </p>
+              </div>
             </CardContent>
-            <CardFooter className="bg-gray-50 p-4">
+            <CardFooter className="bg-gray-50 p-4 mt-auto">
               <Button
                 variant="outline"
                 className="w-full"
@@ -150,103 +201,95 @@ export default function InteractiveProjectRow() {
             </CardFooter>
           </Card>
         ))}
-        {projects.length < 3 && !isAdding && (
-          <Card
-            className="flex flex-col justify-center items-center p-6 border-2 border-dashed border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors"
-            onClick={() => setIsAdding(true)}
+        <Card
+          className="flex flex-col justify-center items-center p-6 border-2 border-dashed border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors h-[400px]"
+          onClick={() => setIsAdding(true)}
+        >
+          <PlusCircle className="w-12 h-12 text-gray-400 mb-4" />
+          <p className="text-gray-500 text-center">Add a new project</p>
+        </Card>
+      </div>
+
+      <Dialog
+        open={isAdding}
+        onOpenChange={(open) => {
+          if (!open) setIsAdding(false);
+        }}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add New Project</DialogTitle>
+          </DialogHeader>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              addProject();
+            }}
+            className="space-y-4"
           >
-            <PlusCircle className="w-12 h-12 text-gray-400 mb-4" />
-            <p className="text-gray-500 text-center">Add a new project</p>
-          </Card>
-        )}
-        {isAdding && (
-          <Card className="overflow-hidden flex flex-col">
-            <CardContent className="p-4 flex-grow">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  addProject();
-                }}
-                className="space-y-4"
-              >
-                <div>
-                  <Label htmlFor="newProjectName">Project Name</Label>
-                  <Input
-                    id="newProjectName"
-                    value={newProject.name}
-                    onChange={(e) =>
-                      setNewProject({ ...newProject, name: e.target.value })
-                    }
-                    placeholder="Enter project name"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="newProjectDescription">Description</Label>
-                  <Textarea
-                    id="newProjectDescription"
-                    value={newProject.description}
-                    onChange={(e) =>
+            <div>
+              <Label htmlFor="newProjectName">Project Name</Label>
+              <Input
+                id="newProjectName"
+                value={newProject.title}
+                onChange={(e) =>
+                  setNewProject({ ...newProject, title: e.target.value })
+                }
+                placeholder="Enter project name"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="newProjectDescription">Description</Label>
+              <Textarea
+                id="newProjectDescription"
+                value={newProject.description}
+                onChange={(e) =>
+                  setNewProject({ ...newProject, description: e.target.value })
+                }
+                placeholder="Enter project description"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="newProjectDate"> Date</Label>
+              <Input
+                id="newProjectDate"
+                type="date"
+                value={newProject.date}
+                onChange={(e) =>
+                  setNewProject({ ...newProject, date: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="newProjectImage">Image</Label>
+              <Input
+                id="newProjectImage"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
                       setNewProject({
                         ...newProject,
-                        description: e.target.value,
-                      })
-                    }
-                    placeholder="Enter project description"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="newProjectDate">Project Date</Label>
-                  <Input
-                    id="newProjectDate"
-                    type="date"
-                    value={newProject.date}
-                    onChange={(e) =>
-                      setNewProject({ ...newProject, date: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="newProjectImage">Project Image</Label>
-                  <Input
-                    id="newProjectImage"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setNewProject({
-                            ...newProject,
-                            imageUrl: reader.result as string,
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                </div>
-                <div className="flex space-x-2">
-                  <Button type="submit" className="flex-1">
-                    Add Project
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsAdding(false)}
-                    className="flex-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+                        images: reader.result as string,
+                      });
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </div>
+            <DialogFooter>
+              <Button type="submit">Add Project</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <Dialog
         open={viewingProject !== null}
@@ -275,7 +318,9 @@ export default function InteractiveProjectRow() {
               </p>
               <p className="text-sm text-gray-500 flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
-                {viewingProject.date}
+                {viewingProject.date || (
+                  <span className="text-red-500">Date not set</span>
+                )}
               </p>
             </div>
           )}
@@ -291,9 +336,9 @@ export default function InteractiveProjectRow() {
                 <Label htmlFor="editProjectName">Project Name</Label>
                 <Input
                   id="editProjectName"
-                  value={newProject.name}
+                  value={newProject.title}
                   onChange={(e) =>
-                    setNewProject({ ...newProject, name: e.target.value })
+                    setNewProject({ ...newProject, title: e.target.value })
                   }
                   placeholder="Enter project name"
                   required
@@ -339,7 +384,7 @@ export default function InteractiveProjectRow() {
                       reader.onloadend = () => {
                         setNewProject({
                           ...newProject,
-                          imageUrl: reader.result as string,
+                          images: reader.result as string,
                         });
                       };
                       reader.readAsDataURL(file);
