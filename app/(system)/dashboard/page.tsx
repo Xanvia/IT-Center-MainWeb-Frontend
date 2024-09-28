@@ -3,7 +3,7 @@ import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import Link from "next/link";
 import { shortcuts } from "@/constants/dashboardShortcuts";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/config/nextAuth";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
