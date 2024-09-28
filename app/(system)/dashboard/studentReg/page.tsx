@@ -6,6 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Image from "next/image";
 
+type OLSubject = "english" | "mathematics" | "science";
+const OLSub: OLSubject[] = ["english", "mathematics", "science"];
+
 const formSchema = z.object({
   personalDetails: z.object({
     title: z.string().min(1, { message: "Title is required" }),
@@ -324,7 +327,7 @@ export default function StudentRegistrationForm() {
                     </tr>
                   </thead>
                   <tbody>
-                    {["english", "mathematics", "science"].map((subject) => (
+                    {OLSub.map((subject) => (
                       <tr key={subject}>
                         <td>
                           {subject.charAt(0).toUpperCase() + subject.slice(1)}

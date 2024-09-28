@@ -29,7 +29,6 @@ export default function StaffRegistrationForm() {
     append: appendEmail,
     remove: removeEmail,
   } = useFieldArray({
-    control,
     name: "emails",
   });
 
@@ -38,7 +37,6 @@ export default function StaffRegistrationForm() {
     append: appendPhone,
     remove: removePhone,
   } = useFieldArray({
-    control,
     name: "telephones",
   });
 

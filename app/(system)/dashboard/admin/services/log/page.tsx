@@ -39,15 +39,16 @@ export default function InteractiveLogRow() {
   const [viewingLog, setViewingLog] = useState<Log | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [newLog, setNewLog] = useState({
-    name: "",
+    id: "",
+    title: "",
     description: "",
-    imageUrl: "",
+    images: "",
     date: "",
   });
 
   //addLog function
   const addLog = async () => {
-    if (newLog.name && newLog.description && newLog.date) {
+    if (newLog.title && newLog.description && newLog.date) {
       try {
         const response = await fetch("/api/logs", {
           // Adjust the endpoint accordingly
@@ -56,10 +57,9 @@ export default function InteractiveLogRow() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name: newLog.name,
+            title: newLog.title,
             description: newLog.description,
-            imageUrl:
-              newLog.imageUrl || "/placeholder.svg?height=200&width=300",
+            images: newLog.images || "/placeholder.svg?height=200&width=300",
             date: newLog.date,
           }),
         });
@@ -70,7 +70,7 @@ export default function InteractiveLogRow() {
 
         const data = await response.json(); // Assuming the server responds with the created log
         setLogs([...logs, { ...data, id: Date.now() }]); // Use the id from the server if provided
-        setNewLog({ name: "", description: "", imageUrl: "", date: "" });
+        setNewLog({ id: "", title: "", description: "", images: "", date: "" });
         setIsAdding(false);
       } catch (error) {
         console.error(error);
@@ -97,7 +97,7 @@ export default function InteractiveLogRow() {
 
   //saveEdit function
   const saveEdit = async () => {
-    if (viewingLog && newLog.name && newLog.description && newLog.date) {
+    if (viewingLog && newLog.title && newLog.description && newLog.date) {
       try {
         const response = await fetch(`/api/logs/${viewingLog.id}`, {
           // Adjust the endpoint accordingly
@@ -106,9 +106,9 @@ export default function InteractiveLogRow() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name: newLog.name,
+            name: newLog.title,
             description: newLog.description,
-            imageUrl: newLog.imageUrl || viewingLog.imageUrl,
+            imageUrl: newLog.images || viewingLog.imageUrl,
             date: newLog.date,
           }),
         });
@@ -216,8 +216,10 @@ export default function InteractiveLogRow() {
               <Label htmlFor="newLogName">Log Name</Label>
               <Input
                 id="newLogName"
-                value={newLog.name}
-                onChange={(e) => setNewLog({ ...newLog, name: e.target.value })}
+                value={newLog.title}
+                onChange={(e) =>
+                  setNewLog({ ...newLog, title: e.target.value })
+                }
                 placeholder="Enter log name"
                 required
               />
@@ -257,7 +259,7 @@ export default function InteractiveLogRow() {
                     reader.onloadend = () => {
                       setNewLog({
                         ...newLog,
-                        imageUrl: reader.result as string,
+                        images: reader.result as string,
                       });
                     };
                     reader.readAsDataURL(file);
@@ -315,9 +317,9 @@ export default function InteractiveLogRow() {
                 <Label htmlFor="editLogName">Log Name</Label>
                 <Input
                   id="editLogName"
-                  value={newLog.name}
+                  value={newLog.title}
                   onChange={(e) =>
-                    setNewLog({ ...newLog, name: e.target.value })
+                    setNewLog({ ...newLog, title: e.target.value })
                   }
                   placeholder="Enter log name"
                   required
@@ -360,7 +362,7 @@ export default function InteractiveLogRow() {
                       reader.onloadend = () => {
                         setNewLog({
                           ...newLog,
-                          imageUrl: reader.result as string,
+                          images: reader.result as string,
                         });
                       };
                       reader.readAsDataURL(file);
