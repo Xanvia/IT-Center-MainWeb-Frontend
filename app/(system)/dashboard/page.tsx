@@ -5,8 +5,6 @@ import { shortcuts } from "@/constants/dashboardShortcuts";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-const isAdmin = () => true; // Set to false to see non-admin view
-
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
