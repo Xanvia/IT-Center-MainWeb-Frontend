@@ -5,7 +5,7 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { PlusIcon, TrashIcon } from "lucide-react";
-import { StaffFormData, staffSchema } from "@/schemas/staffSchema";
+import { StaffFormData, staffSchema } from "@/schemas/staffRegSchema";
 import { useRouter } from "next/navigation";
 
 export default function StaffRegistrationForm() {

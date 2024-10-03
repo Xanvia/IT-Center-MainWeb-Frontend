@@ -3,64 +3,12 @@
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import Image from "next/image";
+import { FormData, formSchema } from "@/schemas/studentRegSchema";
+import { DefaultStudentRegValues } from "@/constants/studentRegDefault";
 
 type OLSubject = "english" | "mathematics" | "science";
 const OLSub: OLSubject[] = ["english", "mathematics", "science"];
-
-const formSchema = z.object({
-  personalDetails: z.object({
-    title: z.string().min(1, { message: "Title is required" }),
-    fullName: z.string().min(2, { message: "Full name is required" }),
-    nameWithInitials: z
-      .string()
-      .min(2, { message: "Name with initials is required" }),
-    nationalIdCardNo: z
-      .string()
-      .min(5, { message: "National ID Card number is required" }),
-    phoneNumber: z
-      .string()
-      .min(10, { message: "Valid phone number is required" }),
-    postalAddress: z.string().min(5, { message: "Postal address is required" }),
-    photo: z.any().optional(),
-  }),
-  educationalQualifications: z.object({
-    olevel: z.object({
-      english: z.string().min(1, { message: "Grade is required" }),
-      mathematics: z.string().min(1, { message: "Grade is required" }),
-      science: z.string().min(1, { message: "Grade is required" }),
-    }),
-    alevel: z
-      .array(
-        z.object({
-          subject: z.string().min(1, { message: "Subject is required" }),
-          grade: z.string().min(1, { message: "Grade is required" }),
-        })
-      )
-      .min(4, { message: "At least 4 A-Level subjects are required" }),
-  }),
-  higherEducationalQualifications: z.array(
-    z.object({
-      qualification: z
-        .string()
-        .min(1, { message: "Qualification is required" }),
-      dateAwarded: z.string().min(1, { message: "Date awarded is required" }),
-      institute: z.string().min(1, { message: "Institute is required" }),
-    })
-  ),
-  otherQualifications: z.string(),
-  employmentDetails: z.object({
-    institute: z.string().min(1, { message: "Institute is required" }),
-    designation: z.string().min(1, { message: "Designation is required" }),
-    officeAddress: z.string().min(1, { message: "Office address is required" }),
-    officeTelephone: z
-      .string()
-      .min(1, { message: "Office telephone is required" }),
-  }),
-});
-
-type FormData = z.infer<typeof formSchema>;
 
 export default function StudentRegistrationForm() {
   const {
@@ -71,40 +19,7 @@ export default function StudentRegistrationForm() {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      personalDetails: {
-        title: "",
-        fullName: "",
-        nameWithInitials: "",
-        nationalIdCardNo: "",
-        phoneNumber: "",
-        postalAddress: "",
-        photo: null,
-      },
-      educationalQualifications: {
-        olevel: {
-          english: "",
-          mathematics: "",
-          science: "",
-        },
-        alevel: [
-          { subject: "", grade: "" },
-          { subject: "", grade: "" },
-          { subject: "", grade: "" },
-          { subject: "", grade: "" },
-        ],
-      },
-      higherEducationalQualifications: [
-        { qualification: "", dateAwarded: "", institute: "" },
-      ],
-      otherQualifications: "",
-      employmentDetails: {
-        institute: "",
-        designation: "",
-        officeAddress: "",
-        officeTelephone: "",
-      },
-    },
+    defaultValues: DefaultStudentRegValues,
   });
 
   const {
