@@ -64,6 +64,7 @@ export default function StudentRegistrationForm() {
           <h1 className="text-3xl font-bold my-6 text-center">
             Student Registration
           </h1>
+          {/* Personal Details  */}
           <div className="card-body">
             <h2 className="card-title text-2xl font-bold">Personal Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -230,6 +231,7 @@ export default function StudentRegistrationForm() {
           </div>
         </div>
 
+        {/* Education Qualification  */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title text-2xl font-bold">
