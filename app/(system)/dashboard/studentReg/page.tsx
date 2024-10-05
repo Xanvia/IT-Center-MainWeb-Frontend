@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { FormData, formSchema } from "@/schemas/studentRegSchema";
 import { DefaultStudentRegValues } from "@/constants/studentRegDefault";
+import { UploadFile } from "@/utils/fileUploder";
+import toast, { Toaster } from "react-hot-toast";
 
 type OLSubject = "english" | "mathematics" | "science";
 const OLSub: OLSubject[] = ["english", "mathematics", "science"];
@@ -37,15 +39,18 @@ export default function StudentRegistrationForm() {
     console.log(data);
   };
 
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handlePhotoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files;
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string);
-        setValue("personalDetails.photo", file);
-      };
-      reader.readAsDataURL(file);
+      const imageUrl = await UploadFile(file[0], "student-profile");
+      if (imageUrl) {
+        setPhotoPreview("http://localhost:3001/" + imageUrl);
+        setValue("personalDetails.photo", imageUrl);
+      } else {
+        toast("Profile Picture Upload Failed. Try Again!");
+      }
     }
   };
 
@@ -218,6 +223,7 @@ export default function StudentRegistrationForm() {
                     height={100}
                     className="rounded-full"
                   />
+                  <Toaster />
                 </div>
               )}
             </div>
