@@ -37,6 +37,10 @@ export default function StudentRegistrationForm() {
 
   const onSubmit = (data: FormData) => {
     console.log(data);
+    // continue the function
+    // here check the data in browser console and match it with backend dto.
+    // test the flow and make sure there will be a student user in database
+    // extra: delete the user (old one) after successfully created the student
   };
 
   const handlePhotoUpload = async (
