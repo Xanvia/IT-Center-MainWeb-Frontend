@@ -3,61 +3,14 @@
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import Image from "next/image";
+import { FormData, formSchema } from "@/schemas/studentRegSchema";
+import { DefaultStudentRegValues } from "@/constants/studentRegDefault";
+import { UploadFile } from "@/utils/fileUploder";
+import toast, { Toaster } from "react-hot-toast";
 
-const formSchema = z.object({
-  personalDetails: z.object({
-    title: z.string().min(1, { message: "Title is required" }),
-    fullName: z.string().min(2, { message: "Full name is required" }),
-    nameWithInitials: z
-      .string()
-      .min(2, { message: "Name with initials is required" }),
-    nationalIdCardNo: z
-      .string()
-      .min(5, { message: "National ID Card number is required" }),
-    phoneNumber: z
-      .string()
-      .min(10, { message: "Valid phone number is required" }),
-    postalAddress: z.string().min(5, { message: "Postal address is required" }),
-    photo: z.any().optional(),
-  }),
-  educationalQualifications: z.object({
-    olevel: z.object({
-      english: z.string().min(1, { message: "Grade is required" }),
-      mathematics: z.string().min(1, { message: "Grade is required" }),
-      science: z.string().min(1, { message: "Grade is required" }),
-    }),
-    alevel: z
-      .array(
-        z.object({
-          subject: z.string().min(1, { message: "Subject is required" }),
-          grade: z.string().min(1, { message: "Grade is required" }),
-        })
-      )
-      .min(4, { message: "At least 4 A-Level subjects are required" }),
-  }),
-  higherEducationalQualifications: z.array(
-    z.object({
-      qualification: z
-        .string()
-        .min(1, { message: "Qualification is required" }),
-      dateAwarded: z.string().min(1, { message: "Date awarded is required" }),
-      institute: z.string().min(1, { message: "Institute is required" }),
-    })
-  ),
-  otherQualifications: z.string(),
-  employmentDetails: z.object({
-    institute: z.string().min(1, { message: "Institute is required" }),
-    designation: z.string().min(1, { message: "Designation is required" }),
-    officeAddress: z.string().min(1, { message: "Office address is required" }),
-    officeTelephone: z
-      .string()
-      .min(1, { message: "Office telephone is required" }),
-  }),
-});
-
-type FormData = z.infer<typeof formSchema>;
+type OLSubject = "english" | "mathematics" | "science";
+const OLSub: OLSubject[] = ["english", "mathematics", "science"];
 
 export default function StudentRegistrationForm() {
   const {
@@ -68,40 +21,7 @@ export default function StudentRegistrationForm() {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      personalDetails: {
-        title: "",
-        fullName: "",
-        nameWithInitials: "",
-        nationalIdCardNo: "",
-        phoneNumber: "",
-        postalAddress: "",
-        photo: null,
-      },
-      educationalQualifications: {
-        olevel: {
-          english: "",
-          mathematics: "",
-          science: "",
-        },
-        alevel: [
-          { subject: "", grade: "" },
-          { subject: "", grade: "" },
-          { subject: "", grade: "" },
-          { subject: "", grade: "" },
-        ],
-      },
-      higherEducationalQualifications: [
-        { qualification: "", dateAwarded: "", institute: "" },
-      ],
-      otherQualifications: "",
-      employmentDetails: {
-        institute: "",
-        designation: "",
-        officeAddress: "",
-        officeTelephone: "",
-      },
-    },
+    defaultValues: DefaultStudentRegValues,
   });
 
   const {
@@ -117,17 +37,24 @@ export default function StudentRegistrationForm() {
 
   const onSubmit = (data: FormData) => {
     console.log(data);
+    // continue the function
+    // here check the data in browser console and match it with backend dto.
+    // test the flow and make sure there will be a student user in database
+    // extra: delete the user (old one) after successfully created the student
   };
 
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handlePhotoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files;
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string);
-        setValue("personalDetails.photo", file);
-      };
-      reader.readAsDataURL(file);
+      const imageUrl = await UploadFile(file[0], "student-profile");
+      if (imageUrl) {
+        setPhotoPreview("http://localhost:3001/" + imageUrl);
+        setValue("personalDetails.photo", imageUrl);
+      } else {
+        toast("Profile Picture Upload Failed. Try Again!");
+      }
     }
   };
 
@@ -141,6 +68,7 @@ export default function StudentRegistrationForm() {
           <h1 className="text-3xl font-bold my-6 text-center">
             Student Registration
           </h1>
+          {/* Personal Details  */}
           <div className="card-body">
             <h2 className="card-title text-2xl font-bold">Personal Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -300,12 +228,14 @@ export default function StudentRegistrationForm() {
                     height={100}
                     className="rounded-full"
                   />
+                  <Toaster />
                 </div>
               )}
             </div>
           </div>
         </div>
 
+        {/* Education Qualification  */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title text-2xl font-bold">
@@ -324,7 +254,7 @@ export default function StudentRegistrationForm() {
                     </tr>
                   </thead>
                   <tbody>
-                    {["english", "mathematics", "science"].map((subject) => (
+                    {OLSub.map((subject) => (
                       <tr key={subject}>
                         <td>
                           {subject.charAt(0).toUpperCase() + subject.slice(1)}
