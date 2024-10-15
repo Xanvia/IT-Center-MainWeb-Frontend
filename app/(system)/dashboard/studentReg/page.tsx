@@ -404,7 +404,7 @@ export default function StudentRegistrationForm() {
             </table>
             <button
               type="button"
-              className="btn btn-primary mt-4"
+              className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
               onClick={() =>
                 appendHigherEducation({
                   qualification: "",
@@ -536,7 +536,10 @@ export default function StudentRegistrationForm() {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary w-full">
+        <button
+          type="submit"
+          className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
+        >
           Submit Registration
         </button>
       </form>
