@@ -392,7 +392,7 @@ export default function StudentRegistrationForm() {
                     <td>
                       <button
                         type="button"
-                        className="btn btn-error btn-sm"
+                        className="btn btn-error btn-sm text-white"
                         onClick={() => removeHigherEducation(index)}
                       >
                         Remove
