@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 import { Tabs, Tab } from "@nextui-org/react";
-import Link from "next/link";
+import CourseCard from "./courseCard"; // Import the reusable CourseCard component
 
 interface Course {
   id: string;
@@ -19,8 +18,8 @@ interface Course {
 export const undergraduateCourses: Course[] = [
   {
     id: "1",
-    image: "/placeholder.svg?height=200&width=300",
-    code: "CS101",
+    image: "/common/mainWeb.jpg",
+    code: "CSC1010",
     name: "Introduction to Computer Science",
     description: "A foundational course covering basic programming concepts.",
     duration: "3 months",
@@ -29,8 +28,28 @@ export const undergraduateCourses: Course[] = [
   },
   {
     id: "2",
-    image: "/placeholder.svg?height=200&width=300",
-    code: "MATH201",
+    image: "/common/mainWeb.jpg",
+    code: "MAT2010",
+    name: "Linear Algebra",
+    description: "Study of linear equations, matrices, and vector spaces.",
+    duration: "4 months",
+    lecturer: "Prof. John Doe",
+    fee: 600,
+  },
+  {
+    id: "3",
+    image: "/common/mainWeb.jpg",
+    code: "CSC1010",
+    name: "Introduction to Computer Science",
+    description: "A foundational course covering basic programming concepts.",
+    duration: "3 months",
+    lecturer: "Dr. Jane Smith",
+    fee: 500,
+  },
+  {
+    id: "4",
+    image: "/common/mainWeb.jpg",
+    code: "MAT2010",
     name: "Linear Algebra",
     description: "Study of linear equations, matrices, and vector spaces.",
     duration: "4 months",
@@ -42,9 +61,9 @@ export const undergraduateCourses: Course[] = [
 
 export const externalCourses: Course[] = [
   {
-    id: "3",
-    image: "/placeholder.svg?height=200&width=300",
-    code: "BUS301",
+    id: "5",
+    image: "/common/mainWeb.jpg",
+    code: "BUS3010",
     name: "Business Management",
     description: "Overview of business management principles and practices.",
     duration: "2 months",
@@ -52,9 +71,9 @@ export const externalCourses: Course[] = [
     fee: 450,
   },
   {
-    id: "4",
-    image: "/placeholder.svg?height=200&width=300",
-    code: "ART105",
+    id: "6",
+    image: "/common/mainWeb.jpg",
+    code: "ART1052",
     name: "Digital Art and Design",
     description: "Introduction to digital art tools and design principles.",
     duration: "3 months",
@@ -91,24 +110,7 @@ export default function CourseRegistration() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => (
-            <Link
-              href={`/dashboard/courseRegistration/${course.id}`}
-              key={course.id}
-            >
-              <Card className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                <CardHeader className="p-0">
-                  <Image
-                    src={course.image}
-                    alt={course.name}
-                    className="w-full h-48 object-cover"
-                  />
-                </CardHeader>
-                <CardBody>
-                  <h2 className="text-xl font-semibold">{course.code}</h2>
-                  <p className="text-lg">{course.name}</p>
-                </CardBody>
-              </Card>
-            </Link>
+            <CourseCard key={course.id} course={course} /> // Use the reusable CourseCard component
           ))}
         </div>
       </div>
