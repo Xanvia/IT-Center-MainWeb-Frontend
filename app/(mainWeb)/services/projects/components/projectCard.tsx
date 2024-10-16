@@ -24,7 +24,7 @@ export default function ProjectShowcase() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-6">IT Center Projects</h1>
+      <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl text-xl text-center mb-6">Projects</h1>
       <Card className="p-6 shadow-lg">
         <div className="flex justify-end mb-6">
           <div className="flex items-center">
