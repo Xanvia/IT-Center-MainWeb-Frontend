@@ -38,7 +38,7 @@ export default function ProjectShowcase() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <Button size="sm" onClick={handleSearch}>Search</Button>
+            <Button className="bg-red-800 text-white hover:bg-yellow-500 hover:text-black transition-colors" size="sm" onClick={handleSearch}>Search</Button>
           </div>
         </div>
         <div className="space-y-6 max-w-3xl mx-auto">
