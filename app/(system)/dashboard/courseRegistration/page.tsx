@@ -93,7 +93,7 @@ export default function CourseRegistration() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold my-4 mt-2 text-center">
+      <h1 className="text-2xl font-bold my-4 mt-2 text-center">
         Course Registration
       </h1>
 
