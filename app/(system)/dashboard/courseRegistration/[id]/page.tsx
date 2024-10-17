@@ -51,21 +51,22 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-8">
+    <div className="container mx-auto px-4 py-6 mt-2">
       <Card className="w-full rounded-lg shadow-md">
-        <CardBody className="p-0 flex flex-col md:flex-row">
+        <CardBody className="p-2 flex flex-col md:flex-row">
           <Image
             src={course.image}
             alt={course.name}
-            className="w-full md:w-1/3 h-64 md:h-auto object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
+            className="object-cover m-2 w-1/3"
+            //className="w-full md:w-1/3 h-64 md:h-auto object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
           />
-          <div className="p-6 flex-grow">
-            <h2 className="text-2xl font-semibold mb-2">{course.name}</h2>
-            <p className="text-lg mb-2">Course Code: {course.code}</p>
+          <div className="flex-grow">
+            <h2 className="text-xl font-semibold">{course.name}</h2>
+            <p className="text-md mb-2">{course.code}</p>
             <p className="text-md mb-4">{course.description}</p>
-            <p className="text-lg mb-2">Instructor: {course.lecturer}</p>
-            <p className="text-lg mb-2">Duration: {course.duration}</p>
-            <p className="text-lg mb-2">Course Fee: ${course.fee}</p>
+            <p className="text-sm">Instructor: {course.lecturer}</p>
+            <p className="text-sm">Duration: {course.duration}</p>
+            <p className="text-sm mb-2">Course Fee: ${course.fee}</p>
           </div>
         </CardBody>
       </Card>
