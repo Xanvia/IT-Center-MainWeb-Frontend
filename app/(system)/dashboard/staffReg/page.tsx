@@ -48,7 +48,7 @@ export default function StaffRegistrationForm() {
     >
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
-          <h1 className="text-3xl font-bold pb-8 text-center">
+          <h1 className="text-2xl font-bold text-center pb-8">
             Staff Registration
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
