@@ -65,12 +65,12 @@ export default function StudentRegistrationForm() {
         className="space-y-8 max-w-4xl mx-auto p-4"
       >
         <div className="card bg-base-100 shadow-xl">
-          <h1 className="text-3xl font-bold my-6 text-center">
+          <h1 className="text-2xl font-bold my-4 text-center">
             Student Registration
           </h1>
           {/* Personal Details  */}
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">Personal Details</h2>
+            <h2 className="card-title text-xl font-bold">Personal Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Controller
                 name="personalDetails.title"
@@ -238,12 +238,12 @@ export default function StudentRegistrationForm() {
         {/* Education Qualification  */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">
+            <h2 className="card-title text-xl font-bold">
               Educational Qualifications
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-xl font-semibold mb-4">
+                <h3 className="text-lg font-semibold mb-4">
                   GCE Ordinary Level
                 </h3>
                 <table className="table w-full">
@@ -279,7 +279,7 @@ export default function StudentRegistrationForm() {
                 </table>
               </div>
               <div>
-                <h3 className="text-xl font-semibold mb-4">
+                <h3 className="text-lg font-semibold mb-4">
                   GCE Advanced Level
                 </h3>
                 <table className="table w-full">
@@ -333,7 +333,7 @@ export default function StudentRegistrationForm() {
 
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">
+            <h2 className="card-title text-xl font-bold">
               Higher Educational Qualifications
             </h2>
             <table className="table w-full">
@@ -420,7 +420,7 @@ export default function StudentRegistrationForm() {
 
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">
+            <h2 className="card-title text-xl font-bold">
               Other Qualifications
             </h2>
             <Controller
@@ -441,9 +441,7 @@ export default function StudentRegistrationForm() {
 
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">
-              Employment Details
-            </h2>
+            <h2 className="card-title text-xl font-bold">Employment Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Controller
                 name="employmentDetails.institute"
