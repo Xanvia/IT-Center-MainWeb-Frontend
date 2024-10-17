@@ -38,7 +38,7 @@ export default function Home() {
               </button>
             </Link>
 
-            <Link href={"/courseReg"}>
+            <Link href={"/dashboard/courseRegistration"}>
               <button className="bg-transparent hover:bg-yellow-200 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
                 Course Registration
               </button>
@@ -107,10 +107,12 @@ export default function Home() {
             <span className="mr-0 text-2xl text-red-800 hover:text-red-700">
               more courses
             </span>
-            <PiArrowRightBold
-              color="maroon"
-              className="group-hover:translate-x-2 duration-300 text-xl"
-            />
+            <Link href={"/dashboard/courseRegistration"}>
+              <PiArrowRightBold
+                color="maroon"
+                className="group-hover:translate-x-2 duration-300 text-xl"
+              />
+            </Link>
           </div>
         </button>
       </div>
