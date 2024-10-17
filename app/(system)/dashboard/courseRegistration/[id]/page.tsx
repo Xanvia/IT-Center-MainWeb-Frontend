@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Card, CardBody, Image, Button } from "@nextui-org/react";
-import { undergraduateCourses, externalCourses } from "../page"; // Adjust this import path as necessary
 import { useRouter } from "next/navigation";
+import { externalCourses, undergraduateCourses } from "../courseData.";
 
 interface CourseDetailsProps {
   params: {
