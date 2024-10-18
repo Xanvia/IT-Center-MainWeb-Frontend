@@ -68,7 +68,7 @@ export default function CourseRegistration() {
       : externalCourses;
 
   return (
-    <div className="container mx-auto px-16 py-8">
+    <div className="container mx-auto px-28 py-8">
       <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl text-xl text-center gird">
         Course Overview
       </h1>
@@ -90,18 +90,13 @@ export default function CourseRegistration() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => (
-            <Link
-              href={`/dashboard/courseRegistration/${course.id}`}
-              key={course.id}
-            >
-              <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                <CourseCard
-                  image={course.image}
-                  code={course.code}
-                  name={course.name}
-                />
-              </div>
-            </Link>
+            <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+              <CourseCard
+                image={course.image}
+                code={course.code}
+                name={course.name}
+              />
+            </div>
           ))}
         </div>
       </div>
