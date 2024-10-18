@@ -6,7 +6,6 @@ interface CourseCardProps {
   image: string;
   code: string;
   name: string;
-  isClickable?: boolean;
 }
 
 export default function CourseCard({ image, code, name }: CourseCardProps) {
