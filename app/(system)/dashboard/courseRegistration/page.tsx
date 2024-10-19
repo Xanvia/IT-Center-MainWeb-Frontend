@@ -1,18 +1,25 @@
-// page.tsx
-
 "use client";
-import { useState } from "react";
-import { Tabs, Tab, Link } from "@nextui-org/react";
-import CourseCard from "./courseCard"; // Import the reusable CourseCard component
+
+import { useState, useMemo } from "react";
+import { Tabs, Tab, Link, Input } from "@nextui-org/react";
+import { Search } from "lucide-react";
+import CourseCard from "./courseCard";
 import { Course, externalCourses, undergraduateCourses } from "./courseData.";
 
 export default function CourseRegistration() {
   const [selectedCategory, setSelectedCategory] = useState("undergraduate");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const courses: Course[] =
     selectedCategory === "undergraduate"
       ? undergraduateCourses
       : externalCourses;
+
+  const filteredCourses = useMemo(() => {
+    return courses.filter((course) =>
+      course.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [courses, searchQuery]);
 
   return (
     <div className="container mx-auto px-4 py-8">
