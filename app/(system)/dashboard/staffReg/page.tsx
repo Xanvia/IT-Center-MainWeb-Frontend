@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StaffFormData, staffRegSchema } from "@/schemas/staffRegSchema";
+import { Select, SelectItem } from "@nextui-org/react";
 
 export default function StaffRegistrationForm() {
   const {
@@ -36,9 +37,45 @@ export default function StaffRegistrationForm() {
     name: "telephones",
   });
 
-  const onSubmit = (data: StaffFormData) => {
-    console.log(data);
-    // Handle form submission here
+  // State for success or error messages
+  const [message, setMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (data: StaffFormData) => {
+    setIsSubmitting(true); // Disable the submit button during submission
+    setMessage(null); // Reset message state before submission
+
+    try {
+      const response = await fetch("http://localhost:3001/staff-profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        // Handle error response (e.g., validation errors, server errors)
+        const errorMessage = `Failed to submit: ${response.statusText}`;
+        setMessage(errorMessage);
+        console.error(errorMessage);
+        setIsSubmitting(false); // Re-enable submit button
+        return;
+      }
+
+      // Assuming the API returns a success message or created resource data
+      const result = await response.json();
+      console.log("Staff registration successful:", result);
+      setMessage("Staff registration successful!");
+
+      // You can add additional logic here, like resetting the form
+    } catch (error) {
+      // Handle any network errors
+      console.error("An error occurred during submission:", error);
+      setMessage("An error occurred during submission.");
+    } finally {
+      setIsSubmitting(false); // Re-enable submit button
+    }
   };
 
   return (
@@ -52,6 +89,43 @@ export default function StaffRegistrationForm() {
             Staff Registration
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Controller
+              name="title"
+              control={control}
+              render={({ field }) => (
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Title</span>
+                  </label>
+                  <Select
+                    {...field}
+                    placeholder="Select a title"
+                    className="max-w-xs"
+                  >
+                    <SelectItem key="DR" value="DR">
+                      DR
+                    </SelectItem>
+                    <SelectItem key="MR" value="MR">
+                      MR
+                    </SelectItem>
+                    <SelectItem key="MRS" value="MRS">
+                      MRS
+                    </SelectItem>
+                    <SelectItem key="MISS" value="MISS">
+                      MISS
+                    </SelectItem>
+                    <SelectItem key="REV" value="REV">
+                      REV
+                    </SelectItem>
+                  </Select>
+                  {errors.title && (
+                    <span className="text-error text-sm">
+                      {errors.title.message}
+                    </span>
+                  )}
+                </div>
+              )}
+            />
             <Controller
               name="displayName"
               control={control}
@@ -244,9 +318,12 @@ export default function StaffRegistrationForm() {
       <button
         type="submit"
         className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
+        disabled={isSubmitting} // Disable button while submitting
       >
-        Submit Registration
+        {isSubmitting ? "Submitting..." : "Submit Registration"}
       </button>
+
+      {message && <p className="mt-4 text-center">{message}</p>}
     </form>
   );
 }
