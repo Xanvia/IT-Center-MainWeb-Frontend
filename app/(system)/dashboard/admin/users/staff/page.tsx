@@ -77,7 +77,9 @@ export default function StaffRequests() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Staff Registration Requests</h1>
+      <h1 className="text-2xl font-bold my-4 mt-2 text-center">
+        Staff Registration Requests
+      </h1>
       <div className="space-y-4">
         {staffRequests.length === 0 ? (
           <p>No staff requests available.</p>
