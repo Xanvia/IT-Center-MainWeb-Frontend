@@ -127,7 +127,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <ul className="mb-6 flex flex-col gap-1.5 font-medium">
               {/* Registration */}
               <li>
-                <Tab pathname="/courses/registration">
+                <Tab pathname="/dashboard/courseRegistration">
                   <div className="flex justify-center w-5">
                     <FaRegPaste size={18} />
                   </div>
@@ -136,7 +136,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               {/* Enrolled Courses */}
               <li>
-                <Tab pathname="/courses">
+                <Tab pathname="/dashboard/enrolledCourses">
                   <div className="flex justify-center w-5">
                     <MdOutlineSchool size={20} />
                   </div>

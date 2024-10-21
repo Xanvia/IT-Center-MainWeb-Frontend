@@ -14,7 +14,7 @@ export const shortcuts = [
   {
     name: "Course Registration",
     icon: BookOpen,
-    href: "/courseRegistration",
+    href: "/dashboard/courseRegistration",
     visual: "/common/courseReg.jpg",
     primary: true,
   },
