@@ -1,6 +1,9 @@
 import * as z from "zod";
 
 export const staffRegSchema = z.object({
+  title: z.enum(["DR", "MR", "MRS", "MISS", "REV"], {
+    required_error: "Title is required",
+  }),
   displayName: z.string().min(1, { message: "Display name is required" }),
   designation: z.string().min(1, { message: "Designation is required" }),
   nominal: z.string().min(1, { message: "Nominal is required" }),
