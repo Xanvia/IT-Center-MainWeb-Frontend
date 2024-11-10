@@ -13,19 +13,19 @@ import { Beaker, Users, Wifi } from "lucide-react";
 export default function Reservation() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <header className="bg-maroon-700 text-white p-4">
+      <header className="bg-maroon text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <Link className="text-2xl font-bold" href="/">
-            IT Center Reservations
+          <Link className="text-2xl font-bold" href="/reservation">
+            IT Center <span className="text-yellow-500">Reservations</span>
           </Link>
           <nav className="space-x-4">
-            <Link className="hover:underline" href="/">
+            <Link className="hover:text-yellow-500" href="/reservation">
               Home
             </Link>
-            <Link className="hover:underline" href="/about">
+            <Link className="hover:text-yellow-500" href="/about">
               About
             </Link>
-            <Link className="hover:underline" href="/contact">
+            <Link className="hover:text-yellow-500" href="/contact">
               Contact
             </Link>
           </nav>
@@ -55,32 +55,32 @@ export default function Reservation() {
             {
               name: "Computer Lab A",
               capacity: 30,
-              image: "/placeholder.svg?height=200&width=300",
+              image: "/common/labReservation.jpg",
             },
             {
               name: "Conference Hall B",
               capacity: 100,
-              image: "/placeholder.svg?height=200&width=300",
+              image: "/common/labReservation.jpg",
             },
             {
               name: "Robotics Lab",
               capacity: 20,
-              image: "/placeholder.svg?height=200&width=300",
+              image: "/common/labReservation.jpg",
             },
             {
               name: "Lecture Hall C",
               capacity: 200,
-              image: "/placeholder.svg?height=200&width=300",
+              image: "/common/labReservation.jpg",
             },
             {
               name: "3D Printing Lab",
               capacity: 15,
-              image: "/placeholder.svg?height=200&width=300",
+              image: "/common/labReservation.jpg",
             },
             {
               name: "Multimedia Studio",
               capacity: 10,
-              image: "/placeholder.svg?height=200&width=300",
+              image: "/common/labReservation.jpg",
             },
           ].map((room) => (
             <Card key={room.name} className="overflow-hidden">
@@ -115,7 +115,7 @@ export default function Reservation() {
               <CardFooter>
                 <Button
                   asChild
-                  className="w-full bg-maroon-700 hover:bg-maroon-800 text-white"
+                  className="w-full bg-maroon hover:text-yellow-500 text-white"
                 >
                   <Link
                     href={`/room/${room.name

@@ -6,14 +6,14 @@ import { Beaker, Calendar, Clock, MapPin, Users, Wifi } from "lucide-react";
 export default function Component() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <header className="bg-maroon-700 text-white p-4">
+      <header className="text-white p-4 bg-maroon">
         <div className="container mx-auto flex justify-between items-center">
           <Link className="text-2xl font-bold" href="/">
             IT Center Reservations
           </Link>
           <nav className="space-x-4">
             <Link className="hover:underline" href="/">
-              Home
+              Hom
             </Link>
             <Link className="hover:underline" href="/about">
               About
