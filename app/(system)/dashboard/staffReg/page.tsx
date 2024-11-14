@@ -45,18 +45,28 @@ export default function StaffRegistrationForm() {
     setIsSubmitting(true); // Disable the submit button during submission
     setMessage(null); // Reset message state before submission
 
+    console.log("Submitting data:", data); // Log data before submission
+
+    // Transform emails and telephones to arrays of strings
+    const transformedData = {
+      ...data,
+      emails: data.emails.map((email) => email.value),
+      telephones: data.telephones.map((telephone) => telephone.value),
+    };
+
     try {
       const response = await fetch("http://localhost:3001/staff-profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(transformedData),
       });
 
       if (!response.ok) {
         // Handle error response (e.g., validation errors, server errors)
         const errorMessage = `Failed to submit: ${response.statusText}`;
+        const errorDetails = await response.json(); // Get error details if available
         setMessage(errorMessage);
         console.error(errorMessage);
         setIsSubmitting(false); // Re-enable submit button
