@@ -35,12 +35,36 @@ export default function StudentRegistrationForm() {
 
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log(data);
     // continue the function
     // here check the data in browser console and match it with backend dto.
     // test the flow and make sure there will be a student user in database
     // extra: delete the user (old one) after successfully created the student
+
+    try {
+      // Perform API call to create a student in the database
+      const response = await fetch("http://localhost:3001/student-profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        // Show a success toast and redirect to dashboard after creation
+        toast.success("Student created successfully!");
+        setTimeout(() => {
+          window.location.href = "/dashboard"; // Redirect to dashboard
+        }, 1000);
+      } else {
+        toast.error("Failed to create student. Try again!");
+      }
+    } catch (error) {
+      console.error("Error creating student:", error);
+      toast.error("An error occurred. Please try again.");
+    }
   };
 
   const handlePhotoUpload = async (
