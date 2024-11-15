@@ -72,14 +72,15 @@ export default function StaffRegistrationForm() {
         throw new Error(`Failed to submit: ${response.statusText}`);
       }
 
-      const result = await response.json();
-      console.log("Staff registration successful:", result);
+      // const result = await response.json();
+      // console.log("Staff registration successful:", result);
+
       setAlertInfo({
         message: "Staff registration successful!",
         type: "success",
       });
 
-      // Redirect to dashboard after a short delay
+      // Redirect to dashboard after a succuessfull registration in a short delay
       setTimeout(() => {
         router.push("/dashboard");
       }, 2000);
