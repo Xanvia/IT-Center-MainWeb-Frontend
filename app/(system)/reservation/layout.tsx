@@ -1,5 +1,5 @@
 import React from "react";
-import ReservationHeader from "./header";
+import ReservationHeader from "./components/header";
 
 interface ReservationLayoutProps {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ const ReservationLayout: React.FC<ReservationLayoutProps> = ({ children }) => {
     <div className="flex flex-col min-h-screen bg-gray-100">
       <ReservationHeader />
       <main>{children}</main>
-      <footer className="bg-maroon text-white p-4 mt-5">
+      <footer className="bg-maroon text-gray-300 p-4 mt-auto">
         <div className="mx-auto text-center">
           <p>&copy; 2024 IT Center Reservations. All rights reserved.</p>
         </div>

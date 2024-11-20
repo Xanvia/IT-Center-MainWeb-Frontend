@@ -12,7 +12,7 @@ import { MapPin, Nfc, Users } from "lucide-react";
 
 export default function Reservation() {
   return (
-    <main className="flex-grow container mx-auto px-4 py-8">
+    <main className="flex-grow container mx-auto py-8">
       <section className="mb-12 text-center">
         <h1 className="text-4xl font-bold mb-4 text-maroon-800">
           Reserve Your Space
