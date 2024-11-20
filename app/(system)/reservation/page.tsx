@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Beaker, Users, Wifi } from "lucide-react";
+import { MapPin, Nfc, Users } from "lucide-react";
 
 export default function Reservation() {
   return (
@@ -104,12 +104,12 @@ export default function Reservation() {
                   <span>Capacity: {room.capacity}</span>
                 </div>
                 <div className="flex items-center space-x-2 text-gray-600 mt-2">
-                  <Wifi className="h-5 w-5" />
-                  <span>High-speed WiFi</span>
+                  <MapPin className="h-5 w-5" />
+                  <span>Location:</span>
                 </div>
                 <div className="flex items-center space-x-2 text-gray-600 mt-2">
-                  <Beaker className="h-5 w-5" />
-                  <span>Modern Equipment</span>
+                  <Nfc className="h-5 w-5" />
+                  <span>Charge /h: {}</span>
                 </div>
               </CardContent>
               <CardFooter>
