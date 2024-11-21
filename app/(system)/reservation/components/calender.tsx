@@ -1,17 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { addDays, format, isSameDay } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
+import { format, isSameDay } from "date-fns";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 
 // Mock data for booked slots
 const bookedSlots = [
@@ -24,6 +18,7 @@ const bookedSlots = [
 type Slot = "morning" | "afternoon";
 
 export default function ReservationCalendar() {
+  let [value, setValue] = useState(parseDate("2024-11-27"));
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
@@ -56,117 +51,34 @@ export default function ReservationCalendar() {
     }
   };
 
+  const handleDateClick = (arg: any) => {
+    alert(arg.dateStr);
+  };
+
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-4">
-      <Calendar
-        mode="single"
-        selected={selectedDate}
-        onSelect={handleDateSelect}
-        className="rounded-md border p-3"
-        classNames={{
-          months:
-            "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-          month: "space-y-4 w-full sm:w-1/2",
-          table: "w-full border-collapse space-y-1",
-          head_row: "flex",
-          head_cell:
-            "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
-          row: "flex w-full mt-2",
-          cell: cn(
-            "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent",
-            "first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
-          ),
-          day: cn("h-16 w-16 p-0 font-normal aria-selected:opacity-100"),
-          day_range_end: "day-range-end",
-          day_selected:
-            "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-          day_today: "bg-accent text-accent-foreground",
-          day_outside: "text-muted-foreground opacity-50",
-          day_disabled: "text-muted-foreground opacity-50",
-          day_hidden: "invisible",
-        }}
-        components={{
-          Day: ({ date, ...props }) => {
-            const isBookedMorning = isSlotBooked(date, "morning");
-            const isBookedAfternoon = isSlotBooked(date, "afternoon");
-            return (
-              <div className="relative h-16 w-16" {...props}>
-                <div className="absolute inset-0 flex flex-col">
-                  <div
-                    className={cn(
-                      "flex-1 border-b",
-                      isBookedMorning ? "bg-red-200" : "bg-green-200"
-                    )}
-                  ></div>
-                  <div
-                    className={cn(
-                      "flex-1",
-                      isBookedAfternoon ? "bg-red-200" : "bg-green-200"
-                    )}
-                  ></div>
-                </div>
-                <div className="relative z-10 h-full w-full flex items-center justify-center">
-                  {date.getDate()}
-                </div>
-              </div>
-            );
+    <div className="max-w-4xl m-5 p-4 ">
+      <FullCalendar
+        plugins={[dayGridPlugin]}
+        initialView="dayGridMonth"
+        // dateClick={handleDateClick}
+        eventContent={renderEventContent}
+        events={[
+          {
+            title: "SIRED",
+            start: "2024-11-26",
+            end: "2024-11-29",
+            display: "background",
+            color: "#ff9f1c",
           },
-        }}
+        ]}
       />
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="w-full mt-4">Select Time Slot</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              Select a Time Slot for{" "}
-              {selectedDate ? format(selectedDate, "PP") : "your reservation"}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <Button
-              variant={selectedSlot === "morning" ? "default" : "outline"}
-              onClick={() => handleSlotSelect("morning")}
-              disabled={selectedDate && isSlotBooked(selectedDate, "morning")}
-              className="h-20"
-            >
-              8:00 AM - 12:00 PM
-              {selectedDate && isSlotBooked(selectedDate, "morning") && (
-                <span className="block text-xs mt-1">Booked</span>
-              )}
-            </Button>
-            <Button
-              variant={selectedSlot === "afternoon" ? "default" : "outline"}
-              onClick={() => handleSlotSelect("afternoon")}
-              disabled={selectedDate && isSlotBooked(selectedDate, "afternoon")}
-              className="h-20"
-            >
-              1:00 PM - 5:00 PM
-              {selectedDate && isSlotBooked(selectedDate, "afternoon") && (
-                <span className="block text-xs mt-1">Booked</span>
-              )}
-            </Button>
-          </div>
-          <Button
-            onClick={handleContinue}
-            disabled={!selectedDate || !selectedSlot}
-            className="w-full mt-4"
-          >
-            Continue Reservation
-          </Button>
-        </DialogContent>
-      </Dialog>
-      <div className="mt-4 text-sm text-muted-foreground">
-        <div className="flex items-center">
-          <div className="w-4 h-4 bg-green-200 mr-2"></div>
-          <span>Available</span>
-        </div>
-        <div className="flex items-center mt-1">
-          <div className="w-4 h-4 bg-red-200 mr-2"></div>
-          <span>Booked</span>
-        </div>
-      </div>
     </div>
+  );
+}
+function renderEventContent(eventInfo: any) {
+  return (
+    <>
+      <i>{eventInfo.event.title}</i>
+    </>
   );
 }
