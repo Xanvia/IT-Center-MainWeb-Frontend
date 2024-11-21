@@ -10,9 +10,13 @@ interface CourseCardProps {
 
 export default function CourseCard({ image, code, name }: CourseCardProps) {
   return (
-    <Card>
+    <Card className="rounded-lg">
       <CardHeader className="p-2">
-        <img src={image} alt={name} className="w-full object-cover" />
+        <img
+          src={image}
+          alt={name}
+          className="w-full object-cover rounded-xl"
+        />
       </CardHeader>
       <CardBody>
         <h2 className="text-sm font-semibold">{code}</h2>
