@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./Components/css/log.module.css";
-import CustomAccordion from "./Components/accordion";
+import CustomAccordion from "./components/accordion";
 
 const initialContent = "Certificate based Computer skill programme";
 const initialPhotos = ["/logjpg/im1.jpg", "/logjpg/im2.jpg", "/logjpg/im3.jpg"];
