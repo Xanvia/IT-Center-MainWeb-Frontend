@@ -1,9 +1,11 @@
 import ReservationCalendar from "../../components/calender";
+import { ReservationForm } from "../../components/requestForm";
 
 export default function ReservationPage() {
   return (
-    <div className="">
+    <div>
       <ReservationCalendar />
+      <ReservationForm />
     </div>
   );
 }

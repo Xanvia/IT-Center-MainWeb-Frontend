@@ -56,22 +56,26 @@ export default function ReservationCalendar() {
   };
 
   return (
-    <div className="max-w-4xl m-5 p-4 ">
-      <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridMonth"
-        // dateClick={handleDateClick}
-        eventContent={renderEventContent}
-        events={[
-          {
-            title: "SIRED",
-            start: "2024-11-26",
-            end: "2024-11-29",
-            display: "background",
-            color: "#ff9f1c",
-          },
-        ]}
-      />
+    <div className="max-w-4xl m-5 p-4 grid grid-cols-3">
+      <div className="md:col-span-2">
+        <FullCalendar
+          plugins={[dayGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          // dateClick={handleDateClick}
+          selectable={true}
+          eventContent={renderEventContent}
+          events={[
+            {
+              title: "SIRED",
+              start: "2024-11-26",
+              end: "2024-11-29",
+              display: "background",
+              color: "#ff9f1c",
+            },
+          ]}
+        />
+      </div>
+      <div className="md:col-span-1"></div>
     </div>
   );
 }
