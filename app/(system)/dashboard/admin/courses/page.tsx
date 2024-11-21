@@ -8,25 +8,25 @@ export default function Component() {
   const courseActions = [
     {
       name: "Create Course",
-      href: "/admin/courses/create",
+      href: "courses/createCourse",
       icon: BookOpen,
       color: "text-green-500",
     },
     {
       name: "Update Course",
-      href: "/admin/courses/update",
+      href: "courses/updateCourse",
       icon: Edit,
       color: "text-blue-500",
     },
     {
-      name: "Enrollment Details",
-      href: "/admin/courses/enrollments",
+      name: "Enrollment Requests",
+      href: "courses/enrollments",
       icon: Users,
       color: "text-purple-500",
     },
     {
       name: "Update Results",
-      href: "/admin/courses/results",
+      href: "courses/results",
       icon: Award,
       color: "text-amber-500",
     },
