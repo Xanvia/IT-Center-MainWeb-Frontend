@@ -1,48 +1,19 @@
 // ProjectShowcase.tsx
 "use client"
 
-import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Search } from "lucide-react"
 import Image from "next/image"
-import { projects, Project } from "../data/projectsData"
-
+import { projects } from "../data/projectsData"
 
 export default function ProjectShowcase() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filteredProjects, setFilteredProjects] = useState(projects)
-
-  const handleSearch = () => {
-    const filtered = projects.filter((project) =>
-      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    setFilteredProjects(filtered)
-  }
-
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl text-xl text-center mb-6">Projects</h1>
+      <h1 className="from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl text-xl text-center mb-6">
+        Projects
+      </h1>
       <Card className="p-6 shadow-lg">
-        <div className="flex justify-end mb-6">
-          <div className="flex items-center">
-            <div className="relative mr-2">
-              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input
-                type="text"
-                placeholder="Search projects..."
-                className="pl-8 pr-4 py-1 w-64 text-sm"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <Button className="bg-red-800 text-white hover:bg-yellow-500 hover:text-black transition-colors" size="sm" onClick={handleSearch}>Search</Button>
-          </div>
-        </div>
-        <div className="space-y-6 max-w-3xl mx-auto">
-          {filteredProjects.map((project, index) => (
+        <div className="space-y-6 max-w-6xl mx-auto">
+          {projects.map((project, index) => (
             <Card key={project.id} className="overflow-hidden shadow-md">
               <div className={`flex flex-col ${index % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}>
                 <div className="w-full sm:w-2/5 h-48 sm:h-auto">
@@ -66,8 +37,8 @@ export default function ProjectShowcase() {
             </Card>
           ))}
         </div>
-        {filteredProjects.length === 0 && (
-          <p className="text-center text-gray-500 mt-8">No projects found matching your search.</p>
+        {projects.length === 0 && (
+          <p className="text-center text-gray-500 mt-8">No projects available.</p>
         )}
       </Card>
     </div>

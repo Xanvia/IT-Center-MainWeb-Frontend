@@ -28,6 +28,13 @@ export interface Project {
       description: "Upgraded security protocols and implemented advanced threat detection systems, reducing incidents by 80%. This included multi-factor authentication and AI-powered threat detection.",
       date:"10/15/2024",
       imageUrl: "/common/labReservation.jpg"
+    },
+    {
+      id: 4,
+      title: "Cybersecurity Enhancement",
+      description: "Upgraded security protocols and implemented advanced threat detection systems, reducing incidents by 80%. This included multi-factor authentication and AI-powered threat detection.",
+      date:"10/15/2024",
+      imageUrl: "/common/labReservation.jpg"
     }
   ]
   
