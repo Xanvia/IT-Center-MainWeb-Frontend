@@ -14,7 +14,14 @@ import {
   MdOutlineSettings,
   MdPhonelinkSetup,
 } from "react-icons/md";
-import { FaPeopleArrows, FaPeopleGroup, FaRegPaste } from "react-icons/fa6";
+import {
+  FaCreditCard,
+  FaMoneyBill,
+  FaPeopleArrows,
+  FaPeopleGroup,
+  FaRegPaste,
+  FaWallet,
+} from "react-icons/fa6";
 import {
   BsBuildingFill,
   BsBuildingFillAdd,
@@ -25,6 +32,7 @@ import { PiStudentBold } from "react-icons/pi";
 import { GrUserManager } from "react-icons/gr";
 import { RiAdminFill } from "react-icons/ri";
 import { BiSolidReport } from "react-icons/bi";
+import { AirOutlined } from "@mui/icons-material";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -143,6 +151,15 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Enrolled Courses
                 </Tab>
               </li>
+              {/* Course Payments */}
+              <li>
+                <Tab pathname="/dashboard/coursePayments">
+                  <div className="flex justify-center w-5">
+                    <FaCreditCard size={18} />
+                  </div>
+                  Course Payments
+                </Tab>
+              </li>
             </ul>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-gray-100">
               PROFILE
@@ -249,7 +266,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </SidebarLinkGroup>
 
               <li>
-                <Tab pathname="/admin/courses">
+                <Tab pathname="/dashboard/admin/courses">
                   <div className="flex justify-center w-5">
                     <MdOutlineSchool size={20} />
                   </div>
