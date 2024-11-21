@@ -11,6 +11,52 @@ export interface Course {
   fee: number;
 }
 
+export const Courses: Course[] = [
+  {
+    id: "1",
+    image: "/common/mainWeb.jpg",
+    code: "CSC1010",
+    name: "Introduction to Computer Science",
+    description: "A foundational course covering basic programming concepts.",
+    duration: "3 months",
+    lecturer: "Dr. Jane Smith",
+    fee: 500,
+  },
+  {
+    id: "2",
+    image: "/common/mainWeb.jpg",
+    code: "MAT2010",
+    name: "Linear Algebra",
+    description: "Study of linear equations, matrices, and vector spaces.",
+    duration: "4 months",
+    lecturer: "Prof. John Doe",
+    fee: 600,
+  },
+  {
+    id: "3",
+    image: "/common/mainWeb.jpg",
+    code: "CSC1010",
+    name: "Introduction to Computer Science",
+    description: "A foundational course covering basic programming concepts.",
+    duration: "3 months",
+    lecturer: "Dr. Jane Smith",
+    fee: 500,
+  },
+  {
+    id: "4",
+    image: "/common/mainWeb.jpg",
+    code: "MAT2010",
+    name: "Linear Algebra",
+    description: "Study of linear equations, matrices, and vector spaces.",
+    duration: "4 months",
+    lecturer: "Prof. John Doe",
+    fee: 600,
+  },
+  // Add more undergraduate courses as needed
+];
+
+{
+  /* 
 export const undergraduateCourses: Course[] = [
   {
     id: "1",
@@ -78,3 +124,5 @@ export const externalCourses: Course[] = [
   },
   // Add more external courses as needed
 ];
+*/
+}
