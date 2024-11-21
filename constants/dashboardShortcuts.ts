@@ -56,7 +56,7 @@ export const shortcuts = [
   {
     name: "Manage Courses",
     icon: BookmarkPlus,
-    href: "/manage-courses",
+    href: "/admin/courses",
     adminOnly: true,
   },
   {
