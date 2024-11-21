@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardBody, Image, Button } from "@nextui-org/react";
+import { Card, CardBody, Image, Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { externalCourses, undergraduateCourses } from "../courseData.";
+import { Courses } from "../courseData.";
 
 interface CourseDetailsProps {
   params: {
@@ -11,17 +11,17 @@ interface CourseDetailsProps {
   };
 }
 
-const CourseDetails = ({ params }: CourseDetailsProps) => {
+export default function CourseDetails({ params }: CourseDetailsProps) {
   const { id } = params;
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showPayment, setShowPayment] = useState(false);
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cvv, setCvv] = useState("");
 
-  // Combine both undergraduate and external courses for search
-  const allCourses = [...undergraduateCourses, ...externalCourses];
-
-  // Find the course by ID
-  const course = allCourses.find((course) => course.id === id);
+  const course = Courses.find((course: { id: string }) => course.id === id);
 
   if (!course) {
     return <p>Course not found</p>;
@@ -40,13 +40,18 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
       return;
     }
 
-    // Here you would typically send the file to your server
     console.log("File uploaded:", file);
+    setShowPayment(true);
+  };
 
-    // Simulate successful enrollment
-    alert("Enrollment request successful!");
+  const handlePayment = () => {
+    if (!cardNumber || !expiryDate || !cvv) {
+      setError("Please fill in all payment details.");
+      return;
+    }
 
-    // Redirect to the course registration dashboard
+    console.log("Payment processed");
+    alert("Enrollment successful!");
     router.push("/dashboard/courseRegistration");
   };
 
@@ -58,7 +63,6 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
             src={course.image}
             alt={course.name}
             className="object-cover m-2 w-1/3"
-            //className="w-full md:w-1/3 h-64 md:h-auto object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
           />
           <div className="flex-grow">
             <h2 className="text-xl font-semibold">{course.name}</h2>
@@ -79,20 +83,53 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
           onChange={handleFileChange}
           className="file-input file-input-bordered w-full"
         />
-        <br />
-        <br />
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 mt-2">{error}</p>}
 
-        <Button
-          color="primary"
-          className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
-          onClick={handleEnrollRequest}
-        >
-          Request to Enroll
-        </Button>
+        {!showPayment ? (
+          <Button
+            color="primary"
+            className="w-full mt-4 bg-primary text-primary-foreground hover:bg-primary/90"
+            onClick={handleEnrollRequest}
+          >
+            Request to Enroll
+          </Button>
+        ) : (
+          <Card className="mt-4">
+            <CardBody>
+              <h6 className="text-lg font-semibold mb-4">Payment Details</h6>
+              <div className="space-y-4">
+                <Input
+                  label="Card Number"
+                  placeholder="1234 5678 9012 3456"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value)}
+                />
+                <div className="flex space-x-4">
+                  <Input
+                    label="Expiry Date"
+                    placeholder="MM/YY"
+                    value={expiryDate}
+                    onChange={(e) => setExpiryDate(e.target.value)}
+                  />
+                  <Input
+                    label="CVV"
+                    placeholder="123"
+                    value={cvv}
+                    onChange={(e) => setCvv(e.target.value)}
+                  />
+                </div>
+                <Button
+                  color="primary"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                  onClick={handlePayment}
+                >
+                  Pay ${course.fee} and Enroll
+                </Button>
+              </div>
+            </CardBody>
+          </Card>
+        )}
       </div>
     </div>
   );
-};
-
-export default CourseDetails;
+}
