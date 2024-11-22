@@ -9,7 +9,6 @@ import * as z from "zod";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Card,
   CardContent,
@@ -27,22 +26,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { DateRange } from "react-day-picker";
-
-// Mock function to simulate existing reservations
-const getExistingReservations = () => [
-  new Date(2023, 5, 10),
-  new Date(2023, 5, 15),
-  new Date(2023, 5, 20),
-  new Date(2023, 5, 22),
-];
 
 const formSchema = z.object({
   date: z.date({
@@ -55,18 +42,18 @@ const formSchema = z.object({
     message: "Event name must be at least 2 characters.",
   }),
   eventDetails: z.string().optional(),
-  paymentMethod: z.enum(["online", "payLater"], {
-    required_error: "Please select a payment method.",
+  phoneNumber: z.string().min(10, {
+    message: "Phone number must be at least 10 characters.",
   }),
 });
 
-export function ReservationForm() {
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
-  });
-  const existingReservations = getExistingReservations();
-
+export function ReservationForm({
+  date,
+  setDate,
+}: {
+  date: DateRange | undefined;
+  setDate: (date: DateRange | undefined) => void;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -128,9 +115,6 @@ export function ReservationForm() {
                         </PopoverTrigger>
                       </Popover>
                     </FormControl>
-                    <FormDescription>
-                      Select an available date for your reservation.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -174,9 +158,6 @@ export function ReservationForm() {
                         </FormItem>
                       </RadioGroup>
                     </FormControl>
-                    <FormDescription>
-                      Choose your preferred time slot for the event.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -205,7 +186,7 @@ export function ReservationForm() {
               name="eventDetails"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Event Details (Optional)</FormLabel>
+                  <FormLabel>Event Details</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter event details"
@@ -223,34 +204,19 @@ export function ReservationForm() {
 
             <FormField
               control={form.control}
-              name="paymentMethod"
+              name="phoneNumber"
               render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>Payment Method</FormLabel>
+                <FormItem>
+                  <FormLabel>Phone Number</FormLabel>
                   <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex space-y-1"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="online" />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          Pay Online
-                        </FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="payLater" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Pay Later</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
+                    <Input
+                      type="number"
+                      placeholder="Enter your mobile number"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
-                    Choose how you'd like to pay for the reservation.
+                    Provide a valid method to contact you.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -258,7 +224,7 @@ export function ReservationForm() {
             />
 
             <Button type="submit" className="w-full">
-              Submit Reservation
+              Request Reservation
             </Button>
           </form>
         </Form>
