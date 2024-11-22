@@ -9,7 +9,6 @@ import {
   TableRow,
   TableCell,
   Card,
-  CardHeader,
   CardBody,
 } from "@nextui-org/react";
 
@@ -17,7 +16,6 @@ interface EnrolledCourse {
   id: string;
   courseCode: string;
   courseName: string;
-  requestState: "Pending" | "Approved" | "Rejected";
   results: string | null;
 }
 
@@ -26,28 +24,24 @@ const enrolledCourses: EnrolledCourse[] = [
     id: "1",
     courseCode: "CS101",
     courseName: "Introduction to Computer Science",
-    requestState: "Approved",
     results: "A",
   },
   {
     id: "2",
     courseCode: "MATH201",
     courseName: "Linear Algebra",
-    requestState: "Pending",
     results: null,
   },
   {
     id: "3",
     courseCode: "BUS301",
     courseName: "Business Management",
-    requestState: "Rejected",
     results: null,
   },
   {
     id: "4",
     courseCode: "ART105",
     courseName: "Digital Art and Design",
-    requestState: "Approved",
     results: "B+",
   },
 ];
@@ -63,7 +57,6 @@ export default function EnrolledCoursesPage() {
               <TableColumn>NUMBER</TableColumn>
               <TableColumn>COURSE CODE</TableColumn>
               <TableColumn>COURSE NAME</TableColumn>
-              <TableColumn>REQUEST STATE</TableColumn>
               <TableColumn>RESULTS</TableColumn>
             </TableHeader>
             <TableBody>
@@ -72,20 +65,6 @@ export default function EnrolledCoursesPage() {
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{course.courseCode}</TableCell>
                   <TableCell>{course.courseName}</TableCell>
-                  <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold
-                      ${
-                        course.requestState === "Approved"
-                          ? "bg-green-100 text-green-800"
-                          : course.requestState === "Pending"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {course.requestState}
-                    </span>
-                  </TableCell>
                   <TableCell>
                     {course.results ? (
                       <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold">
