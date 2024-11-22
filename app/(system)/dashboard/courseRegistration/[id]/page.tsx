@@ -81,7 +81,7 @@ export default function CourseDetailPage() {
                 <InfoItem
                   icon={DollarSign}
                   label="Course Fee"
-                  value={`$${course.fees}`}
+                  value={`Rs. ${course.fees}.00`}
                 />
               </div>
               <Button
@@ -89,7 +89,7 @@ export default function CourseDetailPage() {
                 aria-label="Register for Course"
               >
                 <Calendar className="mr-2 h-4 w-4" />
-                Register for Course
+                Request for Enroll
               </Button>
             </CardContent>
           </Card>
