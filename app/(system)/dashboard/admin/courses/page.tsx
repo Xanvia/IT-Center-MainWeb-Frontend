@@ -34,7 +34,9 @@ export default function Component() {
 
   return (
     <div className="container mx-auto p-6 text-center">
-      <h1 className="text-2xl font-bold mb-10">Course Management</h1>
+      <h1 className="text-3xl text-maroon font-bold mb-10">
+        Course Management
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {courseActions.map((action) => (
           <Link key={action.name} href={action.href}>

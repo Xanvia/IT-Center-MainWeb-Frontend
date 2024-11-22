@@ -13,6 +13,7 @@ import {
   CardBody,
   Button,
 } from "@nextui-org/react";
+import { cn } from "@/lib/utils";
 
 interface CoursePayment {
   id: string;
@@ -65,7 +66,9 @@ export default function CoursePaymentsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold pb-8 text-center">Course Payments</h1>
+      <h1 className="text-3xl text-maroon font-bold pb-8 text-center">
+        Course Payments
+      </h1>
       <Card className="w-full">
         <CardBody>
           <Table aria-label="Course payments table">
@@ -101,9 +104,11 @@ export default function CoursePaymentsPage() {
                       <>
                         <Button
                           size="sm"
-                          color="default"
+                          className={cn(
+                            "mr-2 bg-maroon text-white",
+                            "hover:bg-maroon-600 active:bg-maroon-700"
+                          )}
                           onClick={() => handlePay(course.id)}
-                          className="mr-2"
                         >
                           Pay
                         </Button>

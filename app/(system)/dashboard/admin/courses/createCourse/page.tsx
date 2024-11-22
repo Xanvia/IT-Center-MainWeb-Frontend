@@ -375,7 +375,9 @@ export default function CreateCourse() {
     <div className="container mx-auto py-10 px-4">
       <Card className="max-w-4xl mx-auto">
         <CardBody className="p-6">
-          <h2 className="text-2xl font-bold mb-8">Create a New Course</h2>
+          <h2 className="text-3xl text-maroon font-bold mb-8">
+            Create a New Course
+          </h2>
 
           <div className="mb-6">
             <Progress

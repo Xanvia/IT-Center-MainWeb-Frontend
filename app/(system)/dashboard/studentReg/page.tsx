@@ -89,7 +89,7 @@ export default function StudentRegistrationForm() {
         className="space-y-8 max-w-4xl mx-auto p-4"
       >
         <div className="card bg-base-100 shadow-xl">
-          <h1 className="text-2xl font-bold my-4 text-center">
+          <h1 className="text-3xl text-maroon font-bold my-4 text-center">
             Student Registration
           </h1>
           {/* Personal Details  */}

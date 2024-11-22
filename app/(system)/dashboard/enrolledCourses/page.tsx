@@ -49,7 +49,9 @@ const enrolledCourses: EnrolledCourse[] = [
 export default function EnrolledCoursesPage() {
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold pb-8 text-center">Enrolled Courses</h1>
+      <h1 className="text-3xl font-bold pb-8 text-center text-maroon">
+        Enrolled Courses
+      </h1>
       <Card className="w-full">
         <CardBody>
           <Table aria-label="Enrolled courses table">
