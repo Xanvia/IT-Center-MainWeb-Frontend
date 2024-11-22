@@ -31,6 +31,15 @@ export default function ReservationCalendar() {
               color: "#ff9f1c",
             },
           ]}
+          select={function (info) {
+            console.log(info.startStr);
+          }}
+          // selectAllow={function (selectInfo) {
+          //   return selectInfo.startStr !== "2024-11-26";
+          // }}
+          selectOverlap={function (event) {
+            return event.display !== "background";
+          }}
         />
       </div>
     </div>
