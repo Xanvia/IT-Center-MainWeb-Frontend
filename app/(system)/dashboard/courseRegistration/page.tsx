@@ -4,20 +4,20 @@ import { useState, useMemo, Key } from "react";
 import { Link, Input } from "@nextui-org/react";
 import { Search } from "lucide-react";
 import CourseCard from "./courseCard";
-import { Courses } from "./courseData.";
+import { courses } from "./courseData.";
 
 export default function CourseRegistration() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredCourses = useMemo(() => {
-    return Courses.filter((course: { name: string }) =>
+    return courses.filter((course: { name: string }) =>
       course.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold my-4 mt-2 text-center">
+      <h1 className="text-2xl font-bold my-4 mt-2 text-center text-maroon">
         Course Registration
       </h1>
 
