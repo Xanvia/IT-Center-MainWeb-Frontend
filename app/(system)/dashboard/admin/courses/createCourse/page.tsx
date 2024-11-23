@@ -15,13 +15,13 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import {
-  Calendar,
   Book,
   Users,
   DollarSign,
   Clock,
   Target,
   User,
+  Heading6,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -31,29 +31,22 @@ const formSchema = z.object({
     .string()
     .min(10, "Description must be at least 10 characters."),
   duration: z.string().min(2, "Duration must be at least 2 characters."),
-  registrationDeadline: z.date({
-    required_error: "Registration deadline is required.",
-  }),
   fees: z.number().positive("Fees must be a positive number."),
   audience: z.string().min(2, "Audience must be at least 2 characters."),
-  instructor: z.string().optional(),
+  instructor: z.string().min(1, "Instructor name is required."),
   studentLimit: z
     .number()
     .int()
     .positive("Student limit must be a positive integer."),
-  startingDate: z.date({
-    required_error: "Starting date is required.",
-  }),
-  endingDate: z.date({
-    required_error: "Ending date is required.",
-  }),
+  startingDate: z.string().min(1, "Starting date is required."),
+  endingDate: z.string().min(1, "Ending date is required."),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 const steps = [
   { title: "Basic Info", icon: Book },
-  { title: "Dates", icon: Calendar },
+  { title: "Dates", icon: Clock },
   { title: "Audience", icon: Users },
   { title: "Financials", icon: DollarSign },
   { title: "Finalize", icon: Clock },
@@ -62,7 +55,7 @@ const steps = [
 export default function CreateCourse() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
-  const [images, setImages] = useState<File[]>([]);
+  const [image, setImage] = useState<File | null>(null);
   const {
     control,
     handleSubmit,
@@ -78,12 +71,14 @@ export default function CreateCourse() {
       audience: "",
       instructor: "",
       studentLimit: 0,
+      startingDate: "",
+      endingDate: "",
     },
   });
 
   const onSubmit = async (data: FormData) => {
     try {
-      console.log(data, images);
+      console.log(data, image);
       toast.success("Course created successfully!");
       router.push("/dashboard/admin/courses");
     } catch (error) {
@@ -92,8 +87,8 @@ export default function CreateCourse() {
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setImages(Array.from(event.target.files));
+    if (event.target.files && event.target.files[0]) {
+      setImage(event.target.files[0]);
     }
   };
 
@@ -116,7 +111,7 @@ export default function CreateCourse() {
                   placeholder="Enter an exciting course name"
                   isInvalid={!!errors.courseName}
                   errorMessage={errors.courseName?.message}
-                  startContent={<Book className="text-default-400" />}
+                  startContent={<Book className="text-default-400 w-4 h-4" />}
                 />
               )}
             />
@@ -143,7 +138,7 @@ export default function CreateCourse() {
                   placeholder="How long is your course?"
                   isInvalid={!!errors.duration}
                   errorMessage={errors.duration?.message}
-                  startContent={<Clock className="text-default-400" />}
+                  startContent={<Clock className="text-default-400 w-4 h-4" />}
                 />
               )}
             />
@@ -153,82 +148,30 @@ export default function CreateCourse() {
         return (
           <>
             <Controller
-              name="registrationDeadline"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="date"
-                  label="Registration Deadline"
-                  placeholder="When does registration close?"
-                  value={
-                    field.value instanceof Date
-                      ? field.value.toISOString().split("T")[0]
-                      : ""
-                  }
-                  onChange={(e) => {
-                    const dateValue = e.target.value
-                      ? new Date(e.target.value)
-                      : null;
-                    field.onChange(dateValue);
-                  }}
-                  isInvalid={!!errors.registrationDeadline}
-                  errorMessage={errors.registrationDeadline?.message}
-                  startContent={<Calendar className="text-default-400" />}
-                />
-              )}
-            />
-
-            <Controller
               name="startingDate"
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
-                  type="date"
                   label="Starting Date"
-                  placeholder="When does the course begin?"
-                  value={
-                    field.value instanceof Date
-                      ? field.value.toISOString().split("T")[0]
-                      : ""
-                  }
-                  onChange={(e) => {
-                    const dateValue = e.target.value
-                      ? new Date(e.target.value)
-                      : null;
-                    field.onChange(dateValue);
-                  }}
+                  placeholder="DD-MM-YYYY"
                   isInvalid={!!errors.startingDate}
                   errorMessage={errors.startingDate?.message}
-                  startContent={<Calendar className="text-default-400" />}
+                  startContent={<Clock className="text-default-400 w-4 h-4" />}
                 />
               )}
             />
-
             <Controller
               name="endingDate"
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
-                  type="date"
                   label="Ending Date"
-                  placeholder="When does the course end?"
-                  value={
-                    field.value instanceof Date
-                      ? field.value.toISOString().split("T")[0]
-                      : ""
-                  }
-                  onChange={(e) => {
-                    const dateValue = e.target.value
-                      ? new Date(e.target.value)
-                      : null;
-                    field.onChange(dateValue);
-                  }}
+                  placeholder="DD-MM-YYYY"
                   isInvalid={!!errors.endingDate}
                   errorMessage={errors.endingDate?.message}
-                  startContent={<Calendar className="text-default-400" />}
+                  startContent={<Clock className="text-default-400 w-4 h-4" />}
                 />
               )}
             />
@@ -245,10 +188,9 @@ export default function CreateCourse() {
                   {...field}
                   label="Target Audience"
                   placeholder="Who is this course for?"
-                  value={typeof field.value === "string" ? field.value : ""} // Ensure only string
                   isInvalid={!!errors.audience}
                   errorMessage={errors.audience?.message}
-                  startContent={<Target className="text-default-400" />}
+                  startContent={<Target className="text-default-400 w-4 h-4" />}
                 />
               )}
             />
@@ -261,11 +203,11 @@ export default function CreateCourse() {
                   type="number"
                   label="Student Limit"
                   placeholder="How many students can enroll?"
-                  value={field.value?.toString() || ""}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
                   isInvalid={!!errors.studentLimit}
                   errorMessage={errors.studentLimit?.message}
-                  startContent={<Users className="text-default-400" />}
+                  value={field.value.toString()} // Convert number to string
+                  onChange={(e) => field.onChange(Number(e.target.value))} // Convert string back to number
+                  startContent={<Users className="text-default-400 w-4 h-4" />}
                 />
               )}
             />
@@ -275,10 +217,11 @@ export default function CreateCourse() {
               render={({ field }) => (
                 <Input
                   {...field}
-                  label="Instructor (Optional)"
+                  label="Instructor"
                   placeholder="Who's teaching this course?"
-                  value={typeof field.value === "string" ? field.value : ""} // Ensure only string
-                  startContent={<User className="text-default-400" />}
+                  isInvalid={!!errors.instructor}
+                  errorMessage={errors.instructor?.message}
+                  startContent={<User className="text-default-400 w-4 h-4" />}
                 />
               )}
             />
@@ -295,11 +238,11 @@ export default function CreateCourse() {
                 type="number"
                 label="Course Fees"
                 placeholder="How much does the course cost?"
-                value={field.value?.toString() || ""}
-                onChange={(e) => field.onChange(Number(e.target.value))}
                 isInvalid={!!errors.fees}
                 errorMessage={errors.fees?.message}
-                startContent={<DollarSign className="text-default-400" />}
+                value={field.value.toString()} // Convert number to string
+                onChange={(e) => field.onChange(Number(e.target.value))} // Convert string back to number
+                startContent={<h6 className="text-sm">Rs. </h6>}
               />
             )}
           />
@@ -318,22 +261,9 @@ export default function CreateCourse() {
               <strong>Duration:</strong> {watch("duration")}
             </p>
             <p>
-              <strong>Dates:</strong>{" "}
-              {watch("startingDate")
-                ? new Date(watch("startingDate")).toLocaleDateString()
-                : "N/A"}{" "}
-              -{" "}
-              {watch("endingDate")
-                ? new Date(watch("endingDate")).toLocaleDateString()
-                : "N/A"}
+              <strong>Dates:</strong> {watch("startingDate")} -{" "}
+              {watch("endingDate")}
             </p>
-            <p>
-              <strong>Registration Deadline:</strong>{" "}
-              {watch("registrationDeadline")
-                ? new Date(watch("registrationDeadline")).toLocaleDateString()
-                : "N/A"}
-            </p>
-
             <p>
               <strong>Audience:</strong> {watch("audience")}
             </p>
@@ -341,26 +271,24 @@ export default function CreateCourse() {
               <strong>Student Limit:</strong> {watch("studentLimit")}
             </p>
             <p>
-              <strong>Instructor:</strong>{" "}
-              {watch("instructor") || "Not specified"}
+              <strong>Instructor:</strong> {watch("instructor")}
             </p>
             <p>
-              <strong>Fees:</strong> ${watch("fees")}
+              <strong>Fees:</strong> Rs. {watch("fees")}.00
             </p>
             <div className="form-control w-full">
               <label className="label">
-                <span className="label-text">Course Images</span>
+                <span className="label-text">Course Image</span>
               </label>
               <input
                 type="file"
                 accept="image/*"
-                multiple
                 onChange={handleImageUpload}
                 className="file-input file-input-bordered w-full"
               />
               <label className="label">
                 <span className="label-text-alt">
-                  You can upload multiple images for the course.
+                  Upload an image for the course.
                 </span>
               </label>
             </div>
@@ -378,12 +306,14 @@ export default function CreateCourse() {
           <h2 className="text-3xl text-maroon font-bold mb-8">
             Create a New Course
           </h2>
-
           <div className="mb-6">
             <Progress
               value={(currentStep + 1) * (100 / steps.length)}
               className="max-w-md"
-              color="primary"
+              color="default"
+              classNames={{
+                indicator: "bg-maroon",
+              }}
             />
           </div>
           <div className="flex justify-between mb-6">
@@ -394,8 +324,13 @@ export default function CreateCourse() {
                   color={index === currentStep ? "primary" : "default"}
                   variant={index === currentStep ? "solid" : "bordered"}
                   onPress={() => setCurrentStep(index)}
+                  className={
+                    index === currentStep ? "bg-maroon text-white" : ""
+                  }
                 >
-                  <step.icon />
+                  <step.icon
+                    className={index === currentStep ? "text-white" : ""}
+                  />
                 </Button>
               </Tooltip>
             ))}
@@ -412,11 +347,19 @@ export default function CreateCourse() {
                 Previous
               </Button>
               {currentStep === steps.length - 1 ? (
-                <Button color="primary" type="submit">
+                <Button
+                  color="primary"
+                  type="submit"
+                  className="bg-maroon text-white"
+                >
                   Create Course
                 </Button>
               ) : (
-                <Button color="primary" onPress={nextStep}>
+                <Button
+                  color="primary"
+                  onPress={nextStep}
+                  className="bg-maroon text-white"
+                >
                   Next
                 </Button>
               )}
