@@ -55,10 +55,7 @@ export default function ReservationCalendar({
             setDate({ from: info.start, to: endDate });
           }}
           selectOverlap={function (event) {
-            return (
-              event.backgroundColor !== "#ff9f1c" &&
-              event.groupId !== "available"
-            );
+            return event.backgroundColor !== "#ff9f1c";
           }}
         />
       </div>
@@ -68,7 +65,7 @@ export default function ReservationCalendar({
 function renderEventContent(eventInfo: any) {
   return (
     <>
-      <i className="text-sm">{eventInfo.event.title}</i>
+      <i className="text-sm ">{eventInfo.event.title}</i>
     </>
   );
 }

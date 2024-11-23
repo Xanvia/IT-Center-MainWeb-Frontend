@@ -32,9 +32,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { DateRange } from "react-day-picker";
 
 const formSchema = z.object({
-  date: z.date({
-    required_error: "A reservation date is required.",
-  }),
+  date: z
+    .object({
+      from: z.date(),
+      to: z.date(),
+    })
+    .optional(),
   timeSlot: z.enum(["morning", "evening", "fullDay"], {
     required_error: "Please select a time slot.",
   }),
@@ -134,9 +137,9 @@ export function ReservationForm({
                       >
                         <FormItem className="flex items-center space-x-3 space-y-0">
                           <FormControl>
-                            <RadioGroupItem value="morning" />
+                            <RadioGroupItem disabled value="morning" />
                           </FormControl>
-                          <FormLabel className="font-normal">
+                          <FormLabel className="font-normal ">
                             8 am-12 pm{" "}
                           </FormLabel>
                         </FormItem>
@@ -210,7 +213,7 @@ export function ReservationForm({
                   <FormLabel>Phone Number</FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
+                      type="tel"
                       placeholder="Enter your mobile number"
                       {...field}
                     />

@@ -20,16 +20,6 @@ export default function Reservation() {
         <p className="text-xl mb-6 text-gray-600">
           Find and book the perfect lab or hall for your needs
         </p>
-        <div className="flex justify-center">
-          <Input
-            className="max-w-sm mr-2"
-            placeholder="Search for labs or halls"
-            type="search"
-          />
-          <Button className="bg-yellow-500 text-maroon-900 hover:bg-yellow-600">
-            Search
-          </Button>
-        </div>
       </section>
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[

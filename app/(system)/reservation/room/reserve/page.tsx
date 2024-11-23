@@ -6,8 +6,8 @@ import { DateRange } from "react-day-picker";
 
 export default function ReservationPage() {
   const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: new Date(2022, 0, 20),
+    from: new Date(),
+    to: new Date(),
   });
 
   return (
