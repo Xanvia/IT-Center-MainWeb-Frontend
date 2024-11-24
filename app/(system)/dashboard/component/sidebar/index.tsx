@@ -169,7 +169,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <ul className="mb-6 flex flex-col gap-1.5 font-medium">
               {/* Notification  */}
               <li>
-                <Tab pathname="/notification">
+                <Tab pathname="/dashboard/notification">
                   <div className="flex justify-center w-5">
                     <MdNotifications size={20} />
                   </div>
@@ -178,7 +178,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               {/* Account Settings  */}
               <li>
-                <Tab pathname="/settings">
+                <Tab pathname="/dashboard/settings">
                   <div className="flex justify-center w-5">
                     <MdOutlineSettings size={20} />
                   </div>
@@ -202,7 +202,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <>
                       <div
                         className={`group relative flex items-center gap-2 rounded-md px-4 py-2 duration-300 ease-in-out  ${
-                          pathname === "/admin/reservations"
+                          pathname === "/dashboard/admin/reservations"
                             ? "bg-yellow-400 text-black"
                             : "hover:bg-gray-400 hover:text-black"
                         }`}
@@ -226,7 +226,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <ul className="mb-5 mt-2 flex flex-col gap-2 pl-6">
                           <li>
-                            <Tab pathname="/admin/reservations/requests">
+                            <Tab pathname="/dashboard/admin/reservations/requests">
                               <div className="flex justify-center w-5">
                                 <BsBuildingFillAdd size={18} />
                               </div>
@@ -234,7 +234,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </Tab>
                           </li>
                           <li>
-                            <Tab pathname="/admin/reservations/halls">
+                            <Tab pathname="/dashboard/admin/reservations/halls">
                               <div className="flex justify-center w-5">
                                 <BsBuildingFillGear size={18} />
                               </div>
