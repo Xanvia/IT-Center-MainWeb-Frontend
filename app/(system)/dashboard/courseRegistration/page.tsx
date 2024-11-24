@@ -3,8 +3,8 @@
 import { useState, useMemo, Key } from "react";
 import { Link, Input } from "@nextui-org/react";
 import { Search } from "lucide-react";
-import CourseCard from "./courseCard";
 import { courses } from "./courseData.";
+import CourseCard from "./courseCard";
 
 export default function CourseRegistration() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -50,6 +50,7 @@ export default function CourseRegistration() {
                     image={course.image}
                     code={course.code}
                     name={course.name}
+                    id={""}
                   />
                 </div>
               </Link>
