@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { MapPin, Nfc, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,10 +11,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ReservationModal from "./reservation-model";
+import Image from "next/image";
+import Link from "next/link";
 
 interface Reservation {
   id: string;
   name: string;
+  image: string[];
   description: string;
   images: string[];
   seatLimit: number;
@@ -30,6 +33,7 @@ interface Reservation {
 const dummyReservations: Reservation[] = [
   {
     id: "1",
+    image: ["/common/labReservation.jpg"],
     name: "Conference Room A",
     description: "Large conference room with modern amenities",
     images: ["/placeholder.svg?height=100&width=100"],
@@ -45,6 +49,7 @@ const dummyReservations: Reservation[] = [
   {
     id: "2",
     name: "Study Room B",
+    image: ["/common/labReservation.jpg"],
     description: "Quiet study room for small groups",
     images: ["/placeholder.svg?height=100&width=100"],
     seatLimit: 6,
@@ -94,39 +99,89 @@ export default function AdminReservations() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {reservations.map((reservation) => (
-          <Card key={reservation.id}>
+          // <Card key={reservation.id}>
+          //   <CardHeader>
+          //     <CardTitle>{reservation.name}</CardTitle>
+          //   </CardHeader>
+          //   <CardContent>
+          //     <Image
+          //       src={reservation.images[0]}
+          //       alt={`Image of ${reservation.name}`}
+          //       width={300}
+          //       height={300}
+          //     />
+          //     <p className="text-sm text-gray-600 mb-2">
+          //       {reservation.description}
+          //     </p>
+          //     <p className="text-sm">
+          //       <strong>Location:</strong> {reservation.location}
+          //     </p>
+          //     <p className="text-sm">
+          //       <strong>Seats:</strong> {reservation.seatLimit}
+          //     </p>
+          //     <p className="text-sm">
+          //       <strong>Fee:</strong> ${reservation.feePerHour}/hour
+          //     </p>
+          //   </CardContent>
+          //   <CardFooter className="flex justify-end space-x-2">
+          //     <Button
+          //       variant="outline"
+          //       onClick={() => {
+          //         setEditingReservation(reservation);
+          //         setIsModalOpen(true);
+          //       }}
+          //     >
+          //       Edit
+          //     </Button>
+          //     <Button
+          //       variant="destructive"
+          //       onClick={() => handleDeleteReservation(reservation.id)}
+          //     >
+          //       Delete
+          //     </Button>
+          //   </CardFooter>
+          // </Card>
+          <Card key={reservation.id} className="overflow-hidden">
+            <img
+              alt={`Image of ${reservation.name}`}
+              className="w-full h-48 object-cover"
+              height="200"
+              src={reservation.image[0]}
+              style={{
+                aspectRatio: "300/200",
+                objectFit: "cover",
+              }}
+              width="300"
+            />
             <CardHeader>
               <CardTitle>{reservation.name}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-600 mb-2">
-                {reservation.description}
-              </p>
-              <p className="text-sm">
-                <strong>Location:</strong> {reservation.location}
-              </p>
-              <p className="text-sm">
-                <strong>Seats:</strong> {reservation.seatLimit}
-              </p>
-              <p className="text-sm">
-                <strong>Fee:</strong> ${reservation.feePerHour}/hour
-              </p>
+              <div className="flex items-center space-x-2 text-gray-600">
+                <Users className="h-5 w-5" />
+                <span>Capacity: {reservation.seatLimit}</span>
+              </div>
+              <div className="flex items-center space-x-2 text-gray-600 mt-2">
+                <MapPin className="h-5 w-5" />
+                <span>Location:</span>
+              </div>
+              <div className="flex items-center space-x-2 text-gray-600 mt-2">
+                <Nfc className="h-5 w-5" />
+                <span>Charge /h: {}</span>
+              </div>
             </CardContent>
-            <CardFooter className="flex justify-end space-x-2">
+            <CardFooter>
               <Button
-                variant="outline"
-                onClick={() => {
-                  setEditingReservation(reservation);
-                  setIsModalOpen(true);
-                }}
+                asChild
+                className="w-full bg-maroon hover:text-yellow-500 text-white"
               >
-                Edit
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => handleDeleteReservation(reservation.id)}
-              >
-                Delete
+                <Link
+                  href={`/room/${reservation.name
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`}
+                >
+                  View Details
+                </Link>
               </Button>
             </CardFooter>
           </Card>
