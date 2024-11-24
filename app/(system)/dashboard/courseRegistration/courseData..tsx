@@ -15,7 +15,7 @@ export interface Course {
 
 export const courses: Course[] = [
   {
-    id: "cs101",
+    id: "csc1010",
     code: "CSC1010",
     name: "Introduction to Computer Science",
     description:
@@ -30,7 +30,7 @@ export const courses: Course[] = [
     studentLimit: 30,
   },
   {
-    id: "math201",
+    id: "mat2012",
     code: "MAT2012",
     name: "Advanced Calculus",
     description:
@@ -45,7 +45,7 @@ export const courses: Course[] = [
     studentLimit: 25,
   },
   {
-    id: "bio301",
+    id: "bio3013",
     code: "BIO3013",
     name: "Introduction to Biology",
     description:
@@ -60,7 +60,7 @@ export const courses: Course[] = [
     studentLimit: 20,
   },
   {
-    id: "zoo301",
+    id: "zoo3011",
     code: "ZOO3011",
     name: "Introduction to Anatomy",
     description:

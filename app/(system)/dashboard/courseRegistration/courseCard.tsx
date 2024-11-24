@@ -6,6 +6,7 @@ interface CourseCardProps {
   image: string;
   code: string;
   name: string;
+  id: string;
 }
 
 export default function CourseCard({ image, code, name }: CourseCardProps) {
