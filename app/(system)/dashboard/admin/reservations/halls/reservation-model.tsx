@@ -7,22 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-
-interface Reservation {
-  id: string;
-  name: string;
-  description: string;
-  images: string[];
-  seatLimit: number;
-  computers: number;
-  availableSoftware: string;
-  equipment: string;
-  hasAC: boolean;
-  bestCase: string;
-  location: string;
-  feePerHour: number;
-}
-
+import { Reservation } from "@/utils/types";
 interface ReservationModalProps {
   reservation?: Reservation | null;
   onClose: () => void;
@@ -43,7 +28,7 @@ export default function ReservationModal({
     computers: 0,
     availableSoftware: "",
     equipment: "",
-    hasAC: false,
+    hasAC: true,
     bestCase: "",
     location: "",
     feePerHour: 0,
@@ -54,6 +39,41 @@ export default function ReservationModal({
       setFormData(reservation);
     }
   }, [reservation]);
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (files && files.length > 0) {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("reservation", files[i]);
+      }
+      try {
+        const result = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/reservations/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        if (result.ok) {
+          const data = await result.json();
+          console.log(data);
+          setFormData((prev) => ({
+            ...prev,
+            images: [
+              ...prev.images,
+              ...data.files.map(
+                (file: { path: string }) =>
+                  `${process.env.NEXT_PUBLIC_BACKEND_URL}/${file.path}`
+              ),
+            ],
+          }));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -69,10 +89,11 @@ export default function ReservationModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formData);
+    console.log(formData);
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center overflow-y-auto">
+    <div className="fixed top-0 bottom-0 right-0 left-20 bg-black bg-opacity-50 flex justify-center items-center overflow-y-auto z-10">
       <div className="bg-white p-6 rounded-lg w-full max-w-4xl m-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">
@@ -85,6 +106,17 @@ export default function ReservationModal({
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
+              <div>
+                <Label htmlFor="image">Images</Label>
+                <Input
+                  id="image"
+                  name="image"
+                  type="file"
+                  onChange={handleImageChange}
+                  multiple
+                  required
+                />
+              </div>
               <div>
                 <Label htmlFor="name">Name</Label>
                 <Input

@@ -11,29 +11,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ReservationModal from "./reservation-model";
-import Image from "next/image";
 import Link from "next/link";
-
-interface Reservation {
-  id: string;
-  name: string;
-  image: string[];
-  description: string;
-  images: string[];
-  seatLimit: number;
-  computers: number;
-  availableSoftware: string;
-  equipment: string;
-  hasAC: boolean;
-  bestCase: string;
-  location: string;
-  feePerHour: number;
-}
+import { Reservation } from "@/utils/types";
 
 const dummyReservations: Reservation[] = [
   {
     id: "1",
-    image: ["/common/labReservation.jpg"],
     name: "Conference Room A",
     description: "Large conference room with modern amenities",
     images: ["/placeholder.svg?height=100&width=100"],
@@ -49,7 +32,6 @@ const dummyReservations: Reservation[] = [
   {
     id: "2",
     name: "Study Room B",
-    image: ["/common/labReservation.jpg"],
     description: "Quiet study room for small groups",
     images: ["/placeholder.svg?height=100&width=100"],
     seatLimit: 6,
@@ -146,7 +128,9 @@ export default function AdminReservations() {
               alt={`Image of ${reservation.name}`}
               className="w-full h-48 object-cover"
               height="200"
-              src={reservation.image[0]}
+              src={
+                reservation.images[0] || "/placeholder.svg?height=200&width=300"
+              }
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
