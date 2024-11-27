@@ -21,9 +21,9 @@ import {
 import CourseCard from "../(system)/dashboard/courseRegistration/courseCard";
 import {
   Course,
-  Courses,
+  courses,
 } from "../(system)/dashboard/courseRegistration/courseData.";
-import { useState } from "react";
+import { Key, useState } from "react";
 
 export default function Home() {
   return (
@@ -114,20 +114,30 @@ export default function Home() {
          */}
 
         <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 sm:space-x-5 my-14 justify-center md:gap-10 sm:gap-6">
-          {Courses.slice(0, 3).map((course) => (
-            <Link
-              href={`/dashboard/courseRegistration/${course.id}`}
-              key={course.id}
-            >
-              <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                <CourseCard
-                  image={course.image}
-                  code={course.code}
-                  name={course.name}
-                />
-              </div>
-            </Link>
-          ))}
+          {courses
+            .slice(0, 3)
+            .map(
+              (course: {
+                id: Key | null | undefined;
+                image: string;
+                code: string;
+                name: string;
+              }) => (
+                <Link
+                  href={`/dashboard/courseRegistration/${course.id}`}
+                  key={course.id}
+                >
+                  <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                    <CourseCard
+                      image={course.image}
+                      code={course.code}
+                      name={course.name}
+                      id={""}
+                    />
+                  </div>
+                </Link>
+              )
+            )}
         </div>
         <button>
           <div className="flex items-center justify-center group">
