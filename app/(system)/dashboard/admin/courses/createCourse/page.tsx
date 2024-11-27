@@ -40,6 +40,7 @@ const formSchema = z.object({
     .positive("Student limit must be a positive integer."),
   startingDate: z.string().min(1, "Starting date is required."),
   endingDate: z.string().min(1, "Ending date is required."),
+  registrationDeadline: z.string().min(1, "Registration deadline is required."),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -73,15 +74,39 @@ export default function CreateCourse() {
       studentLimit: 0,
       startingDate: "",
       endingDate: "",
+      registrationDeadline: "",
     },
   });
 
   const onSubmit = async (data: FormData) => {
     try {
-      console.log(data, image);
-      toast.success("Course created successfully!");
-      router.push("/dashboard/admin/courses");
+      // Convert fees to a string with two decimal places
+      const payload = {
+        ...data,
+        fees: data.fees.toFixed(2), // Ensure it's a string
+      };
+
+      console.log(payload, image);
+
+      const response = await fetch("http://localhost:3001/courses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        toast.success("Course created successfully!");
+        router.push("/dashboard/admin/courses");
+      } else {
+        const errorData = await response.json();
+        toast.error(
+          errorData.message || "Failed to create course. Please try again."
+        );
+      }
     } catch (error) {
+      console.error(error);
       toast.error("Failed to create course. Please try again.");
     }
   };
@@ -147,6 +172,20 @@ export default function CreateCourse() {
       case 1:
         return (
           <>
+            <Controller
+              name="registrationDeadline"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label="Registration Deadline"
+                  placeholder="DD-MM-YYYY"
+                  isInvalid={!!errors.startingDate}
+                  errorMessage={errors.startingDate?.message}
+                  startContent={<Clock className="text-default-400 w-4 h-4" />}
+                />
+              )}
+            />
             <Controller
               name="startingDate"
               control={control}
