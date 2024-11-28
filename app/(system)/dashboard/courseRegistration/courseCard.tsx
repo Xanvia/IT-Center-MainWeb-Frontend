@@ -3,13 +3,17 @@
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 
 interface CourseCardProps {
-  image: string;
-  code: string;
-  name: string;
-  id: string;
+  courseImage: string;
+  courseCode: string;
+  courseName: string;
+  courseID: string;
 }
 
-export default function CourseCard({ image, code, name }: CourseCardProps) {
+export default function CourseCard({
+  courseImage: image,
+  courseCode: code,
+  courseName: name,
+}: CourseCardProps) {
   return (
     <Card className="rounded-lg">
       <CardHeader className="p-2">
