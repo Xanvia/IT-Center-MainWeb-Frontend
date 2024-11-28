@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MapPin, Nfc, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +13,8 @@ import {
 import ReservationModal from "./reservation-model";
 import Link from "next/link";
 import { Reservation } from "@/utils/types";
+import { Toaster } from "@/components/ui/toaster";
+import { toast } from "@/hooks/use-toast";
 
 const dummyReservations: Reservation[] = [
   {
@@ -20,28 +22,14 @@ const dummyReservations: Reservation[] = [
     name: "Conference Room A",
     description: "Large conference room with modern amenities",
     images: ["/placeholder.svg?height=100&width=100"],
-    seatLimit: 20,
+    seatLimit: 10,
     computers: 5,
     availableSoftware: "Microsoft Office, Adobe Creative Suite",
     equipment: "Projector, Whiteboard",
-    hasAC: true,
+    isAC: true,
     bestCase: "Meetings, Presentations",
     location: "Building 1, Floor 2",
-    feePerHour: 50,
-  },
-  {
-    id: "2",
-    name: "Study Room B",
-    description: "Quiet study room for small groups",
-    images: ["/placeholder.svg?height=100&width=100"],
-    seatLimit: 6,
-    computers: 2,
-    availableSoftware: "Microsoft Office",
-    equipment: "Whiteboard",
-    hasAC: true,
-    bestCase: "Group Study, Tutoring",
-    location: "Library, Floor 1",
-    feePerHour: 20,
+    feeRatePerHour: 50,
   },
 ];
 
@@ -70,6 +58,26 @@ export default function AdminReservations() {
   const handleDeleteReservation = (id: string) => {
     setReservations(reservations.filter((r) => r.id !== id));
   };
+
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        const result = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/reservations`
+        );
+        if (result.ok) {
+          const data = await result.json();
+          setReservations(data);
+        } else {
+          toast({ description: "Failed to fetch reservations" });
+        }
+      } catch (error) {
+        toast({ description: "Failed to fetch reservations" });
+      }
+    };
+
+    fetchReservations();
+  }, []);
 
   return (
     <div className="container mx-auto p-4">
@@ -171,6 +179,7 @@ export default function AdminReservations() {
           </Card>
         ))}
       </div>
+      <Toaster />
       {isModalOpen && (
         <ReservationModal
           reservation={editingReservation}

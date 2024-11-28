@@ -13,8 +13,8 @@ export interface Reservation {
   computers: number;
   availableSoftware: string;
   equipment: string;
-  hasAC: boolean;
+  isAC: boolean;
   bestCase: string;
   location: string;
-  feePerHour: number;
+  feeRatePerHour: number;
 }

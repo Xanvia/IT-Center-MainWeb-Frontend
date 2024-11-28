@@ -1,6 +1,5 @@
 "use client";
 
-import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
 
 export default function SystemLayout({
@@ -10,10 +9,7 @@ export default function SystemLayout({
 }>) {
   return (
     <main>
-      <SessionProvider>
-        {children}
-        <Toaster />
-      </SessionProvider>
+      <SessionProvider>{children}</SessionProvider>
     </main>
   );
 }

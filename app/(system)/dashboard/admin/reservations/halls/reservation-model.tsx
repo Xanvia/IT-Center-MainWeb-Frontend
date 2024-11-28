@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Reservation } from "@/utils/types";
 import { toast } from "@/hooks/use-toast";
+import Axios from "@/config/axios";
 interface ReservationModalProps {
   reservation?: Reservation | null;
   onClose: () => void;
@@ -29,10 +30,10 @@ export default function ReservationModal({
     computers: 0,
     availableSoftware: "",
     equipment: "",
-    hasAC: true,
+    isAC: true,
     bestCase: "",
     location: "",
-    feePerHour: 0,
+    feeRatePerHour: 0,
   });
 
   useEffect(() => {
@@ -89,25 +90,23 @@ export default function ReservationModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
-    console.log(formData);
     const url = reservation ? `reservations/${reservation.id}` : "reservations";
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`, {
-        method: reservation ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (res.ok) {
-        toast({
-          title: "Reservation saved.",
-          description: "Your reservation has been saved successfully",
-        });
-        onClose();
+      if (reservation) {
+        const res = await Axios.patch(url, formData);
+        console.log(res.data);
       }
-    } catch (error) {
+      const res = await Axios.post(url, formData);
+      console.log(res.data);
+
+      toast({
+        title: "Reservation saved.",
+        description: "Your reservation has been saved successfully",
+      });
+      onClose();
+      onSave(formData);
+    } catch (error: any) {
+      console.log(error.response.data);
       toast({
         title: "Something went wrong!",
         description: "Your reservation has not been saved successfully",
@@ -227,7 +226,7 @@ export default function ReservationModal({
                   id="feePerHour"
                   name="feePerHour"
                   type="number"
-                  value={formData.feePerHour}
+                  value={formData.feeRatePerHour}
                   onChange={handleChange}
                   required
                 />
@@ -235,7 +234,7 @@ export default function ReservationModal({
               <div className="flex items-center space-x-2">
                 <Switch
                   id="hasAC"
-                  checked={formData.hasAC}
+                  checked={formData.isAC}
                   onCheckedChange={handleSwitchChange}
                 />
                 <Label htmlFor="hasAC">Has AC</Label>
