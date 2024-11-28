@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Reservation } from "@/utils/types";
+import { toast } from "@/hooks/use-toast";
 interface ReservationModalProps {
   reservation?: Reservation | null;
   onClose: () => void;
@@ -86,10 +87,32 @@ export default function ReservationModal({
     setFormData((prev) => ({ ...prev, hasAC: checked }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formData);
     console.log(formData);
+    const url = reservation ? `reservations/${reservation.id}` : "reservations";
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`, {
+        method: reservation ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        toast({
+          title: "Reservation saved.",
+          description: "Your reservation has been saved successfully",
+        });
+        onClose();
+      }
+    } catch (error) {
+      toast({
+        title: "Something went wrong!",
+        description: "Your reservation has not been saved successfully",
+      });
+    }
   };
 
   return (
@@ -166,7 +189,6 @@ export default function ReservationModal({
                   type="number"
                   value={formData.computers}
                   onChange={handleChange}
-                  required
                 />
               </div>
             </div>
@@ -187,6 +209,7 @@ export default function ReservationModal({
                   name="equipment"
                   value={formData.equipment}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div>
