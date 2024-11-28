@@ -11,135 +11,187 @@ import {
   Button,
   Card,
   CardBody,
-  Progress,
-  Tooltip,
+  Calendar,
 } from "@nextui-org/react";
-import {
-  Book,
-  Users,
-  DollarSign,
-  Clock,
-  Target,
-  User,
-  Heading6,
-} from "lucide-react";
+import { Book, Users, DollarSign, Clock, Target } from "lucide-react";
+//import { DatePicker } from "@/components/ui/date-picker";
 import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 const formSchema = z.object({
   courseName: z.string().min(2, "Course name must be at least 2 characters."),
+  courseCode: z.string().min(2, "Course code must be at least 2 characters."),
   description: z
     .string()
     .min(10, "Description must be at least 10 characters."),
-  duration: z.string().min(2, "Duration must be at least 2 characters."),
-  fees: z.number().positive("Fees must be a positive number."),
-  audience: z.string().min(2, "Audience must be at least 2 characters."),
-  instructor: z.string().min(1, "Instructor name is required."),
+  duration: z.string().min(1, "Duration is required."),
+  registrationDeadline: z.date({
+    required_error: "Registration deadline is required",
+  }),
+  startingDate: z.date({
+    required_error: "Starting date is required",
+  }),
+  endingDate: z.date({
+    required_error: "Ending date is required",
+  }),
   studentLimit: z
     .number()
     .int()
     .positive("Student limit must be a positive integer."),
-  startingDate: z.string().min(1, "Starting date is required."),
-  endingDate: z.string().min(1, "Ending date is required."),
-  registrationDeadline: z.string().min(1, "Registration deadline is required."),
+  fees: z.number().positive("Fees must be a positive number."),
+  instructor: z.string().min(1, "Instructor name is required."),
+  audience: z.string().min(1, "Target audience is required."),
+  images: z.array(z.string()).optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
-const steps = [
-  { title: "Basic Info", icon: Book },
-  { title: "Dates", icon: Clock },
-  { title: "Audience", icon: Users },
-  { title: "Financials", icon: DollarSign },
-  { title: "Finalize", icon: Clock },
-];
-
 export default function CreateCourse() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(0);
-  const [image, setImage] = useState<File | null>(null);
+  const [images, setImages] = useState<File[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     control,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       courseName: "",
+      courseCode: "",
       description: "",
       duration: "",
-      fees: 0,
-      audience: "",
-      instructor: "",
+      registrationDeadline: new Date(),
+      startingDate: new Date(),
+      endingDate: new Date(),
       studentLimit: 0,
-      startingDate: "",
-      endingDate: "",
-      registrationDeadline: "",
+      fees: 0,
+      instructor: "",
+      audience: "",
+      images: [],
     },
   });
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setImages(Array.from(event.target.files));
+    }
+  };
+
   const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+
     try {
-      // Convert fees to a string with two decimal places
-      const payload = {
+      // Handle image uploads first
+      const imageUrls: string[] = [];
+
+      if (images.length > 0) {
+        for (const image of images) {
+          const formData = new FormData();
+          formData.append("file", image);
+
+          // Replace with your image upload endpoint
+          const uploadResponse = await fetch("http://localhost:3001/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error("Failed to upload images");
+          }
+
+          const { url } = await uploadResponse.json();
+          imageUrls.push(url);
+        }
+      }
+
+      // Prepare the course data
+      const courseData = {
         ...data,
-        fees: data.fees.toFixed(2), // Ensure it's a string
+        images: imageUrls,
+        registrationDeadline: data.registrationDeadline
+          .toISOString()
+          .split("T")[0],
+        startingDate: data.startingDate.toISOString(),
+        endingDate: data.endingDate.toISOString(),
       };
 
-      console.log(payload, image);
-
+      // Submit the course
       const response = await fetch("http://localhost:3001/courses", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(courseData),
       });
 
-      if (response.ok) {
-        toast.success("Course created successfully!");
-        router.push("/dashboard/admin/courses");
-      } else {
+      if (!response.ok) {
         const errorData = await response.json();
-        toast.error(
-          errorData.message || "Failed to create course. Please try again."
-        );
+        throw new Error(errorData.message || "Failed to create course");
       }
+
+      toast.success("Course created successfully!", {
+        duration: 5000,
+        style: {
+          background: "#22c55e",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "16px",
+        },
+      });
+      setTimeout(() => {
+        router.push("/dashboard/admin/courses");
+      }, 5000);
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to create course. Please try again.");
+      console.error("Error creating course:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create course"
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setImage(event.target.files[0]);
-    }
-  };
-
-  const nextStep = () =>
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
-  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
-
-  const renderStep = () => {
-    switch (currentStep) {
-      case 0:
-        return (
-          <>
-            <Controller
-              name="courseName"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label="Course Name"
-                  placeholder="Enter an exciting course name"
-                  isInvalid={!!errors.courseName}
-                  errorMessage={errors.courseName?.message}
-                  startContent={<Book className="text-default-400 w-4 h-4" />}
-                />
-              )}
-            />
+  return (
+    <div className="container mx-auto py-10 px-4">
+      <Toaster position="top-center" />
+      <Card className="max-w-4xl mx-auto">
+        <CardBody className="p-6">
+          <h2 className="text-3xl text-maroon font-bold mb-8">
+            Create a New Course
+          </h2>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Controller
+                name="courseName"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label="Course Name"
+                    placeholder="Enter course name"
+                    isInvalid={!!errors.courseName}
+                    errorMessage={errors.courseName?.message}
+                    startContent={<Book className="text-default-400 w-4 h-4" />}
+                  />
+                )}
+              />
+              <Controller
+                name="courseCode"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label="Course Code"
+                    placeholder="Enter course code"
+                    isInvalid={!!errors.courseCode}
+                    errorMessage={errors.courseCode?.message}
+                    startContent={<Book className="text-default-400 w-4 h-4" />}
+                  />
+                )}
+              />
+            </div>
             <Controller
               name="description"
               control={control}
@@ -147,7 +199,7 @@ export default function CreateCourse() {
                 <Textarea
                   {...field}
                   label="Description"
-                  placeholder="Describe your amazing course"
+                  placeholder="Describe your course"
                   isInvalid={!!errors.description}
                   errorMessage={errors.description?.message}
                 />
@@ -160,249 +212,170 @@ export default function CreateCourse() {
                 <Input
                   {...field}
                   label="Duration"
-                  placeholder="How long is your course?"
+                  placeholder="Enter course duration"
                   isInvalid={!!errors.duration}
                   errorMessage={errors.duration?.message}
-                  startContent={<Clock className="text-default-400 w-4 h-4" />}
+                  startContent={
+                    <Calendar className="text-default-400 w-4 h-4" />
+                  }
                 />
               )}
             />
-          </>
-        );
-      case 1:
-        return (
-          <>
-            <Controller
-              name="registrationDeadline"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label="Registration Deadline"
-                  placeholder="DD-MM-YYYY"
-                  isInvalid={!!errors.startingDate}
-                  errorMessage={errors.startingDate?.message}
-                  startContent={<Clock className="text-default-400 w-4 h-4" />}
-                />
-              )}
-            />
-            <Controller
-              name="startingDate"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label="Starting Date"
-                  placeholder="DD-MM-YYYY"
-                  isInvalid={!!errors.startingDate}
-                  errorMessage={errors.startingDate?.message}
-                  startContent={<Clock className="text-default-400 w-4 h-4" />}
-                />
-              )}
-            />
-            <Controller
-              name="endingDate"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label="Ending Date"
-                  placeholder="DD-MM-YYYY"
-                  isInvalid={!!errors.endingDate}
-                  errorMessage={errors.endingDate?.message}
-                  startContent={<Clock className="text-default-400 w-4 h-4" />}
-                />
-              )}
-            />
-          </>
-        );
-      case 2:
-        return (
-          <>
-            <Controller
-              name="audience"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label="Target Audience"
-                  placeholder="Who is this course for?"
-                  isInvalid={!!errors.audience}
-                  errorMessage={errors.audience?.message}
-                  startContent={<Target className="text-default-400 w-4 h-4" />}
-                />
-              )}
-            />
-            <Controller
-              name="studentLimit"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="number"
-                  label="Student Limit"
-                  placeholder="How many students can enroll?"
-                  isInvalid={!!errors.studentLimit}
-                  errorMessage={errors.studentLimit?.message}
-                  value={field.value.toString()} // Convert number to string
-                  onChange={(e) => field.onChange(Number(e.target.value))} // Convert string back to number
-                  startContent={<Users className="text-default-400 w-4 h-4" />}
-                />
-              )}
-            />
-            <Controller
-              name="instructor"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label="Instructor"
-                  placeholder="Who's teaching this course?"
-                  isInvalid={!!errors.instructor}
-                  errorMessage={errors.instructor?.message}
-                  startContent={<User className="text-default-400 w-4 h-4" />}
-                />
-              )}
-            />
-          </>
-        );
-      case 3:
-        return (
-          <Controller
-            name="fees"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                type="number"
-                label="Course Fees"
-                placeholder="How much does the course cost?"
-                isInvalid={!!errors.fees}
-                errorMessage={errors.fees?.message}
-                value={field.value.toString()} // Convert number to string
-                onChange={(e) => field.onChange(Number(e.target.value))} // Convert string back to number
-                startContent={<h6 className="text-sm">Rs. </h6>}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Controller
+                name="registrationDeadline"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="date"
+                    label="Registration Deadline"
+                    value={field.value.toISOString().split("T")[0]}
+                    onChange={(e) => field.onChange(new Date(e.target.value))}
+                    isInvalid={!!errors.registrationDeadline}
+                    errorMessage={errors.registrationDeadline?.message}
+                    startContent={
+                      <Clock className="text-default-400 w-4 h-4" />
+                    }
+                  />
+                )}
               />
-            )}
-          />
-        );
-      case 4:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Course Summary</h3>
-            <p>
-              <strong>Name:</strong> {watch("courseName")}
-            </p>
-            <p>
-              <strong>Description:</strong> {watch("description")}
-            </p>
-            <p>
-              <strong>Duration:</strong> {watch("duration")}
-            </p>
-            <p>
-              <strong>Dates:</strong> {watch("startingDate")} -{" "}
-              {watch("endingDate")}
-            </p>
-            <p>
-              <strong>Audience:</strong> {watch("audience")}
-            </p>
-            <p>
-              <strong>Student Limit:</strong> {watch("studentLimit")}
-            </p>
-            <p>
-              <strong>Instructor:</strong> {watch("instructor")}
-            </p>
-            <p>
-              <strong>Fees:</strong> Rs. {watch("fees")}.00
-            </p>
+              <Controller
+                name="startingDate"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="date"
+                    label="Starting Date"
+                    value={field.value.toISOString().split("T")[0]}
+                    onChange={(e) => field.onChange(new Date(e.target.value))}
+                    isInvalid={!!errors.startingDate}
+                    errorMessage={errors.startingDate?.message}
+                    startContent={
+                      <Clock className="text-default-400 w-4 h-4" />
+                    }
+                  />
+                )}
+              />
+              <Controller
+                name="endingDate"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="date"
+                    label="Ending Date"
+                    value={field.value.toISOString().split("T")[0]}
+                    onChange={(e) => field.onChange(new Date(e.target.value))}
+                    isInvalid={!!errors.endingDate}
+                    errorMessage={errors.endingDate?.message}
+                    startContent={
+                      <Clock className="text-default-400 w-4 h-4" />
+                    }
+                  />
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Controller
+                name="studentLimit"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="number"
+                    label="Student Limit"
+                    placeholder="Enter student limit"
+                    isInvalid={!!errors.studentLimit}
+                    errorMessage={errors.studentLimit?.message}
+                    value={field.value.toString()}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    startContent={
+                      <Users className="text-default-400 w-4 h-4" />
+                    }
+                  />
+                )}
+              />
+              <Controller
+                name="fees"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="number"
+                    label="Course Fees"
+                    placeholder="Enter course fees"
+                    isInvalid={!!errors.fees}
+                    errorMessage={errors.fees?.message}
+                    value={field.value.toString()}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    startContent={
+                      <DollarSign className="text-default-400 w-4 h-4" />
+                    }
+                  />
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Controller
+                name="instructor"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label="Instructor"
+                    placeholder="Enter instructor name"
+                    isInvalid={!!errors.instructor}
+                    errorMessage={errors.instructor?.message}
+                    startContent={
+                      <Users className="text-default-400 w-4 h-4" />
+                    }
+                  />
+                )}
+              />
+              <Controller
+                name="audience"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label="Target Audience"
+                    placeholder="Enter target audience"
+                    isInvalid={!!errors.audience}
+                    errorMessage={errors.audience?.message}
+                    startContent={
+                      <Target className="text-default-400 w-4 h-4" />
+                    }
+                  />
+                )}
+              />
+            </div>
             <div className="form-control w-full">
               <label className="label">
-                <span className="label-text">Course Image</span>
+                <span className="label-text">Course Images</span>
               </label>
               <input
                 type="file"
                 accept="image/*"
+                multiple
                 onChange={handleImageUpload}
                 className="file-input file-input-bordered w-full"
               />
               <label className="label">
                 <span className="label-text-alt">
-                  Upload an image for the course.
+                  Upload images for the course
                 </span>
               </label>
             </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="container mx-auto py-10 px-4">
-      <Card className="max-w-4xl mx-auto">
-        <CardBody className="p-6">
-          <h2 className="text-3xl text-maroon font-bold mb-8">
-            Create a New Course
-          </h2>
-          <div className="mb-6">
-            <Progress
-              value={(currentStep + 1) * (100 / steps.length)}
-              className="max-w-md"
-              color="default"
-              classNames={{
-                indicator: "bg-maroon",
-              }}
-            />
-          </div>
-          <div className="flex justify-between mb-6">
-            {steps.map((step, index) => (
-              <Tooltip key={step.title} content={step.title}>
-                <Button
-                  isIconOnly
-                  color={index === currentStep ? "primary" : "default"}
-                  variant={index === currentStep ? "solid" : "bordered"}
-                  onPress={() => setCurrentStep(index)}
-                  className={
-                    index === currentStep ? "bg-maroon text-white" : ""
-                  }
-                >
-                  <step.icon
-                    className={index === currentStep ? "text-white" : ""}
-                  />
-                </Button>
-              </Tooltip>
-            ))}
-          </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {renderStep()}
-            <div className="flex justify-between mt-6">
-              <Button
-                color="default"
-                variant="flat"
-                onPress={prevStep}
-                isDisabled={currentStep === 0}
-              >
-                Previous
-              </Button>
-              {currentStep === steps.length - 1 ? (
-                <Button
-                  color="primary"
-                  type="submit"
-                  className="bg-maroon text-white"
-                >
-                  Create Course
-                </Button>
-              ) : (
-                <Button
-                  color="primary"
-                  onPress={nextStep}
-                  className="bg-maroon text-white"
-                >
-                  Next
-                </Button>
-              )}
-            </div>
+            <Button
+              color="primary"
+              type="submit"
+              className="bg-maroon text-white w-full"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Creating Course..." : "Create Course"}
+            </Button>
           </form>
         </CardBody>
       </Card>
