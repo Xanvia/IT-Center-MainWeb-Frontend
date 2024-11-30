@@ -47,10 +47,10 @@ export default function CourseRegistration() {
               >
                 <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
                   <CourseCard
-                    image={course.image}
-                    code={course.code}
-                    name={course.name}
-                    id={""}
+                    courseImage={course.image}
+                    courseCode={course.code}
+                    courseName={course.name}
+                    courseID={""}
                   />
                 </div>
               </Link>

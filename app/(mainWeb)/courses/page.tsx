@@ -4,20 +4,11 @@ import { useState, useMemo } from "react";
 import { Tabs, Tab, Link, Input } from "@nextui-org/react";
 import { Search } from "lucide-react";
 import CourseCard from "@/app/(system)/dashboard/courseRegistration/courseCard";
-import {
-  Course,
-  externalCourses,
-  undergraduateCourses,
-} from "@/app/(system)/dashboard/courseRegistration/courseData.";
+import { courses } from "@/app/(system)/dashboard/courseRegistration/courseData.";
 
 export default function CourseRegistration() {
   const [selectedCategory, setSelectedCategory] = useState("undergraduate");
   const [searchQuery, setSearchQuery] = useState("");
-
-  const courses: Course[] =
-    selectedCategory === "undergraduate"
-      ? undergraduateCourses
-      : externalCourses;
 
   const filteredCourses = useMemo(() => {
     return courses.filter((course) =>
@@ -84,9 +75,10 @@ export default function CourseRegistration() {
             {filteredCourses.map((course) => (
               <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
                 <CourseCard
-                  image={course.image}
-                  code={course.code}
-                  name={course.name}
+                  courseImage={course.image}
+                  courseCode={course.code}
+                  courseName={course.name}
+                  courseID={""}
                 />
               </div>
             ))}
