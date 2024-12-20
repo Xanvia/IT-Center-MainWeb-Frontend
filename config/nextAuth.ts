@@ -57,7 +57,6 @@ export const authOptions: NextAuthOptions = {
 
         const user = await res.json();
         if (!res.ok) {
-          console.log(user.message);
           if (user.field == "password") throw Error("password");
           else throw Error("email");
           // return null;
@@ -83,7 +82,6 @@ export const authOptions: NextAuthOptions = {
               },
             }
           );
-          console.log(res);
           return res.data;
         } catch (error) {
           if ((error as any).response) {
