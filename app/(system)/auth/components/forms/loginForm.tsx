@@ -21,7 +21,7 @@ export default function LoginForm() {
   const router = useRouter();
   const submitData = async (data: loginSchemaType) => {
     try {
-      const response = await signIn("credentials", {
+      const response = await signIn("local-credentials", {
         email: data.email,
         password: data.password,
         redirect: false,

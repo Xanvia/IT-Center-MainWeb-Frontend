@@ -1,44 +1,59 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
+import Axios from "./axios";
 
 async function refreshToken(token: JWT): Promise<JWT> {
-  const res = await fetch("http://localhost:3001/auth/refresh", {
-    method: "POST",
-    headers: {
-      authorization: `Refresh ${token.refresh_token}`,
-    },
-  });
-  console.log("refreshed");
-
-  const response = await res.json();
-
-  return {
-    ...token,
-    ...response,
-  };
+  try {
+    const res = await Axios.post(
+      "/auth/refresh",
+      {},
+      {
+        headers: {
+          authorization: `Bearer ${token.refreshToken}`,
+          "Content-type": "application/json",
+        },
+      }
+    );
+    console.log("refreshed");
+    const response = await res.data;
+    console.log({
+      ...token,
+      ...response,
+    });
+    return {
+      ...token,
+      ...response,
+    };
+  } catch (error: any) {
+    console.log(error.response);
+  }
+  return token;
 }
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      id: "local-credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const res = await fetch("http://localhost:3001/auth/signin", {
-          method: "POST",
-          body: JSON.stringify({
-            email: credentials?.email,
-            hashedPassword: credentials?.password,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          mode: "cors",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              email: credentials?.email,
+              hashedPassword: credentials?.password,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            mode: "cors",
+          }
+        );
 
         const user = await res.json();
         if (!res.ok) {
@@ -52,23 +67,31 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     CredentialsProvider({
-      name: "credentialsGoogle",
+      id: "google-credentials",
       credentials: {
-        token: {},
+        token: { label: "token", type: "text" },
       },
       async authorize(credentials, req) {
-        console.log("im here");
-        const res = await fetch("http://localhost:3001/auth/refresh", {
-          method: "POST",
-          headers: {
-            authorization: `Refresh ${credentials?.token}`,
-          },
-        });
-        const user = await res.json();
-        if (!res.ok) {
-          return null;
+        try {
+          const res = await Axios.post(
+            "/auth/refresh",
+            {},
+            {
+              headers: {
+                authorization: `Bearer ${credentials?.token}`,
+                "Content-type": "application/json",
+              },
+            }
+          );
+          console.log(res);
+          return res.data;
+        } catch (error) {
+          if ((error as any).response) {
+            const errorData = (error as any).response?.data;
+            throw Error(errorData?.message);
+          }
+          throw Error();
         }
-        return user;
       },
     }),
   ],
