@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ReservationModal from "./reservation-model";
-import Link from "next/link";
 import { Reservation } from "@/utils/types";
 import { Toaster } from "@/components/ui/toaster";
 import { toast } from "@/hooks/use-toast";
@@ -89,48 +88,6 @@ export default function AdminReservations() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {reservations.map((reservation) => (
-          // <Card key={reservation.id}>
-          //   <CardHeader>
-          //     <CardTitle>{reservation.name}</CardTitle>
-          //   </CardHeader>
-          //   <CardContent>
-          //     <Image
-          //       src={reservation.images[0]}
-          //       alt={`Image of ${reservation.name}`}
-          //       width={300}
-          //       height={300}
-          //     />
-          //     <p className="text-sm text-gray-600 mb-2">
-          //       {reservation.description}
-          //     </p>
-          //     <p className="text-sm">
-          //       <strong>Location:</strong> {reservation.location}
-          //     </p>
-          //     <p className="text-sm">
-          //       <strong>Seats:</strong> {reservation.seatLimit}
-          //     </p>
-          //     <p className="text-sm">
-          //       <strong>Fee:</strong> ${reservation.feePerHour}/hour
-          //     </p>
-          //   </CardContent>
-          //   <CardFooter className="flex justify-end space-x-2">
-          //     <Button
-          //       variant="outline"
-          //       onClick={() => {
-          //         setEditingReservation(reservation);
-          //         setIsModalOpen(true);
-          //       }}
-          //     >
-          //       Edit
-          //     </Button>
-          //     <Button
-          //       variant="destructive"
-          //       onClick={() => handleDeleteReservation(reservation.id)}
-          //     >
-          //       Delete
-          //     </Button>
-          //   </CardFooter>
-          // </Card>
           <Card key={reservation.id} className="overflow-hidden">
             <img
               alt={`Image of ${reservation.name}`}
@@ -155,25 +112,28 @@ export default function AdminReservations() {
               </div>
               <div className="flex items-center space-x-2 text-gray-600 mt-2">
                 <MapPin className="h-5 w-5" />
-                <span>Location:</span>
+                <span>Location:{reservation.location}</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-600 mt-2">
                 <Nfc className="h-5 w-5" />
-                <span>Charge /h: {}</span>
+                <span>Charge /h: {reservation.feeRatePerHour}</span>
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex justify-end space-x-2">
               <Button
-                asChild
-                className="w-full bg-maroon hover:text-yellow-500 text-white"
+                variant="outline"
+                onClick={() => {
+                  setEditingReservation(reservation);
+                  setIsModalOpen(true);
+                }}
               >
-                <Link
-                  href={`/room/${reservation.name
-                    .toLowerCase()
-                    .replace(/\s+/g, "-")}`}
-                >
-                  View Details
-                </Link>
+                Edit
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => handleDeleteReservation(reservation.id)}
+              >
+                Delete
               </Button>
             </CardFooter>
           </Card>

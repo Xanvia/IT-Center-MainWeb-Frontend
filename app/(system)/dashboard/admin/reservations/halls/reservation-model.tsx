@@ -63,7 +63,6 @@ export default function ReservationModal({
           setFormData((prev) => ({
             ...prev,
             images: [
-              ...prev.images,
               ...data.files.map(
                 (file: { path: string }) =>
                   `${process.env.NEXT_PUBLIC_BACKEND_URL}/${file.path}`
@@ -95,9 +94,10 @@ export default function ReservationModal({
       if (reservation) {
         const res = await Axios.patch(url, formData);
         console.log(res.data);
+      } else {
+        const res = await Axios.post(url, formData);
+        console.log(res.data);
       }
-      const res = await Axios.post(url, formData);
-      console.log(res.data);
 
       toast({
         title: "Reservation saved.",
@@ -130,13 +130,19 @@ export default function ReservationModal({
             <div className="space-y-4">
               <div>
                 <Label htmlFor="image">Images</Label>
+
+                {reservation?.images.map((image, index) => (
+                  <div className="flex ">
+                    <img src={image} alt={`image:${index}`} className="h-20" />
+                  </div>
+                ))}
+
                 <Input
                   id="image"
                   name="image"
                   type="file"
                   onChange={handleImageChange}
                   multiple
-                  required
                 />
               </div>
               <div>
