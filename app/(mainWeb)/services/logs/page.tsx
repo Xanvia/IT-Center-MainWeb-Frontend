@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "./Components/css/log.module.css";
-import CustomAccordion from "./components/accordion";
 
 const initialContent = "Certificate based Computer skill programme";
 const initialPhotos = ["/logjpg/im1.jpg", "/logjpg/im2.jpg", "/logjpg/im3.jpg"];
@@ -17,7 +15,7 @@ export default function Home() {
 
   return (
     <div className="overflow-hidden">
-      <div className={styles.Container}>
+      <div className="flex flex-col items-center justify-center">
         <div className="p-2 md:pt-10 pb-2">
           <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl text-xl text-center gird">
             Service Log
@@ -27,18 +25,18 @@ export default function Home() {
           </div>
         </div>
 
-        <div className={styles.ContentWrapper}>
-          <div className={styles.itemBox}>
-            <div className={styles.headLine}>
-              <CustomAccordion
+        <div className="flex flex-col items-center justify-center">
+          <div className="w-full md:w-1/2">
+            <div>
+              {/* <CustomAccordion
                 onItemSelected={setSubject}
                 onPhotosSelected={setPhotos}
                 onParagraphSelected={setParagraph}
-              />
+              /> */}
             </div>
           </div>
 
-          <div className={styles.ContentBox}>
+          {/* <div className={styles.ContentBox}>
             <div className={styles.ContentHeadline}>{subject}</div>
             <div className={styles.Photos}>
               {photos.map((photo, index) => (
@@ -51,7 +49,7 @@ export default function Home() {
               ))}
             </div>
             {paragraph && <p className={styles.Paragraph}>{paragraph}</p>}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

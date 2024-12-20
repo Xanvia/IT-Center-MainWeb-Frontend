@@ -51,26 +51,26 @@ export const authOptions: NextAuthOptions = {
         return user;
       },
     }),
-    // CredentialsProvider({
-    //   name: "credentialsGoogle",
-    //   credentials: {
-    //     token: {},
-    //   },
-    //   async authorize(credentials, req) {
-    //     console.log("im here");
-    //     const res = await fetch("http://localhost:3001/auth/refresh", {
-    //       method: "POST",
-    //       headers: {
-    //         authorization: `Refresh ${credentials?.token}`,
-    //       },
-    //     });
-    //     const user = await res.json();
-    //     if (!res.ok) {
-    //       return null;
-    //     }
-    //     return user;
-    //   },
-    // }),
+    CredentialsProvider({
+      name: "credentialsGoogle",
+      credentials: {
+        token: {},
+      },
+      async authorize(credentials, req) {
+        console.log("im here");
+        const res = await fetch("http://localhost:3001/auth/refresh", {
+          method: "POST",
+          headers: {
+            authorization: `Refresh ${credentials?.token}`,
+          },
+        });
+        const user = await res.json();
+        if (!res.ok) {
+          return null;
+        }
+        return user;
+      },
+    }),
   ],
   pages: {
     signIn: "/auth/signin",
