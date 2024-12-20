@@ -16,7 +16,6 @@ export default function LoginForm() {
     setError,
     formState: { errors, isSubmitting },
   } = useForm<loginSchemaType>({
-    mode: "onTouched",
     resolver: zodResolver(loginSchema),
   });
   const router = useRouter();
@@ -89,7 +88,7 @@ export default function LoginForm() {
         />
       </div>
 
-      <Link href={"http://localhost:3001/auth/google/sign"}>
+      <Link href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/sign`}>
         <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray-200 p-3 hover:bg-opacity-50 dark:border-primary-border-dark dark:bg-primary-dark dark:hover:bg-opacity-50">
           <span>
             <svg
