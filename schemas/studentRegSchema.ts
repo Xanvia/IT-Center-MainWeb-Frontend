@@ -14,7 +14,6 @@ export const formSchema = z.object({
       .string()
       .min(10, { message: "Valid phone number is required" }),
     postalAddress: z.string().min(5, { message: "Postal address is required" }),
-    photo: z.any().optional(),
   }),
   educationalQualifications: z.object({
     olevel: z.object({

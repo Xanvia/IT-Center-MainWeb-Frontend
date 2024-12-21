@@ -7,7 +7,6 @@ import DropdownProfile from "./profile";
 
 export default function Selection() {
   const { data: session } = useSession();
-  console.log(session);
   if (session && session.user)
     return (
       <>

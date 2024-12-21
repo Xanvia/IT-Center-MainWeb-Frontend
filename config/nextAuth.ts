@@ -3,32 +3,27 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 import Axios from "./axios";
 
-async function refreshToken(token: JWT): Promise<JWT> {
+async function refreshToken(token: JWT) {
   try {
     const res = await Axios.post(
       "/auth/refresh",
       {},
       {
         headers: {
-          authorization: `Bearer ${token.refreshToken}`,
+          authorization: `Bearer ${token.refresh_token}`,
           "Content-type": "application/json",
         },
       }
     );
     console.log("refreshed");
     const response = await res.data;
-    console.log({
-      ...token,
-      ...response,
-    });
     return {
       ...token,
       ...response,
     };
   } catch (error: any) {
-    console.log(error.response);
+    console.log("Refresh token error!!!", error.response.data);
   }
-  return token;
 }
 
 export const authOptions: NextAuthOptions = {
