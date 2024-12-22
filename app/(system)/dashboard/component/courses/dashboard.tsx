@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar } from "@nextui-org/react";
 
 // Types
 type RequestState = "PENDING" | "NOTPAID" | "REJECTED" | "ENROLLED";
@@ -144,6 +145,12 @@ export default function AdminDashboard() {
         ),
       }))
     );
+    setSelectedCourse((prevCourse) => ({
+      ...prevCourse,
+      students: prevCourse.students.map((student) =>
+        student.id === studentId ? { ...student, status: newStatus } : student
+      ),
+    }));
   };
 
   const updateStudentGrade = (studentId: string, newGrade: string) => {
@@ -155,6 +162,12 @@ export default function AdminDashboard() {
         ),
       }))
     );
+    setSelectedCourse((prevCourse) => ({
+      ...prevCourse,
+      students: prevCourse.students.map((student) =>
+        student.id === studentId ? { ...student, grade: newGrade } : student
+      ),
+    }));
   };
 
   const deleteStudent = (studentId: string) => {
@@ -164,12 +177,17 @@ export default function AdminDashboard() {
         students: course.students.filter((student) => student.id !== studentId),
       }))
     );
+    setSelectedCourse((prevCourse) => ({
+      ...prevCourse,
+      students: prevCourse.students.filter(
+        (student) => student.id !== studentId
+      ),
+    }));
   };
 
   const filteredStudents = selectedCourse.students.filter(
     (student) => student.status === selectedTab
   );
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6 text-gray-600">
@@ -200,19 +218,19 @@ export default function AdminDashboard() {
             onValueChange={(value) => setSelectedTab(value as RequestState)}
           >
             <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="ENROLLED">Enrolled</TabsTrigger>
               <TabsTrigger value="PENDING">Pending</TabsTrigger>
               <TabsTrigger value="NOTPAID">Not Paid</TabsTrigger>
               <TabsTrigger value="REJECTED">Rejected</TabsTrigger>
-              <TabsTrigger value="ENROLLED">Enrolled</TabsTrigger>
             </TabsList>
             <TabsContent value={selectedTab}>
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>Id</TableHead>
                     <TableHead>Profile</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
-                    <TableHead>ID</TableHead>
                     <TableHead>Grade</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Action</TableHead>
@@ -221,16 +239,17 @@ export default function AdminDashboard() {
                 <TableBody>
                   {filteredStudents.map((student) => (
                     <TableRow key={student.id}>
+                      <TableCell>{student.id}</TableCell>
                       <TableCell>
-                        <img
+                        <Avatar
+                          showFallback
                           src={student.profileImg}
-                          alt={student.name}
-                          className="w-10 h-10 rounded-full"
-                        />
+                          name={student.name}
+                          size="md"
+                        ></Avatar>
                       </TableCell>
                       <TableCell>{student.name}</TableCell>
                       <TableCell>{student.email}</TableCell>
-                      <TableCell>{student.id}</TableCell>
                       <TableCell>
                         <Select
                           value={student.grade}
@@ -282,6 +301,7 @@ export default function AdminDashboard() {
                       <TableCell>
                         <Button
                           variant="destructive"
+                          className="bg-red-700"
                           size="icon"
                           onClick={() => deleteStudent(student.id)}
                         >
