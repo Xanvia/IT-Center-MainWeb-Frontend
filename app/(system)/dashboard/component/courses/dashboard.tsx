@@ -100,7 +100,7 @@ const mockCourses: Course[] = [
   },
   {
     id: "3",
-    name: "Web Design Fundamentals",
+    name: "Web Design Fundamentals and Best Practices",
     students: [
       {
         id: "7",
@@ -172,10 +172,12 @@ export default function AdminDashboard() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">LMS Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-600">
+        Student Management
+      </h1>
       <div className="flex gap-4">
-        <div className="w-1/4">
-          <h2 className="text-xl font-semibold mb-2">Courses</h2>
+        <div className="w-1/5">
+          <h2 className="text-lg font-semibold mb-5">Courses</h2>
           <div className="space-y-2">
             {courses.map((course) => (
               <Button
@@ -186,13 +188,13 @@ export default function AdminDashboard() {
                 className="w-full justify-start"
                 onClick={() => setSelectedCourse(course)}
               >
-                {course.name}
+                <p className="truncate">{course.name}</p>
               </Button>
             ))}
           </div>
         </div>
-        <div className="w-3/4">
-          <h2 className="text-xl font-semibold mb-2">{selectedCourse.name}</h2>
+        <div className="w-4/5">
+          <h2 className="text-lg font-semibold mb-5">{selectedCourse.name}</h2>
           <Tabs
             value={selectedTab}
             onValueChange={(value) => setSelectedTab(value as RequestState)}
