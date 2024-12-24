@@ -32,7 +32,9 @@ import { PiStudentBold } from "react-icons/pi";
 import { GrUserManager } from "react-icons/gr";
 import { RiAdminFill } from "react-icons/ri";
 import { BiSolidReport } from "react-icons/bi";
+
 import { AirOutlined } from "@mui/icons-material";
+import { BookOpen, BookUser, SwatchBook } from "lucide-react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -186,7 +188,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <ul className="mb-6 flex flex-col gap-1.5 font-medium">
               {/* Notification  */}
               <li>
-                <Tab pathname="/notification">
+                <Tab pathname="/dashboard/notification">
                   <div className="flex justify-center w-5">
                     <MdNotifications size={20} />
                   </div>
@@ -195,7 +197,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               {/* Account Settings  */}
               <li>
-                <Tab pathname="/settings">
+                <Tab pathname="/dashboard/settings">
                   <div className="flex justify-center w-5">
                     <MdOutlineSettings size={20} />
                   </div>
@@ -219,7 +221,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <>
                       <div
                         className={`group relative flex items-center gap-2 rounded-md px-4 py-2 duration-300 ease-in-out  ${
-                          pathname === "/admin/reservations"
+                          pathname === "/dashboard/admin/reservations"
                             ? "bg-yellow-400 text-black"
                             : "hover:bg-gray-400 hover:text-black"
                         }`}
@@ -243,7 +245,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <ul className="mb-5 mt-2 flex flex-col gap-2 pl-6">
                           <li>
-                            <Tab pathname="/admin/reservations/requests">
+                            <Tab pathname="/dashboard/admin/reservations/requests">
                               <div className="flex justify-center w-5">
                                 <BsBuildingFillAdd size={18} />
                               </div>
@@ -251,7 +253,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </Tab>
                           </li>
                           <li>
-                            <Tab pathname="/admin/reservations/halls">
+                            <Tab pathname="/dashboard/admin/reservations/halls">
                               <div className="flex justify-center w-5">
                                 <BsBuildingFillGear size={18} />
                               </div>
@@ -265,6 +267,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 }}
               </SidebarLinkGroup>
 
+              {/* check this out
               <li>
                 <Tab pathname="/dashboard/admin/courses">
                   <div className="flex justify-center w-5">
@@ -273,6 +276,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Courses
                 </Tab>
               </li>
+              */}
 
               <SidebarLinkGroup
                 activeCondition={pathname.includes("/admin/services")}
@@ -282,7 +286,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <>
                       <div
                         className={`group relative flex items-center gap-2 rounded-md px-4 py-2 duration-300 ease-in-out  ${
-                          pathname === "/admin/reservations"
+                          pathname === "dashboard/admin/services"
                             ? "bg-yellow-400 text-black"
                             : "hover:bg-gray-400 hover:text-black"
                         }`}
@@ -328,6 +332,61 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <FaPeopleGroup size={20} />
                               </div>
                               Project
+                            </Tab>
+                          </li>
+                        </ul>
+                      </div>
+                    </>
+                  );
+                }}
+              </SidebarLinkGroup>
+
+              <SidebarLinkGroup
+                activeCondition={pathname.includes("/admin/courses")}
+              >
+                {(handleClick, open) => {
+                  return (
+                    <>
+                      <div
+                        className={`group relative flex items-center gap-2 rounded-md px-4 py-2 duration-300 ease-in-out  ${
+                          pathname === "dashboard/admin/courses"
+                            ? "bg-yellow-400 text-black"
+                            : "hover:bg-gray-400 hover:text-black"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
+                        }}
+                      >
+                        <div className="flex justify-center w-5">
+                          <BookOpen size={22} />
+                        </div>
+                        Courses
+                        <ArrowIcon open={open} />
+                      </div>
+                      {/* <!-- Dropdown Menu Start --> */}
+                      <div
+                        className={` overflow-hidden dropdown-menu  ${
+                          open ? "h-24 opacity-100" : "h-0 opacity-0"
+                        }`}
+                      >
+                        <ul className="mb-5 mt-1 flex flex-col gap-2 pl-6">
+                          <li>
+                            <Tab pathname="/dashboard/admin/courses/manageCourses">
+                              <div className="flex justify-center w-5">
+                                <SwatchBook size={20} />
+                              </div>
+                              Manage Courses
+                            </Tab>
+                          </li>
+                          <li>
+                            <Tab pathname="/dashboard/admin/courses/students">
+                              <div className="flex justify-center w-5">
+                                <BookUser size={20} />
+                              </div>
+                              Students
                             </Tab>
                           </li>
                         </ul>

@@ -7,21 +7,23 @@ const SignIn: React.FC = () => {
   return (
     <div className="flex flex-wrap items-center">
       <div className="hidden w-full xl:block xl:w-1/2">
-        <div className="px-28 py-16 text-center">
+        <div className="px-28 py-16 text-center flex flex-col items-center">
           <Link className="mb-5 inline-block" href="/">
             <Image
               src={"/logo/ceitlogo.png"}
               alt="Logo"
               width={176}
               height={32}
+              className="bg-yellow-500 rounded-medium"
             />
           </Link>
 
-          <p className="2xl:px-20">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit suspendisse.
+          <p className="w-96 font-semibold text-maroon font-xl">
+            IT Center <br />{" "}
+            <span className="font-normal font-vietnam">
+              University of Peradeniya
+            </span>
           </p>
-
-          <span className="mt-16 inline-block"></span>
         </div>
       </div>
 

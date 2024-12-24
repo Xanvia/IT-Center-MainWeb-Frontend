@@ -6,7 +6,6 @@ export const DefaultStudentRegValues = {
     nationalIdCardNo: "",
     phoneNumber: "",
     postalAddress: "",
-    photo: null,
   },
   educationalQualifications: {
     olevel: {

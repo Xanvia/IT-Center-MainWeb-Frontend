@@ -4,22 +4,24 @@ import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { FormData, formSchema } from "@/schemas/studentRegSchema";
+import { FormData as FORMdata, formSchema } from "@/schemas/studentRegSchema";
 import { DefaultStudentRegValues } from "@/constants/studentRegDefault";
-import { UploadFile } from "@/utils/fileUploder";
 import toast, { Toaster } from "react-hot-toast";
+import Axios from "@/config/axios";
+import { useSession } from "next-auth/react";
+import { delay } from "@/utils/common";
 
 type OLSubject = "english" | "mathematics" | "science";
 const OLSub: OLSubject[] = ["english", "mathematics", "science"];
 
 export default function StudentRegistrationForm() {
+  const { data: session } = useSession();
   const {
     control,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<FORMdata>({
     resolver: zodResolver(formSchema),
     defaultValues: DefaultStudentRegValues,
   });
@@ -35,7 +37,8 @@ export default function StudentRegistrationForm() {
 
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = (data: FORMdata) => {
+
     console.log(data);
     // continue the function
     // here check the data in browser console and match it with backend dto.
@@ -67,16 +70,31 @@ export default function StudentRegistrationForm() {
     }
   };
 
+  // upload profile image
   const handlePhotoUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files;
     if (file) {
-      const imageUrl = await UploadFile(file[0], "student-profile");
-      if (imageUrl) {
-        setPhotoPreview("http://localhost:3001/" + imageUrl);
-        setValue("personalDetails.photo", imageUrl);
-      } else {
+      const formData = new FormData();
+      formData.append("user", file[0]);
+      try {
+        const response = await Axios.post("/user/upload-img", formData, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        const imageUrl = response.data.path;
+        console.log(imageUrl);
+        if (imageUrl) {
+          toast("Profile Picture Uploaded Successfully!");
+          await delay(3000);
+          setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
+        } else {
+          toast("Profile Picture Upload Failed. Try Again!");
+        }
+      } catch (error) {
         toast("Profile Picture Upload Failed. Try Again!");
       }
     }
@@ -88,6 +106,7 @@ export default function StudentRegistrationForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-8 max-w-4xl mx-auto p-4"
       >
+        <Toaster />
         <div className="card bg-base-100 shadow-xl">
           <h1 className="text-3xl text-maroon font-bold my-4 text-center">
             Student Registration
@@ -250,9 +269,8 @@ export default function StudentRegistrationForm() {
                     alt="Profile Photo"
                     width={100}
                     height={100}
-                    className="rounded-full"
+                    className="rounded-lg h-28 w-auto"
                   />
-                  <Toaster />
                 </div>
               )}
             </div>
