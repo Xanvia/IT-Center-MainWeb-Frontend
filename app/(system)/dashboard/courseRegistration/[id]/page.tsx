@@ -25,7 +25,7 @@ export default function CourseDetailPage() {
     <main className="flex-grow container mx-auto py-3">
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2 h-full flex flex-col justify-between">
-          <h1 className="text-3xl font-bold mb-4 text-maroon">{course.name}</h1>
+          <h1 className="text-2xl font-bold mb-4 text-maroon">{course.name}</h1>
           <div className="relative h-max sm:h-96">
             <Image
               src={course.image}
@@ -39,7 +39,7 @@ export default function CourseDetailPage() {
         <div className="md:col-span-1">
           <Card className="w-full max-w-md">
             <CardContent className="p-6">
-              <h2 className="text-2xl font-semibold mb-4 text-maroon">
+              <h2 className="text-xl font-semibold mb-4 text-maroon">
                 Course Info
               </h2>
               <div className="space-y-4">
