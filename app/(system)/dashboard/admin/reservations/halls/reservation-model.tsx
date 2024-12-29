@@ -290,7 +290,9 @@ export default function ReservationModal({
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Save</Button>
+            <Button className="bg-maroon" type="submit">
+              Save
+            </Button>
           </div>
         </form>
       </div>

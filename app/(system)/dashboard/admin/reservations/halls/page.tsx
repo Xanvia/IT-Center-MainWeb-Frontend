@@ -21,7 +21,7 @@ const dummyReservations: Reservation[] = [
     id: "1",
     name: "Conference Room A",
     description: "Large conference room with modern amenities",
-    images: ["/placeholder.svg?height=100&width=100"],
+    images: [],
     seatLimit: 10,
     noOfComputers: 5,
     availableSoftwares: "Microsoft Office, Adobe Creative Suite",
@@ -40,10 +40,12 @@ export default function AdminReservations() {
   const [editingReservation, setEditingReservation] =
     useState<Reservation | null>(null);
 
+  // Add a new reservation
   const handleAddReservation = (newReservation: Reservation) => {
     setReservations([...reservations, newReservation]);
   };
 
+  // Edit an existing reservation
   const handleEditReservation = (updatedReservation: Reservation) => {
     setReservations(
       reservations.map((r) =>
@@ -52,6 +54,7 @@ export default function AdminReservations() {
     );
   };
 
+  // Delete a reservation
   const handleDeleteReservation = async (id: string) => {
     try {
       await Axios.delete(`/reservations/${id}`);
@@ -62,6 +65,7 @@ export default function AdminReservations() {
     setReservations(reservations.filter((r) => r.id !== id));
   };
 
+  // Fetch reservations from the server at the start
   useEffect(() => {
     console.log("Fetching reservations");
     const fetchReservations = async () => {
@@ -87,7 +91,7 @@ export default function AdminReservations() {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Manage Reservations</h1>
-        <Button onClick={() => setIsModalOpen(true)}>
+        <Button className="bg-maroon" onClick={() => setIsModalOpen(true)}>
           <Plus className="mr-2 h-4 w-4" /> Add Reservation
         </Button>
       </div>
@@ -98,9 +102,7 @@ export default function AdminReservations() {
               alt={`Image of ${reservation.name}`}
               className="w-full h-48 object-cover"
               height="200"
-              src={
-                reservation.images[0] || "/placeholder.svg?height=200&width=300"
-              }
+              src={reservation.images[0]}
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -135,7 +137,7 @@ export default function AdminReservations() {
                 Edit
               </Button>
               <Button
-                variant="destructive"
+                className="bg-red-700"
                 onClick={() => handleDeleteReservation(reservation.id)}
               >
                 Delete
