@@ -8,7 +8,7 @@ import {
   Course,
   externalCourses,
   undergraduateCourses,
-} from "@/app/(system)/dashboard/courseRegistration/courseData.";
+} from "@/app/(system)/dashboard/courseRegistration/courseData";
 
 export default function CourseRegistration() {
   const [selectedCategory, setSelectedCategory] = useState("undergraduate");
