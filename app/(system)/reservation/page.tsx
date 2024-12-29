@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,10 +9,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { MapPin, Nfc, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Reservation } from "@/utils/types";
+import Axios from "@/config/axios";
 
-export default function Reservation() {
+export default function Reservations() {
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+
+  useEffect(() => {
+    // Fetch reservations from the server
+    const fetchReservations = async () => {
+      const response = await Axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/reservations`
+      );
+      const data = await response.data;
+      setReservations(data);
+    };
+    fetchReservations();
+  }, []);
+
   return (
     <main className="flex-grow container mx-auto py-8">
       <section className="mb-12 text-center">
@@ -22,44 +40,13 @@ export default function Reservation() {
         </p>
       </section>
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[
-          {
-            name: "Computer Lab A",
-            capacity: 30,
-            image: "/common/labReservation.jpg",
-          },
-          {
-            name: "Conference Hall B",
-            capacity: 100,
-            image: "/common/labReservation.jpg",
-          },
-          {
-            name: "Robotics Lab",
-            capacity: 20,
-            image: "/common/labReservation.jpg",
-          },
-          {
-            name: "Lecture Hall C",
-            capacity: 200,
-            image: "/common/labReservation.jpg",
-          },
-          {
-            name: "3D Printing Lab",
-            capacity: 15,
-            image: "/common/labReservation.jpg",
-          },
-          {
-            name: "Multimedia Studio",
-            capacity: 10,
-            image: "/common/labReservation.jpg",
-          },
-        ].map((room) => (
+        {reservations.map((room) => (
           <Card key={room.name} className="overflow-hidden">
             <img
               alt={`Image of ${room.name}`}
               className="w-full h-48 object-cover"
               height="200"
-              src={room.image}
+              src={room.images[0]}
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -72,7 +59,7 @@ export default function Reservation() {
             <CardContent>
               <div className="flex items-center space-x-2 text-gray-600">
                 <Users className="h-5 w-5" />
-                <span>Capacity: {room.capacity}</span>
+                <span>Capacity: {room.seatLimit}</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-600 mt-2">
                 <MapPin className="h-5 w-5" />
