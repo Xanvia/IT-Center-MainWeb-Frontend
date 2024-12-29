@@ -23,7 +23,7 @@ const dummyReservations: Reservation[] = [
     images: ["/placeholder.svg?height=100&width=100"],
     seatLimit: 10,
     noOfComputers: 5,
-    availableSoftware: "Microsoft Office, Adobe Creative Suite",
+    availableSoftwares: "Microsoft Office, Adobe Creative Suite",
     equipment: "Projector, Whiteboard",
     isAC: true,
     bestCase: "Meetings, Presentations",
@@ -59,6 +59,7 @@ export default function AdminReservations() {
   };
 
   useEffect(() => {
+    console.log("Fetching reservations");
     const fetchReservations = async () => {
       try {
         const result = await fetch(

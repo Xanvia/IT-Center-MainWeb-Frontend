@@ -30,7 +30,7 @@ export default function ReservationModal({
     images: [],
     seatLimit: 0,
     noOfComputers: 0,
-    availableSoftware: "",
+    availableSoftwares: "",
     equipment: "",
     isAC: true,
     bestCase: "",
@@ -88,7 +88,7 @@ export default function ReservationModal({
   };
 
   const handleSwitchChange = (checked: boolean) => {
-    setFormData((prev) => ({ ...prev, hasAC: checked }));
+    setFormData((prev) => ({ ...prev, isAC: checked }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -104,12 +104,14 @@ export default function ReservationModal({
 
     const url = reservation ? `reservations/${reservation.id}` : "reservations";
     console.log("formData", convertedFormData);
+    let res;
     try {
       if (reservation) {
-        const res = await Axios.patch(url, convertedFormData);
+        res = await Axios.put(url, convertedFormData);
         console.log(res.data);
       } else {
-        const res = await Axios.post(url, convertedFormData);
+        const { id, ...data } = convertedFormData;
+        res = await Axios.post(url, data);
         console.log(res.data);
       }
 
@@ -118,7 +120,7 @@ export default function ReservationModal({
         description: "Your reservation has been saved successfully",
       });
       onClose();
-      onSave(convertedFormData);
+      onSave(res.data);
     } catch (error: any) {
       console.log(error.response.data);
       toast({
@@ -196,11 +198,11 @@ export default function ReservationModal({
             </div>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="availableSoftware">Available Software</Label>
+                <Label htmlFor="availableSoftwares">Available Software</Label>
                 <Input
-                  id="availableSoftware"
-                  name="availableSoftware"
-                  value={formData.availableSoftware}
+                  id="availableSoftwares"
+                  name="availableSoftwares"
+                  value={formData.availableSoftwares}
                   onChange={handleChange}
                 />
               </div>
@@ -224,7 +226,7 @@ export default function ReservationModal({
                 />
               </div>
               <div>
-                <Label htmlFor="feePerHour">Fee per Hour</Label>
+                <Label htmlFor="feeRatePerHour">Fee per Hour</Label>
                 <Input
                   id="feeRatePerHour"
                   name="feeRatePerHour"
