@@ -109,10 +109,12 @@ export default function ReservationModal({
       if (reservation) {
         res = await Axios.put(url, convertedFormData);
         console.log(res.data);
+        onSave(formData);
       } else {
         const { id, ...data } = convertedFormData;
         res = await Axios.post(url, data);
         console.log(res.data);
+        onSave(res.data);
       }
 
       toast({
@@ -120,7 +122,7 @@ export default function ReservationModal({
         description: "Your reservation has been saved successfully",
       });
       onClose();
-      onSave(res.data);
+      console.log("convertedFormData", convertedFormData, res.data);
     } catch (error: any) {
       console.log(error.response.data);
       toast({

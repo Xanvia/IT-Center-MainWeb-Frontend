@@ -14,6 +14,7 @@ import ReservationModal from "./reservation-model";
 import { Reservation } from "@/utils/types";
 import { Toaster } from "@/components/ui/toaster";
 import { toast } from "@/hooks/use-toast";
+import Axios from "@/config/axios";
 
 const dummyReservations: Reservation[] = [
   {
@@ -40,10 +41,7 @@ export default function AdminReservations() {
     useState<Reservation | null>(null);
 
   const handleAddReservation = (newReservation: Reservation) => {
-    setReservations([
-      ...reservations,
-      { ...newReservation, id: Date.now().toString() },
-    ]);
+    setReservations([...reservations, newReservation]);
   };
 
   const handleEditReservation = (updatedReservation: Reservation) => {
@@ -54,7 +52,13 @@ export default function AdminReservations() {
     );
   };
 
-  const handleDeleteReservation = (id: string) => {
+  const handleDeleteReservation = async (id: string) => {
+    try {
+      await Axios.delete(`/reservations/${id}`);
+      toast({ description: "Reservation deleted successfully" });
+    } catch (error) {
+      toast({ description: "Failed to delete reservation" });
+    }
     setReservations(reservations.filter((r) => r.id !== id));
   };
 
