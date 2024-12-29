@@ -28,7 +28,7 @@ export const shortcuts = [
   {
     name: "Lab Reservation",
     icon: Calendar,
-    href: "/dashboard/lab-reservation",
+    href: "/reservation",
     visual: "/common/labReservation.jpg",
     primary: true,
   },

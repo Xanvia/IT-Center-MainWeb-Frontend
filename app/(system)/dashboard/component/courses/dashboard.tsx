@@ -22,7 +22,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar } from "@nextui-org/react";
 
 // Types
-type RequestState = "PENDING" | "NOTPAID" | "REJECTED" | "ENROLLED";
+type RequestState =
+  | "PENDING"
+  | "NOTPAID"
+  | "REJECTED"
+  | "ENROLLED"
+  | "COMPLETED";
 type Student = {
   id: string;
   name: string;
@@ -125,7 +130,7 @@ const mockCourses: Course[] = [
         email: "henry@example.com",
         profileImg: "/placeholder.svg?height=40&width=40",
         grade: "C",
-        status: "REJECTED",
+        status: "COMPLETED",
       },
     ],
   },
@@ -217,11 +222,12 @@ export default function AdminDashboard() {
             value={selectedTab}
             onValueChange={(value) => setSelectedTab(value as RequestState)}
           >
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="ENROLLED">Enrolled</TabsTrigger>
               <TabsTrigger value="PENDING">Pending</TabsTrigger>
               <TabsTrigger value="NOTPAID">Not Paid</TabsTrigger>
               <TabsTrigger value="REJECTED">Rejected</TabsTrigger>
+              <TabsTrigger value="COMPLETED">Completed</TabsTrigger>
             </TabsList>
             <TabsContent value={selectedTab}>
               <Table>
@@ -289,6 +295,7 @@ export default function AdminDashboard() {
                                 "NOTPAID",
                                 "REJECTED",
                                 "ENROLLED",
+                                "COMPLETED",
                               ] as RequestState[]
                             ).map((status) => (
                               <SelectItem key={status} value={status}>

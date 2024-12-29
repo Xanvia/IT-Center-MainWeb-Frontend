@@ -22,7 +22,7 @@ const dummyReservations: Reservation[] = [
     description: "Large conference room with modern amenities",
     images: ["/placeholder.svg?height=100&width=100"],
     seatLimit: 10,
-    computers: 5,
+    noOfComputers: 5,
     availableSoftware: "Microsoft Office, Adobe Creative Suite",
     equipment: "Projector, Whiteboard",
     isAC: true,

@@ -10,7 +10,7 @@ export interface Reservation {
   description: string;
   images: string[];
   seatLimit: number;
-  computers: number;
+  noOfComputers: number;
   availableSoftware: string;
   equipment: string;
   isAC: boolean;

@@ -10,6 +10,8 @@ import { Switch } from "@/components/ui/switch";
 import { Reservation } from "@/utils/types";
 import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
+import { delay } from "@/utils/common";
+
 interface ReservationModalProps {
   reservation?: Reservation | null;
   onClose: () => void;
@@ -27,7 +29,7 @@ export default function ReservationModal({
     description: "",
     images: [],
     seatLimit: 0,
-    computers: 0,
+    noOfComputers: 0,
     availableSoftware: "",
     equipment: "",
     isAC: true,
@@ -60,9 +62,11 @@ export default function ReservationModal({
         if (result.ok) {
           const data = await result.json();
           console.log(data);
+          await delay(3000);
           setFormData((prev) => ({
             ...prev,
             images: [
+              ...prev.images,
               ...data.files.map(
                 (file: { path: string }) =>
                   `${process.env.NEXT_PUBLIC_BACKEND_URL}/${file.path}`
@@ -129,23 +133,6 @@ export default function ReservationModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <Label htmlFor="image">Images</Label>
-
-                {reservation?.images.map((image, index) => (
-                  <div className="flex ">
-                    <img src={image} alt={`image:${index}`} className="h-20" />
-                  </div>
-                ))}
-
-                <Input
-                  id="image"
-                  name="image"
-                  type="file"
-                  onChange={handleImageChange}
-                  multiple
-                />
-              </div>
-              <div>
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
@@ -192,7 +179,7 @@ export default function ReservationModal({
                   id="computers"
                   name="computers"
                   type="number"
-                  value={formData.computers}
+                  value={formData.noOfComputers}
                   onChange={handleChange}
                 />
               </div>
@@ -244,6 +231,54 @@ export default function ReservationModal({
                   onCheckedChange={handleSwitchChange}
                 />
                 <Label htmlFor="hasAC">Has AC</Label>
+              </div>
+              <div>
+                <Label htmlFor="image">Images</Label>
+
+                <div className="flex m-1 space-x-2 overflow-auto">
+                  {reservation?.images.map((image, index) => (
+                    <div>
+                      <img
+                        src={image}
+                        alt={`image:${index}`}
+                        className="h-20"
+                      />
+                      <div className="absolute top-1 right-1"></div>
+                    </div>
+                  ))}
+                  {formData.images.map((image, index) => (
+                    <div className="relative ">
+                      <img
+                        src={image}
+                        alt={`image:${index}`}
+                        className="h-20"
+                      />
+                      <div className="absolute top-0 right-1">
+                        <p
+                          className=" text-red-500 cursor-pointer text-sm font-bold"
+                          onClick={() =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              images: prev.images.filter(
+                                (img) => img !== image
+                              ),
+                            }))
+                          }
+                        >
+                          x
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <Input
+                  id="image"
+                  name="image"
+                  type="file"
+                  onChange={handleImageChange}
+                  multiple
+                />
               </div>
             </div>
           </div>
