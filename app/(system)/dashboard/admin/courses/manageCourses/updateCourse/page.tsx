@@ -18,7 +18,7 @@ export default function courseUpdate() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold my-4 mt-2 text-center text-maroon">
+      <h1 className="text-2xl font-bold my-4 mt-2 text-center text-maroon">
         Update Courses
       </h1>
 
