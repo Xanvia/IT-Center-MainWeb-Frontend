@@ -14,7 +14,7 @@ export const shortcuts = [
   {
     name: "Course Registration",
     icon: BookOpen,
-    href: "/courseRegistration",
+    href: "/dashboard/courseRegistration",
     visual: "/common/courseReg.jpg",
     primary: true,
   },
@@ -28,7 +28,7 @@ export const shortcuts = [
   {
     name: "Lab Reservation",
     icon: Calendar,
-    href: "/dashboard/lab-reservation",
+    href: "/reservation",
     visual: "/common/labReservation.jpg",
     primary: true,
   },

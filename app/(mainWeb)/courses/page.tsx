@@ -1,11 +1,33 @@
-import React from "react";
-import { Options } from "./options";
-import HCourseCard from "../components/cards/hCourseCard";
+"use client";
 
-const Home: React.FC = () => {
+import { useState, useMemo } from "react";
+import { Tabs, Tab, Link, Input } from "@nextui-org/react";
+import { Search } from "lucide-react";
+import CourseCard from "@/app/(system)/dashboard/courseRegistration/courseCard";
+import {
+  Course,
+  externalCourses,
+  undergraduateCourses,
+} from "@/app/(system)/dashboard/courseRegistration/courseData.";
+
+export default function CourseRegistration() {
+  const [selectedCategory, setSelectedCategory] = useState("undergraduate");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const courses: Course[] =
+    selectedCategory === "undergraduate"
+      ? undergraduateCourses
+      : externalCourses;
+
+  const filteredCourses = useMemo(() => {
+    return courses.filter((course) =>
+      course.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [courses, searchQuery]);
+
   return (
-    <div className="p-2 md:p-10 overflow-hidden">
-      <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl text-xl text-center gird">
+    <div className="container mx-auto px-20 py-8">
+      <h1 className="from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl text-xl text-center">
         Course Overview
       </h1>
       <div className="flex justify-center mt-1">
@@ -13,67 +35,66 @@ const Home: React.FC = () => {
       </div>
       <br />
 
-      <div role="tablist" className="tabs tabs-lifted">
-        <input
-          type="radio"
-          name="my_tabs_2"
-          role="tab"
-          className="tab h-12 text-lg text-maroon w-96"
-          aria-label="Undergraduate"
-          defaultChecked
-        />
-        <div
-          role="tabpanel"
-          className="tab-content border-base-300 rounded-box p-2 bg-white sm:block hidden"
-        >
-          <Options />
-          <br />
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 sm:m-5">
-            <div className="">
-              <HCourseCard />
-            </div>
-            <div className="">
-              <HCourseCard />
-            </div>
-            <div className="">
-              <HCourseCard />
-            </div>
-            <div className="">
-              <HCourseCard />
-            </div>
-            <div className="">
-              <HCourseCard />
-            </div>
-          </div>
+      <div className="shadow-lg rounded-lg p-6 px-12 bg-white">
+        <div className="flex justify-between items-center mb-6">
+          <Tabs
+            aria-label="Course Categories"
+            selectedKey={selectedCategory}
+            onSelectionChange={(key) => setSelectedCategory(key as string)}
+          >
+            <Tab key="undergraduate" title="Undergraduate" />
+            <Tab key="external" title="External" />
+          </Tabs>
         </div>
-        <input
-          type="radio"
-          name="my_tabs_2"
-          role="tab"
-          className="tab h-12 text-lg"
-          aria-label="External"
+
+        <Input
+          placeholder="Enter course name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          startContent={
+            <Search className="text-default-400 pointer-events-none flex-shrink-0" />
+          }
+          className="max-w-xs pb-6"
+          classNames={{
+            base: "max-w-full sm:max-w-[44%]",
+            label: "text-black/50 dark:text-white/90",
+            input: [
+              "bg-transparent",
+              "text-black/90 dark:text-white/90",
+              "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+            ],
+            innerWrapper: "bg-transparent",
+            inputWrapper: [
+              "shadow-xl",
+              "bg-default-200/50",
+              "dark:bg-default/60",
+              "backdrop-blur-xl",
+              "backdrop-saturate-200",
+              "hover:bg-default-200/70",
+              "dark:hover:bg-default/70",
+              "group-data-[focused=true]:bg-default-200/50",
+              "dark:group-data-[focused=true]:bg-default/60",
+              "!cursor-text",
+            ],
+          }}
         />
-        <div role="tabpanel" className="tab-content rounded-box p-6 bg-white">
-          <Options />
-          <br />
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 p-5">
-            <div className="">
-              <HCourseCard />
-            </div>
-            <div className="">
-              <HCourseCard />
-            </div>
-            <div className="">
-              <HCourseCard />
-            </div>
-            <div className="">
-              <HCourseCard />
-            </div>
+
+        {filteredCourses.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCourses.map((course) => (
+              <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                <CourseCard
+                  image={course.image}
+                  code={course.code}
+                  name={course.name}
+                />
+              </div>
+            ))}
           </div>
-        </div>
+        ) : (
+          <p className="text-center text-gray-500 mt-4">No Match Found.</p>
+        )}
       </div>
     </div>
   );
-};
-
-export default Home;
+}

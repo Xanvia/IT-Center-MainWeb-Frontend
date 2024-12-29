@@ -3,108 +3,27 @@
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import Image from "next/image";
+import { FormData as FORMdata, formSchema } from "@/schemas/studentRegSchema";
+import { DefaultStudentRegValues } from "@/constants/studentRegDefault";
+import toast, { Toaster } from "react-hot-toast";
+import Axios from "@/config/axios";
+import { useSession } from "next-auth/react";
+import { delay } from "@/utils/common";
 
 type OLSubject = "english" | "mathematics" | "science";
 const OLSub: OLSubject[] = ["english", "mathematics", "science"];
 
-const formSchema = z.object({
-  personalDetails: z.object({
-    title: z.string().min(1, { message: "Title is required" }),
-    fullName: z.string().min(2, { message: "Full name is required" }),
-    nameWithInitials: z
-      .string()
-      .min(2, { message: "Name with initials is required" }),
-    nationalIdCardNo: z
-      .string()
-      .min(5, { message: "National ID Card number is required" }),
-    phoneNumber: z
-      .string()
-      .min(10, { message: "Valid phone number is required" }),
-    postalAddress: z.string().min(5, { message: "Postal address is required" }),
-    photo: z.any().optional(),
-  }),
-  educationalQualifications: z.object({
-    olevel: z.object({
-      english: z.string().min(1, { message: "Grade is required" }),
-      mathematics: z.string().min(1, { message: "Grade is required" }),
-      science: z.string().min(1, { message: "Grade is required" }),
-    }),
-    alevel: z
-      .array(
-        z.object({
-          subject: z.string().min(1, { message: "Subject is required" }),
-          grade: z.string().min(1, { message: "Grade is required" }),
-        })
-      )
-      .min(4, { message: "At least 4 A-Level subjects are required" }),
-  }),
-  higherEducationalQualifications: z.array(
-    z.object({
-      qualification: z
-        .string()
-        .min(1, { message: "Qualification is required" }),
-      dateAwarded: z.string().min(1, { message: "Date awarded is required" }),
-      institute: z.string().min(1, { message: "Institute is required" }),
-    })
-  ),
-  otherQualifications: z.string(),
-  employmentDetails: z.object({
-    institute: z.string().min(1, { message: "Institute is required" }),
-    designation: z.string().min(1, { message: "Designation is required" }),
-    officeAddress: z.string().min(1, { message: "Office address is required" }),
-    officeTelephone: z
-      .string()
-      .min(1, { message: "Office telephone is required" }),
-  }),
-});
-
-type FormData = z.infer<typeof formSchema>;
-
 export default function StudentRegistrationForm() {
+  const { data: session } = useSession();
   const {
     control,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<FORMdata>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      personalDetails: {
-        title: "",
-        fullName: "",
-        nameWithInitials: "",
-        nationalIdCardNo: "",
-        phoneNumber: "",
-        postalAddress: "",
-        photo: null,
-      },
-      educationalQualifications: {
-        olevel: {
-          english: "",
-          mathematics: "",
-          science: "",
-        },
-        alevel: [
-          { subject: "", grade: "" },
-          { subject: "", grade: "" },
-          { subject: "", grade: "" },
-          { subject: "", grade: "" },
-        ],
-      },
-      higherEducationalQualifications: [
-        { qualification: "", dateAwarded: "", institute: "" },
-      ],
-      otherQualifications: "",
-      employmentDetails: {
-        institute: "",
-        designation: "",
-        officeAddress: "",
-        officeTelephone: "",
-      },
-    },
+    defaultValues: DefaultStudentRegValues,
   });
 
   const {
@@ -118,19 +37,41 @@ export default function StudentRegistrationForm() {
 
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: FORMdata) => {
     console.log(data);
+    // continue the function
+    // here check the data in browser console and match it with backend dto.
+    // test the flow and make sure there will be a student user in database
+    // extra: delete the user (old one) after successfully created the student
   };
 
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  // upload profile image
+  const handlePhotoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files;
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string);
-        setValue("personalDetails.photo", file);
-      };
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append("user", file[0]);
+      try {
+        const response = await Axios.post("/user/upload-img", formData, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        const imageUrl = response.data.path;
+        console.log(imageUrl);
+        if (imageUrl) {
+          toast("Profile Picture Uploaded Successfully!");
+          await delay(3000);
+          setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
+        } else {
+          toast("Profile Picture Upload Failed. Try Again!");
+        }
+      } catch (error) {
+        toast("Profile Picture Upload Failed. Try Again!");
+      }
     }
   };
 
@@ -140,12 +81,14 @@ export default function StudentRegistrationForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-8 max-w-4xl mx-auto p-4"
       >
+        <Toaster />
         <div className="card bg-base-100 shadow-xl">
-          <h1 className="text-3xl font-bold my-6 text-center">
+          <h1 className="text-2xl font-bold my-4 text-center">
             Student Registration
           </h1>
+          {/* Personal Details  */}
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">Personal Details</h2>
+            <h2 className="card-title text-xl font-bold">Personal Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Controller
                 name="personalDetails.title"
@@ -301,7 +244,7 @@ export default function StudentRegistrationForm() {
                     alt="Profile Photo"
                     width={100}
                     height={100}
-                    className="rounded-full"
+                    className="rounded-lg h-28 w-auto"
                   />
                 </div>
               )}
@@ -309,14 +252,15 @@ export default function StudentRegistrationForm() {
           </div>
         </div>
 
+        {/* Education Qualification  */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">
+            <h2 className="card-title text-xl font-bold">
               Educational Qualifications
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-xl font-semibold mb-4">
+                <h3 className="text-lg font-semibold mb-4">
                   GCE Ordinary Level
                 </h3>
                 <table className="table w-full">
@@ -352,7 +296,7 @@ export default function StudentRegistrationForm() {
                 </table>
               </div>
               <div>
-                <h3 className="text-xl font-semibold mb-4">
+                <h3 className="text-lg font-semibold mb-4">
                   GCE Advanced Level
                 </h3>
                 <table className="table w-full">
@@ -406,7 +350,7 @@ export default function StudentRegistrationForm() {
 
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">
+            <h2 className="card-title text-xl font-bold">
               Higher Educational Qualifications
             </h2>
             <table className="table w-full">
@@ -465,7 +409,7 @@ export default function StudentRegistrationForm() {
                     <td>
                       <button
                         type="button"
-                        className="btn btn-error btn-sm"
+                        className="btn btn-error btn-sm text-white"
                         onClick={() => removeHigherEducation(index)}
                       >
                         Remove
@@ -477,7 +421,7 @@ export default function StudentRegistrationForm() {
             </table>
             <button
               type="button"
-              className="btn btn-primary mt-4"
+              className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
               onClick={() =>
                 appendHigherEducation({
                   qualification: "",
@@ -493,7 +437,7 @@ export default function StudentRegistrationForm() {
 
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">
+            <h2 className="card-title text-xl font-bold">
               Other Qualifications
             </h2>
             <Controller
@@ -514,9 +458,7 @@ export default function StudentRegistrationForm() {
 
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl font-bold">
-              Employment Details
-            </h2>
+            <h2 className="card-title text-xl font-bold">Employment Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Controller
                 name="employmentDetails.institute"
@@ -609,7 +551,10 @@ export default function StudentRegistrationForm() {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary w-full">
+        <button
+          type="submit"
+          className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
+        >
           Submit Registration
         </button>
       </form>

@@ -1,13 +1,14 @@
-"use client";
+import ProjectShowcase from './components/projectCard';
 
-import FullSearch from "./components/search/fullSearch";
-import ProPage from "./components/proPage";
 
-export default function page() {
+import React from 'react'
+
+function page() {
   return (
     <div>
-      <FullSearch />
-      <ProPage />
+      <ProjectShowcase/>
     </div>
-  );
+  )
 }
+
+export default page

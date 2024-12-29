@@ -25,7 +25,7 @@ export default function Home() {
         <div className="md:ml-20 md:mt-20 ml-5 mt-10">
           <div>
             <h1 className="md:text-5xl sm:text-3xl text-3xl text-white font-rubik">
-              Welcome to Our IT Center
+              Welcome to IT Center
             </h1>
             <h3 className="mt-3 ml-1 text-gray-300 font-sans md:text-xl  sm:text-lg text-base">
               Empowering your digital journey
@@ -38,7 +38,7 @@ export default function Home() {
               </button>
             </Link>
 
-            <Link href={"/courseReg"}>
+            <Link href={"/dashboard/courseRegistration"}>
               <button className="bg-transparent hover:bg-yellow-200 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
                 Course Registration
               </button>
@@ -66,7 +66,7 @@ export default function Home() {
           <h1 className="text-5xl font-rubik">
             Innovative IT Solutions for{" "}
             <div className="inline-block from-yellow-500 to-yellow-200 bg-clip-text text-transparent bg-gradient-to-b">
-              Your Business
+              You & Your Business
             </div>
           </h1>
           <p className="md:m-10 m-5 md:text-xl text-sm md:mx-20 md:mt-10 text-slate-400">
@@ -107,10 +107,12 @@ export default function Home() {
             <span className="mr-0 text-2xl text-red-800 hover:text-red-700">
               more courses
             </span>
-            <PiArrowRightBold
-              color="maroon"
-              className="group-hover:translate-x-2 duration-300 text-xl"
-            />
+            <Link href={"/dashboard/courseRegistration"}>
+              <PiArrowRightBold
+                color="maroon"
+                className="group-hover:translate-x-2 duration-300 text-xl"
+              />
+            </Link>
           </div>
         </button>
       </div>
