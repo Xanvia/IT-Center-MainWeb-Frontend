@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Card, CardBody, Image, Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { externalCourses, undergraduateCourses } from "../courseData.";
+import { courses } from "../courseData";
 
 interface CourseDetailsProps {
   params: {
@@ -17,11 +17,8 @@ const CourseDetails = ({ params }: CourseDetailsProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Combine both undergraduate and external courses for search
-  const allCourses = [...undergraduateCourses, ...externalCourses];
-
   // Find the course by ID
-  const course = allCourses.find((course) => course.id === id);
+  const course = courses.find((course) => course.id === id);
 
   if (!course) {
     return <p>Course not found</p>;
