@@ -93,13 +93,23 @@ export default function ReservationModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Convert numeric fields to numbers
+    const convertedFormData = {
+      ...formData,
+      seatLimit: Number(formData.seatLimit),
+      noOfComputers: Number(formData.noOfComputers),
+      feeRatePerHour: Number(formData.feeRatePerHour),
+    };
+
     const url = reservation ? `reservations/${reservation.id}` : "reservations";
+    console.log("formData", convertedFormData);
     try {
       if (reservation) {
-        const res = await Axios.patch(url, formData);
+        const res = await Axios.patch(url, convertedFormData);
         console.log(res.data);
       } else {
-        const res = await Axios.post(url, formData);
+        const res = await Axios.post(url, convertedFormData);
         console.log(res.data);
       }
 
@@ -108,7 +118,7 @@ export default function ReservationModal({
         description: "Your reservation has been saved successfully",
       });
       onClose();
-      onSave(formData);
+      onSave(convertedFormData);
     } catch (error: any) {
       console.log(error.response.data);
       toast({
@@ -177,7 +187,7 @@ export default function ReservationModal({
                 <Label htmlFor="computers">Number of Computers</Label>
                 <Input
                   id="computers"
-                  name="computers"
+                  name="noOfComputers"
                   type="number"
                   value={formData.noOfComputers}
                   onChange={handleChange}
@@ -216,8 +226,8 @@ export default function ReservationModal({
               <div>
                 <Label htmlFor="feePerHour">Fee per Hour</Label>
                 <Input
-                  id="feePerHour"
-                  name="feePerHour"
+                  id="feeRatePerHour"
+                  name="feeRatePerHour"
                   type="number"
                   value={formData.feeRatePerHour}
                   onChange={handleChange}
@@ -236,16 +246,6 @@ export default function ReservationModal({
                 <Label htmlFor="image">Images</Label>
 
                 <div className="flex m-1 space-x-2 overflow-auto">
-                  {reservation?.images.map((image, index) => (
-                    <div>
-                      <img
-                        src={image}
-                        alt={`image:${index}`}
-                        className="h-20"
-                      />
-                      <div className="absolute top-1 right-1"></div>
-                    </div>
-                  ))}
                   {formData.images.map((image, index) => (
                     <div className="relative ">
                       <img
