@@ -1,20 +1,49 @@
 "use client";
 
-import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardBody, CardFooter } from "@nextui-org/card";
+import { BookOpen, Edit, Users, Award } from "lucide-react";
+import Link from "next/link";
 
-const ManageCoursesPage = () => {
+export default function manageCourses() {
+  const courseActions = [
+    {
+      name: "Create Course",
+      href: "manageCourses/createCourse",
+      icon: BookOpen,
+      color: "text-green-500",
+    },
+    {
+      name: "Update Course",
+      href: "manageCourses/updateCourse",
+      icon: Edit,
+      color: "text-blue-500",
+    },
+  ];
+
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Manage Courses</h1>
-      <Card>
-        <CardContent className="p-6">
-          {/* Course management content will go here */}
-          <div>Course management interface coming soon...</div>
-        </CardContent>
-      </Card>
+    <div className="container mx-auto p-6 text-center">
+      <h1 className="text-3xl text-maroon font-bold mb-10">
+        Course Management
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {courseActions.map((action) => (
+          <Link key={action.name} href={action.href}>
+            <Card
+              isPressable
+              className="w-full h-full hover:scale-105 transition-transform duration-200"
+            >
+              <CardBody className="items-center justify-center py-6">
+                <action.icon className={`w-16 h-16 ${action.color}`} />
+              </CardBody>
+              <CardFooter className="flex-col items-center justify-center pb-6 pt-2">
+                <p className="text-lg font-semibold text-center">
+                  {action.name}
+                </p>
+              </CardFooter>
+            </Card>
+          </Link>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default ManageCoursesPage;
+}
