@@ -35,7 +35,7 @@ export default function Reservations() {
         <h1 className="text-4xl font-bold mb-4 text-maroon-800">
           Reserve Your Space
         </h1>
-        <p className="text-xl mb-6 text-gray-600">
+        <p className="text-md mb-6 text-gray-600">
           Find and book the perfect lab or hall for your needs
         </p>
       </section>
@@ -63,11 +63,11 @@ export default function Reservations() {
               </div>
               <div className="flex items-center space-x-2 text-gray-600 mt-2">
                 <MapPin className="h-5 w-5" />
-                <span>Location:</span>
+                <span>Location: {room.location}</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-600 mt-2">
                 <Nfc className="h-5 w-5" />
-                <span>Charge /h: {}</span>
+                <span>Charge /h: {room.feeRatePerHour} LKR</span>
               </div>
             </CardContent>
             <CardFooter>
@@ -75,11 +75,7 @@ export default function Reservations() {
                 asChild
                 className="w-full bg-maroon hover:text-yellow-500 text-white"
               >
-                <Link
-                  href={`/room/${room.name.toLowerCase().replace(/\s+/g, "-")}`}
-                >
-                  View Details
-                </Link>
+                <Link href={`reservation/room/${room.id}`}>View Details</Link>
               </Button>
             </CardFooter>
           </Card>
