@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getAbsoluteImageUrl(url: string | undefined) {
-  return url?.startsWith("uploads/")
+  return url?.startsWith("uploads")
     ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`
     : url;
 }
