@@ -57,6 +57,7 @@ export default function Component({ params }: { params: { id: string } }) {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [room, setRoom] = useState<RoomDetails>(sampleRoom);
+  const router = useRouter();
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -168,6 +169,9 @@ export default function Component({ params }: { params: { id: string } }) {
               <Button
                 className="w-full mt-6 bg-yellow-500 text-maroon-900 hover:bg-yellow-600"
                 aria-label="Request to Reserve"
+                onClick={() =>
+                  router.push(`/reservation/room/${room.id}/reserve`)
+                }
               >
                 <Calendar className="mr-2 h-4 w-4" />
                 Request to Reserve
@@ -194,6 +198,7 @@ export default function Component({ params }: { params: { id: string } }) {
 
 import { LucideIcon } from "lucide-react";
 import Axios from "@/config/axios";
+import { useRouter } from "next/navigation";
 
 function InfoItem({
   icon: Icon,

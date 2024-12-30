@@ -13,9 +13,11 @@ import { MapPin, Nfc, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Reservation } from "@/utils/types";
 import Axios from "@/config/axios";
+import { useRouter } from "next/navigation";
 
 export default function Reservations() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     // Fetch reservations from the server
@@ -72,10 +74,12 @@ export default function Reservations() {
             </CardContent>
             <CardFooter>
               <Button
-                asChild
                 className="w-full bg-maroon hover:text-yellow-500 text-white"
+                onClick={() => {
+                  router.push(`/reservation/room/${room.id}`);
+                }}
               >
-                <Link href={`reservation/room/${room.id}`}>View Details</Link>
+                View Details
               </Button>
             </CardFooter>
           </Card>

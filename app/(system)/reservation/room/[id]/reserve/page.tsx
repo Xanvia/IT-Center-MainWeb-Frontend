@@ -1,10 +1,15 @@
 "use client";
 import { useState } from "react";
-import ReservationCalendar from "../../components/calender";
-import { ReservationForm } from "../../components/requestForm";
+import ReservationCalendar from "../../../components/calender";
+import { ReservationForm } from "../../../components/requestForm";
 import { DateRange } from "react-day-picker";
 
-export default function ReservationPage() {
+export default function ReservationPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const slug = params.id;
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(),
