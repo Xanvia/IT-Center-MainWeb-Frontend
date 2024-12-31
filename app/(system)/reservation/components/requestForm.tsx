@@ -33,6 +33,16 @@ import { DateRange } from "react-day-picker";
 import Axios from "@/config/axios";
 import { Event } from "@/utils/types";
 import { useSession } from "next-auth/react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
   date: z
@@ -70,10 +80,18 @@ export function ReservationForm({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: "onBlur",
     defaultValues: {
       eventDetails: "",
     },
   });
+
+  const validateFields = async () => {
+    const isValid = await form.trigger();
+    if (isValid) {
+      setOpen(true);
+    }
+  };
 
   const [events, setEvents] = useState<Event[]>([]);
   const [reservation, setReservation] = useState<reservationData>();
@@ -82,6 +100,7 @@ export function ReservationForm({
     false,
     false,
   ]);
+  const [open, setOpen] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -159,6 +178,21 @@ export function ReservationForm({
     }
   }, [date]);
 
+  const charges = (timeSlot: string) => {
+    var amount = 0;
+    if (!reservation) {
+      return 0;
+    }
+    if (timeSlot === "FULLDAY") {
+      amount = reservation.feeRatePerHour * 8;
+    } else {
+      amount = reservation.feeRatePerHour * 4;
+    }
+    date?.from &&
+      date?.to &&
+      (amount = amount * (date.to.getDate() - date.from.getDate() + 1));
+    return amount;
+  };
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
@@ -326,10 +360,79 @@ export function ReservationForm({
                 </FormItem>
               )}
             />
-
-            <Button type="submit" className="w-full">
+            <Button className="w-full" type="button" onClick={validateFields}>
               Request Reservation
             </Button>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Confirm Your Reservation</DialogTitle>
+                  <DialogDescription>
+                    Make sure the details are correct before submitting.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 pt-2">
+                  <div className="flex justify-between items-center">
+                    <Label className=" text-gray-600 font-medium">
+                      Reservation Name:
+                    </Label>
+                    <p className="text-right text-small">{reservation?.name}</p>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <Label className="font-medium text-gray-600">
+                    Event Name:
+                  </Label>
+                  <p className="text-right text-small">
+                    {form.watch("eventName")}
+                  </p>
+                </div>
+                <div className="flex justify-between items-start">
+                  <Label className="font-medium text-gray-600">
+                    Reservation Date:
+                  </Label>
+                  <div className="text-right text-small">
+                    <p>From: {date?.from?.toDateString()}</p>
+                    <p>To: {date?.to?.toDateString()}</p>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <Label className="font-medium text-gray-600">
+                    Time Slot:
+                  </Label>
+                  <p className="text-right text-small">
+                    {form.watch("timeSlot") === "MORNING"
+                      ? "8 am - 12 pm"
+                      : form.watch("timeSlot") === "AFTERNOON"
+                      ? "1 pm - 5 pm"
+                      : "Full Day"}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <Label className="font-medium text-gray-600">
+                    Estimated Charge:
+                  </Label>
+                  <p className="text-right font-semibold ">
+                    LKR {charges(form.watch("timeSlot"))}
+                  </p>
+                </div>
+                <p className="text-xs italic text-gray-600">
+                  You will be required to pay this amount upon confirmation by
+                  the IT Center. condition applied*
+                </p>
+
+                <DialogFooter>
+                  <Button
+                    type="button"
+                    className="bg-red-600"
+                    onClick={form.handleSubmit(onSubmit)}
+                  >
+                    Process
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </form>
         </Form>
       </CardContent>
