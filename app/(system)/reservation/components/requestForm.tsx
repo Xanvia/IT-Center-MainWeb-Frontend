@@ -168,12 +168,15 @@ export function ReservationForm({
       };
       if (taken("MORNING")) {
         setTimeLocked((prev) => [true, prev[1], true]);
+        form.resetField("timeSlot");
       }
       if (taken("AFTERNOON")) {
         setTimeLocked((prev) => [prev[0], true, true]);
+        form.resetField("timeSlot");
       }
       if (taken("FULLDAY")) {
         setTimeLocked([true, true, true]);
+        form.resetField("timeSlot");
       }
     }
   }, [date]);
