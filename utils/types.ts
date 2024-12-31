@@ -18,3 +18,12 @@ export interface Reservation {
   location: string;
   feeRatePerHour: number;
 }
+
+export type Event = {
+  title: string;
+  start: string;
+  end: string;
+  display: string;
+  color?: string;
+  timeSlot?: string;
+};
