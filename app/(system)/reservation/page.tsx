@@ -34,7 +34,7 @@ export default function Reservations() {
   return (
     <main className="flex-grow container mx-auto py-8">
       <section className="mb-12 text-center">
-        <h1 className="text-4xl font-bold mb-4 text-maroon-800">
+        <h1 className="text-4xl font-rubik font-bold mb-2 text-maroon-800">
           Reserve Your Space
         </h1>
         <p className="text-md mb-6 text-gray-600">
