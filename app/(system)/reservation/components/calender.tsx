@@ -7,6 +7,7 @@ import { DateRange } from "react-day-picker";
 import { useEffect, useState } from "react";
 import Axios from "@/config/axios";
 import { Event } from "@/utils/types";
+import { addOneDaytoDateString } from "@/utils/common";
 
 export default function ReservationCalendar({
   setDate,
@@ -24,12 +25,15 @@ export default function ReservationCalendar({
           `/reserve-records/reservation/${reservationId}`
         );
         const data = await response.data;
-        console.log(data);
+        console.log("blaaaaaa", data);
         setEvents(
           data.map((event: any) => ({
             title: event.eventName,
             start: event.startingDate,
-            end: event.endingDate,
+            end:
+              event.endingDate === event.startingDate
+                ? event.endingDate
+                : addOneDaytoDateString(event.endingDate),
             color: event.timeSlot === "FULLDAY" ? "#ff9f1c" : "#ff9fac",
           }))
         );
@@ -55,7 +59,7 @@ export default function ReservationCalendar({
           eventContent={renderEventContent}
           events={events}
           select={function (info) {
-            console.log(info);
+            console.log("infooo", info);
             const endDate = new Date(info.end);
             endDate.setDate(endDate.getDate() - 1);
             setDate({ from: info.start, to: endDate });
@@ -71,7 +75,7 @@ export default function ReservationCalendar({
 function renderEventContent(eventInfo: any) {
   return (
     <>
-      <i className="text-sm ">{eventInfo.event.title}</i>
+      <i className="text-sm ">{eventInfo.event.title.slice(0, 15)}</i>
     </>
   );
 }

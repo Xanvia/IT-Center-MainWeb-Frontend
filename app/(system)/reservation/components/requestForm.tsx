@@ -40,9 +40,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   date: z
@@ -77,13 +77,11 @@ export function ReservationForm({
   reservationId: string;
 }) {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
-    defaultValues: {
-      eventDetails: "",
-    },
   });
 
   const validateFields = async () => {
@@ -95,11 +93,7 @@ export function ReservationForm({
 
   const [events, setEvents] = useState<Event[]>([]);
   const [reservation, setReservation] = useState<reservationData>();
-  const [timeLocked, setTimeLocked] = useState<boolean[]>([
-    false,
-    false,
-    false,
-  ]);
+  const [timeLocked, setTimeLocked] = useState<boolean[]>([true, true, true]);
   const [open, setOpen] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -115,6 +109,7 @@ export function ReservationForm({
           description: values.eventDetails,
           phoneNumber: values.phoneNumber,
           reservationId: reservationId,
+          charges: charges(values.timeSlot),
         },
         {
           headers: {
@@ -122,6 +117,7 @@ export function ReservationForm({
           },
         }
       );
+      router.push("/reservation/my-reservations");
     } catch (error) {
       console.log("something went wrong!");
     }
@@ -161,9 +157,20 @@ export function ReservationForm({
       setTimeLocked([false, false, false]);
       const taken = (timeSlot: "MORNING" | "AFTERNOON" | "FULLDAY") => {
         return events.some((event) => {
-          return (
-            isSameDay(date.from!, event.start) && timeSlot === event.timeSlot
-          );
+          const endDate = new Date(event.end);
+          for (
+            let currentDate = new Date(event.start);
+            currentDate <= endDate;
+            currentDate.setDate(currentDate.getDate() + 1)
+          ) {
+            if (
+              isSameDay(date.from!, currentDate) &&
+              timeSlot === event.timeSlot
+            ) {
+              return true;
+            }
+          }
+          return false;
         });
       };
       if (taken("MORNING")) {
@@ -179,7 +186,7 @@ export function ReservationForm({
         form.resetField("timeSlot");
       }
     }
-  }, [date]);
+  }, [date, events]);
 
   const charges = (timeSlot: string) => {
     var amount = 0;

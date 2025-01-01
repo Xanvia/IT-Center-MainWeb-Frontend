@@ -14,3 +14,9 @@ export function getAbsoluteImageUrl(url: string | undefined) {
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function addOneDaytoDateString(dateString: string) {
+  const date = new Date(dateString);
+  date.setDate(date.getDate() + 1);
+  return date.toISOString().split("T")[0];
+}
