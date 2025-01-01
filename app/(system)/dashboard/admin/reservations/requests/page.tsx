@@ -152,7 +152,7 @@ const ReservationsPage: React.FC = () => {
   }, []);
 
   return (
-    <main className="w-full min-h-screen">
+    <main className="w-full ">
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-6 text-gray-600">
           Reservation Management
