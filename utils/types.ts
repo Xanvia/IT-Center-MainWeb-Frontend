@@ -27,3 +27,19 @@ export type Event = {
   color?: string;
   timeSlot?: string;
 };
+
+export type ReservationStatus =
+  | "PENDING"
+  | "PAYMENT"
+  | "CONFIRMED"
+  | "REJECTED"
+  | "DONE";
+
+export interface ReservationRequest {
+  id: string;
+  eventName: string;
+  startingDate: string;
+  endingDate: string;
+  timeSlot: "MORNING" | "AFTERNOON" | "FULLDAY";
+  status: ReservationStatus;
+}
