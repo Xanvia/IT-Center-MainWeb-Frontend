@@ -4,9 +4,9 @@ import React from "react";
 
 const AboutPage: React.FC = () => {
   return (
-    <div className="mx-auto p-8 px-20">
+    <div className="mx-auto min-h-[80vh] bg-background p-8 px-20">
       <div className="mx-auto">
-        <h1 className="text-3xl font-rubik font-bold text-center my-12 text-maroon">
+        <h1 className="text-3xl font-rubik font-bold text-center mb-12 mt-6 text-maroon">
           About Reservations
         </h1>
       </div>

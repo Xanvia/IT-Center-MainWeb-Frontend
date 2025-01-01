@@ -2,9 +2,9 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 export default function ContactPage() {
   return (
-    <div className="p-8 bg-gradient-to-b from-blue-50 to-white">
+    <div className="p-8 min-h-[80vh] bg-background to-white">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-rubik font-bold text-center my-12 text-maroon">
+        <h1 className="text-3xl font-rubik font-bold text-center mb-12 mt-6 text-maroon">
           Get in Touch with Us!
         </h1>
 

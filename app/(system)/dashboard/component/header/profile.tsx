@@ -4,7 +4,11 @@ import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { getAbsoluteImageUrl } from "@/utils/common";
 
-const DropdownProfile = () => {
+interface props {
+  reservation?: boolean;
+}
+
+const DropdownProfile = ({ reservation }: props) => {
   const { data: session } = useSession();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -47,14 +51,24 @@ const DropdownProfile = () => {
       <Link
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}
-        className="flex items-center gap-3 w-max"
+        className={`flex items-center w-max ${
+          reservation ? "gap-1 pl-4" : "gap-3"
+        }`}
         href="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-red-800">
-            {session?.user.name}
+          <span
+            className={`block text-sm font-medium ${
+              reservation ? "text-gray-300 text-sm " : "text-red-800"
+            }`}
+          >
+            {reservation
+              ? session?.user.name.split(" ")[0]
+              : session?.user.name}
           </span>
-          <span className="block text-xs">{session?.user.role}</span>
+          <span className={`block text-xs ${reservation && "text-gray-400"}`}>
+            {session?.user.role}
+          </span>
         </span>
 
         <Image
@@ -67,23 +81,25 @@ const DropdownProfile = () => {
           className="h-12 w-12 rounded-full object-cover object-top"
         />
 
-        <svg
-          className={`hidden fill-current sm:block duration-300 ${
-            dropdownOpen && "rotate-180"
-          }`}
-          width="12"
-          height="8"
-          viewBox="0 0 12 8"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M0.410765 0.910734C0.736202 0.585297 1.26384 0.585297 1.58928 0.910734L6.00002 5.32148L10.4108 0.910734C10.7362 0.585297 11.2638 0.585297 11.5893 0.910734C11.9147 1.23617 11.9147 1.76381 11.5893 2.08924L6.58928 7.08924C6.26384 7.41468 5.7362 7.41468 5.41077 7.08924L0.410765 2.08924C0.0853277 1.76381 0.0853277 1.23617 0.410765 0.910734Z"
-            fill=""
-          />
-        </svg>
+        {!reservation && (
+          <svg
+            className={`hidden fill-current sm:block duration-300 ${
+              dropdownOpen && "rotate-180"
+            }`}
+            width="12"
+            height="8"
+            viewBox="0 0 12 8"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M0.410765 0.910734C0.736202 0.585297 1.26384 0.585297 1.58928 0.910734L6.00002 5.32148L10.4108 0.910734C10.7362 0.585297 11.2638 0.585297 11.5893 0.910734C11.9147 1.23617 11.9147 1.76381 11.5893 2.08924L6.58928 7.08924C6.26384 7.41468 5.7362 7.41468 5.41077 7.08924L0.410765 2.08924C0.0853277 1.76381 0.0853277 1.23617 0.410765 0.910734Z"
+              fill=""
+            />
+          </svg>
+        )}
       </Link>
 
       {/* <!-- Dropdown Start --> */}

@@ -42,4 +42,7 @@ export interface ReservationRequest {
   endingDate: string;
   timeSlot: "MORNING" | "AFTERNOON" | "FULLDAY";
   status: ReservationStatus;
+  reservation: {
+    name: string;
+  };
 }
