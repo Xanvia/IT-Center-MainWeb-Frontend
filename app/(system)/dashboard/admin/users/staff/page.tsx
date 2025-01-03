@@ -228,7 +228,9 @@ const StaffPage: React.FC = () => {
                           </DialogTrigger>
                           <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                              <DialogTitle>{staff.displayName}</DialogTitle>
+                              <DialogTitle>
+                                {staff.title + ". " + staff.displayName}
+                              </DialogTitle>
                               <DialogDescription>
                                 Designation: {staff.designation}
                               </DialogDescription>
@@ -238,16 +240,36 @@ const StaffPage: React.FC = () => {
                                 <Label className=" text-gray-600 font-bold">
                                   Email:
                                 </Label>
-                                <p className="text-right text-small">
-                                  {staff.emails[0].email}
+                                <p className="text-left text-small">
+                                  {staff.emails.map((email) => (
+                                    <div>{email.email}</div>
+                                  ))}
+                                </p>
+                              </div>
+                              <div className="flex gap-3 items-center">
+                                <Label className=" text-gray-600 font-bold">
+                                  Nominal:
+                                </Label>
+                                <p className="text-left text-small">
+                                  {staff.nominal}
                                 </p>
                               </div>
                               <div className="flex gap-3 items-center">
                                 <Label className=" text-gray-600 font-bold">
                                   Telephone:
                                 </Label>
-                                <p className="text-right text-small">
-                                  {staff.telephones[0].phoneNumber}
+                                <p className="text-left text-small">
+                                  {staff.telephones.map((telephone) => (
+                                    <div>{telephone.phoneNumber}</div>
+                                  ))}
+                                </p>
+                              </div>
+                              <div className="flex gap-3 items-center">
+                                <Label className=" text-gray-600 font-bold">
+                                  Ext No:
+                                </Label>
+                                <p className="text-left text-small">
+                                  {staff.extNo}
                                 </p>
                               </div>
                             </div>
