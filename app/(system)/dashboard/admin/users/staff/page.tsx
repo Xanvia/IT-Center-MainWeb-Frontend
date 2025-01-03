@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, Edit, Eye, Trash2 } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -20,10 +20,8 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
-  DialogFooter,
   DialogHeader,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
@@ -65,6 +63,36 @@ const StaffPage: React.FC = () => {
   const [requestList, setRequestList] = useState<StaffRequest[]>([]);
   const [selectedTab, setSelectedTab] = useState<StaffState>("REGISTERED");
   const { data: session } = useSession();
+
+  const approveStaff = (staffEmail: string) => {
+    try {
+      Axios.post(
+        `/user/convert/staff/`,
+        {
+          requestedBy: staffEmail,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const rejectStaff = (profileId: string) => {
+    try {
+      Axios.delete(`/staff-profile/${profileId}`, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const deleteStaff = (staffId: string) => {
     try {
@@ -275,10 +303,18 @@ const StaffPage: React.FC = () => {
                             </div>
                           </DialogContent>
                         </Dialog>
-                        <Button size="sm" className="bg-green-500 text-white">
+                        <Button
+                          size="sm"
+                          onClick={() => approveStaff(staff.requestBy)}
+                          className="bg-green-500 text-white"
+                        >
                           Approve
                         </Button>
-                        <Button size="sm" className="bg-red-500 text-white">
+                        <Button
+                          onClick={() => rejectStaff(staff.id)}
+                          size="sm"
+                          className="bg-red-500 text-white"
+                        >
                           Reject
                         </Button>
                       </div>
