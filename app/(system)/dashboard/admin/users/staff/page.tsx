@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Eye, Trash2 } from "lucide-react";
+import { Edit, Eye, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -22,6 +22,8 @@ import {
   DialogTitle,
   DialogHeader,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
@@ -62,6 +64,7 @@ const StaffPage: React.FC = () => {
   const [staffList, setStaffList] = useState<Staff[]>([]);
   const [requestList, setRequestList] = useState<StaffRequest[]>([]);
   const [selectedTab, setSelectedTab] = useState<StaffState>("REGISTERED");
+  const [newExtNo, setNewExtNo] = useState("");
   const { data: session } = useSession();
 
   const approveStaff = (staffEmail: string) => {
@@ -89,6 +92,29 @@ const StaffPage: React.FC = () => {
           Authorization: `Bearer ${session?.access_token}`,
         },
       });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateExtNO = (profileId: string, extNo: string) => {
+    try {
+      Axios.patch(
+        `/staff-profile/${profileId}`,
+        {
+          extNo: extNo,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      setRequestList((requests) =>
+        requests.map((request) =>
+          request.id === profileId ? { ...request, extNo: extNo } : request
+        )
+      );
     } catch (error) {
       console.log(error);
     }
@@ -246,7 +272,42 @@ const StaffPage: React.FC = () => {
                     </TableCell>
                     <TableCell>{staff.displayName}</TableCell>
                     <TableCell>{staff.designation}</TableCell>
-                    <TableCell>{staff.extNo}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        {staff.extNo}
+                        <Dialog onOpenChange={() => setNewExtNo(staff.extNo)}>
+                          <DialogTrigger asChild>
+                            <Edit className="h-4 w-4 cursor-pointer" />
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                              <DialogTitle>Edit the Ext No</DialogTitle>
+                            </DialogHeader>
+                            <div className="grid gap-4 pt-2">
+                              <Label>Ext No</Label>
+                              <input
+                                value={newExtNo}
+                                onChange={(e) => setNewExtNo(e.target.value)}
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                              />
+                            </div>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button
+                                  onClick={() =>
+                                    updateExtNO(staff.id, newExtNo)
+                                  }
+                                  type="submit"
+                                  className="bg-red-600"
+                                >
+                                  Update
+                                </Button>
+                              </DialogClose>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </TableCell>
                     <TableCell>{staff.requestBy}</TableCell>
                     <TableCell>
                       <div className="flex gap-2 items-center">
