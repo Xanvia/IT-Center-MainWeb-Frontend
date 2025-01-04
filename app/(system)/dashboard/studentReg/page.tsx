@@ -4,15 +4,18 @@ import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { FormData as FORMdata, formSchema } from "@/schemas/studentRegSchema";
+import {
+  StudentFormData as FORMdata,
+  formSchema,
+} from "@/schemas/studentRegSchema";
 import { DefaultStudentRegValues } from "@/constants/studentRegDefault";
 import toast, { Toaster } from "react-hot-toast";
 import Axios from "@/config/axios";
 import { useSession } from "next-auth/react";
 import { delay } from "@/utils/common";
 
-type OLSubject = "english" | "mathematics" | "science";
-const OLSub: OLSubject[] = ["english", "mathematics", "science"];
+type OLSubject = "englishOL" | "mathematicsOL" | "scienceOL";
+const OLSub: OLSubject[] = ["englishOL", "mathematicsOL", "scienceOL"];
 
 export default function StudentRegistrationForm() {
   const { data: session } = useSession();
@@ -37,12 +40,41 @@ export default function StudentRegistrationForm() {
 
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const onSubmit = (data: FORMdata) => {
-    console.log(data);
+  const onSubmit = async (data: FORMdata) => {
     // continue the function
     // here check the data in browser console and match it with backend dto.
     // test the flow and make sure there will be a student user in database
     // extra: delete the user (old one) after successfully created the student
+
+    console.log(data);
+
+    try {
+      // Send the form data to the backend
+      const response = await Axios.post("/user/convert/student", data, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 201) {
+        toast("Student registered successfully!");
+
+        // Optionally, delete the old user after successful registration
+        /*await Axios.delete(`/user/${data.oldUserId}`, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+  
+        toast("Old user deleted successfully!");*/
+      } else {
+        toast("Failed to register student.");
+      }
+    } catch (error) {
+      console.error("Error registering student:", error);
+      toast("An error occurred while registering the student.");
+    }
   };
 
   // upload profile image
@@ -54,6 +86,7 @@ export default function StudentRegistrationForm() {
       const formData = new FormData();
       formData.append("user", file[0]);
       try {
+        //axios use instead of fetch
         const response = await Axios.post("/user/upload-img", formData, {
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
@@ -103,7 +136,7 @@ export default function StudentRegistrationForm() {
                       {...field}
                     >
                       <option value="">Select a title</option>
-                      {["Rev", "Mr", "Ms", "Mrs", "Dr", "Prof"].map((title) => (
+                      {["Rev", "Mr", "Miss", "Mrs", "Dr"].map((title) => (
                         <option key={title} value={title}>
                           {title}
                         </option>
@@ -162,6 +195,27 @@ export default function StudentRegistrationForm() {
                 )}
               />
               <Controller
+                name="personalDetails.dateOfBirth"
+                control={control}
+                render={({ field }) => (
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Date of Birth</span>
+                    </label>
+                    <input
+                      type="date"
+                      className="input input-bordered w-full"
+                      {...field}
+                    />
+                    {errors.personalDetails?.dateOfBirth && (
+                      <span className="text-error text-sm">
+                        {errors.personalDetails.dateOfBirth.message}
+                      </span>
+                    )}
+                  </div>
+                )}
+              />
+              <Controller
                 name="personalDetails.nationalIdCardNo"
                 control={control}
                 render={({ field }) => (
@@ -206,7 +260,7 @@ export default function StudentRegistrationForm() {
                 )}
               />
               <Controller
-                name="personalDetails.postalAddress"
+                name="personalDetails.address"
                 control={control}
                 render={({ field }) => (
                   <div className="form-control">
@@ -214,13 +268,13 @@ export default function StudentRegistrationForm() {
                       <span className="label-text">Postal Address</span>
                     </label>
                     <textarea
-                      placeholder="Enter your postal address"
+                      placeholder="Enter your permanent address"
                       className="textarea textarea-bordered w-full"
                       {...field}
                     />
-                    {errors.personalDetails?.postalAddress && (
+                    {errors.personalDetails?.address && (
                       <span className="text-error text-sm">
-                        {errors.personalDetails.postalAddress.message}
+                        {errors.personalDetails.address.message}
                       </span>
                     )}
                   </div>
@@ -367,7 +421,7 @@ export default function StudentRegistrationForm() {
                   <tr key={field.id}>
                     <td>
                       <Controller
-                        name={`higherEducationalQualifications.${index}.qualification`}
+                        name={`higherEducationalQualifications.${index}.FOQualification`}
                         control={control}
                         render={({ field }) => (
                           <input
@@ -381,7 +435,7 @@ export default function StudentRegistrationForm() {
                     </td>
                     <td>
                       <Controller
-                        name={`higherEducationalQualifications.${index}.dateAwarded`}
+                        name={`higherEducationalQualifications.${index}.date`}
                         control={control}
                         render={({ field }) => (
                           <input
@@ -424,8 +478,8 @@ export default function StudentRegistrationForm() {
               className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
               onClick={() =>
                 appendHigherEducation({
-                  qualification: "",
-                  dateAwarded: "",
+                  FOQualification: "",
+                  date: "",
                   institute: "",
                 })
               }
@@ -526,7 +580,7 @@ export default function StudentRegistrationForm() {
                 )}
               />
               <Controller
-                name="employmentDetails.officeTelephone"
+                name="employmentDetails.officePhone"
                 control={control}
                 render={({ field }) => (
                   <div className="form-control">
@@ -539,9 +593,9 @@ export default function StudentRegistrationForm() {
                       className="input input-bordered w-full"
                       {...field}
                     />
-                    {errors.employmentDetails?.officeTelephone && (
+                    {errors.employmentDetails?.officePhone && (
                       <span className="text-error text-sm">
-                        {errors.employmentDetails.officeTelephone.message}
+                        {errors.employmentDetails.officePhone.message}
                       </span>
                     )}
                   </div>
