@@ -3,15 +3,16 @@ export const DefaultStudentRegValues = {
     title: "",
     fullName: "",
     nameWithInitials: "",
+    dateOfBirth: "",
     nationalIdCardNo: "",
     phoneNumber: "",
-    postalAddress: "",
+    address: "",
   },
   educationalQualifications: {
     olevel: {
-      english: "",
-      mathematics: "",
-      science: "",
+      englishOL: "",
+      mathematicsOL: "",
+      scienceOL: "",
     },
     alevel: [
       { subject: "", grade: "" },
@@ -21,13 +22,13 @@ export const DefaultStudentRegValues = {
     ],
   },
   higherEducationalQualifications: [
-    { qualification: "", dateAwarded: "", institute: "" },
+    { FOQualification: "", date: "", institute: "" },
   ],
   otherQualifications: "",
   employmentDetails: {
     institute: "",
     designation: "",
     officeAddress: "",
-    officeTelephone: "",
+    officePhone: "",
   },
 };
