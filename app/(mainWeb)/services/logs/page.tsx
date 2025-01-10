@@ -1,57 +1,99 @@
-"use client";
 
-import React, { useState } from "react";
+"use client"
+import { useState } from "react";
 
-const initialContent = "Certificate based Computer skill programme";
-const initialPhotos = ["/logjpg/im1.jpg", "/logjpg/im2.jpg", "/logjpg/im3.jpg"];
-const initialParagraph = [
-  "1 This is the paragraph for Item 1Some essay samples below are by students who chose to write about a challenge, while other examples may be helpful if you’re looking to write about yourself more generally. And yes, a few of these essays did help these students get accepted into the Ivy League (I’m not telling you which!) though these are all great essays regardless of where (or if) students were admitted to their top choice school.",
+interface Log {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+}
+
+const logs: Log[] = [
+  {
+    id: 1,
+    name: "System Update",
+    description: "Details about the recent system update.",
+    image: "/logjpg/im1.jpg"
+
+  },
+  {
+    id: 2,
+    name: "Server Maintenance",
+    description: "Information about scheduled server maintenance.",
+    image: "/logjpg/im1.jpg"
+
+  },
+  {
+    id: 3,
+    name: "Bug Fix",
+    description: "Summary of fixed bugs in the latest patch.",
+    image:  "/logjpg/im1.jpg"
+
+  },
+  {
+    id: 4,
+    name: "Bug Fix",
+    description: "Summary of fixed bugs in the latest patch.",
+    image:  "/logjpg/im1.jpg"
+
+  },
+  {
+    id: 5,
+    name: "Bug Fix",
+    description: "Summary of fixed bugs in the latest patch.",
+    image:  "/logjpg/im1.jpg"
+
+  },
+  {
+    id: 6,
+    name: "Bug Fix",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis feugiat quam sit amet magna condimentum, et egestas felis tempor. Praesent maximus euismod erat, sit amet gravida tortor viverra a. Fusce at molestie orci, sed lacinia velit. Donec vel ullamcorper ex. Maecenas at dapibus mauris. Aliquam commodo, magna quis pellentesque aliquet, dolor dui consectetur mauris, at vestibulum dui justo non est. Pellentesque pellentesque urna id erat tempor facilisis. Proin ut ligula non diam varius aliquet. Donec consequat erat magna, interdum molestie ipsum euismod vel",
+    image:  "/logjpg/im1.jpg"
+
+  },
 ];
 
-export default function Home() {
-  const [subject, setSubject] = useState<string>(initialContent);
-  const [photos, setPhotos] = useState<string[]>(initialPhotos);
-  const [paragraph, setParagraph] = useState<string[]>(initialParagraph);
+const LogPage: React.FC = () => {
+  const [selectedLog, setSelectedLog] = useState<Log>(logs[0]);
 
   return (
-    <div className="overflow-hidden">
-      <div className="flex flex-col items-center justify-center">
-        <div className="p-2 md:pt-10 pb-2">
-          <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl text-xl text-center gird">
-            Service Log
-          </h1>
-          <div className="flex justify-center mt-1">
-            <div className="bg-yellow-600 h-1 md:w-32 rounded-md"></div>
-          </div>
-        </div>
+    <div className="flex h-screen p-4 space-x-4">
+      {/* Logs List on the Left */}
+      <div className="w-1/3 bg-gray-100 rounded-lg p-4 shadow-lg overflow-y-auto">
+        <h2 className="text-lg font-bold mb-4">Logs</h2>
+        <ul className="space-y-2">
+          {logs.map((log) => (
+            <li
+              key={log.id}
+              onClick={() => setSelectedLog(log)}
+              className="p-2 bg-white rounded-lg shadow cursor-pointer hover:bg-gray-200"
+            >
+              {log.name}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <div className="w-full md:w-1/2">
-            <div>
-              {/* <CustomAccordion
-                onItemSelected={setSubject}
-                onPhotosSelected={setPhotos}
-                onParagraphSelected={setParagraph}
-              /> */}
-            </div>
+      {/* Log Details on the Right */}
+      <div className="w-2/3 bg-gray-50 rounded-lg p-4 shadow-lg">
+        {selectedLog ? (
+          <div>
+            <h2 className="text-xl font-bold mb-4">{selectedLog.name}</h2>
+            <img
+              src={selectedLog.image}
+              alt={selectedLog.name}
+              className="w-full h-64 object-cover rounded-lg mb-4"
+            />
+            <p>{selectedLog.description}</p>
           </div>
-
-          {/* <div className={styles.ContentBox}>
-            <div className={styles.ContentHeadline}>{subject}</div>
-            <div className={styles.Photos}>
-              {photos.map((photo, index) => (
-                <img
-                  className={styles.Photo}
-                  key={index}
-                  src={photo}
-                  alt={`Photo ${index + 1}`}
-                />
-              ))}
-            </div>
-            {paragraph && <p className={styles.Paragraph}>{paragraph}</p>}
-          </div> */}
-        </div>
+        ) : (
+          <p className="text-gray-500">Select a log to see details.</p>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default LogPage;
+

@@ -25,7 +25,7 @@ export default function InteractiveNewsRow() {
       id: 1,
       name: "News Alpha",
       description: "A cutting-edge web application for task management. This news aims to revolutionize how teams collaborate and manage their workflows.",
-      imageUrl: "/placeholder.svg?height=200&width=300",
+      imageUrl: "/common/mainWeb.jpg",
       date: "2023-06-15",
       time: "14:00",
       venue: "Tech Hub, Silicon Valley"
