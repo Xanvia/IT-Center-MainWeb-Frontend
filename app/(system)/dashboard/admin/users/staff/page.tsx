@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Eye, Trash2 } from "lucide-react";
+import { Delete, Edit, Eye, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -36,7 +36,12 @@ type Staff = {
   name: string;
   email: string;
   image: string;
-  designation: string;
+  staffProfile: {
+    id: string;
+    title: string;
+    designation: string;
+    extNo: string;
+  };
 };
 
 type StaffRequest = {
@@ -67,9 +72,9 @@ const StaffPage: React.FC = () => {
   const [newExtNo, setNewExtNo] = useState("");
   const { data: session } = useSession();
 
-  const approveStaff = (staffEmail: string) => {
+  const approveStaff = async (staffEmail: string) => {
     try {
-      Axios.post(
+      await Axios.post(
         `/user/convert/staff/`,
         {
           requestedBy: staffEmail,
@@ -85,9 +90,9 @@ const StaffPage: React.FC = () => {
     }
   };
 
-  const rejectStaff = (profileId: string) => {
+  const rejectStaff = async (profileId: string) => {
     try {
-      Axios.delete(`/staff-profile/${profileId}`, {
+      await Axios.delete(`/staff-profile/${profileId}`, {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
         },
@@ -101,9 +106,9 @@ const StaffPage: React.FC = () => {
     }
   };
 
-  const updateExtNO = (profileId: string, extNo: string) => {
+  const updateExtNO = async (profileId: string, extNo: string) => {
     try {
-      Axios.patch(
+      await Axios.patch(
         `/staff-profile/${profileId}`,
         {
           extNo: extNo,
@@ -114,19 +119,34 @@ const StaffPage: React.FC = () => {
           },
         }
       );
-      setRequestList((requests) =>
-        requests.map((request) =>
-          request.id === profileId ? { ...request, extNo: extNo } : request
-        )
-      );
+      {
+        selectedTab === "REGISTERED"
+          ? setStaffList((staffs) =>
+              staffs.map((staff) =>
+                staff.staffProfile.id === profileId
+                  ? {
+                      ...staff,
+                      staffProfile: { ...staff.staffProfile, extNo: extNo },
+                    }
+                  : staff
+              )
+            )
+          : setRequestList((requests) =>
+              requests.map((request) =>
+                request.id === profileId
+                  ? { ...request, extNo: extNo }
+                  : request
+              )
+            );
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const deleteStaff = (staffId: string) => {
+  const deleteStaff = async (staffId: string) => {
     try {
-      Axios.delete(`/staff/${staffId}`, {
+      await Axios.delete(`/user/staff/${staffId}`, {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
         },
@@ -139,14 +159,10 @@ const StaffPage: React.FC = () => {
     }
   };
 
-  const filteredStaffList = staffList.filter(
-    (staff) => staff.designation === selectedTab
-  );
-
   useEffect(() => {
     const fetchStaffList = async () => {
       try {
-        const response = await Axios.get("/staff-profile", {
+        const response = await Axios.get("/user/staff", {
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
           },
@@ -202,49 +218,90 @@ const StaffPage: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredStaffList.map((staff, index) => (
+                {staffList.map((staff, index) => (
                   <TableRow key={staff.id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
-                      <div className="flex gap-1">
+                      <div className="flex gap-1 items-center">
                         <Avatar src={staff.image} name={staff.name} />
                         <div>
-                          <p className="font-semibold">{staff.name}</p>
+                          <p className="font-semibold">
+                            {staff.staffProfile.title + " " + staff.name}
+                          </p>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{staff.designation}</TableCell>
+                    <TableCell>{staff.staffProfile.designation}</TableCell>
                     <TableCell>{staff.email}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        {staff.staffProfile.extNo}
+                        <Dialog
+                          onOpenChange={() =>
+                            setNewExtNo(staff.staffProfile.extNo)
+                          }
+                        >
+                          <DialogTrigger asChild>
+                            <Edit className="h-4 w-4 cursor-pointer" />
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                              <DialogTitle>Edit the Ext No</DialogTitle>
+                            </DialogHeader>
+                            <div className="grid gap-4 pt-2">
+                              <Label>Ext No</Label>
+                              <input
+                                value={newExtNo}
+                                onChange={(e) => setNewExtNo(e.target.value)}
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                              />
+                            </div>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button
+                                  onClick={() =>
+                                    updateExtNO(staff.staffProfile.id, newExtNo)
+                                  }
+                                  type="submit"
+                                  className="bg-red-600"
+                                >
+                                  Update
+                                </Button>
+                              </DialogClose>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Eye className="h-5 w-5 cursor-pointer" />
+                            <Trash2 className="h-5 w-5 text-red-600 cursor-pointer" />
                           </DialogTrigger>
                           <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                              <DialogTitle>{staff.name}</DialogTitle>
-                              <DialogDescription>
-                                Designation: {staff.designation}
-                              </DialogDescription>
+                              <DialogTitle>Confirmation</DialogTitle>
                             </DialogHeader>
-                            <div className="grid gap-4 pt-2">
-                              <div className="flex gap-3 items-center">
-                                <Label className=" text-gray-600 font-bold">
-                                  Email:
-                                </Label>
-                                <p className="text-right text-small">
-                                  {staff.email}
-                                </p>
-                              </div>
+                            <div>
+                              <p>
+                                Are you sure you want to delete this staff
+                                Account?
+                              </p>
                             </div>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button
+                                  onClick={() => deleteStaff(staff.id)}
+                                  type="submit"
+                                  className="bg-red-600"
+                                >
+                                  Delete
+                                </Button>
+                              </DialogClose>
+                            </DialogFooter>
                           </DialogContent>
                         </Dialog>
-
-                        <Trash2
-                          onClick={() => deleteStaff(staff.id)}
-                          className="h-5 w-5 text-red-600 cursor-pointer"
-                        />
                       </div>
                     </TableCell>
                   </TableRow>
