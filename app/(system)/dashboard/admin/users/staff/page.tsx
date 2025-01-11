@@ -92,6 +92,10 @@ const StaffPage: React.FC = () => {
           Authorization: `Bearer ${session?.access_token}`,
         },
       });
+      // update the request list
+      setRequestList((requests) =>
+        requests.filter((request) => request.id !== profileId)
+      );
     } catch (error) {
       console.log(error);
     }
