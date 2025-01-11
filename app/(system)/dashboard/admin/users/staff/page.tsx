@@ -75,9 +75,9 @@ const StaffPage: React.FC = () => {
   const approveStaff = async (staffEmail: string) => {
     try {
       await Axios.post(
-        `/user/convert/staff/`,
+        `/user/convert/staff`,
         {
-          requestedBy: staffEmail,
+          requestBy: staffEmail,
         },
         {
           headers: {
