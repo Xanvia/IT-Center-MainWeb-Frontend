@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Eye, Trash2 } from "lucide-react";
+import { Edit, Eye, MoreVertical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -27,6 +27,14 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Types
 type StaffState = "REGISTERED" | "REQUESTS";
@@ -160,7 +168,56 @@ const StaffPage: React.FC = () => {
     }
   };
 
+  const promoteStaff = async (staffId: string) => {
+    try {
+      await Axios.post(
+        `/user/convert/admin`,
+        {
+          requestId: staffId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      // update the staff list
+      setStaffList((staffs) =>
+        staffs.map((staff) =>
+          staff.id === staffId ? { ...staff, role: "ADMIN" } : staff
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const demoteAdmin = async (staffId: string) => {
+    try {
+      await Axios.post(
+        `/user/demote/staff`,
+        {
+          requestId: staffId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      // update the staff list
+      setStaffList((staffs) =>
+        staffs.map((staff) =>
+          staff.id === staffId ? { ...staff, role: "STAFF" } : staff
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
+    if (!session) return;
     const fetchStaffList = async () => {
       try {
         const response = await Axios.get("/user/staff", {
@@ -190,7 +247,7 @@ const StaffPage: React.FC = () => {
 
     fetchStaffList();
     fetchStaffRequests();
-  }, []);
+  }, [session]);
 
   return (
     <main className="w-full ">
@@ -280,7 +337,7 @@ const StaffPage: React.FC = () => {
                     </TableCell>
                     <TableCell>{staff.role}</TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 items-center">
                         <Dialog>
                           <DialogTrigger asChild>
                             <Trash2 className="h-5 w-5 text-red-600 cursor-pointer" />
@@ -308,6 +365,88 @@ const StaffPage: React.FC = () => {
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
+                        {/* drop down to select make admin and remove admin */}
+
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <MoreVertical className="h-4 w-4 cursor-pointer" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="w-10">
+                            <DropdownMenuLabel className="text-sm">
+                              Convert User
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+
+                            <DropdownMenuItem
+                              disabled={staff.role !== "STAFF"}
+                              onSelect={(e) => e.preventDefault()}
+                            >
+                              <div>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <span>to Admin</span>
+                                  </DialogTrigger>
+                                  <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                      <DialogTitle>Confirmation</DialogTitle>
+                                    </DialogHeader>
+                                    <div>
+                                      <p>
+                                        Are you sure you want to Promote this
+                                        staff Account to Admin Account?
+                                      </p>
+                                    </div>
+                                    <DialogFooter>
+                                      <DialogClose asChild>
+                                        <Button
+                                          onClick={() => promoteStaff(staff.id)}
+                                          type="submit"
+                                          className="bg-red-600"
+                                        >
+                                          Promote
+                                        </Button>
+                                      </DialogClose>
+                                    </DialogFooter>
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              disabled={staff.role !== "ADMIN"}
+                              onSelect={(e) => e.preventDefault()}
+                            >
+                              <div>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <span>to Staff</span>
+                                  </DialogTrigger>
+                                  <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                      <DialogTitle>Confirmation</DialogTitle>
+                                    </DialogHeader>
+                                    <div>
+                                      <p>
+                                        Are you sure you want to Demote this
+                                        Admin Account to Staff Account?
+                                      </p>
+                                    </div>
+                                    <DialogFooter>
+                                      <DialogClose asChild>
+                                        <Button
+                                          onClick={() => demoteAdmin(staff.id)}
+                                          type="submit"
+                                          className="bg-red-600"
+                                        >
+                                          Demote
+                                        </Button>
+                                      </DialogClose>
+                                    </DialogFooter>
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </TableCell>
                   </TableRow>
