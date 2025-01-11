@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Delete, Edit, Eye, Trash2 } from "lucide-react";
+import { Edit, Eye, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -36,7 +36,8 @@ type Staff = {
   name: string;
   email: string;
   image: string;
-  staffProfile: {
+  role: string;
+  staffProfile?: {
     id: string;
     title: string;
     designation: string;
@@ -123,7 +124,7 @@ const StaffPage: React.FC = () => {
         selectedTab === "REGISTERED"
           ? setStaffList((staffs) =>
               staffs.map((staff) =>
-                staff.staffProfile.id === profileId
+                staff.staffProfile?.id === profileId
                   ? {
                       ...staff,
                       staffProfile: { ...staff.staffProfile, extNo: extNo },
@@ -214,6 +215,7 @@ const StaffPage: React.FC = () => {
                   <TableHead>Designation</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Ext No</TableHead>
+                  <TableHead>Role</TableHead>
                   <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
@@ -226,19 +228,19 @@ const StaffPage: React.FC = () => {
                         <Avatar src={staff.image} name={staff.name} />
                         <div>
                           <p className="font-semibold">
-                            {staff.staffProfile.title + " " + staff.name}
+                            {staff.staffProfile?.title + " " + staff.name}
                           </p>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{staff.staffProfile.designation}</TableCell>
+                    <TableCell>{staff.staffProfile?.designation}</TableCell>
                     <TableCell>{staff.email}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        {staff.staffProfile.extNo}
+                        {staff.staffProfile?.extNo}
                         <Dialog
                           onOpenChange={() =>
-                            setNewExtNo(staff.staffProfile.extNo)
+                            setNewExtNo(staff.staffProfile!.extNo)
                           }
                         >
                           <DialogTrigger asChild>
@@ -260,7 +262,10 @@ const StaffPage: React.FC = () => {
                               <DialogClose asChild>
                                 <Button
                                   onClick={() =>
-                                    updateExtNO(staff.staffProfile.id, newExtNo)
+                                    updateExtNO(
+                                      staff.staffProfile!.id,
+                                      newExtNo
+                                    )
                                   }
                                   type="submit"
                                   className="bg-red-600"
@@ -273,6 +278,7 @@ const StaffPage: React.FC = () => {
                         </Dialog>
                       </div>
                     </TableCell>
+                    <TableCell>{staff.role}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
                         <Dialog>
