@@ -9,6 +9,9 @@ import { useSession } from "next-auth/react";
 import axios from "@/config/axios";
 import { AxiosError } from "axios";
 import { PlusCircle, MinusCircle } from "lucide-react";
+import toast from "react-hot-toast";
+import { delay } from "@/utils/common";
+import Image from "next/image";
 
 export default function StaffRegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,6 +51,8 @@ export default function StaffRegistrationForm() {
     control,
     name: "telephones",
   });
+
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
   const onSubmit = async (data: StaffFormData) => {
     setIsSubmitting(true);
@@ -94,6 +99,37 @@ export default function StaffRegistrationForm() {
       setValue("requestBy", session.user.email);
     }
   }, [session, setValue]);
+
+  // upload profile image
+  const handlePhotoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files;
+    if (file) {
+      const formData = new FormData();
+      formData.append("user", file[0]);
+      try {
+        //axios use instead of fetch
+        const response = await axios.post("/user/upload-img", formData, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        const imageUrl = response.data.path;
+        console.log(imageUrl);
+        if (imageUrl) {
+          toast("Profile Picture Uploaded Successfully!");
+          await delay(3000);
+          setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
+        } else {
+          toast("Profile Picture Upload Failed. Try Again!");
+        }
+      } catch (error) {
+        toast("Profile Picture Upload Failed. Try Again!");
+      }
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -190,6 +226,29 @@ export default function StaffRegistrationForm() {
               <span className="text-error text-sm">{errors.extNo.message}</span>
             )}
           </div>
+        </div>
+
+        <div className="form-control mt-4">
+          <label className="label">
+            <span className="label-text">Profile Photo</span>
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handlePhotoUpload}
+            className="file-input file-input-bordered w-full"
+          />
+          {photoPreview && (
+            <div className="mt-4">
+              <Image
+                src={photoPreview}
+                alt="Profile Photo"
+                width={100}
+                height={100}
+                className="rounded-lg h-28 w-auto"
+              />
+            </div>
+          )}
         </div>
 
         <div className="space-y-4">
@@ -302,7 +361,7 @@ export default function StaffRegistrationForm() {
             disabled={isSubmitting}
             className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
           >
-            {isSubmitting ? "Submitting..." : "Submit"}
+            {isSubmitting ? "Submitting..." : "Submit Registration"}
           </button>
         </div>
       </form>
