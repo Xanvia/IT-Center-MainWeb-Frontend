@@ -97,9 +97,9 @@ export default function StaffRegistrationForm() {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+      <h1 className="text-2xl font-bold text-center pb-8">
         Staff Registration
-      </h2>
+      </h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="form-control">
@@ -225,7 +225,7 @@ export default function StaffRegistrationForm() {
               <button
                 type="button"
                 onClick={() => appendEmail("")}
-                className="btn btn-primary btn-sm mt-2"
+                className="btn btn-primary btn-sm mt-2 bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
               >
                 <PlusCircle className="h-5 w-5 mr-2" />
                 Add Email
@@ -265,7 +265,7 @@ export default function StaffRegistrationForm() {
               <button
                 type="button"
                 onClick={() => appendTelephone("")}
-                className="btn btn-primary btn-sm mt-2"
+                className="btn btn-primary btn-sm mt-2 bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
               >
                 <PlusCircle className="h-5 w-5 mr-2" />
                 Add Telephone
@@ -300,7 +300,7 @@ export default function StaffRegistrationForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="btn btn-primary"
+            className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
           >
             {isSubmitting ? "Submitting..." : "Submit"}
           </button>
