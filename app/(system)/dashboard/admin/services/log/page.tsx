@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,26 +14,22 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react";
+import Axios from "@/config/axios";
 
 interface Log {
   id: string;
+  title: string;
   name: string;
-  description: string;
-  imageUrl: string;
   date: string;
+  description: string;
+  images: {
+    id: string;
+    path: string;
+  }[];
 }
 
 export default function InteractiveLogRow() {
-  const [logs, setLogs] = useState<Log[]>([
-    {
-      id: "vvb",
-      name: "Log Alpha",
-      description:
-        "A cutting-edge web application for task management. This log aims to revolutionize how teams collaborate and manage their workflows.",
-      imageUrl: "/common/mainWeb.jpg",
-      date: "2023-06-15",
-    },
-  ]);
+  const [logs, setLogs] = useState<Log[]>([]);
 
   const [isAdding, setIsAdding] = useState(false);
   const [viewingLog, setViewingLog] = useState<Log | null>(null);
@@ -50,25 +46,19 @@ export default function InteractiveLogRow() {
   const addLog = async () => {
     if (newLog.title && newLog.description && newLog.date) {
       try {
-        const response = await fetch("/api/logs", {
-          // Adjust the endpoint accordingly
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        const response = await Axios.post(
+          "/content/log",
+          {
             title: newLog.title,
+            // venue: newLog.venue,
             description: newLog.description,
-            images: newLog.images || "/placeholder.svg?height=200&width=300",
+            imageUrl: newLog.images,
             date: newLog.date,
-          }),
-        });
+          },
+          {}
+        );
 
-        if (!response.ok) {
-          throw new Error("Failed to add log");
-        }
-
-        const data = await response.json(); // Assuming the server responds with the created log
+        const data = await response.data(); // Assuming the server responds with the created log
         setLogs([...logs, { ...data, id: Date.now() }]); // Use the id from the server if provided
         setNewLog({ id: "", title: "", description: "", images: "", date: "" });
         setIsAdding(false);
@@ -83,56 +73,72 @@ export default function InteractiveLogRow() {
   };
 
   const startEditing = () => {
-    if (viewingLog) {
-      setNewLog({
-        id: "one",
-        title: viewingLog.name,
-        description: viewingLog.description,
-        images: viewingLog.imageUrl,
-        date: viewingLog.date,
-      });
-      setIsEditing(true);
-    }
+    // if (viewingLog) {
+    //   setNewLog({
+    //     id: "one",
+    //     title: viewingLog.name,
+    //     description: viewingLog.description,
+    //     images: viewingLog.imageUrl,
+    //     date: viewingLog.date,
+    //   });
+    //   setIsEditing(true);
+    // }
   };
 
   //saveEdit function
   const saveEdit = async () => {
-    if (viewingLog && newLog.title && newLog.description && newLog.date) {
-      try {
-        const response = await fetch(`/api/logs/${viewingLog.id}`, {
-          // Adjust the endpoint accordingly
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: newLog.title,
-            description: newLog.description,
-            imageUrl: newLog.images || viewingLog.imageUrl,
-            date: newLog.date,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to update log");
-        }
-
-        const data = await response.json(); // Assuming the server responds with the updated log
-        setLogs(
-          logs.map((log) => (log.id === viewingLog.id ? { ...data } : log))
-        );
-        setViewingLog({ ...data }); // Update the viewing log with the new data
-        setIsEditing(false);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    // if (viewingLog && newLog.title && newLog.description && newLog.date) {
+    //   try {
+    //     const response = await fetch(`/api/logs/${viewingLog.id}`, {
+    //       // Adjust the endpoint accordingly
+    //       method: "PUT",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         name: newLog.title,
+    //         description: newLog.description,
+    //         imageUrl: newLog.images || viewingLog.imageUrl,
+    //         date: newLog.date,
+    //       }),
+    //     });
+    //     if (!response.ok) {
+    //       throw new Error("Failed to update log");
+    //     }
+    //     const data = await response.json(); // Assuming the server responds with the updated log
+    //     setLogs(
+    //       logs.map((log) => (log.id === viewingLog.id ? { ...data } : log))
+    //     );
+    //     setViewingLog({ ...data }); // Update the viewing log with the new data
+    //     setIsEditing(false);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }
   };
 
   const truncateText = (text: string, maxLength: number) => {
-    if (text.length <= maxLength) return text;
-    return text.substr(0, maxLength) + "...";
+    // if (text.length <= maxLength) return text;
+    return text;
   };
+
+  // fetch all data
+  useEffect(() => {
+    console.log("im hereeee");
+    const fetchLogs = async () => {
+      try {
+        const response = await Axios.get("/contents/logs");
+        // 200 OK
+        const data = await response.data;
+
+        setLogs(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchLogs();
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
@@ -142,7 +148,7 @@ export default function InteractiveLogRow() {
           <Card key={log.id} className="flex flex-col h-[400px]">
             <div className="h-[200px] relative">
               <img
-                src={log.imageUrl}
+                src={log.images[0]?.path}
                 alt={log.name}
                 className="w-full h-full object-cover"
               />
@@ -292,7 +298,7 @@ export default function InteractiveLogRow() {
           {viewingLog && !isEditing && (
             <div className="space-y-4">
               <img
-                src={viewingLog.imageUrl}
+                // src={viewingLog.imageUrl}
                 alt={viewingLog.name}
                 className="w-full h-48 object-cover rounded-md"
               />
