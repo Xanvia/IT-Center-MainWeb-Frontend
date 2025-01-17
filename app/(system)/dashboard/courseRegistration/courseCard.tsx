@@ -3,6 +3,7 @@
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 
 interface CourseCardProps {
+  id: string;
   image: string;
   code: string;
   name: string;

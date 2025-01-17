@@ -9,13 +9,18 @@ import {
   BookOpen,
   DollarSign,
   GraduationCap,
+  Edit,
+  LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { courses } from "@/app/(system)/dashboard/courseRegistration/courseData";
 
 export default function CourseDetailPage() {
   const { id } = useParams();
-  const course = courses.find((c: { id: string | string[] }) => c.id === id);
+  const router = useRouter();
+  const course = courses.find((c) => c.id === id);
 
   if (!course) {
     return <div>Course not found</div>;
@@ -25,7 +30,7 @@ export default function CourseDetailPage() {
     <main className="flex-grow container mx-auto py-3">
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2 h-full flex flex-col justify-between">
-          <h1 className="text-2xl font-bold mb-4 text-maroon">{course.name}</h1>
+          <h1 className="text-3xl font-bold mb-4 text-maroon">{course.name}</h1>
           <div className="relative h-max sm:h-96">
             <Image
               src={course.image}
@@ -39,7 +44,7 @@ export default function CourseDetailPage() {
         <div className="md:col-span-1">
           <Card className="w-full max-w-md">
             <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4 text-maroon">
+              <h2 className="text-2xl font-semibold mb-4 text-maroon">
                 Course Info
               </h2>
               <div className="space-y-4">
@@ -84,13 +89,27 @@ export default function CourseDetailPage() {
                   value={`Rs. ${course.fees}.00`}
                 />
               </div>
-              <Button
-                className="w-full mt-6 bg-maroon text-white hover:bg-gray-600"
-                aria-label="Register for Course"
-              >
-                <Calendar className="mr-2 h-4 w-4" />
-                Request for Enroll
-              </Button>
+              <div className="flex space-x-4 mt-6">
+                <Button
+                  className="flex-1 bg-maroon text-white hover:bg-gray-600"
+                  aria-label="Register for Course"
+                >
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Request for Enroll
+                </Button>
+                <Link
+                  href={`/dashboard/courseRegistration/${course.id}/edit`}
+                  passHref
+                >
+                  <Button
+                    className="flex-1 bg-maroon text-white hover:bg-maroon-600"
+                    aria-label="Edit Course"
+                  >
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Course
+                  </Button>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -105,9 +124,7 @@ export default function CourseDetailPage() {
   );
 }
 
-import { type LucideIcon } from "lucide-react";
-import { courses } from "../courseData";
-
+// ... (InfoItem component remains the same)
 function InfoItem({
   icon: Icon,
   label,
