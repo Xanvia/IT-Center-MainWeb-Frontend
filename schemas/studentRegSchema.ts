@@ -1,53 +1,39 @@
 import { z } from "zod";
 
 export const formSchema = z.object({
-  personalDetails: z.object({
-    title: z.string().min(1, { message: "Title is required" }),
-    fullName: z.string().min(2, { message: "Full name is required" }),
-    nameWithInitials: z
-      .string()
-      .min(2, { message: "Name with initials is required" }),
-    nationalIdCardNo: z
-      .string()
-      .min(5, { message: "National ID Card number is required" }),
-    phoneNumber: z
-      .string()
-      .min(10, { message: "Valid phone number is required" }),
-    postalAddress: z.string().min(5, { message: "Postal address is required" }),
+  title: z.string().min(1, { message: "Title is required" }),
+  fullName: z.string().min(2, { message: "Full name is required" }),
+  nameWithIntials: z.string().min(2, { message: "Name with initials is required" }),
+  dateOfBirth: z.string().min(1, { message: "Date of birth is required" }),
+  nationalIdCardNo: z.string().min(5, { message: "National ID Card number is required" }),
+  phoneNumber: z.string().min(10, { message: "Valid phone number is required" }),
+  address: z.string().min(5, { message: "Permanent address is required" }),
+  education: z.object({
+    englishOL: z.string().min(1, { message: "Grade is required (ex: B)" }),
+    mathematicsOL: z.string().min(1, { message: "Grade is required (ex: B)" }),
+    scienceOL: z.string().min(1, { message: "Grade is required (ex: B)" }),
+    aLevelResults: z.array(
+      z.object({
+        subject: z.string().min(1, { message: "Subject is required (ex: Chemistry)" }),
+        grade: z.string().min(1, { message: "Grade is required (ex: B)" }),
+      })
+    ).min(4, { message: "At least 4 A-Level subjects are required" }),
   }),
-  educationalQualifications: z.object({
-    olevel: z.object({
-      english: z.string().min(1, { message: "Grade is required" }),
-      mathematics: z.string().min(1, { message: "Grade is required" }),
-      science: z.string().min(1, { message: "Grade is required" }),
-    }),
-    alevel: z
-      .array(
-        z.object({
-          subject: z.string().min(1, { message: "Subject is required" }),
-          grade: z.string().min(1, { message: "Grade is required" }),
-        })
-      )
-      .min(4, { message: "At least 4 A-Level subjects are required" }),
-  }),
-  higherEducationalQualifications: z.array(
+  higherEdu: z.array(
     z.object({
-      qualification: z
-        .string()
-        .min(1, { message: "Qualification is required" }),
-      dateAwarded: z.string().min(1, { message: "Date awarded is required" }),
+      FOQualification: z.string().min(1, { message: "Qualification is required" }),
+      date: z.string().min(1, { message: "Date awarded is required" }),
       institute: z.string().min(1, { message: "Institute is required" }),
     })
   ),
-  otherQualifications: z.string(),
-  employmentDetails: z.object({
-    institute: z.string().min(1, { message: "Institute is required" }),
+  otherQualification: z.string(),
+  employment: z.object({
+    institution: z.string().min(1, { message: "Institute is required" }),
     designation: z.string().min(1, { message: "Designation is required" }),
     officeAddress: z.string().min(1, { message: "Office address is required" }),
-    officeTelephone: z
-      .string()
-      .min(1, { message: "Office telephone is required" }),
+    officePhone: z.string().min(1, { message: "Office telephone is required" }),
   }),
 });
 
-export type FormData = z.infer<typeof formSchema>;
+export type StudentFormData = z.infer<typeof formSchema>;
+
