@@ -395,7 +395,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       {/* <!-- Dropdown Menu Start --> */}
                       <div
                         className={` overflow-hidden dropdown-menu  ${
-                          open ? "h-36 opacity-100" : "h-0 opacity-0"
+                          open ? "h-24 opacity-100" : "h-0 opacity-0"
                         }`}
                       >
                         <ul className="mb-5 mt-1 flex flex-col gap-2 pl-6">
@@ -413,14 +413,6 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <GrUserManager size={20} />
                               </div>
                               Staff
-                            </Tab>
-                          </li>
-                          <li>
-                            <Tab pathname="/dashboard/admin/users/admin">
-                              <div className="flex justify-center w-5">
-                                <RiAdminFill size={20} />
-                              </div>
-                              Admin
                             </Tab>
                           </li>
                         </ul>
