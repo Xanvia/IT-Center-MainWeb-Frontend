@@ -189,7 +189,7 @@ export default function Component() {
             >
               <Camera className="text-white" size={24} />
             </div>
-            <input
+            <Input
               type="file"
               ref={fileInputRef}
               onChange={handleImageChange}
