@@ -4,6 +4,7 @@ interface CustomAlertProps {
   message: string;
   isVisible: boolean;
   onClose: () => void;
+  type: "success" | "error";
 }
 
 export function CustomAlert({ message, isVisible, onClose }: CustomAlertProps) {
