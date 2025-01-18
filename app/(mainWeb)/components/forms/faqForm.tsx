@@ -100,6 +100,7 @@ export default function FAQForm() {
         message="Your question has been submitted!"
         isVisible={showAlert}
         onClose={() => setShowAlert(false)}
+        type={"success"}
       />
     </>
   );
