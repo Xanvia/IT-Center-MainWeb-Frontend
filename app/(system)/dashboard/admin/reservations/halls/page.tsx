@@ -77,7 +77,7 @@ export default function AdminReservations() {
   if (!session) {
     return (
       <div className="p-4">
-        <h1 className="text-2xl font-semibold mb-4">Manage Courses</h1>
+        <h1 className="text-2xl font-semibold mb-4">Manage Reservation</h1>
         {/* centered loading spinner */}
         <div className="flex justify-center items-center h-20 animate-spin">
           <Loader />
@@ -90,7 +90,7 @@ export default function AdminReservations() {
   ) {
     return (
       <div className="p-4">
-        <h1 className="text-2xl font-semibold mb-4">Manage Courses</h1>
+        <h1 className="text-2xl font-semibold mb-4">Manage Reservation</h1>
         <div className="grid gap-4">
           <p>Sorry :( You are not Authorized to view this page.</p>
         </div>
