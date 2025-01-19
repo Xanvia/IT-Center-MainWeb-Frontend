@@ -6,10 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { StudentFormData, formSchema } from "@/schemas/studentRegSchema";
 import { DefaultStudentRegValues } from "@/constants/studentRegDefault";
-import toast, { Toaster } from "react-hot-toast";
 import axios from "@/config/axios";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { delay } from "@/utils/common";
+import { toast } from "@/hooks/use-toast";
 
 type OLSubject = "englishOL" | "mathematicsOL" | "scienceOL";
 const OLSub: OLSubject[] = ["englishOL", "mathematicsOL", "scienceOL"];
@@ -35,15 +35,18 @@ export default function StudentRegistrationForm() {
     name: "higherEdu",
   });
 
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/auth/signin" });
+  };
+
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: StudentFormData) => {
     console.log(data);
 
-    // Succesully created a student profile in DB but it always says as "server error"
-    // extra : delete the user (old one) after successfully created the student
-
     try {
+      setLoading(true);
       const response = await axios.post("/user/convert/student", data, {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
@@ -52,23 +55,28 @@ export default function StudentRegistrationForm() {
       });
 
       if (response.status === 201) {
-        toast("Student registered successfully!");
-
-        // Optionally, delete the old user after successful registration
-        /*await Axios.delete(`/user/${data.oldUserId}`, {
-          headers: {
-            Authorization: `Bearer ${session?.access_token}`,
-          },
+        toast({
+          title: "Success",
+          description: "Student registered successfully!",
         });
-  
-        toast("Old user deleted successfully!");*/
+        handleSignOut();
       } else {
-        toast("Failed to register student.");
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
         console.error("Server response:", response.data);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error registering student:", error);
-      toast("An error occurred while registering the student.");
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error.response.data.message,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,6 +88,7 @@ export default function StudentRegistrationForm() {
       const formData = new FormData();
       formData.append("user", file);
       try {
+        setLoading(true);
         const response = await axios.post("/user/upload-img", formData, {
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
@@ -88,14 +97,27 @@ export default function StudentRegistrationForm() {
         });
         const imageUrl = response.data.path;
         if (imageUrl) {
-          toast("Profile Picture Uploaded Successfully!");
+          toast({
+            title: "Success",
+            description: "Image Uploaded Successfully!",
+          });
           await delay(3000);
           setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
         } else {
-          toast("Profile Picture Upload Failed. Try Again!");
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with your request.",
+          });
         }
-      } catch (error) {
-        toast("Profile Picture Upload Failed. Try Again!");
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+        });
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -105,7 +127,6 @@ export default function StudentRegistrationForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-8 max-w-4xl mx-auto p-4"
     >
-      <Toaster />
       <div className="card bg-base-100 shadow-xl">
         <h1 className="text-2xl font-bold my-4 text-center">
           Student Registration
@@ -275,6 +296,7 @@ export default function StudentRegistrationForm() {
               <span className="label-text">Profile Photo</span>
             </label>
             <input
+              disabled={loading}
               type="file"
               accept="image/*"
               onChange={handlePhotoUpload}
@@ -592,6 +614,7 @@ export default function StudentRegistrationForm() {
       </div>
 
       <button
+        disabled={loading}
         type="submit"
         className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
       >

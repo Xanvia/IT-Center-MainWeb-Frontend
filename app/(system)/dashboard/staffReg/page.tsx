@@ -4,15 +4,14 @@ import { useState, useEffect } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StaffFormData, staffRegSchema } from "@/schemas/staffRegSchema";
-import { Select, SelectItem } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import axios from "@/config/axios";
 import { AxiosError } from "axios";
 import { PlusCircle, MinusCircle } from "lucide-react";
-import toast from "react-hot-toast";
 import { delay } from "@/utils/common";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 export default function StaffRegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,17 +80,23 @@ export default function StaffRegistrationForm() {
         },
       });
       console.log("API response:", response.data);
-      setSubmitSuccess("Staff profile created successfully!");
+      toast({
+        title: "Success",
+        description: "Staff Registeration Request Sent successfully!",
+      });
       reset(); // Reset the form
       router.push("/dashboard");
     } catch (error) {
       console.error("API error:", error);
       if (error instanceof AxiosError) {
         console.error("Error response:", error.response?.data);
-        setSubmitError(
-          error.response?.data?.message ||
-            "An error occurred while submitting the form."
-        );
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description:
+            error.response?.data?.message ||
+            "An error occurred while submitting the form.",
+        });
       } else {
         setSubmitError("An unexpected error occurred.");
       }
@@ -125,14 +130,25 @@ export default function StaffRegistrationForm() {
         const imageUrl = response.data.path;
         console.log(imageUrl);
         if (imageUrl) {
-          toast("Profile Picture Uploaded Successfully!");
+          toast({
+            title: "Success",
+            description: "Image uploaded successfully!",
+          });
           await delay(3000);
           setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
         } else {
-          toast("Profile Picture Upload Failed. Try Again!");
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with your request.",
+          });
         }
       } catch (error) {
-        toast("Profile Picture Upload Failed. Try Again!");
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
       }
     }
   };
