@@ -373,7 +373,16 @@ const StaffPage: React.FC = () => {
                         <div className="flex gap-2 items-center">
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Trash2 className="h-5 w-5 text-red-600 cursor-pointer" />
+                              <button
+                                disabled={
+                                  staff.role === "S_ADMIN" ||
+                                  (session.user.role === "ADMIN" &&
+                                    staff.role === "ADMIN")
+                                }
+                                className="disabled:text-red-300 text-red-600"
+                              >
+                                <Trash2 className="h-5 w-5  cursor-pointer" />
+                              </button>
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[425px]">
                               <DialogHeader>
@@ -402,7 +411,11 @@ const StaffPage: React.FC = () => {
 
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <MoreVertical className="h-4 w-4 cursor-pointer" />
+                              <MoreVertical
+                                className={`h-4 w-4 cursor-pointer ${
+                                  session.user.role !== "S_ADMIN" && "hidden"
+                                } `}
+                              />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-10">
                               <DropdownMenuLabel className="text-sm">
