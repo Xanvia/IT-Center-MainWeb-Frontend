@@ -6,11 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
 import { delay } from "@/utils/common";
-import { Course } from "../../../courseRegistration/newCourseData";
+import { Course } from "@/utils/types";
 
 interface CourseModalProps {
   course?: Course | null;
@@ -135,7 +134,7 @@ export default function CourseModal({
   };
 
   return (
-    <div className="fixed top-12 bottom-0 right-0 left-20 bg-black bg-opacity-50 flex justify-center items-center overflow-y-auto z-10">
+    <div className="fixed top-16 bottom-0 right-0 left-28 bg-black bg-opacity-50 flex justify-center items-center overflow-y-auto z-10">
       <div className="bg-white p-6 rounded-lg w-full max-w-4xl m-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">

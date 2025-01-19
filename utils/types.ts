@@ -102,3 +102,20 @@ export interface staffProfileData {
     }[];
   };
 }
+
+export interface Course {
+  id: string;
+  courseName: string;
+  courseCode: string;
+  description: string;
+  duration: string;
+  startingDate: string;
+  endingDate: string;
+  studentLimit: number;
+  fees: number;
+  instructor?: string;
+  audience: string;
+  images: string[];
+  registered?: number;
+  registrationDeadline: string;
+}
