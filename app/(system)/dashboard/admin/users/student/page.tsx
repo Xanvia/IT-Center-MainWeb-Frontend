@@ -25,6 +25,8 @@ import {
 import { Loader, Trash2 } from "lucide-react";
 import { Avatar } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
+import { getAbsoluteImageUrl } from "@/utils/common";
+import { toast } from "@/hooks/use-toast";
 
 interface Student {
   id: string;
@@ -52,6 +54,12 @@ export default function StudentsPage() {
         setStudents(data);
       } catch (error) {
         console.error("Error fetching students:", error);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description:
+            "There was a problem with our System. Try Again Later...",
+        });
       }
     };
 
@@ -67,8 +75,17 @@ export default function StudentsPage() {
           },
         });
         setStudents(students.filter((student) => student.id !== studentId));
+        toast({
+          title: "Success",
+          description: "User has deleted succesfully!",
+        });
       } catch (error) {
         console.error("Error deleting student:", error);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
       }
     }
   };
@@ -120,7 +137,7 @@ export default function StudentsPage() {
               <TableRow key={student.id}>
                 <TableCell>
                   <Avatar
-                    src={student.image}
+                    src={getAbsoluteImageUrl(student.image)}
                     fallback={student.name[0]}
                     alt={student.name}
                     className="mr-3"
