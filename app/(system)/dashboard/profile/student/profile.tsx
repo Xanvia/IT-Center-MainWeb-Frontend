@@ -1,9 +1,8 @@
 "use client"
-
+import { Avatar} from "@heroui/avatar";
 import {  AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar} from "@heroui/avatar";
 import {StuProfile} from "@/utils/types";
 import Axios from "@/config/axios";
 import { useRouter } from "next/navigation";
@@ -25,7 +24,7 @@ import { useSession } from "next-auth/react";
     // Fetch stuProfile from the server
     const fetchStuProfile = async () => {
       const response = await Axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/student/me`,{
+        `/user/student/me`,{
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
           },

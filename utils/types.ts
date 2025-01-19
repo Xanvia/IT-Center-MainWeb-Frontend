@@ -72,13 +72,33 @@ export interface ReservationRequest {
                 date: string;
                 institute: string;
             }[]
-           
-        ,
+           ,
         employment: {
             institution: string;
             designation: string;
             officeAddress: string;
             officePhone: string;
-        }
+          }
+    }
+ }
+
+ export interface staffProfileData{
+    email?: string;
+    image?: string;
+    staffProfile: {
+        id: string;
+        displayName: string;
+        title: string;
+        designation: string;
+        nominal: string;
+        extNo: string;
+        emails:
+            {
+                email: string;
+            }[],
+        telephones:
+            {
+                phoneNumber: string;
+            }[]  
     }
  }
