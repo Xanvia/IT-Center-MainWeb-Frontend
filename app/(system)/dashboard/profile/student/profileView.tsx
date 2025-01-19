@@ -1,32 +1,53 @@
 "use client";
 
-import { Avatar } from "@heroui/avatar";
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StuProfile } from "@/utils/types";
+import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
+import { getAbsoluteImageUrl } from "@/utils/common";
+import { Avatar } from "@nextui-org/react";
 
 export default function StudentProfileView({
   stuProfile,
+  admin,
 }: {
   stuProfile: StuProfile | undefined;
+  admin?: boolean;
 }) {
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Header Banner */}
-      <div className="h-48 bg-[#862727]" />
+  const navigate = useRouter();
 
+  const handleGoBack = () => {
+    navigate.back(); // Navigates back one step in history
+  };
+
+  return (
+    <div className="min-h-[80vh] bg-white">
+      {/* Header Banner */}
+      {admin && (
+        <div
+          className="absolute top-28 left-8 cursor-pointer font-rubik underline text-white flex items-center"
+          onClick={handleGoBack}
+        >
+          <ChevronLeft />
+          Go back
+        </div>
+      )}
+      <div className="h-48 bg-[#862727]" />
       <div className="max-w-3xl mx-auto px-4 -mt-24">
         <Card className="shadow-lg">
           <CardContent className="p-6">
             {/* Profile Picture and Display Name */}
-            <div className="flex flex-col items-center -mt-20 mb-8">
-              <Avatar className="w-32 h-32  border-white shadow-lg">
-                <AvatarImage src="/placeholder.svg" />
-                <AvatarFallback>SS</AvatarFallback>
-              </Avatar>
+            <div className="flex flex-col items-center -mt-20 mb-4">
+              <Avatar
+                src={
+                  getAbsoluteImageUrl(stuProfile?.image) ||
+                  "/users/generalUser.png"
+                }
+                className="w-36 h-36  border-white shadow-lg"
+              />
 
-              <h2 className="mt-4 text-2xl font-semibold">
+              <h2 className="mt-2 text-2xl font-semibold">
                 {stuProfile?.studentProfile?.displayName}
               </h2>
               <p className="text-gray-500">{stuProfile?.studentId}</p>
@@ -94,7 +115,7 @@ export default function StudentProfileView({
               </TabsContent>
 
               <TabsContent value="education">
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <h3 className="text-lg font-semibold">O/L Results</h3>
                   <div className="grid grid-cols-3 gap-6">
                     <div className="space-y-1">
@@ -116,6 +137,20 @@ export default function StudentProfileView({
                       </p>
                     </div>
                   </div>
+                  <h3 className="text-lg font-semibold">A/L Results</h3>
+                  <div className="grid grid-cols-4 gap-6">
+                    {stuProfile?.studentProfile.education.aLevelResults.map(
+                      (result) => (
+                        <div className="space-y-1">
+                          <p className="font-medium">{result.subject}</p>
+                          <p className="p-2 bg-gray-100 rounded-md">
+                            {result.grade}
+                          </p>
+                        </div>
+                      )
+                    )}
+                  </div>
+
                   <div className="space-y-1">
                     <p className="font-medium">Other Qualification</p>
                     <p className="p-2 bg-gray-100 rounded-md">

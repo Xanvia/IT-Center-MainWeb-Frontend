@@ -15,7 +15,6 @@ interface Props {
 
 export default function StudentProfilePage({ params }: Props) {
   const [student, setStudent] = useState<StuProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { data: session } = useSession();
 
@@ -25,26 +24,24 @@ export default function StudentProfilePage({ params }: Props) {
     }
     const getStudentData = async () => {
       try {
-        setIsLoading(true);
         const result = await Axios.get(`/user/student/${params.id}`, {
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
           },
         });
 
+        console.log(result.data);
         setStudent(result.data);
-      } catch (err) {
-        setError("Failed to load student profile");
-        console.error(err);
-      } finally {
-        setIsLoading(false);
+      } catch (err: any) {
+        console.log(err.message);
+        setError(err.response.data.message);
       }
     };
 
     getStudentData();
   }, [params.id, session]);
 
-  if (isLoading) {
+  if (!session) {
     return (
       <div className="flex justify-center items-center h-20 animate-spin">
         <Loader />
@@ -53,12 +50,14 @@ export default function StudentProfilePage({ params }: Props) {
   }
 
   if (error) {
-    // return <ErrorMessage message={error} />
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-4">
+        <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+          Something Went Wrong!
+        </h2>
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
   }
-
-  if (!student) {
-    return <></>; //<ErrorMessage message="Student not found" />
-  }
-
-  return <StudentProfileView stuProfile={student} />;
+  if (student) return <StudentProfileView stuProfile={student!} admin />;
 }
