@@ -123,6 +123,8 @@ export default function EnrollmentRequestsTable() {
                     <Button
                       onClick={() => handlePayment(request.id)}
                       disabled={request.status !== "NOT-PAID"}
+                      variant="yellow"
+                      className="transition-colors duration-200"
                     >
                       Pay
                     </Button>
@@ -130,7 +132,12 @@ export default function EnrollmentRequestsTable() {
                   <TableCell>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button
+                          disabled={request.status == "NOT-PAID"}
+                          variant="destructive"
+                          className="bg-red-700"
+                          size="icon"
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </AlertDialogTrigger>
