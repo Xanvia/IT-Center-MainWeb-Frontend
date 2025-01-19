@@ -12,12 +12,14 @@ import { PlusCircle, MinusCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import { delay } from "@/utils/common";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function StaffRegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const { data: session } = useSession();
+  const router = useRouter();
   const {
     register,
     control,
@@ -28,8 +30,8 @@ export default function StaffRegistrationForm() {
   } = useForm<StaffFormData>({
     resolver: zodResolver(staffRegSchema),
     defaultValues: {
-      emails: [""],
-      telephones: [""],
+      emails: [{ email: "" }],
+      telephones: [{ telephone: "" }],
       requestBy: "",
     },
   });
@@ -54,7 +56,7 @@ export default function StaffRegistrationForm() {
 
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const onSubmit = async (data: StaffFormData) => {
+  const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     setSubmitError(null);
     setSubmitSuccess(null);
@@ -64,6 +66,12 @@ export default function StaffRegistrationForm() {
     if (!data.requestBy && session?.user?.email) {
       data.requestBy = session.user.email;
     }
+
+    // change email and telephone object array to string arrays
+    data.emails = data.emails.map((email: any) => email.email);
+    data.telephones = data.telephones.map(
+      (telephone: any) => telephone.telephone
+    );
 
     try {
       const response = await axios.post("/staff-profile", data, {
@@ -75,9 +83,7 @@ export default function StaffRegistrationForm() {
       console.log("API response:", response.data);
       setSubmitSuccess("Staff profile created successfully!");
       reset(); // Reset the form
-      // Reset the email and telephone fields to have one empty field each
-      setValue("emails", [""]);
-      setValue("telephones", [""]);
+      router.push("/dashboard");
     } catch (error) {
       console.error("API error:", error);
       if (error instanceof AxiosError) {
@@ -259,7 +265,7 @@ export default function StaffRegistrationForm() {
             {emailFields.map((field, index) => (
               <div key={field.id} className="flex items-center space-x-2 mb-2">
                 <input
-                  {...register(`emails.${index}`)}
+                  {...register(`emails.${index}.email`)}
                   type="email"
                   className="input input-bordered w-full flex-grow"
                   placeholder="Enter email address"
@@ -283,7 +289,7 @@ export default function StaffRegistrationForm() {
             {emailFields.length < 2 && (
               <button
                 type="button"
-                onClick={() => appendEmail("")}
+                onClick={() => appendEmail({ email: "" })}
                 className="btn btn-primary btn-sm mt-2 bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
               >
                 <PlusCircle className="h-5 w-5 mr-2" />
@@ -299,7 +305,7 @@ export default function StaffRegistrationForm() {
             {telephoneFields.map((field, index) => (
               <div key={field.id} className="flex items-center space-x-2 mb-2">
                 <input
-                  {...register(`telephones.${index}`)}
+                  {...register(`telephones.${index}.telephone`)}
                   type="tel"
                   className="input input-bordered w-full flex-grow"
                   placeholder="Enter telephone number"
@@ -323,7 +329,7 @@ export default function StaffRegistrationForm() {
             {telephoneFields.length < 2 && (
               <button
                 type="button"
-                onClick={() => appendTelephone("")}
+                onClick={() => appendTelephone({ telephone: "" })}
                 className="btn btn-primary btn-sm mt-2 bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
               >
                 <PlusCircle className="h-5 w-5 mr-2" />
