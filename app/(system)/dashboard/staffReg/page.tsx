@@ -5,6 +5,8 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StaffFormData, staffRegSchema } from "@/schemas/staffRegSchema";
 import { Select, SelectItem } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
+import Axios from "@/config/axios";
 
 export default function StaffRegistrationForm() {
   const {
@@ -40,31 +42,31 @@ export default function StaffRegistrationForm() {
   // State for success or error messages
   const [message, setMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { data: session } = useSession();
 
   const onSubmit = async (data: StaffFormData) => {
     setIsSubmitting(true); // Disable the submit button during submission
     setMessage(null); // Reset message state before submission
 
     try {
-      const response = await fetch("http://localhost:3001/staff-profile", {
-        method: "POST",
+      const response = await Axios.post(`/staff-profile`, data, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
         },
-        body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        // Handle error response (e.g., validation errors, server errors)
+      if (response.status !== 201 && response.status !== 200) {
         const errorMessage = `Failed to submit: ${response.statusText}`;
         setMessage(errorMessage);
         console.error(errorMessage);
-        setIsSubmitting(false); // Re-enable submit button
+        setIsSubmitting(false);
         return;
       }
 
-      // Assuming the API returns a success message or created resource data
-      const result = await response.json();
+      // Store the response data
+      const result = response.data;
+
       console.log("Staff registration successful:", result);
       setMessage("Staff registration successful!");
 
@@ -323,7 +325,7 @@ export default function StaffRegistrationForm() {
         {isSubmitting ? "Submitting..." : "Submit Registration"}
       </button>
 
-      {message && <p className="mt-4 text-center">{message}</p>}
+      {message && <p className="mt-4 text-center text-red-500">{message}</p>}
     </form>
   );
 }
