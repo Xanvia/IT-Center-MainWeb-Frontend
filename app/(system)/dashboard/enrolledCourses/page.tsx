@@ -133,7 +133,11 @@ export default function EnrollmentRequestsTable() {
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button
-                          disabled={request.status == "NOT-PAID"}
+                          disabled={
+                            request.status === "COMPLETED" ||
+                            request.status === "REJECTED" ||
+                            request.status === "ENROLLED"
+                          }
                           variant="destructive"
                           className="bg-red-700"
                           size="icon"
