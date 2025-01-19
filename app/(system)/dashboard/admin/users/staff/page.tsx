@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Role } from "@/utils/nextauth";
 import { getAbsoluteImageUrl } from "@/utils/common";
+import { toast } from "@/hooks/use-toast";
 
 // Types
 type StaffState = "REGISTERED" | "REQUESTS";
@@ -100,8 +101,17 @@ const StaffPage: React.FC = () => {
       setRequestList((requests) =>
         requests.filter((request) => request.requestBy !== staffEmail)
       );
+      toast({
+        title: "Success",
+        description: "The Staff Request Approved Successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
@@ -116,8 +126,17 @@ const StaffPage: React.FC = () => {
       setRequestList((requests) =>
         requests.filter((request) => request.id !== profileId)
       );
+      toast({
+        title: "Success",
+        description: "The Staff Request Rejected Successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
@@ -154,14 +173,20 @@ const StaffPage: React.FC = () => {
               )
             );
       }
+      toast({ title: "Success", description: "Ext No has been changed." });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
   const deleteStaff = async (staffId: string) => {
     try {
-      await Axios.delete(`/user/staff/${staffId}`, {
+      await Axios.delete(`/user/${staffId}`, {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
         },
@@ -169,8 +194,17 @@ const StaffPage: React.FC = () => {
       setStaffList((prevStaffList) =>
         prevStaffList.filter((staff) => staff.id !== staffId)
       );
+      toast({
+        title: "Succuess",
+        description: "User has been deleted successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
@@ -193,8 +227,17 @@ const StaffPage: React.FC = () => {
           staff.id === staffId ? { ...staff, role: "ADMIN" } : staff
         )
       );
+      toast({
+        title: "Succuess",
+        description: "User has been promoted successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
@@ -217,8 +260,17 @@ const StaffPage: React.FC = () => {
           staff.id === staffId ? { ...staff, role: "STAFF" } : staff
         )
       );
+      toast({
+        title: "Succuess",
+        description: "User has been demoted successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
