@@ -1,108 +1,164 @@
 "use client";
 
-import React from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
-  TableHeader,
-  TableColumn,
   TableBody,
-  TableRow,
   TableCell,
-  Card,
-  CardHeader,
-  CardBody,
-} from "@nextui-org/react";
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useSession } from "next-auth/react";
+import axios from "@/config/axios";
+import { Loader } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
-interface EnrolledCourse {
+interface EnrollmentRequest {
   id: string;
-  courseCode: string;
-  courseName: string;
-  requestState: "Pending" | "Approved" | "Rejected";
-  results: string | null;
+  registrationDate: string;
+  status: "PENDING" | "COMPLETED" | "NOT-PAID" | "REJECTED" | "ENROLLED";
+  result: string;
+  paymentDate: string | null;
+  course: {
+    id: string;
+    courseName: string;
+  };
 }
 
-const enrolledCourses: EnrolledCourse[] = [
-  {
-    id: "1",
-    courseCode: "CS101",
-    courseName: "Introduction to Computer Science",
-    requestState: "Approved",
-    results: "A",
-  },
-  {
-    id: "2",
-    courseCode: "MATH201",
-    courseName: "Linear Algebra",
-    requestState: "Pending",
-    results: null,
-  },
-  {
-    id: "3",
-    courseCode: "BUS301",
-    courseName: "Business Management",
-    requestState: "Rejected",
-    results: null,
-  },
-  {
-    id: "4",
-    courseCode: "ART105",
-    courseName: "Digital Art and Design",
-    requestState: "Approved",
-    results: "B+",
-  },
-];
+export default function EnrollmentRequestsTable() {
+  const [enrollmentRequests, setEnrollmentRequests] = useState<
+    EnrollmentRequest[]
+  >([]);
 
-export default function EnrolledCoursesPage() {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold pb-8 text-center text-maroon">
-        Enrolled Courses
-      </h1>
-      <Card className="w-full">
-        <CardBody>
-          <Table aria-label="Enrolled courses table">
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (!session) return;
+    const fetchEnrollmentRequests = async () => {
+      try {
+        const response = await axios.get("/registration-records/user", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+        const data = await response.data;
+        console.log(data);
+        setEnrollmentRequests(data);
+      } catch (error) {
+        console.error("Error fetching enrollment requests:", error);
+      }
+    };
+
+    fetchEnrollmentRequests();
+  }, [session]);
+
+  const handleDeleteER = async (id: string) => {
+    // Implement delete logic here
+
+    try {
+      await axios.delete(`/registration-records/${id}`);
+      toast({ description: "Request deleted successfully" });
+    } catch (error) {
+      toast({ description: "Failed to delete the request" });
+    }
+    setEnrollmentRequests(enrollmentRequests.filter((r) => r.id !== id));
+  };
+
+  const handlePayment = async (id: string) => {
+    // Implement payment logic here
+    console.log("Process payment for:", id);
+  };
+
+  if (!session) {
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-semibold mb-4">Enrollment Requests</h1>
+        {/* centered loading spinner */}
+        <div className="flex justify-center items-center h-20 animate-spin">
+          <Loader />
+        </div>
+      </div>
+    );
+  } else
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Enrollment Requests</h1>
+
+        <div className="pt-4">
+          <Table>
             <TableHeader>
-              <TableColumn>NUMBER</TableColumn>
-              <TableColumn>COURSE CODE</TableColumn>
-              <TableColumn>COURSE NAME</TableColumn>
-              <TableColumn>REQUEST STATE</TableColumn>
-              <TableColumn>RESULTS</TableColumn>
+              <TableRow>
+                <TableHead className="w-[100px]">Index</TableHead>
+                <TableHead>Course Name</TableHead>
+                <TableHead>Request State</TableHead>
+                <TableHead>Result</TableHead>
+                <TableHead>Payment</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
             </TableHeader>
             <TableBody>
-              {enrolledCourses.map((course, index) => (
-                <TableRow key={course.id}>
+              {enrollmentRequests.map((request, index) => (
+                <TableRow key={request.id}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{course.courseCode}</TableCell>
-                  <TableCell>{course.courseName}</TableCell>
+                  <TableCell>{request.course.courseName}</TableCell>
+                  <TableCell>{request.status}</TableCell>
                   <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold
-                      ${
-                        course.requestState === "Approved"
-                          ? "bg-green-100 text-green-800"
-                          : course.requestState === "Pending"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {course.requestState}
-                    </span>
+                    {request.result === "NA" ? "NA" : request.result}
                   </TableCell>
                   <TableCell>
-                    {course.results ? (
-                      <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold">
-                        {course.results}
-                      </span>
-                    ) : (
-                      <span className="text-gray-500">N/A</span>
-                    )}
+                    <Button
+                      onClick={() => handlePayment(request.id)}
+                      disabled={request.status !== "NOT-PAID"}
+                    >
+                      Pay
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your enrollment request.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteER(request.id)}
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </CardBody>
-      </Card>
-    </div>
-  );
+        </div>
+      </div>
+    );
 }
