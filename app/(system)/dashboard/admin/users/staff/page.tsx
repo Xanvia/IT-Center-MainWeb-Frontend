@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Eye, MoreVertical, Trash2 } from "lucide-react";
+import { Edit, Eye, Loader, MoreVertical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -35,6 +35,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Role } from "@/utils/nextauth";
+import { getAbsoluteImageUrl } from "@/utils/common";
+import { toast } from "@/hooks/use-toast";
 
 // Types
 type StaffState = "REGISTERED" | "REQUESTS";
@@ -94,8 +97,21 @@ const StaffPage: React.FC = () => {
           },
         }
       );
+      // update the request list
+      setRequestList((requests) =>
+        requests.filter((request) => request.requestBy !== staffEmail)
+      );
+      toast({
+        title: "Success",
+        description: "The Staff Request Approved Successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
@@ -110,8 +126,17 @@ const StaffPage: React.FC = () => {
       setRequestList((requests) =>
         requests.filter((request) => request.id !== profileId)
       );
+      toast({
+        title: "Success",
+        description: "The Staff Request Rejected Successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
@@ -148,14 +173,20 @@ const StaffPage: React.FC = () => {
               )
             );
       }
+      toast({ title: "Success", description: "Ext No has been changed." });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
   const deleteStaff = async (staffId: string) => {
     try {
-      await Axios.delete(`/user/staff/${staffId}`, {
+      await Axios.delete(`/user/${staffId}`, {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
         },
@@ -163,8 +194,17 @@ const StaffPage: React.FC = () => {
       setStaffList((prevStaffList) =>
         prevStaffList.filter((staff) => staff.id !== staffId)
       );
+      toast({
+        title: "Succuess",
+        description: "User has been deleted successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
@@ -187,8 +227,17 @@ const StaffPage: React.FC = () => {
           staff.id === staffId ? { ...staff, role: "ADMIN" } : staff
         )
       );
+      toast({
+        title: "Succuess",
+        description: "User has been promoted successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
@@ -211,8 +260,17 @@ const StaffPage: React.FC = () => {
           staff.id === staffId ? { ...staff, role: "STAFF" } : staff
         )
       );
+      toast({
+        title: "Succuess",
+        description: "User has been demoted successfully!",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
@@ -226,6 +284,7 @@ const StaffPage: React.FC = () => {
           },
         });
         const data = await response.data;
+        console.log(data);
         setStaffList(data);
       } catch (error) {
         console.log(error);
@@ -249,352 +308,395 @@ const StaffPage: React.FC = () => {
     fetchStaffRequests();
   }, [session]);
 
-  return (
-    <main className="w-full ">
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-6 text-gray-600">
-          Staff Accounts
-        </h1>
-        <Tabs
-          value={selectedTab}
-          onValueChange={(value) => setSelectedTab(value as StaffState)}
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="REGISTERED">Registered</TabsTrigger>
-            <TabsTrigger value="REQUESTS">Requests</TabsTrigger>
-          </TabsList>
-          <TabsContent value={"REGISTERED"}>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>No</TableHead>
-                  <TableHead>Profile</TableHead>
-                  <TableHead>Designation</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Ext No</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {staffList.map((staff, index) => (
-                  <TableRow key={staff.id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-1 items-center">
-                        <Avatar src={staff.image} name={staff.name} />
-                        <div>
-                          <p className="font-semibold">
-                            {staff.staffProfile?.title + " " + staff.name}
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>{staff.staffProfile?.designation}</TableCell>
-                    <TableCell>{staff.email}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        {staff.staffProfile?.extNo}
-                        <Dialog
-                          onOpenChange={() =>
-                            setNewExtNo(staff.staffProfile!.extNo)
-                          }
-                        >
-                          <DialogTrigger asChild>
-                            <Edit className="h-4 w-4 cursor-pointer" />
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>Edit the Ext No</DialogTitle>
-                            </DialogHeader>
-                            <div className="grid gap-4 pt-2">
-                              <Label>Ext No</Label>
-                              <input
-                                value={newExtNo}
-                                onChange={(e) => setNewExtNo(e.target.value)}
-                                className="w-full p-2 border border-gray-300 rounded-md"
-                              />
-                            </div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button
-                                  onClick={() =>
-                                    updateExtNO(
-                                      staff.staffProfile!.id,
-                                      newExtNo
-                                    )
-                                  }
-                                  type="submit"
-                                  className="bg-red-600"
-                                >
-                                  Update
-                                </Button>
-                              </DialogClose>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                    </TableCell>
-                    <TableCell>{staff.role}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2 items-center">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Trash2 className="h-5 w-5 text-red-600 cursor-pointer" />
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>Confirmation</DialogTitle>
-                            </DialogHeader>
-                            <div>
-                              <p>
-                                Are you sure you want to delete this staff
-                                Account?
-                              </p>
-                            </div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button
-                                  onClick={() => deleteStaff(staff.id)}
-                                  type="submit"
-                                  className="bg-red-600"
-                                >
-                                  Delete
-                                </Button>
-                              </DialogClose>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                        {/* drop down to select make admin and remove admin */}
-
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <MoreVertical className="h-4 w-4 cursor-pointer" />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="w-10">
-                            <DropdownMenuLabel className="text-sm">
-                              Convert User
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-
-                            <DropdownMenuItem
-                              disabled={staff.role !== "STAFF"}
-                              onSelect={(e) => e.preventDefault()}
-                            >
-                              <div>
-                                <Dialog>
-                                  <DialogTrigger asChild>
-                                    <span>to Admin</span>
-                                  </DialogTrigger>
-                                  <DialogContent className="sm:max-w-[425px]">
-                                    <DialogHeader>
-                                      <DialogTitle>Confirmation</DialogTitle>
-                                    </DialogHeader>
-                                    <div>
-                                      <p>
-                                        Are you sure you want to Promote this
-                                        staff Account to Admin Account?
-                                      </p>
-                                    </div>
-                                    <DialogFooter>
-                                      <DialogClose asChild>
-                                        <Button
-                                          onClick={() => promoteStaff(staff.id)}
-                                          type="submit"
-                                          className="bg-red-600"
-                                        >
-                                          Promote
-                                        </Button>
-                                      </DialogClose>
-                                    </DialogFooter>
-                                  </DialogContent>
-                                </Dialog>
-                              </div>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              disabled={staff.role !== "ADMIN"}
-                              onSelect={(e) => e.preventDefault()}
-                            >
-                              <div>
-                                <Dialog>
-                                  <DialogTrigger asChild>
-                                    <span>to Staff</span>
-                                  </DialogTrigger>
-                                  <DialogContent className="sm:max-w-[425px]">
-                                    <DialogHeader>
-                                      <DialogTitle>Confirmation</DialogTitle>
-                                    </DialogHeader>
-                                    <div>
-                                      <p>
-                                        Are you sure you want to Demote this
-                                        Admin Account to Staff Account?
-                                      </p>
-                                    </div>
-                                    <DialogFooter>
-                                      <DialogClose asChild>
-                                        <Button
-                                          onClick={() => demoteAdmin(staff.id)}
-                                          type="submit"
-                                          className="bg-red-600"
-                                        >
-                                          Demote
-                                        </Button>
-                                      </DialogClose>
-                                    </DialogFooter>
-                                  </DialogContent>
-                                </Dialog>
-                              </div>
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TabsContent>
-          <TabsContent value={"REQUESTS"}>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>No</TableHead>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Designation</TableHead>
-                  <TableHead>Ext No</TableHead>
-                  <TableHead>Requested By</TableHead>
-                  <TableHead>Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {requestList.map((staff, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        <Avatar name={staff.displayName} />
-                      </div>
-                    </TableCell>
-                    <TableCell>{staff.displayName}</TableCell>
-                    <TableCell>{staff.designation}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        {staff.extNo}
-                        <Dialog onOpenChange={() => setNewExtNo(staff.extNo)}>
-                          <DialogTrigger asChild>
-                            <Edit className="h-4 w-4 cursor-pointer" />
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>Edit the Ext No</DialogTitle>
-                            </DialogHeader>
-                            <div className="grid gap-4 pt-2">
-                              <Label>Ext No</Label>
-                              <input
-                                value={newExtNo}
-                                onChange={(e) => setNewExtNo(e.target.value)}
-                                className="w-full p-2 border border-gray-300 rounded-md"
-                              />
-                            </div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button
-                                  onClick={() =>
-                                    updateExtNO(staff.id, newExtNo)
-                                  }
-                                  type="submit"
-                                  className="bg-red-600"
-                                >
-                                  Update
-                                </Button>
-                              </DialogClose>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                    </TableCell>
-                    <TableCell>{staff.requestBy}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2 items-center">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Eye className="h-5 w-5 cursor-pointer" />
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>
-                                {staff.title + ". " + staff.displayName}
-                              </DialogTitle>
-                              <DialogDescription>
-                                Designation: {staff.designation}
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="grid gap-4 pt-2">
-                              <div className="flex gap-3 items-center">
-                                <Label className=" text-gray-600 font-bold">
-                                  Email:
-                                </Label>
-                                <p className="text-left text-small">
-                                  {staff.emails.map((email) => (
-                                    <div>{email.email}</div>
-                                  ))}
-                                </p>
-                              </div>
-                              <div className="flex gap-3 items-center">
-                                <Label className=" text-gray-600 font-bold">
-                                  Nominal:
-                                </Label>
-                                <p className="text-left text-small">
-                                  {staff.nominal}
-                                </p>
-                              </div>
-                              <div className="flex gap-3 items-center">
-                                <Label className=" text-gray-600 font-bold">
-                                  Telephone:
-                                </Label>
-                                <p className="text-left text-small">
-                                  {staff.telephones.map((telephone) => (
-                                    <div>{telephone.phoneNumber}</div>
-                                  ))}
-                                </p>
-                              </div>
-                              <div className="flex gap-3 items-center">
-                                <Label className=" text-gray-600 font-bold">
-                                  Ext No:
-                                </Label>
-                                <p className="text-left text-small">
-                                  {staff.extNo}
-                                </p>
-                              </div>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
-                        <Button
-                          size="sm"
-                          onClick={() => approveStaff(staff.requestBy)}
-                          className="bg-green-500 text-white"
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          onClick={() => rejectStaff(staff.id)}
-                          size="sm"
-                          className="bg-red-500 text-white"
-                        >
-                          Reject
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TabsContent>
-        </Tabs>
+  if (!session) {
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-semibold mb-4">Staff Accounts</h1>
+        {/* centered loading spinner */}
+        <div className="flex justify-center items-center h-20 animate-spin">
+          <Loader />
+        </div>
       </div>
-    </main>
-  );
+    );
+  } else if (
+    session?.user?.role !== "ADMIN" &&
+    session?.user?.role !== "S_ADMIN"
+  ) {
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-semibold mb-4">Staff Accounts</h1>
+        <div className="grid gap-4">
+          <p>Sorry :( You are not Authorized to view this page.</p>
+        </div>
+      </div>
+    );
+  } else
+    return (
+      <main className="w-full ">
+        <div className="container mx-auto p-4">
+          <h1 className="text-2xl font-bold mb-6 text-gray-600">
+            Staff Accounts
+          </h1>
+          <Tabs
+            value={selectedTab}
+            onValueChange={(value) => setSelectedTab(value as StaffState)}
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="REGISTERED">Registered</TabsTrigger>
+              <TabsTrigger value="REQUESTS">Requests</TabsTrigger>
+            </TabsList>
+            <TabsContent value={"REGISTERED"}>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>No</TableHead>
+                    <TableHead>Profile</TableHead>
+                    <TableHead>Designation</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Ext No</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {staffList.map((staff, index) => (
+                    <TableRow key={staff.id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-1 items-center">
+                          <Avatar
+                            src={getAbsoluteImageUrl(staff.image)}
+                            name={staff.name}
+                          />
+                          <div>
+                            <p className="font-semibold">
+                              {staff.staffProfile?.title + " " + staff.name}
+                            </p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>{staff.staffProfile?.designation}</TableCell>
+                      <TableCell>{staff.email}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          {staff.staffProfile?.extNo}
+                          <Dialog
+                            onOpenChange={() =>
+                              setNewExtNo(staff.staffProfile!.extNo)
+                            }
+                          >
+                            <DialogTrigger asChild>
+                              <Edit className="h-4 w-4 cursor-pointer" />
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>Edit the Ext No</DialogTitle>
+                              </DialogHeader>
+                              <div className="grid gap-4 pt-2">
+                                <Label>Ext No</Label>
+                                <input
+                                  value={newExtNo}
+                                  onChange={(e) => setNewExtNo(e.target.value)}
+                                  className="w-full p-2 border border-gray-300 rounded-md"
+                                />
+                              </div>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button
+                                    onClick={() =>
+                                      updateExtNO(
+                                        staff.staffProfile!.id,
+                                        newExtNo
+                                      )
+                                    }
+                                    type="submit"
+                                    className="bg-red-600"
+                                  >
+                                    Update
+                                  </Button>
+                                </DialogClose>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      </TableCell>
+                      <TableCell>{staff.role}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2 items-center">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <button
+                                disabled={
+                                  staff.role === "S_ADMIN" ||
+                                  (session.user.role === "ADMIN" &&
+                                    staff.role === "ADMIN")
+                                }
+                                className="disabled:text-red-300 text-red-600"
+                              >
+                                <Trash2 className="h-5 w-5  cursor-pointer" />
+                              </button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>Confirmation</DialogTitle>
+                              </DialogHeader>
+                              <div>
+                                <p>
+                                  Are you sure you want to delete this staff
+                                  Account?
+                                </p>
+                              </div>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button
+                                    onClick={() => deleteStaff(staff.id)}
+                                    type="submit"
+                                    className="bg-red-600"
+                                  >
+                                    Delete
+                                  </Button>
+                                </DialogClose>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                          {/* drop down to select make admin and remove admin */}
+
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <MoreVertical
+                                className={`h-4 w-4 cursor-pointer ${
+                                  session.user.role !== "S_ADMIN" && "hidden"
+                                } `}
+                              />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-10">
+                              <DropdownMenuLabel className="text-sm">
+                                Convert User
+                              </DropdownMenuLabel>
+                              <DropdownMenuSeparator />
+
+                              <DropdownMenuItem
+                                disabled={staff.role !== "STAFF"}
+                                onSelect={(e) => e.preventDefault()}
+                              >
+                                <div>
+                                  <Dialog>
+                                    <DialogTrigger asChild>
+                                      <span>to Admin</span>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                      <DialogHeader>
+                                        <DialogTitle>Confirmation</DialogTitle>
+                                      </DialogHeader>
+                                      <div>
+                                        <p>
+                                          Are you sure you want to Promote this
+                                          staff Account to Admin Account?
+                                        </p>
+                                      </div>
+                                      <DialogFooter>
+                                        <DialogClose asChild>
+                                          <Button
+                                            onClick={() =>
+                                              promoteStaff(staff.id)
+                                            }
+                                            type="submit"
+                                            className="bg-red-600"
+                                          >
+                                            Promote
+                                          </Button>
+                                        </DialogClose>
+                                      </DialogFooter>
+                                    </DialogContent>
+                                  </Dialog>
+                                </div>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                disabled={staff.role !== "ADMIN"}
+                                onSelect={(e) => e.preventDefault()}
+                              >
+                                <div>
+                                  <Dialog>
+                                    <DialogTrigger asChild>
+                                      <span>to Staff</span>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                      <DialogHeader>
+                                        <DialogTitle>Confirmation</DialogTitle>
+                                      </DialogHeader>
+                                      <div>
+                                        <p>
+                                          Are you sure you want to Demote this
+                                          Admin Account to Staff Account?
+                                        </p>
+                                      </div>
+                                      <DialogFooter>
+                                        <DialogClose asChild>
+                                          <Button
+                                            onClick={() =>
+                                              demoteAdmin(staff.id)
+                                            }
+                                            type="submit"
+                                            className="bg-red-600"
+                                          >
+                                            Demote
+                                          </Button>
+                                        </DialogClose>
+                                      </DialogFooter>
+                                    </DialogContent>
+                                  </Dialog>
+                                </div>
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TabsContent>
+            <TabsContent value={"REQUESTS"}>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>No</TableHead>
+                    <TableHead>Image</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Designation</TableHead>
+                    <TableHead>Ext No</TableHead>
+                    <TableHead>Requested By</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {requestList.map((staff, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
+                          <Avatar name={staff.displayName} />
+                        </div>
+                      </TableCell>
+                      <TableCell>{staff.displayName}</TableCell>
+                      <TableCell>{staff.designation}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          {staff.extNo}
+                          <Dialog onOpenChange={() => setNewExtNo(staff.extNo)}>
+                            <DialogTrigger asChild>
+                              <Edit className="h-4 w-4 cursor-pointer" />
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>Edit the Ext No</DialogTitle>
+                              </DialogHeader>
+                              <div className="grid gap-4 pt-2">
+                                <Label>Ext No</Label>
+                                <input
+                                  value={newExtNo}
+                                  onChange={(e) => setNewExtNo(e.target.value)}
+                                  className="w-full p-2 border border-gray-300 rounded-md"
+                                />
+                              </div>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button
+                                    onClick={() =>
+                                      updateExtNO(staff.id, newExtNo)
+                                    }
+                                    type="submit"
+                                    className="bg-red-600"
+                                  >
+                                    Update
+                                  </Button>
+                                </DialogClose>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      </TableCell>
+                      <TableCell>{staff.requestBy}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2 items-center">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Eye className="h-5 w-5 cursor-pointer" />
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {staff.title + ". " + staff.displayName}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Designation: {staff.designation}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="grid gap-4 pt-2">
+                                <div className="flex gap-3 items-center">
+                                  <Label className=" text-gray-600 font-bold">
+                                    Email:
+                                  </Label>
+                                  <p className="text-left text-small">
+                                    {staff.emails.map((email) => (
+                                      <div>{email.email}</div>
+                                    ))}
+                                  </p>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                  <Label className=" text-gray-600 font-bold">
+                                    Nominal:
+                                  </Label>
+                                  <p className="text-left text-small">
+                                    {staff.nominal}
+                                  </p>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                  <Label className=" text-gray-600 font-bold">
+                                    Telephone:
+                                  </Label>
+                                  <p className="text-left text-small">
+                                    {staff.telephones.map((telephone) => (
+                                      <div>{telephone.phoneNumber}</div>
+                                    ))}
+                                  </p>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                  <Label className=" text-gray-600 font-bold">
+                                    Ext No:
+                                  </Label>
+                                  <p className="text-left text-small">
+                                    {staff.extNo}
+                                  </p>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                          <Button
+                            size="sm"
+                            onClick={() => approveStaff(staff.requestBy)}
+                            className="bg-green-500 text-white"
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            onClick={() => rejectStaff(staff.id)}
+                            size="sm"
+                            className="bg-red-500 text-white"
+                          >
+                            Reject
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </main>
+    );
 };
 
 export default StaffPage;

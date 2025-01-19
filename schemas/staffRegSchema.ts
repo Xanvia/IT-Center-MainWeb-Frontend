@@ -8,10 +8,11 @@ export const staffRegSchema = z.object({
   designation: z.string().min(1, { message: "Designation is required" }),
   nominal: z.string().min(1, { message: "Nominal is required" }),
   extNo: z.string().min(1, { message: "Extension number is required" }),
+  requestBy: z.string(),
   emails: z
     .array(
       z.object({
-        value: z.string().email({ message: "Invalid email address" }),
+        email: z.string().email({ message: "Invalid email address" }),
       })
     )
     .min(1, { message: "At least one email is required" })
@@ -19,7 +20,7 @@ export const staffRegSchema = z.object({
   telephones: z
     .array(
       z.object({
-        value: z
+        telephone: z
           .string()
           .regex(/^\d{10}$/, { message: "Invalid phone number" }),
       })

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Sidebar } from "./component/sidebar";
 import Header from "./component/header";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function DashboardLayout({
   children,
@@ -21,6 +22,7 @@ export default function DashboardLayout({
             <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
               {children}
             </div>
+            <Toaster />
           </main>
         </div>
       </div>
