@@ -160,7 +160,6 @@ const ReservationsPage: React.FC = () => {
         });
         const data = await response.data;
         setReservations(data);
-        toast({ description: "Reservations fetched successfully" });
       } catch (error) {
         console.log(error);
         toast({
