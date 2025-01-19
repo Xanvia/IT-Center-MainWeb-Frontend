@@ -35,6 +35,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Role } from "@/utils/nextauth";
 
 // Types
 type StaffState = "REGISTERED" | "REQUESTS";
@@ -80,6 +81,16 @@ const StaffPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<StaffState>("REGISTERED");
   const [newExtNo, setNewExtNo] = useState("");
   const { data: session } = useSession();
+
+  if (session?.user?.role !== "ADMIN" && session?.user?.role !== "S_ADMIN")
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-semibold mb-4">Staff Accounts</h1>
+        <div className="grid gap-4">
+          <p>Sorry :( You are not Authorized to view this page.</p>
+        </div>
+      </div>
+    );
 
   const approveStaff = async (staffEmail: string) => {
     try {
