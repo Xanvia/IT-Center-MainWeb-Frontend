@@ -1,19 +1,24 @@
-'use client'
+"use client";
 
-import { Avatar} from "@heroui/avatar";
-import {  AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Mail, Phone, Trash2, Upload } from 'lucide-react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { staffProfileData } from "@/utils/types"
+import { Avatar } from "@heroui/avatar";
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Mail, Phone, Trash2, Upload } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { staffProfileData } from "@/utils/types";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Axios from "@/config/axios";
-
 
 // export default function StaffProfile() {
 //   const [staffData, setStaffData] = useState({
@@ -37,132 +42,131 @@ import Axios from "@/config/axios";
 
 export default function StaffProfile() {
   const [staffData, setStaffData] = useState<staffProfileData>();
-   const { data:session } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (!session?.access_token){
+    if (!session?.access_token) {
       return;
     }
     // Fetch staffProfile from the server
     const fetchStaffProfile = async () => {
-      const response = await Axios.get(
-        `/user/staff/me`,{
-          headers: {
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-        }
-      );
+      const response = await Axios.get(`/user/staff/me`, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
       const data = await response.data;
       setStaffData(data);
     };
     fetchStaffProfile();
   }, [session]);
 
-
-  const [profileImage, setProfileImage] = useState<string>("/placeholder.svg")
+  const [profileImage, setProfileImage] = useState<string>("/placeholder.svg");
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+        setProfileImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleInputChange = (field: string, value: string) => {
-    setStaffData(prev => ({
+    setStaffData((prev) => ({
       ...prev,
       staffProfile: {
         ...prev!.staffProfile,
-        [field]: value
-      }
-    }))
-  }
+        [field]: value,
+      },
+    }));
+  };
 
   const handleEmailChange = (index: number, value: string) => {
-    setStaffData(prev => ({
+    setStaffData((prev) => ({
       ...prev,
       staffProfile: {
         ...prev!.staffProfile,
-        emails: prev!.staffProfile.emails.map((email, i) => 
+        emails: prev!.staffProfile.emails.map((email, i) =>
           i === index ? { email: value } : email
-        )
-      }
-    }))
-  }
+        ),
+      },
+    }));
+  };
 
   const handlePhoneChange = (index: number, value: string) => {
-    setStaffData(prev => ({
+    setStaffData((prev) => ({
       ...prev,
       staffProfile: {
         ...prev!.staffProfile,
-        telephones: prev!.staffProfile.telephones.map((phone, i) => 
+        telephones: prev!.staffProfile.telephones.map((phone, i) =>
           i === index ? { phoneNumber: value } : phone
-        )
-      }
-    }))
-  }
+        ),
+      },
+    }));
+  };
 
   const removeEmail = (index: number) => {
-    if (staffData?.staffProfile.emails??[].length > 1) {
+    if (staffData?.staffProfile.emails ?? [].length > 1) {
       //{(staffData?.staffProfile.emails??[]).length < 2 &&
-      setStaffData(prev => ({
+      setStaffData((prev) => ({
         ...prev,
         staffProfile: {
           ...prev!.staffProfile,
-          emails: prev!.staffProfile.emails.filter((_, i) => i !== index)
-        }
-      }))
+          emails: prev!.staffProfile.emails.filter((_, i) => i !== index),
+        },
+      }));
     }
-  }
+  };
 
   const removeTelephone = (index: number) => {
-    if (staffData?.staffProfile.telephones??[].length > 1) {
+    if (staffData?.staffProfile.telephones ?? [].length > 1) {
       //{(staffData?.staffProfile.emails??[]).length < 2 &&
-      setStaffData(prev => ({
+      setStaffData((prev) => ({
         ...prev,
         staffProfile: {
           ...prev!.staffProfile,
-          telephones: prev!.staffProfile.telephones.filter((_, i) => i !== index)
-        }
-      }))
+          telephones: prev!.staffProfile.telephones.filter(
+            (_, i) => i !== index
+          ),
+        },
+      }));
     }
-  }
+  };
 
   const addEmail = () => {
-    if (staffData?.staffProfile.emails??[].length < 2) {
+    if (staffData?.staffProfile.emails ?? [].length < 2) {
       ////{(staffData?.staffProfile.emails??[]).length < 2 &&
-      setStaffData(prev => ({
+      setStaffData((prev) => ({
         ...prev,
         staffProfile: {
           ...prev!.staffProfile,
-          emails: [...prev!.staffProfile.emails, { email: "" }]
-        }
-      }))
+          emails: [...prev!.staffProfile.emails, { email: "" }],
+        },
+      }));
     }
-  }
+  };
 
   const addTelephone = () => {
-    if (staffData?.staffProfile.telephones??[].length < 2) {
+    if (staffData?.staffProfile.telephones ?? [].length < 2) {
       //{(staffData?.staffProfile.emails??[]).length < 2 &&
-      setStaffData(prev => ({
+      setStaffData((prev) => ({
         ...prev,
         staffProfile: {
           ...prev!.staffProfile,
-          telephones: [...prev!.staffProfile.telephones, { phoneNumber: "" }]
-        }
-      }))
+          telephones: [...prev!.staffProfile.telephones, { phoneNumber: "" }],
+        },
+      }));
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-white">
       <div className="h-48 bg-[#862727]" />
-      
+
       <div className="max-w-3xl mx-auto px-4 -mt-24">
         <Card className="shadow-lg">
           <CardContent className="p-6">
@@ -172,24 +176,28 @@ export default function StaffProfile() {
                   <AvatarImage src={profileImage} />
                   <AvatarFallback>SK</AvatarFallback>
                 </Avatar>
-                <label 
-                  htmlFor="profile-upload" 
+                <label
+                  htmlFor="profile-upload"
                   className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-lg cursor-pointer"
                 >
                   <Upload className="h-5 w-5" />
                 </label>
-                <Input 
-                  id="profile-upload" 
-                  type="file" 
-                  className="hidden" 
+                <Input
+                  id="profile-upload"
+                  type="file"
+                  className="hidden"
                   accept="image/*"
                   onChange={handleImageUpload}
                 />
               </div>
-              
+
               <div className="mt-4 text-center">
-                <p className="text-sm text-muted-foreground">Staff Email: {staffData?.email}</p>
-                <p className="text-sm text-muted-foreground">Ext No: {staffData?.staffProfile.extNo}</p>
+                <p className="text-sm text-muted-foreground">
+                  Staff Email: {staffData?.email}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Ext No: {staffData?.staffProfile.extNo}
+                </p>
               </div>
             </div>
 
@@ -200,14 +208,16 @@ export default function StaffProfile() {
                   <Input
                     id="displayName"
                     value={staffData?.staffProfile.displayName}
-                    onChange={(e) => handleInputChange('displayName', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("displayName", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="title">Title</Label>
                   <Select
                     value={staffData?.staffProfile.title}
-                    onValueChange={(value) => handleInputChange('title', value)}
+                    onValueChange={(value) => handleInputChange("title", value)}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select title" />
@@ -226,7 +236,9 @@ export default function StaffProfile() {
                   <Input
                     id="designation"
                     value={staffData?.staffProfile.designation}
-                    onChange={(e) => handleInputChange('designation', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("designation", e.target.value)
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -234,7 +246,9 @@ export default function StaffProfile() {
                   <Input
                     id="nominal"
                     value={staffData?.staffProfile.nominal}
-                    onChange={(e) => handleInputChange('nominal', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("nominal", e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -242,12 +256,8 @@ export default function StaffProfile() {
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <Label>Email Addresses</Label>
-                  {(staffData?.staffProfile.emails??[]).length < 2 && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={addEmail}
-                    >
+                  {(staffData?.staffProfile.emails ?? []).length < 2 && (
+                    <Button variant="outline" size="sm" onClick={addEmail}>
                       Add Email
                     </Button>
                   )}
@@ -259,7 +269,9 @@ export default function StaffProfile() {
                       <div key={index} className="flex gap-2">
                         <Input
                           value={email.email}
-                          onChange={(e) => handleEmailChange(index, e.target.value)}
+                          onChange={(e) =>
+                            handleEmailChange(index, e.target.value)
+                          }
                         />
                         {staffData?.staffProfile.emails.length > 1 && (
                           <Button
@@ -280,12 +292,8 @@ export default function StaffProfile() {
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <Label>Phone Numbers</Label>
-                  {(staffData?.staffProfile.telephones??[]).length < 2 && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={addTelephone}
-                    >
+                  {(staffData?.staffProfile.telephones ?? []).length < 2 && (
+                    <Button variant="outline" size="sm" onClick={addTelephone}>
                       Add Phone
                     </Button>
                   )}
@@ -297,7 +305,9 @@ export default function StaffProfile() {
                       <div key={index} className="flex gap-2">
                         <Input
                           value={phone.phoneNumber}
-                          onChange={(e) => handlePhoneChange(index, e.target.value)}
+                          onChange={(e) =>
+                            handlePhoneChange(index, e.target.value)
+                          }
                         />
                         {staffData?.staffProfile.telephones.length > 1 && (
                           <Button
@@ -323,6 +333,5 @@ export default function StaffProfile() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
-
