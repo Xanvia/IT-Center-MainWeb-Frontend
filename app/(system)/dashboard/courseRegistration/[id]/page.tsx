@@ -10,12 +10,63 @@ import {
   DollarSign,
   GraduationCap,
 } from "lucide-react";
-import Image from "next/image";
+//import Image from "next/image";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "@/hooks/use-toast";
+import { Course } from "../newCourseData";
+import { type LucideIcon } from "lucide-react";
+//import { courses } from "../newCourseData";
+
+function InfoItem({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string | number;
+}) {
+  return (
+    <div className="flex items-start space-x-3 text-gray-600">
+      <Icon className="h-5 w-5 flex-shrink-0 mt-0.5" />
+      <div className="flex-grow">
+        <span className="text-sm font-medium text-gray-500">{label}:</span>{" "}
+        <span className="text-gray-900">{value}</span>
+      </div>
+    </div>
+  );
+}
 
 export default function CourseDetailPage() {
   const { id } = useParams();
-  const course = courses.find((c: { id: string | string[] }) => c.id === id);
+  //const course = courses.find((c: { id: string | string[] }) => c.id === id);
+  const [course, setCourse] = useState<Course | null>(null);
+
+  // Fetch course details when the component mounts
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/courses/${id}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setCourse(data);
+        } else {
+          toast({ description: "Failed to fetch course details." });
+        }
+      } catch (error) {
+        toast({
+          description: "An error occurred while fetching course details.",
+        });
+      }
+    };
+
+    if (id) {
+      fetchCourse();
+    }
+  }, [id]);
 
   if (!course) {
     return <div>Course not found</div>;
@@ -25,15 +76,26 @@ export default function CourseDetailPage() {
     <main className="flex-grow container mx-auto py-3">
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2 h-full flex flex-col justify-between">
-          <h1 className="text-2xl font-bold mb-4 text-maroon">{course.name}</h1>
+          <h1 className="text-2xl font-bold mb-4 text-maroon">
+            {course.courseName}
+          </h1>
           <div className="relative h-max sm:h-96">
-            <Image
-              src={course.image}
-              alt={course.name}
+            <img
+              src={course.images[0]}
+              alt={course.courseName}
+              //layout="fill"
+              //objectFit="cover"
+              className="rounded-lg h-full"
+            />
+            {/*
+        <Image
+              src={course.images[0]}
+              alt={course.courseName}
               layout="fill"
               objectFit="cover"
               className="rounded-lg h-full"
             />
+             */}
           </div>
         </div>
         <div className="md:col-span-1">
@@ -46,7 +108,7 @@ export default function CourseDetailPage() {
                 <InfoItem
                   icon={BookOpen}
                   label="Course Code"
-                  value={course.code}
+                  value={course.courseCode}
                 />
                 <InfoItem
                   icon={Clock}
@@ -56,12 +118,12 @@ export default function CourseDetailPage() {
                 <InfoItem
                   icon={Calendar}
                   label="Start Date"
-                  value={course.startDate}
+                  value={course.startingDate}
                 />
                 <InfoItem
                   icon={Calendar}
                   label="End Date"
-                  value={course.endDate}
+                  value={course.endingDate}
                 />
                 <InfoItem
                   icon={Users}
@@ -71,7 +133,7 @@ export default function CourseDetailPage() {
                 <InfoItem
                   icon={GraduationCap}
                   label="Instructor"
-                  value={course.instructor}
+                  value={course.instructor || "TBA"}
                 />
                 <InfoItem
                   icon={Users}
@@ -102,28 +164,5 @@ export default function CourseDetailPage() {
         <p className="text-gray-600">{course.description}</p>
       </div>
     </main>
-  );
-}
-
-import { type LucideIcon } from "lucide-react";
-import { courses } from "../courseData";
-
-function InfoItem({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: LucideIcon;
-  label: string;
-  value: string | number;
-}) {
-  return (
-    <div className="flex items-start space-x-3 text-gray-600">
-      <Icon className="h-5 w-5 flex-shrink-0 mt-0.5" />
-      <div className="flex-grow">
-        <span className="text-sm font-medium text-gray-500">{label}:</span>{" "}
-        <span className="text-gray-900">{value}</span>
-      </div>
-    </div>
   );
 }
