@@ -46,3 +46,59 @@ export interface ReservationRequest {
     name: string;
   };
 }
+ export interface StuProfile{
+    email: string;
+    name: string;
+    image: string;
+    studentId: string;
+    studentProfile: {
+        displayName: string;
+        title: string;
+        fullName: string;
+        nameWithIntials: string;
+        dateOfBirth: string;
+        nationalIdCardNo: string;
+        address: string;
+        phoneNumber: string;
+        otherQualification: string;
+        education: {
+            englishOL: string;
+            mathematicsOL: string;
+            scienceOL: string;
+        },
+        higherEdu: 
+            {
+                FOQualification: string;
+                date: string;
+                institute: string;
+            }[]
+           ,
+        employment: {
+            institution: string;
+            designation: string;
+            officeAddress: string;
+            officePhone: string;
+          }
+    }
+ }
+
+ export interface staffProfileData{
+    email?: string;
+    image?: string;
+    staffProfile: {
+        id: string;
+        displayName: string;
+        title: string;
+        designation: string;
+        nominal: string;
+        extNo: string;
+        emails:
+            {
+                email: string;
+            }[],
+        telephones:
+            {
+                phoneNumber: string;
+            }[]  
+    }
+ }
