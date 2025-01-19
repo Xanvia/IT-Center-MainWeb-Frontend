@@ -10,6 +10,7 @@ import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
 import { delay } from "@/utils/common";
 import { Course } from "@/utils/types";
+import { useSession } from "next-auth/react";
 
 interface CourseModalProps {
   course?: Course | null;
@@ -38,6 +39,7 @@ export default function CourseModal({
     startingDate: "",
     endingDate: "",
   });
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (course) {
@@ -54,10 +56,13 @@ export default function CourseModal({
       }
       try {
         const result = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/courses/upload-img`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/courses/upload`,
           {
             method: "POST",
             body: formData,
+            headers: {
+              Authorization: `Bearer ${session?.access_token}`,
+            },
           }
         );
         if (result.ok) {
@@ -74,9 +79,11 @@ export default function CourseModal({
               ),
             ],
           }));
+          toast({ description: "Images uploaded successfully" });
         }
       } catch (error) {
         console.error(error);
+        toast({ description: "Failed to upload images" });
       }
     }
   };
@@ -86,10 +93,6 @@ export default function CourseModal({
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSwitchChange = (checked: boolean) => {
-    setFormData((prev) => ({ ...prev, isAC: checked }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,12 +111,20 @@ export default function CourseModal({
     let res;
     try {
       if (course) {
-        res = await Axios.put(url, convertedFormData);
+        res = await Axios.patch(url, convertedFormData, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
         console.log(res.data);
         onSave(formData);
       } else {
         const { id, ...data } = convertedFormData;
-        res = await Axios.post(url, data);
+        res = await Axios.post(url, data, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
         console.log(res.data);
         onSave(res.data);
       }
@@ -206,6 +217,15 @@ export default function CourseModal({
                   value={formData.duration}
                   onChange={handleChange}
                   required
+                />
+              </div>
+              <div>
+                <Label htmlFor="duration">Registered Count</Label>
+                <Input
+                  id="registered"
+                  name="registered"
+                  value={formData.registered}
+                  onChange={handleChange}
                 />
               </div>
             </div>
