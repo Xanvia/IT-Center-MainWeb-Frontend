@@ -62,7 +62,7 @@ export default function StudentProfileView({
               </TabsList>
 
               <TabsContent value="personal">
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-5">
                   <div className="space-y-1">
                     <p className="font-medium">Student Name</p>
                     <p className="p-2 bg-gray-100 rounded-md">
