@@ -48,7 +48,7 @@ const PaymentPage = () => {
 
       // configure and show payment page
       if (sessionId && Checkout) {
-        console.log(Checkout);
+        // console.log(Checkout);
         Checkout.configure({
           session: {
             id: sessionId,
@@ -56,7 +56,7 @@ const PaymentPage = () => {
           },
         });
 
-        console.log(Checkout);
+        // console.log(Checkout);
         Checkout.showPaymentPage();
       } else {
         console.error("Checkout library not loaded.");
