@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Eye, MoreVertical, Trash2 } from "lucide-react";
+import { Edit, Eye, Loader, MoreVertical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -36,6 +36,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Role } from "@/utils/nextauth";
+import { getAbsoluteImageUrl } from "@/utils/common";
 
 // Types
 type StaffState = "REGISTERED" | "REQUESTS";
@@ -231,6 +232,7 @@ const StaffPage: React.FC = () => {
           },
         });
         const data = await response.data;
+        console.log(data);
         setStaffList(data);
       } catch (error) {
         console.log(error);
@@ -254,7 +256,20 @@ const StaffPage: React.FC = () => {
     fetchStaffRequests();
   }, [session]);
 
-  if (session?.user?.role !== "ADMIN" && session?.user?.role !== "S_ADMIN") {
+  if (!session) {
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-semibold mb-4">Staff Accounts</h1>
+        {/* centered loading spinner */}
+        <div className="flex justify-center items-center h-20 animate-spin">
+          <Loader />
+        </div>
+      </div>
+    );
+  } else if (
+    session?.user?.role !== "ADMIN" &&
+    session?.user?.role !== "S_ADMIN"
+  ) {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-semibold mb-4">Staff Accounts</h1>
@@ -297,7 +312,10 @@ const StaffPage: React.FC = () => {
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>
                         <div className="flex gap-1 items-center">
-                          <Avatar src={staff.image} name={staff.name} />
+                          <Avatar
+                            src={getAbsoluteImageUrl(staff.image)}
+                            name={staff.name}
+                          />
                           <div>
                             <p className="font-semibold">
                               {staff.staffProfile?.title + " " + staff.name}
