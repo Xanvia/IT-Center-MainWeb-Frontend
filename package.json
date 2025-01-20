@@ -17,7 +17,7 @@
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/resource-timeline": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
-    "@heroui/avatar": "^2.2.6",
+    "@heroui/avatar": "^2.2.7",
     "@hookform/resolvers": "^3.9.1",
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@mui/icons-material": "^5.16.0",
