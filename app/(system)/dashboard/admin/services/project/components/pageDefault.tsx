@@ -150,7 +150,7 @@ export default function InteractiveProjectRow() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto  p-6 bg-gray-100 rounded-lg shadow-md">
+    <div className="max-w-7xl mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Projects</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project) => (
