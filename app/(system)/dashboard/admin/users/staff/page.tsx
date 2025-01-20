@@ -35,7 +35,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Role } from "@/utils/nextauth";
 import { getAbsoluteImageUrl } from "@/utils/common";
 import { toast } from "@/hooks/use-toast";
 
