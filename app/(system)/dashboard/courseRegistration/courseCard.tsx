@@ -1,7 +1,7 @@
 // card.tsx
 
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
-import { Banknote, Calendar, DollarSign, Users } from "lucide-react";
+import { Banknote, Calendar } from "lucide-react";
 
 interface CourseCardProps {
   id: string;
@@ -20,25 +20,30 @@ export default function CourseCard({
   fees,
 }: CourseCardProps) {
   return (
-    <Card className="rounded-lg">
+    <Card className="w-80 h-[300px] rounded-lg overflow-hidden">
       <CardHeader className="p-2">
-        <img
-          src={image}
-          alt={name}
-          className="w-full object-cover rounded-sm"
-        />
-      </CardHeader>
-      <CardBody>
-        <h2 className="text-sm font-semibold">{code}</h2>
-        <p className="text-md">{name}</p>
-
-        <div className="flex items-center pt-2 space-x-2 text-gray-600">
-          <Banknote className="h-5 w-5" />
-          <span>Rs. {fees}</span>
+        <div className="w-full h-40 overflow-hidden rounded-sm">
+          <img
+            src={image || "/placeholder.svg"}
+            alt={name}
+            className="w-full h-full object-cover"
+          />
         </div>
-        <div className="flex items-center space-x-2 text-gray-600">
-          <Calendar className="h-5 w-5" />
-          <span>RegDL : {regDL}</span>
+      </CardHeader>
+      <CardBody className="p-4 flex flex-col">
+        <h2 className="text-sm font-semibold truncate">{code}</h2>
+        <p className="text-md font-medium mt-1 mb-2 line-clamp-2">{name}</p>
+        <div className="mt-auto">
+          <div className="flex items-center space-x-2 text-gray-600 mb-1">
+            <Banknote className="h-4 w-4 flex-shrink-0" />
+            <span className="text-sm truncate">Course Fee : Rs. {fees}</span>
+          </div>
+          <div className="flex items-center space-x-2 text-gray-600">
+            <Calendar className="h-4 w-4 flex-shrink-0" />
+            <span className="text-sm truncate">
+              Registraton Deadline : {regDL}
+            </span>
+          </div>
         </div>
       </CardBody>
     </Card>
