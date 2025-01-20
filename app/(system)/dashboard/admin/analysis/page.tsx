@@ -29,6 +29,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useSession } from "next-auth/react";
+import { toast } from "@/hooks/use-toast";
+import Axios from "@/config/axios";
 
 // Mock data for charts
 const courseRegistrations = [
@@ -70,17 +72,51 @@ const faqs = [
 export default function AdminAnalysis() {
   const [notificationSubject, setNotificationSubject] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
-  const [notificationRecipient, setNotificationRecipient] =
-    useState("students");
+  const [notificationRecipient, setNotificationRecipient] = useState<
+    "STUDENT" | "ALL" | "STAFF"
+  >("STUDENT");
   const { data: session, status } = useSession();
 
-  const handleSendNotification = () => {
+  const handleSendNotification = async () => {
     // Implement the logic to send notifications here
     console.log("Sending notification:", {
       subject: notificationSubject,
       message: notificationMessage,
       recipient: notificationRecipient,
     });
+    if (notificationMessage === "" || notificationSubject === "") {
+      toast({ description: "Please fill in all fields" });
+      return;
+    }
+    let url;
+    if (notificationRecipient === "STUDENT") {
+      url = "/notifications/allStudents";
+    } else if (notificationRecipient === "STAFF") {
+      url = "/notifications/allTeachers";
+    } else {
+      url = "/notifications/all";
+    }
+    try {
+      await Axios.post(
+        url,
+        {
+          sender: "ADMIN",
+          subject: notificationSubject,
+          content: notificationMessage,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      toast({ description: "Notification sent successfully" });
+    } catch (error) {
+      console.error("Error sending notification:", error);
+      toast({
+        description: "An error occurred while sending the notification",
+      });
+    }
     // Reset form after sending
     setNotificationSubject("");
     setNotificationMessage("");
@@ -264,14 +300,19 @@ export default function AdminAnalysis() {
                 <Label htmlFor="recipient">Recipient</Label>
                 <Select
                   value={notificationRecipient}
-                  onValueChange={setNotificationRecipient}
+                  onValueChange={(value) =>
+                    setNotificationRecipient(
+                      value as "STUDENT" | "ALL" | "STAFF"
+                    )
+                  }
                 >
                   <SelectTrigger id="recipient">
                     <SelectValue placeholder="Select recipient" />
                   </SelectTrigger>
                   <SelectContent position="popper">
-                    <SelectItem value="students">Students</SelectItem>
-                    <SelectItem value="all">All Users</SelectItem>
+                    <SelectItem value="STUDENT">Students</SelectItem>
+                    <SelectItem value="STAFF">Staffs</SelectItem>
+                    <SelectItem value="ALL">All Users</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
