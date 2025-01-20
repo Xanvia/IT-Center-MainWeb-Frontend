@@ -125,14 +125,6 @@ export default function Home() {
         <p className="md:m-10 m-5 md:text-lg text-medium md:mx-20 md:mt-10 mx-7 text-maroon">
           {aboutCoursePara}
         </p>
-        {/*
-        <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 sm:space-x-5 my-14 justify-center">
-          <HCourseCard />
-          <HCourseCard />
-          <HCourseCard />
-        </div>
-         */}
-
         <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 sm:space-x-5 my-14 justify-center md:gap-10 sm:gap-6">
           {courses.slice(0, 3).map((course) => (
             <Link
