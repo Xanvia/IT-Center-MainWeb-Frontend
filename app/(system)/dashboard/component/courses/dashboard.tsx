@@ -22,6 +22,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar } from "@nextui-org/react";
 import Axios from "@/config/axios";
 import { co } from "@fullcalendar/core/internal-common";
+import { getAbsoluteImageUrl } from "@/utils/common";
+import { useRouter } from "next/navigation";
 
 // Types
 type RequestState =
@@ -34,9 +36,10 @@ type Student = {
   id: string;
   name: string;
   email: string;
-  profileImg: string;
+  profileImage: string;
   grade: string;
   status: RequestState;
+  studentId: string;
 };
 type Course = {
   id: string;
@@ -48,6 +51,7 @@ export default function AdminDashboard() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState(courses[0]);
   const [selectedTab, setSelectedTab] = useState<RequestState>("PENDING");
+  const router = useRouter();
 
   // update student status
   const updateStudentStatus = async (
@@ -216,10 +220,17 @@ export default function AdminDashboard() {
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>
                         <Avatar
+                          onClick={() =>
+                            router.push(
+                              `/dashboard/profile/student/${student.studentId}`
+                            )
+                          }
                           showFallback
-                          src={student.profileImg}
+                          src={getAbsoluteImageUrl(student.profileImage)}
                           name={student.name}
                           size="md"
+                          alt={student.name}
+                          className="mr-3 cursor-pointer"
                         ></Avatar>
                       </TableCell>
                       <TableCell>{student.name}</TableCell>
@@ -236,7 +247,7 @@ export default function AdminDashboard() {
                             <SelectValue placeholder="Grade" />
                           </SelectTrigger>
                           <SelectContent>
-                            {["A", "B", "C", "D", "F"].map((grade) => (
+                            {["A", "B", "C", "D", "F", "NA"].map((grade) => (
                               <SelectItem key={grade} value={grade}>
                                 {grade}
                               </SelectItem>
