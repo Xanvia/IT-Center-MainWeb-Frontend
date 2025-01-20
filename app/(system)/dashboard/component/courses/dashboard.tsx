@@ -34,12 +34,12 @@ type Student = {
   id: string;
   name: string;
   email: string;
-  profileImg: string;
-  result: string;
+  profileImage: string;
+  grade: string;
   status: RequestState;
 };
 type Course = {
-  id: string;
+  courseId: string;
   courseName: string;
   students: Student[];
 };
@@ -227,9 +227,11 @@ export default function AdminDashboard() {
             <div className="space-y-2">
               {courses.map((course) => (
                 <Button
-                  key={course.id}
+                  key={course.courseId}
                   variant={
-                    course.id === selectedCourse?.id ? "maroonTheme" : "outline"
+                    course.courseId === selectedCourse?.courseId
+                      ? "maroonTheme"
+                      : "outline"
                   }
                   className="w-full justify-start"
                   onClick={() => setSelectedCourse(course)}
@@ -274,7 +276,7 @@ export default function AdminDashboard() {
                         <TableCell>
                           <Avatar
                             showFallback
-                            src={student.profileImg}
+                            src={student.profileImage}
                             name={student.name}
                             size="md"
                           ></Avatar>
@@ -283,7 +285,7 @@ export default function AdminDashboard() {
                         <TableCell>{student.email}</TableCell>
                         <TableCell>
                           <Select
-                            value={student.result}
+                            value={student.grade}
                             onValueChange={(value) =>
                               updateStudentGrade(student.id, value)
                             }
