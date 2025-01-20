@@ -62,7 +62,7 @@ const ReservationsPage: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [selectedTab, setSelectedTab] = useState<RequestState>("PENDING");
   const [newCharge, setNewCharge] = useState(0);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const updateReservationStatus = (
     reservationId: string,
@@ -171,7 +171,7 @@ const ReservationsPage: React.FC = () => {
     fetchReservations();
   }, []);
 
-  if (!session) {
+  if (status === "loading") {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-semibold mb-4">Reservation Management</h1>

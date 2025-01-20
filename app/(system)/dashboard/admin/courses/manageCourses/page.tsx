@@ -21,7 +21,7 @@ export default function AdminCourses() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   // Add a new reservation
   const handleAddCourse = (newCourse: Course) => {
@@ -74,7 +74,7 @@ export default function AdminCourses() {
     fetchCourses();
   }, []);
 
-  if (!session) {
+  if (status === "loading") {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-semibold mb-4">Manage Courses</h1>

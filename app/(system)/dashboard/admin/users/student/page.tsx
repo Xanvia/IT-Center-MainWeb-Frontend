@@ -39,7 +39,7 @@ interface Student {
 
 export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export default function StudentsPage() {
     }
   };
 
-  if (!session) {
+  if (status === "loading") {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-6 text-gray-600">
