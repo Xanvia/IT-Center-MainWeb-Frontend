@@ -95,10 +95,12 @@ export function ReservationForm({
   const [reservation, setReservation] = useState<reservationData>();
   const [timeLocked, setTimeLocked] = useState<boolean[]>([true, true, true]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     try {
+      setLoading(true);
       const res = await Axios.post(
         `/reserve-records`,
         {
@@ -120,6 +122,8 @@ export function ReservationForm({
       router.push("/reservation/my-reservations");
     } catch (error) {
       console.log("something went wrong!");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -434,6 +438,7 @@ export function ReservationForm({
 
                 <DialogFooter>
                   <Button
+                    disabled={loading}
                     type="button"
                     className="bg-red-600"
                     onClick={form.handleSubmit(onSubmit)}

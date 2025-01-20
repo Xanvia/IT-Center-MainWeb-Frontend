@@ -4,34 +4,27 @@ import { useState, useMemo, Key, useEffect } from "react";
 import { Link, Input } from "@nextui-org/react";
 import { Search } from "lucide-react";
 import CourseCard from "./courseCard";
-import { Course, courses } from "./newCourseData";
 import { toast } from "@/hooks/use-toast";
 
-const dummyCourse: Course[] = [
-  {
-    id: "1",
-    courseName: "Introduction to Biology",
-    courseCode: "CSC1004",
-    description: "Learn the basics of Theorms.",
-    duration: "8 weeks",
-    registrationDeadline: "2024-12-15",
-    fees: 200,
-    audience: "Beginners, students, professionals",
-    instructor: "John Doe",
-    images: [
-      "https://example.com/image1.jpg",
-      "https://example.com/image2.jpg",
-    ],
-    studentLimit: 30,
-    registered: 12,
-    startingDate: "2024-12-18",
-    endingDate: "2025-02-10",
-  },
-];
+interface Course {
+  id: string;
+  courseCode: string;
+  courseName: string;
+  description: string;
+  images: string;
+  duration: string;
+  fees: number;
+  startingDate: string;
+  endingDate: string;
+  audience: string;
+  instructor: string;
+  studentLimit: number;
+  registrationDeadline: string;
+}
 
 export default function CourseRegistration() {
   //const [searchQuery, setSearchQuery] = useState("");
-  const [courses, setCourses] = useState<Course[]>(dummyCourse);
+  const [courses, setCourses] = useState<Course[]>([]);
 
   {
     /* 
@@ -45,7 +38,7 @@ export default function CourseRegistration() {
 
   // Fetch Courses from the server at the start
   useEffect(() => {
-    console.log("Fetching Courses");
+    console.log("Fetching Courses...");
     const fetchCourses = async () => {
       try {
         const result = await fetch(

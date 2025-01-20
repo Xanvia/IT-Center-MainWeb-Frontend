@@ -71,15 +71,45 @@ const config: Config = {
   			}
   		},
   		fontFamily: {
-  			sans: ["var(--font-inter)"],
-  			mono: ["var(--font-roboto-mono)"],
-  			vietnam: ["var(--font-be-vietnam-pro)"],
-  			rubik: ["var(--font-rubik)"]
+  			sans: [
+  				'var(--font-inter)'
+  			],
+  			mono: [
+  				'var(--font-roboto-mono)'
+  			],
+  			vietnam: [
+  				'var(--font-be-vietnam-pro)'
+  			],
+  			rubik: [
+  				'var(--font-rubik)'
+  			]
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },

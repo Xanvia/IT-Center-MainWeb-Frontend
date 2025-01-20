@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Eye, Loader, Trash2 } from "lucide-react";
+import { Edit, Eye, Loader, Send, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -49,6 +49,7 @@ type Reservation = {
   status: RequestState;
   phoneNumber: string;
   user: {
+    id: string;
     name: string;
     email: string;
     image: string;
@@ -62,7 +63,8 @@ const ReservationsPage: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [selectedTab, setSelectedTab] = useState<RequestState>("PENDING");
   const [newCharge, setNewCharge] = useState(0);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const [message, setMessage] = useState<string | null>();
 
   const updateReservationStatus = (
     reservationId: string,
@@ -146,6 +148,32 @@ const ReservationsPage: React.FC = () => {
     }
   };
 
+  const onSend = (userId: string, subject: string) => {
+    try {
+      Axios.post(
+        `/notifications/user`,
+        {
+          sender: "ADMIN",
+          content: message,
+          subject: subject,
+          userId: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      toast({ description: "Notification sent successfully" });
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        description: "Failed to send notification",
+      });
+    }
+  };
+
   const filteredReservations = reservations.filter(
     (reservation) => reservation.status === selectedTab
   );
@@ -171,7 +199,7 @@ const ReservationsPage: React.FC = () => {
     fetchReservations();
   }, []);
 
-  if (!session) {
+  if (status === "loading") {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-semibold mb-4">Reservation Management</h1>
@@ -351,7 +379,7 @@ const ReservationsPage: React.FC = () => {
                         </Select>
                       </TableCell>
                       <TableCell>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 items-center">
                           <Dialog>
                             <DialogTrigger asChild>
                               <Eye className="h-5 w-5 cursor-pointer" />
@@ -434,6 +462,51 @@ const ReservationsPage: React.FC = () => {
                             onClick={() => deleteReservation(reservation.id)}
                             className="h-5 w-5 text-red-600 cursor-pointer"
                           />
+
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Send className="h-4 w-4 cursor-pointer" />
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Send a Notification to{" "}
+                                  {reservation.user?.name}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Send by: ADMIN
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="grid gap-4 pt-2">
+                                <input
+                                  value={`Reservation Event: ${reservation.eventName}`}
+                                  className="w-full p-2 border border-gray-300 rounded-md"
+                                />
+                                <textarea
+                                  placeholder="Type your message here..."
+                                  value={message || ""}
+                                  onChange={(e) => setMessage(e.target.value)}
+                                  className="w-full p-2 border border-gray-300 rounded-md min-h-[100px]"
+                                />
+                                <DialogFooter>
+                                  <DialogClose asChild>
+                                    <Button
+                                      onClick={() =>
+                                        onSend(
+                                          reservation.user.id,
+                                          `Reservation Event: ${reservation.eventName}`
+                                        )
+                                      }
+                                      type="submit"
+                                      className="bg-red-600"
+                                    >
+                                      Send
+                                    </Button>
+                                  </DialogClose>
+                                </DialogFooter>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </div>
                       </TableCell>
                     </TableRow>
