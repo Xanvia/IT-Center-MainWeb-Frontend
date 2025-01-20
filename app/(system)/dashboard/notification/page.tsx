@@ -43,7 +43,11 @@ const NotificationPage = () => {
       <h1 className="text-2xl font-bold mb-6 text-gray-600">Notifications</h1>
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         {notifications.map((notification) => (
-          <NotificationItem key={notification.id} notification={notification} />
+          <NotificationItem
+            key={notification.id}
+            notification={notification}
+            setNotifications={setNotifications}
+          />
         ))}
       </div>
     </div>

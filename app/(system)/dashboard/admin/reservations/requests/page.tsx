@@ -148,13 +148,14 @@ const ReservationsPage: React.FC = () => {
     }
   };
 
-  const onSend = (userId: string) => {
+  const onSend = (userId: string, subject: string) => {
     try {
       Axios.post(
         `/notifications/user`,
         {
           sender: "ADMIN",
           content: message,
+          subject: subject,
           userId: userId,
         },
         {
@@ -477,6 +478,10 @@ const ReservationsPage: React.FC = () => {
                                 </DialogDescription>
                               </DialogHeader>
                               <div className="grid gap-4 pt-2">
+                                <input
+                                  value={`Reservation Event: ${reservation.eventName}`}
+                                  className="w-full p-2 border border-gray-300 rounded-md"
+                                />
                                 <textarea
                                   placeholder="Type your message here..."
                                   value={message || ""}
@@ -487,7 +492,10 @@ const ReservationsPage: React.FC = () => {
                                   <DialogClose asChild>
                                     <Button
                                       onClick={() =>
-                                        onSend(reservation.user.id)
+                                        onSend(
+                                          reservation.user.id,
+                                          `Reservation Event: ${reservation.eventName}`
+                                        )
                                       }
                                       type="submit"
                                       className="bg-red-600"

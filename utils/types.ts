@@ -123,6 +123,7 @@ export interface Course {
 export interface Notification {
   id: string;
   sender: "SYSTEM" | "ADMIN";
+  subject: string;
   content: string;
   isRead: boolean;
   createdDate: Date;
