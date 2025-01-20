@@ -18,7 +18,7 @@ export function NotificationItem({ notification }: NotificationItemProps) {
   };
 
   return (
-    <div className={`p-4 border-b ${isRead ? "bg-gray-50" : "bg-white"}`}>
+    <div className={`p-4 border-b  ${isRead ? "bg-gray-50" : "bg-white"}`}>
       <div className="flex justify-between items-start mb-2">
         <Badge
           variant={
@@ -35,7 +35,7 @@ export function NotificationItem({ notification }: NotificationItemProps) {
       {!isRead && (
         <button
           onClick={handleMarkAsRead}
-          className="text-sm text-blue-600 hover:text-blue-800"
+          className="text-sm text-blue-800 hover:text-blue-500"
         >
           Mark as read
         </button>
