@@ -3,7 +3,7 @@
 import { useState, useMemo, Key } from "react";
 import { Link, Input } from "@nextui-org/react";
 import { Search } from "lucide-react";
-import { courses } from "@/app/(system)/dashboard/courseRegistration/newCourseData";
+// import { courses } from "@/app/(system)/dashboard/courseRegistration/newCourseData";
 import CourseCard from "./courseCardMain";
 
 export default function CourseRegistration() {
@@ -38,7 +38,7 @@ export default function CourseRegistration() {
         </div>
 
         <div className="align-middle grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => (
+          {/* {courses.map((course) => (
             <Link
               href={`/dashboard/courseRegistration/${course.id}`}
               key={course.id}
@@ -52,7 +52,7 @@ export default function CourseRegistration() {
                 />
               </div>
             </Link>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>

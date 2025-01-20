@@ -16,9 +16,9 @@ import {
   introductionPara,
   projectDetails,
 } from "@/constants/homePageData";
-import { courses } from "../(system)/dashboard/courseRegistration/newCourseData";
 import { Key } from "react";
 import CourseCard from "./courses/courseCardMain";
+import { courses } from "../(system)/dashboard/courseRegistration/courseData";
 
 export default function Home() {
   return (
@@ -116,9 +116,9 @@ export default function Home() {
             >
               <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
                 <CourseCard
-                  image={course.images[0]}
-                  courseCode={course.courseCode}
-                  courseName={course.courseName}
+                  image={course.image}
+                  courseCode={course.code}
+                  courseName={course.name}
                   id={""}
                 />
               </div>
