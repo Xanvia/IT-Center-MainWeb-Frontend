@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +20,13 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar } from "@nextui-org/react";
+import Axios from "@/config/axios";
+import { co } from "@fullcalendar/core/internal-common";
 
 // Types
 type RequestState =
   | "PENDING"
-  | "NOTPAID"
+  | "NOT-PAID"
   | "REJECTED"
   | "ENROLLED"
   | "COMPLETED";
@@ -33,166 +35,133 @@ type Student = {
   name: string;
   email: string;
   profileImg: string;
-  grade: string;
+  result: string;
   status: RequestState;
 };
 type Course = {
   id: string;
-  name: string;
+  courseName: string;
   students: Student[];
 };
 
-// Mock data
-const mockCourses: Course[] = [
-  {
-    id: "1",
-    name: "Introduction to React",
-    students: [
-      {
-        id: "1",
-        name: "John Doe",
-        email: "john@example.com",
-        profileImg: "/placeholder.svg?height=40&width=40",
-        grade: "A",
-        status: "PENDING",
-      },
-      {
-        id: "2",
-        name: "Jane Smith",
-        email: "jane@example.com",
-        profileImg: "/placeholder.svg?height=40&width=40",
-        grade: "B",
-        status: "ENROLLED",
-      },
-      {
-        id: "3",
-        name: "Bob Johnson",
-        email: "bob@example.com",
-        profileImg: "/placeholder.svg?height=40&width=40",
-        grade: "C",
-        status: "NOTPAID",
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Advanced JavaScript",
-    students: [
-      {
-        id: "4",
-        name: "Alice Brown",
-        email: "alice@example.com",
-        profileImg: "/placeholder.svg?height=40&width=40",
-        grade: "A",
-        status: "REJECTED",
-      },
-      {
-        id: "5",
-        name: "Charlie Davis",
-        email: "charlie@example.com",
-        profileImg: "/placeholder.svg?height=40&width=40",
-        grade: "B",
-        status: "ENROLLED",
-      },
-      {
-        id: "6",
-        name: "Eva Wilson",
-        email: "eva@example.com",
-        profileImg: "/placeholder.svg?height=40&width=40",
-        grade: "A",
-        status: "PENDING",
-      },
-    ],
-  },
-  {
-    id: "3",
-    name: "Web Design Fundamentals and Best Practices",
-    students: [
-      {
-        id: "7",
-        name: "Frank Miller",
-        email: "frank@example.com",
-        profileImg: "/placeholder.svg?height=40&width=40",
-        grade: "B",
-        status: "ENROLLED",
-      },
-      {
-        id: "8",
-        name: "Grace Lee",
-        email: "grace@example.com",
-        profileImg: "/placeholder.svg?height=40&width=40",
-        grade: "A",
-        status: "NOTPAID",
-      },
-      {
-        id: "9",
-        name: "Henry Taylor",
-        email: "henry@example.com",
-        profileImg: "/placeholder.svg?height=40&width=40",
-        grade: "C",
-        status: "COMPLETED",
-      },
-    ],
-  },
-];
-
 export default function AdminDashboard() {
-  const [courses, setCourses] = useState(mockCourses);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState(courses[0]);
   const [selectedTab, setSelectedTab] = useState<RequestState>("PENDING");
 
-  const updateStudentStatus = (studentId: string, newStatus: RequestState) => {
-    setCourses((prevCourses) =>
-      prevCourses.map((course) => ({
-        ...course,
-        students: course.students.map((student) =>
+  // update student status
+  const updateStudentStatus = async (
+    studentId: string,
+    newStatus: RequestState
+  ) => {
+    try {
+      await Axios.patch(`/registration-records/${studentId}`, {
+        status: newStatus,
+      });
+
+      setCourses((prevCourses) =>
+        prevCourses.map((course) => ({
+          ...course,
+          students: course.students.map((student) =>
+            student.id === studentId
+              ? { ...student, status: newStatus }
+              : student
+          ),
+        }))
+      );
+      setSelectedCourse((prevCourse) => ({
+        ...prevCourse,
+
+        students: prevCourse.students.map((student) =>
           student.id === studentId ? { ...student, status: newStatus } : student
         ),
-      }))
-    );
-    setSelectedCourse((prevCourse) => ({
-      ...prevCourse,
-      students: prevCourse.students.map((student) =>
-        student.id === studentId ? { ...student, status: newStatus } : student
-      ),
-    }));
+      }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const updateStudentGrade = (studentId: string, newGrade: string) => {
-    setCourses((prevCourses) =>
-      prevCourses.map((course) => ({
-        ...course,
-        students: course.students.map((student) =>
-          student.id === studentId ? { ...student, grade: newGrade } : student
+  // update student grade
+  // update student grade
+  const updateStudentGrade = async (studentId: string, newGrade: string) => {
+    try {
+      const student = selectedCourse.students.find((s) => s.id === studentId);
+      if (student && student.status === "COMPLETED") {
+        await Axios.patch(`/registration-records/${studentId}`, {
+          result: newGrade,
+        });
+
+        setCourses((prevCourses) =>
+          prevCourses.map((course) => ({
+            ...course,
+            students: course.students.map((student) =>
+              student.id === studentId
+                ? { ...student, result: newGrade }
+                : student
+            ),
+          }))
+        );
+        setSelectedCourse((prevCourse) => ({
+          ...prevCourse,
+          students: prevCourse.students.map((student) =>
+            student.id === studentId
+              ? { ...student, result: newGrade }
+              : student
+          ),
+        }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // delete student
+  const deleteStudent = async (studentId: string) => {
+    try {
+      await Axios.delete(`/registration-records/${studentId}`);
+
+      setCourses((prevCourses) =>
+        prevCourses.map((course) => ({
+          ...course,
+          students: course.students.filter(
+            (student) => student.id !== studentId
+          ),
+        }))
+      );
+      setSelectedCourse((prevCourse) => ({
+        ...prevCourse,
+        students: prevCourse.students.filter(
+          (student) => student.id !== studentId
         ),
-      }))
-    );
-    setSelectedCourse((prevCourse) => ({
-      ...prevCourse,
-      students: prevCourse.students.map((student) =>
-        student.id === studentId ? { ...student, grade: newGrade } : student
-      ),
-    }));
+      }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const deleteStudent = (studentId: string) => {
-    setCourses((prevCourses) =>
-      prevCourses.map((course) => ({
-        ...course,
-        students: course.students.filter((student) => student.id !== studentId),
-      }))
-    );
-    setSelectedCourse((prevCourse) => ({
-      ...prevCourse,
-      students: prevCourse.students.filter(
-        (student) => student.id !== studentId
-      ),
-    }));
-  };
-
-  const filteredStudents = selectedCourse.students.filter(
+  const filteredStudents = selectedCourse?.students.filter(
     (student) => student.status === selectedTab
   );
+
+  useEffect(() => {
+    const fetchCourseStudentList = async () => {
+      try {
+        const response = await Axios.get("/registration-records/requests");
+        const data = await response.data;
+        console.log(data);
+        setCourses(data);
+
+        if (data.length > 0) {
+          setSelectedCourse(data[0]); // default selected first course
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCourseStudentList();
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl text-maroon font-bold mb-10 text-center">
@@ -206,18 +175,20 @@ export default function AdminDashboard() {
               <Button
                 key={course.id}
                 variant={
-                  course.id === selectedCourse.id ? "default" : "outline"
+                  course.id === selectedCourse?.id ? "maroonTheme" : "outline"
                 }
                 className="w-full justify-start"
                 onClick={() => setSelectedCourse(course)}
               >
-                <p className="truncate">{course.name}</p>
+                <p className="truncate">{course.courseName}</p>
               </Button>
             ))}
           </div>
         </div>
         <div className="w-4/5">
-          <h2 className="text-lg font-semibold mb-5">{selectedCourse.name}</h2>
+          <h2 className="text-lg font-semibold mb-5">
+            {selectedCourse?.courseName}
+          </h2>
           <Tabs
             value={selectedTab}
             onValueChange={(value) => setSelectedTab(value as RequestState)}
@@ -225,7 +196,7 @@ export default function AdminDashboard() {
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="ENROLLED">Enrolled</TabsTrigger>
               <TabsTrigger value="PENDING">Pending</TabsTrigger>
-              <TabsTrigger value="NOTPAID">Not Paid</TabsTrigger>
+              <TabsTrigger value="NOT-PAID">Not-Paid</TabsTrigger>
               <TabsTrigger value="REJECTED">Rejected</TabsTrigger>
               <TabsTrigger value="COMPLETED">Completed</TabsTrigger>
             </TabsList>
@@ -233,7 +204,7 @@ export default function AdminDashboard() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Id</TableHead>
+                    <TableHead>Index</TableHead>
                     <TableHead>Profile</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
@@ -243,9 +214,9 @@ export default function AdminDashboard() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredStudents.map((student) => (
+                  {filteredStudents?.map((student, index) => (
                     <TableRow key={student.id}>
-                      <TableCell>{student.id}</TableCell>
+                      <TableCell>{index + 1}</TableCell>
                       <TableCell>
                         <Avatar
                           showFallback
@@ -258,10 +229,11 @@ export default function AdminDashboard() {
                       <TableCell>{student.email}</TableCell>
                       <TableCell>
                         <Select
-                          value={student.grade}
+                          value={student.result}
                           onValueChange={(value) =>
                             updateStudentGrade(student.id, value)
                           }
+                          disabled={student.status !== "COMPLETED"}
                         >
                           <SelectTrigger className="w-[80px]">
                             <SelectValue placeholder="Grade" />
@@ -292,7 +264,7 @@ export default function AdminDashboard() {
                             {(
                               [
                                 "PENDING",
-                                "NOTPAID",
+                                "NOT-PAID",
                                 "REJECTED",
                                 "ENROLLED",
                                 "COMPLETED",
