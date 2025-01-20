@@ -14,8 +14,9 @@ import {
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import { Course } from "../newCourseData";
+// import { Course } from "../newCourseData";
 import { type LucideIcon } from "lucide-react";
+import { Course } from "@/utils/types";
 //import { courses } from "../newCourseData";
 
 function InfoItem({
