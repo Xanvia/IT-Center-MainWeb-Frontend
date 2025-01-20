@@ -20,3 +20,13 @@ export function addOneDaytoDateString(dateString: string) {
   date.setDate(date.getDate() + 1);
   return date.toISOString().split("T")[0];
 }
+
+export function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  }).format(date);
+}
