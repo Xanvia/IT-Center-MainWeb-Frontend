@@ -82,7 +82,7 @@ const StaffPage: React.FC = () => {
   const [requestList, setRequestList] = useState<StaffRequest[]>([]);
   const [selectedTab, setSelectedTab] = useState<StaffState>("REGISTERED");
   const [newExtNo, setNewExtNo] = useState("");
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const approveStaff = async (staffEmail: string) => {
     try {
@@ -306,9 +306,9 @@ const StaffPage: React.FC = () => {
 
     fetchStaffList();
     fetchStaffRequests();
-  }, [session]);
+  }, [status]);
 
-  if (!session) {
+  if (status === "loading") {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-semibold mb-4">Staff Accounts</h1>

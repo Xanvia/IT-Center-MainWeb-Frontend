@@ -2,13 +2,54 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { Notification } from "@/utils/types";
+import Axios from "@/config/axios";
+import { RefreshCcw } from "lucide-react";
 
 const DropdownNotification = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifying, setNotifying] = useState(true);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { data: session } = useSession();
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+
+  // Fetch notifications from the backend
+  useEffect(() => {
+    if (!session) return;
+    const fetchNotifications = async () => {
+      try {
+        const response = await Axios.get("/notifications/unread", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+        setNotifications(response.data);
+        setNotifying(response.data.length > 0);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchNotifications();
+  }, [session]);
+
+  const refreshNotifications = async () => {
+    if (!session) return;
+    try {
+      const response = await Axios.get("/notifications/unread", {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+      setNotifications(response.data);
+      setNotifying(response.data.length > 0);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
 
   // close by outside click
   useEffect(() => {
@@ -79,39 +120,48 @@ const DropdownNotification = () => {
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
-        <div className="px-4 py-3">
+        <div className="px-4 py-3 flex justify-between items-center">
           <h5 className="text-sm font-medium dark:text-gray-200">
             Notification
           </h5>
+          <button
+            onClick={refreshNotifications}
+            className="text-sm text-blue-500 hover:underline"
+          >
+            <RefreshCcw className="h-4 w-4" />
+          </button>
         </div>
 
         <ul className="flex h-auto flex-col overflow-y-auto">
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t px-4 py-3 hover:bg-gray-200"
-              href="#"
-            >
+          {notifications.length === 0 ? (
+            <li className="flex flex-col gap-2.5 border-t px-4 py-3">
               <p className="text-sm text-black dark:text-white">
-                Edit your information in a swipe Sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim.
+                No new notifications
               </p>
+            </li>
+          ) : (
+            notifications.map((notification, index) => (
+              <li key={index}>
+                <Link
+                  className="flex flex-col gap-2.5 border-t px-4 py-3 hover:bg-gray-200"
+                  href="/dashboard/notification"
+                >
+                  <div>
+                    <p className="text-sm text-black font-bold dark:text-white">
+                      {notification.subject}
+                    </p>
+                    <p className="text-sm text-gray-800 dark:text-white">
+                      {notification.content}
+                    </p>
+                  </div>
 
-              <p className="text-xs dark:text-gray-400">12 May, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t px-4 py-3 hover:bg-gray-200"
-              href="#"
-            >
-              <p className="text-sm text-black">
-                It is a long established fact that a reader will be distracted
-                by the readable.
-              </p>
-
-              <p className="text-xs">24 Feb, 2025</p>
-            </Link>
-          </li>
+                  <p className="text-xs dark:text-gray-400">
+                    {new Date(notification.createdDate).toLocaleDateString()}
+                  </p>
+                </Link>
+              </li>
+            ))
+          )}
         </ul>
       </div>
     </li>
