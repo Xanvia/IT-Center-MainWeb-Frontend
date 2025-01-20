@@ -35,7 +35,7 @@ type Student = {
   name: string;
   email: string;
   profileImg: string;
-  result: string;
+  grade: string;
   status: RequestState;
 };
 type Course = {
@@ -82,7 +82,6 @@ export default function AdminDashboard() {
   };
 
   // update student grade
-  // update student grade
   const updateStudentGrade = async (studentId: string, newGrade: string) => {
     try {
       const student = selectedCourse.students.find((s) => s.id === studentId);
@@ -96,7 +95,7 @@ export default function AdminDashboard() {
             ...course,
             students: course.students.map((student) =>
               student.id === studentId
-                ? { ...student, result: newGrade }
+                ? { ...student, grade: newGrade }
                 : student
             ),
           }))
@@ -104,9 +103,7 @@ export default function AdminDashboard() {
         setSelectedCourse((prevCourse) => ({
           ...prevCourse,
           students: prevCourse.students.map((student) =>
-            student.id === studentId
-              ? { ...student, result: newGrade }
-              : student
+            student.id === studentId ? { ...student, grade: newGrade } : student
           ),
         }));
       }
@@ -229,7 +226,7 @@ export default function AdminDashboard() {
                       <TableCell>{student.email}</TableCell>
                       <TableCell>
                         <Select
-                          value={student.result}
+                          value={student.grade}
                           onValueChange={(value) =>
                             updateStudentGrade(student.id, value)
                           }
