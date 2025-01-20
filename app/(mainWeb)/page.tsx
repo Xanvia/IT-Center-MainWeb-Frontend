@@ -1,5 +1,6 @@
+"use client";
+
 import Bot from "./components/bots/bot";
-import HCourseCard from "./components/cards/hCourseCard";
 import { Carousel } from "./components/sections/carousal";
 import { MainLink } from "./components/sections/mainLink";
 import { PiArrowRightBold } from "react-icons/pi";
@@ -16,11 +17,35 @@ import {
   introductionPara,
   projectDetails,
 } from "@/constants/homePageData";
-import { Key } from "react";
-import CourseCard from "./courses/courseCardMain";
-import { courses } from "../(system)/dashboard/courseRegistration/courseData";
+import { Key, useEffect, useState } from "react";
+import CourseCard, { Course } from "./courses/courseCardMain";
+import { toast } from "@/hooks/use-toast";
 
 export default function Home() {
+  const [courses, setCourses] = useState<Course[]>([]);
+
+  // Fetch Courses from the server at the start
+  useEffect(() => {
+    console.log("Fetching Courses...");
+    const fetchCourses = async () => {
+      try {
+        const result = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/courses`
+        );
+        if (result.ok) {
+          const data = await result.json();
+          setCourses(data);
+        } else {
+          toast({ description: "Failed to fetch courses" });
+        }
+      } catch (error) {
+        toast({ description: "Failed to fetch courses" });
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col overflow-hidden">
       {/* header body */}
@@ -100,14 +125,6 @@ export default function Home() {
         <p className="md:m-10 m-5 md:text-lg text-medium md:mx-20 md:mt-10 mx-7 text-maroon">
           {aboutCoursePara}
         </p>
-        {/*
-        <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 sm:space-x-5 my-14 justify-center">
-          <HCourseCard />
-          <HCourseCard />
-          <HCourseCard />
-        </div>
-         */}
-
         <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 sm:space-x-5 my-14 justify-center md:gap-10 sm:gap-6">
           {courses.slice(0, 3).map((course) => (
             <Link
@@ -116,9 +133,9 @@ export default function Home() {
             >
               <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
                 <CourseCard
-                  image={course.image}
-                  courseCode={course.code}
-                  courseName={course.name}
+                  image={course.images[0]}
+                  courseCode={course.courseCode}
+                  courseName={course.courseName}
                   id={""}
                 />
               </div>
