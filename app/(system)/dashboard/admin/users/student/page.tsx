@@ -27,6 +27,7 @@ import { Avatar } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { getAbsoluteImageUrl } from "@/utils/common";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface Student {
   id: string;
@@ -39,6 +40,7 @@ interface Student {
 export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const { data: session } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (!session) return;
@@ -137,10 +139,13 @@ export default function StudentsPage() {
               <TableRow key={student.id}>
                 <TableCell>
                   <Avatar
+                    onClick={() =>
+                      router.push(`/dashboard/profile/student/${student.id}`)
+                    }
                     src={getAbsoluteImageUrl(student.image)}
                     fallback={student.name[0]}
                     alt={student.name}
-                    className="mr-3"
+                    className="mr-3 cursor-pointer"
                   />
                 </TableCell>
                 <TableCell>{student.name}</TableCell>
