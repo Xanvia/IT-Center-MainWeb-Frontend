@@ -13,32 +13,25 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Axios from "@/config/axios";
+import { toast } from "@/hooks/use-toast";
 
 
-// export default function StaffProfile() {
-//   const [staffData, setStaffData] = useState({
-//     "staff email": "s19462@sci.pdn.ac.lk",
-//     "extNo": "ST102",
-//     staffProfile: {
-//       displayName: "sanidu kich",
-//       title: "DR",
-//       designation: "Director",
-//       nominal: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
-//       emails: [
-//         { email: "s19464@sci.pdn.ac.lk" },
-//         { email: "s19465@sci.pdn.ac.lk" }
-//       ],
-//       telephones: [
-//         { phoneNumber: "0787053108" },
-//         { phoneNumber: "0787053107" }
-//       ]
-//     }
-//   })
 
 export default function StaffProfile() {
   const [staffData, setStaffData] = useState<staffProfileData>();
    const { data:session } = useSession();
   const router = useRouter();
+
+  // // Delete a reservation
+  // const handleDeleteReservation = async (id: string) => {
+  //   try {
+  //     await Axios.delete(`/reservations/${id}`);
+  //     toast({ description: "Reservation deleted successfully" });
+  //   } catch (error) {
+  //     toast({ description: "Failed to delete reservation" });
+  //   }
+  //   setReservations(reservations.filter((r) => r.id !== id));
+  // };
 
   useEffect(() => {
     if (!session?.access_token){
@@ -158,6 +151,28 @@ export default function StaffProfile() {
       }))
     }
   }
+
+  const handleSave = () => {
+    // Save the updated staff profile
+  try {
+    Axios.put(`/staff-profile/${staffData?.staffProfile.id}`, staffData, {
+      headers: {
+        Authorization: `Bearer ${session?.access_token}`,
+      },
+    });
+    toast({
+      title: "Success",
+      description: "User has updeted succesfully!",
+    });
+  } catch (error) {
+    console.error("Error updeting student:", error);
+    toast({
+      variant: "destructive",
+      title: "Uh oh! Something went wrong.",
+      description: "There was a problem with your request.",
+    });
+  }
+}
 
   return (
     <div className="min-h-screen bg-white">
@@ -315,8 +330,8 @@ export default function StaffProfile() {
                 </div>
               </div>
 
-              <div className="flex justify-end">
-                <Button>Save Changes</Button>
+              <div className="flex justify-end ">
+                <Button onClick={() => handleSave()} className="hover:bg-[#3a3a3a] bg-[#862727] text-white">Save Changes</Button>
               </div>
             </div>
           </CardContent>
