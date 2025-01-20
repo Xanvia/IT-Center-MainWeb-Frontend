@@ -21,8 +21,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar } from "@nextui-org/react";
 import Axios from "@/config/axios";
-import { co } from "@fullcalendar/core/internal-common";
-import { getAbsoluteImageUrl } from "@/utils/common";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -54,7 +52,6 @@ export default function AdminDashboard() {
   const [selectedTab, setSelectedTab] = useState<RequestState>("PENDING");
   const router = useRouter();
   const { data: session, status } = useSession();
-
 
   // update student status
   const updateStudentStatus = async (
@@ -201,115 +198,6 @@ export default function AdminDashboard() {
         <div className="flex justify-center items-center h-20 animate-spin">
           <Loader />
         </div>
-        <div className="w-4/5">
-          <h2 className="text-lg font-semibold mb-5">
-            {selectedCourse?.courseName}
-          </h2>
-          <Tabs
-            value={selectedTab}
-            onValueChange={(value) => setSelectedTab(value as RequestState)}
-          >
-            <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="ENROLLED">Enrolled</TabsTrigger>
-              <TabsTrigger value="PENDING">Pending</TabsTrigger>
-              <TabsTrigger value="NOT-PAID">Not-Paid</TabsTrigger>
-              <TabsTrigger value="REJECTED">Rejected</TabsTrigger>
-              <TabsTrigger value="COMPLETED">Completed</TabsTrigger>
-            </TabsList>
-            <TabsContent value={selectedTab}>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Index</TableHead>
-                    <TableHead>Profile</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Grade</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredStudents?.map((student, index) => (
-                    <TableRow key={student.id}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>
-                        <Avatar
-                          onClick={() =>
-                            router.push(
-                              `/dashboard/profile/student/${student.studentId}`
-                            )
-                          }
-                          showFallback
-                          src={getAbsoluteImageUrl(student.profileImage)}
-                          name={student.name}
-                          size="md"
-                          alt={student.name}
-                          className="mr-3 cursor-pointer"
-                        ></Avatar>
-                      </TableCell>
-                      <TableCell>{student.name}</TableCell>
-                      <TableCell>{student.email}</TableCell>
-                      <TableCell>
-                        <Select
-                          value={student.grade}
-                          onValueChange={(value) =>
-                            updateStudentGrade(student.id, value)
-                          }
-                          disabled={student.status !== "COMPLETED"}
-                        >
-                          <SelectTrigger className="w-[80px]">
-                            <SelectValue placeholder="Grade" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {["A", "B", "C", "D", "F", "NA"].map((grade) => (
-                              <SelectItem key={grade} value={grade}>
-                                {grade}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </TableCell>
-                      <TableCell>
-                        <Select
-                          value={student.status}
-                          onValueChange={(value) =>
-                            updateStudentStatus(
-                              student.id,
-                              value as RequestState
-                            )
-                          }
-                        >
-                          <SelectTrigger className="w-[120px]">
-                            <SelectValue placeholder="Status" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {(
-                              [
-                                "PENDING",
-                                "NOT-PAID",
-                                "REJECTED",
-                                "ENROLLED",
-                                "COMPLETED",
-                              ] as RequestState[]
-                            ).map((status) => (
-                              <SelectItem key={status} value={status}>
-                                {status}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="destructive"
-                          className="bg-red-700"
-                          size="icon"
-                          onClick={() => deleteStudent(student.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
       </div>
     );
   } else if (
