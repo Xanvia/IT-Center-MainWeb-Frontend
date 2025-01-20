@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Notification } from "./page";
 import { formatDate } from "@/utils/common";
+import { Notification } from "@/utils/types";
 
 interface NotificationItemProps {
   notification: Notification;
@@ -28,7 +28,7 @@ export function NotificationItem({ notification }: NotificationItemProps) {
           {notification.sender}
         </Badge>
         <span className="text-sm text-gray-500">
-          {formatDate(notification.date)}
+          {formatDate(notification.createdDate)}
         </span>
       </div>
       <p className="text-gray-800 mb-2">{notification.content}</p>

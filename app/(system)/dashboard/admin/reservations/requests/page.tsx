@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Eye, Loader, Trash2 } from "lucide-react";
+import { Edit, Eye, Loader, Send, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -49,6 +49,7 @@ type Reservation = {
   status: RequestState;
   phoneNumber: string;
   user: {
+    id: string;
     name: string;
     email: string;
     image: string;
@@ -63,6 +64,7 @@ const ReservationsPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<RequestState>("PENDING");
   const [newCharge, setNewCharge] = useState(0);
   const { data: session, status } = useSession();
+  const [message, setMessage] = useState<string | null>();
 
   const updateReservationStatus = (
     reservationId: string,
@@ -142,6 +144,31 @@ const ReservationsPage: React.FC = () => {
       toast({
         variant: "destructive",
         description: "Failed to delete reservation",
+      });
+    }
+  };
+
+  const onSend = (userId: string) => {
+    try {
+      Axios.post(
+        `/notifications/user`,
+        {
+          sender: "ADMIN",
+          content: message,
+          userId: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      toast({ description: "Notification sent successfully" });
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        description: "Failed to send notification",
       });
     }
   };
@@ -351,7 +378,7 @@ const ReservationsPage: React.FC = () => {
                         </Select>
                       </TableCell>
                       <TableCell>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 items-center">
                           <Dialog>
                             <DialogTrigger asChild>
                               <Eye className="h-5 w-5 cursor-pointer" />
@@ -434,6 +461,44 @@ const ReservationsPage: React.FC = () => {
                             onClick={() => deleteReservation(reservation.id)}
                             className="h-5 w-5 text-red-600 cursor-pointer"
                           />
+
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Send className="h-4 w-4 cursor-pointer" />
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Send a Notification to{" "}
+                                  {reservation.user?.name}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Send by: ADMIN
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="grid gap-4 pt-2">
+                                <textarea
+                                  placeholder="Type your message here..."
+                                  value={message || ""}
+                                  onChange={(e) => setMessage(e.target.value)}
+                                  className="w-full p-2 border border-gray-300 rounded-md min-h-[100px]"
+                                />
+                                <DialogFooter>
+                                  <DialogClose asChild>
+                                    <Button
+                                      onClick={() =>
+                                        onSend(reservation.user.id)
+                                      }
+                                      type="submit"
+                                      className="bg-red-600"
+                                    >
+                                      Send
+                                    </Button>
+                                  </DialogClose>
+                                </DialogFooter>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </div>
                       </TableCell>
                     </TableRow>

@@ -21,12 +21,13 @@ export function addOneDaytoDateString(dateString: string) {
   return date.toISOString().split("T")[0];
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date: Date | string): string {
+  const dateObj = typeof date === "string" ? new Date(date) : date;
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
     hour: "numeric",
     minute: "numeric",
-  }).format(date);
+  }).format(dateObj);
 }
