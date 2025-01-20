@@ -24,7 +24,19 @@ import { toast } from "@/hooks/use-toast";
 
 
 export default function StaffProfile() {
-  const [staffData, setStaffData] = useState<staffProfileData>();
+  const [staffData, setStaffData] = useState<staffProfileData>({
+    email: "",
+    staffProfile: {
+      id: "",
+      displayName: "",
+      title: "",
+      designation: "",
+      nominal: "",
+      extNo: "",
+      emails: [{ email: "" }],
+      telephones: [{ phoneNumber: "" }],
+    },
+  });
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -160,7 +172,16 @@ export default function StaffProfile() {
   const handleSave = () => {
     // Save the updated staff profile
   try {
-    Axios.put(`/staff-profile/${staffData?.staffProfile.id}`, staffData, {
+    Axios.patch(`/staff-profile/${staffData?.staffProfile.id}`, {
+
+      displayName: staffData.staffProfile.displayName,
+      title: staffData.staffProfile.title,
+      designation: staffData.staffProfile.designation,
+      nominal: staffData.staffProfile.nominal,
+      extNo: staffData.staffProfile,
+      emails: staffData.staffProfile.emails,
+      telephones: staffData.staffProfile.telephones
+    }, {
       headers: {
         Authorization: `Bearer ${session?.access_token}`,
       },
@@ -258,7 +279,7 @@ export default function StaffProfile() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="nominal">Qualifications</Label>
+                  <Label htmlFor="nominal">Nominal</Label>
                   <Input
                     id="nominal"
                     value={staffData?.staffProfile.nominal}

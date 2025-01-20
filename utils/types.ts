@@ -85,7 +85,7 @@ export interface StuProfile {
 }
 
 export interface staffProfileData {
-  email?: string;
+  email: string;
   image?: string;
   staffProfile: {
     id: string;
