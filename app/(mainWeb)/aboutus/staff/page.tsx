@@ -1,6 +1,6 @@
 'use client'
 import { StaffSection } from "../staff/components/staff-section"
-import { categorizeStaffByExtension, groupStaffByCategory } from "./utils/sort-staff"
+import { categorizeStaffByExtension, groupStaffByCategory, sortStaffByExtension } from "./utils/sort-staff"
 import type { StaffMember } from "./types/staff"
 import { useState, useEffect } from "react";
 import { getSession, useSession } from "next-auth/react";
@@ -17,7 +17,7 @@ export default function StaffsPage() {
     const fetchStaffs = async () => {
       try {
         // Simulated API call
-        const response = await Axios.get("/staff-profile/profile");
+        const response = await Axios.get("/user/staff");
         const data = await response.data;
         setStaffMembers(data);
       } catch (error) {
@@ -33,16 +33,19 @@ export default function StaffsPage() {
     fetchStaffs();
   }, []);
 
-    const categorizedStaff = categorizeStaffByExtension(StaffMembers)
-    const groupedStaff = groupStaffByCategory(categorizedStaff)
+  const categorizedStaff = categorizeStaffByExtension(StaffMembers)
+  const groupedStaff = groupStaffByCategory(categorizedStaff)
+  const sortedGroupedStaff = sortStaffByExtension(groupedStaff)
 
-    return (
-      <div className="container mx-auto py-12 space-y-12">
-        {Object.entries(groupedStaff).map(([category, staff]) => (
-          <StaffSection key={category} title={category} staff={staff} />
-        ))}
-      </div>
-    )
-  }
+  const orderedCategories = ["ADMINISTRATION", "INSTRUCTORS", "OTHER STAFF"]
 
-
+  return (
+    <div className="container mx-auto py-12 space-y-12">
+      {orderedCategories.map(category => (
+        sortedGroupedStaff[category] && (
+          <StaffSection key={category} title={category} staff={sortedGroupedStaff[category]} />
+        )
+      ))}
+    </div>
+  )
+}
