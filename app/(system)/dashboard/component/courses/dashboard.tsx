@@ -51,6 +51,8 @@ export default function AdminDashboard() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState(courses[0]);
   const [selectedTab, setSelectedTab] = useState<RequestState>("PENDING");
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const { data: session, status } = useSession();
 
@@ -60,6 +62,7 @@ export default function AdminDashboard() {
     newStatus: RequestState
   ) => {
     try {
+      setLoading(true);
       await Axios.patch(
         `/registration-records/${studentId}`,
         {
@@ -91,12 +94,15 @@ export default function AdminDashboard() {
       }));
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   // update student grade
   const updateStudentGrade = async (studentId: string, newGrade: string) => {
     try {
+      setLoading(true);
       const student = selectedCourse.students.find((s) => s.id === studentId);
       if (student && student.status === "COMPLETED") {
         await Axios.patch(
@@ -130,6 +136,8 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -356,6 +364,11 @@ export default function AdminDashboard() {
                 </Table>
               </TabsContent>
             </Tabs>
+            <div className={`${loading ? "block" : "hidden"}`}>
+              <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <Loader className="text-gray-200 animate-spin h-10 w-10" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
