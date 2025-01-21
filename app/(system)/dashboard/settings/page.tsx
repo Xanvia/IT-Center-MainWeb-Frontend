@@ -123,6 +123,14 @@ export default function AccountSettings() {
       return;
     }
 
+    if (passwords.new.length < 8) {
+      toast({
+        variant: "destructive",
+        description: "Passwords should exceed 8 characters",
+      });
+      return;
+    }
+
     try {
       await Axios.put(
         `/user/password`,

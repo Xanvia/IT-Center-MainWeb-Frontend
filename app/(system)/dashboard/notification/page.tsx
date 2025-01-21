@@ -37,21 +37,28 @@ const NotificationPage = () => {
         </div>
       </div>
     );
-  }
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6 text-gray-600">Notifications</h1>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        {notifications.map((notification) => (
-          <NotificationItem
-            key={notification.id}
-            notification={notification}
-            setNotifications={setNotifications}
-          />
-        ))}
+  } else if (notifications.length === 0) {
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-6 text-gray-600">Notifications</h1>
+        <p className="text-gray-500 text-center">No notifications found.</p>
       </div>
-    </div>
-  );
+    );
+  } else
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-6 text-gray-600">Notifications</h1>
+        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+          {notifications.map((notification) => (
+            <NotificationItem
+              key={notification.id}
+              notification={notification}
+              setNotifications={setNotifications}
+            />
+          ))}
+        </div>
+      </div>
+    );
 };
 
 export default NotificationPage;
