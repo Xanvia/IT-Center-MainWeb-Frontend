@@ -36,6 +36,8 @@ interface EnrollmentRequest {
   course: {
     id: string;
     courseName: string;
+    courseCode: string;
+    fees: number;
   };
 }
 
@@ -103,6 +105,7 @@ export default function EnrollmentRequestsTable() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Index</TableHead>
+                <TableHead>Course Code</TableHead>
                 <TableHead>Course Name</TableHead>
                 <TableHead>Request State</TableHead>
                 <TableHead>Result</TableHead>
@@ -114,6 +117,7 @@ export default function EnrollmentRequestsTable() {
               {enrollmentRequests.map((request, index) => (
                 <TableRow key={request.id}>
                   <TableCell>{index + 1}</TableCell>
+                  <TableCell>{request.course.courseCode}</TableCell>
                   <TableCell>{request.course.courseName}</TableCell>
                   <TableCell>{request.status}</TableCell>
                   <TableCell>

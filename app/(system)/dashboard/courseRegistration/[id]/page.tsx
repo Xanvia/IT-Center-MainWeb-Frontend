@@ -132,7 +132,7 @@ export default function CourseDetailPage() {
     }
 
     const registrationData = {
-      student: student.id,
+      studentId: student.id,
       courseId: course.id,
       registrationDate: new Date().toISOString().split("T")[0], // Format as YYYY-MM-DD
     };
@@ -153,11 +153,20 @@ export default function CourseDetailPage() {
         toast({ description: "Successfully enrolled in the course!" });
       }
       router.push("/dashboard/enrolledCourses");
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        description: "An error occurred during enrollment.",
-      });
+    } catch (error: any) {
+      if (error.response.data.code === "ER_DUP_ENTRY") {
+        toast({
+          variant: "destructive",
+          description: "You Have already Enrolled for this course!",
+        });
+      } else {
+        console.log(error);
+        toast({
+          variant: "destructive",
+          title: error.message,
+          description: "An error occurred during enrollment.",
+        });
+      }
     }
   };
 
