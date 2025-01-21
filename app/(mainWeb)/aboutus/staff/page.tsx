@@ -17,7 +17,7 @@ export default function StaffsPage() {
     const fetchStaffs = async () => {
       try {
         // Simulated API call
-        const response = await Axios.get("/staff-profile/profile");
+        const response = await Axios.get("/user/staff");
         const data = await response.data;
         setStaffMembers(data);
       } catch (error) {

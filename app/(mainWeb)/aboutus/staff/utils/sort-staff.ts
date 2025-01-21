@@ -3,7 +3,7 @@ import type { StaffMember } from "../types/staff"
 
 export function categorizeStaffByExtension(staff: StaffMember[]): StaffMember[] {
   return staff.map((member) => {
-    const ext = Number.parseInt(member.extNo.split("ST")[1])
+    const ext = Number.parseInt(member.staffProfile.extNo.split("ST")[1])
     if (ext >= 100 && ext < 200) {
       return { ...member, category: "ADMINISTRATION" }
     } else if (ext >= 200 && ext < 300) {
@@ -29,8 +29,8 @@ export function groupStaffByCategory(staff: StaffMember[]) {
 export function sortStaffByExtension(groupedStaff: Record<string, StaffMember[]>) {
   Object.keys(groupedStaff).forEach(category => {
     groupedStaff[category].sort((a, b) => {
-      const extA = Number.parseInt(a.extNo.split("ST")[1])
-      const extB = Number.parseInt(b.extNo.split("ST")[1])
+      const extA = Number.parseInt(a.staffProfile.extNo.split("ST")[1])
+      const extB = Number.parseInt(b.staffProfile.extNo.split("ST")[1])
       return extA - extB
     })
   })
