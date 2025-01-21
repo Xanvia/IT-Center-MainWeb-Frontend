@@ -75,7 +75,7 @@ export function NotificationItem({
         </span>
       </div>
       <p className="text-gray-800 mb-1 font-bold">{notification.subject}</p>
-      <p className="text-gray-800 mb-2">{notification.content}</p>
+      <p className="text-gray-600 mb-2 text-medium">{notification.content}</p>
       <div className="flex justify-end gap-3 items-center">
         {!isRead && (
           <button

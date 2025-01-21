@@ -1,9 +1,15 @@
 // card.tsx
 
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
-import { Banknote, Calendar, DollarSign, Users } from "lucide-react";
 
-// only show the course code, name and image
+// Course card interface : Main web pages
+
+export interface Course {
+  id: string;
+  courseCode: string;
+  courseName: string;
+  images: string;
+}
 
 interface CourseCardProps {
   id: string;
@@ -18,17 +24,20 @@ export default function CourseCard({
   courseName: name,
 }: CourseCardProps) {
   return (
-    <Card className="rounded-lg">
+    <Card className="w-96 h-[270px] rounded-lg overflow-hidden md:w-80 lg:w-80 xl:w-96">
       <CardHeader className="p-2">
-        <img
-          src={image}
-          alt={name}
-          className="w-full object-cover rounded-sm"
-        />
+        <div className="w-full h-40 overflow-hidden rounded-sm">
+          <img
+            src={image || "/placeholder.svg"}
+            alt={name}
+            className="w-full h-full object-cover"
+          />
+        </div>
       </CardHeader>
-      <CardBody>
-        <h2 className="text-sm font-semibold">{code}</h2>
-        <p className="text-md">{name}</p>
+      <CardBody className="p-4 flex flex-col">
+        <h2 className="text-md font-semibold truncate">{code}</h2>
+        <p className="text-lg font-medium mt-1 mb-2 line-clamp-2">{name}</p>
+        <div className="mt-auto"></div>
       </CardBody>
     </Card>
   );
