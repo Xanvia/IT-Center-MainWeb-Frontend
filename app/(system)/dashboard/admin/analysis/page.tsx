@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { Loader, Send } from "lucide-react";
+import { Loader, Send, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,44 +31,14 @@ import {
 import { useSession } from "next-auth/react";
 import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
-import { string } from "zod";
 
-// Mock data for charts
-const courseRegistrations = [
-  { code: "Mathematics", total: 120 },
-  { code: "Physics", total: 85 },
-  { code: "Chemistry", total: 70 },
-  { code: "Biology", total: 90 },
-  { code: "Computer Science", total: 110 },
-];
-
-const monthlyRegistrations = [
-  { month: "Jan", count: 45 },
-  { name: "Feb", total: 52 },
-  { name: "Mar", total: 38 },
-  { name: "Apr", total: 60 },
-  { name: "May", total: 55 },
-  { name: "Jun", total: 48 },
-];
-
-// Mock FAQ data
-const faqs = [
-  {
-    question: "How do I reset my password?",
-    answer:
-      "You can reset your password by clicking on the 'Forgot Password' link on the login page and following the instructions sent to your email.",
-  },
-  {
-    question: "How can I enroll in a course?",
-    answer:
-      "To enroll in a course, navigate to the course catalog, select the desired course, and click on the 'Enroll' button. Follow the prompts to complete the enrollment process.",
-  },
-  {
-    question: "What payment methods are accepted?",
-    answer:
-      "We accept various payment methods including credit/debit cards, PayPal, and bank transfers. The available options will be displayed during the checkout process.",
-  },
-];
+type faqData = {
+  id: string;
+  email: string;
+  description: string;
+  isRead: false;
+  createdDate: string;
+};
 
 type userData = {
   students: number;
@@ -95,6 +65,8 @@ export default function AdminAnalysis() {
     "STUDENT" | "ALL" | "STAFF"
   >("STUDENT");
   const { data: session, status } = useSession();
+
+  const [faqData, setFaqData] = useState<faqData[]>([]);
 
   const [userData, setUserData] = useState<userData>({
     students: 0,
@@ -141,6 +113,21 @@ export default function AdminAnalysis() {
       },
     ],
   });
+
+  const deleteFAQ = async (id: string) => {
+    try {
+      await Axios.delete(`/feedbacks/${id}`, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+      setFaqData((prevData) => prevData.filter((faq) => faq.id !== id));
+      toast({ description: "FAQ deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting FAQ:", error);
+      toast({ description: "An error occurred while deleting the FAQ" });
+    }
+  };
 
   const handleSendNotification = async () => {
     // Implement the logic to send notifications here
@@ -210,12 +197,27 @@ export default function AdminAnalysis() {
         });
         setCourseData(response.data);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching course data:", error);
       }
     };
+
+    const getFAQData = async () => {
+      try {
+        const response = await Axios.get("/feedbacks", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+        setFaqData(response.data);
+      } catch (error) {
+        console.error("Error fetching feedback data:", error);
+      }
+    };
+
     if (session) {
       getUserData();
       getCourseData();
+      getFAQData();
     }
   }, [session]);
 
@@ -324,7 +326,10 @@ export default function AdminAnalysis() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Monthly Student Registrations</CardTitle>
+              <CardTitle>
+                Monthly Student Registrations{" "}
+                <span className="text-gray-400 pl-1">(Last 6 months)</span>
+              </CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
               <ResponsiveContainer width="100%" height={350}>
@@ -357,10 +362,18 @@ export default function AdminAnalysis() {
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
-              {faqs.map((faq, index) => (
+              {faqData.map((faq, index) => (
                 <AccordionItem value={`item-${index}`} key={index}>
-                  <AccordionTrigger>{faq.question}</AccordionTrigger>
-                  <AccordionContent>{faq.answer}</AccordionContent>
+                  <AccordionTrigger>{faq.description}</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="flex justify-between items-center">
+                      <p> Sender: {faq.email}</p>
+                      <Trash2
+                        onClick={() => deleteFAQ(faq.id)}
+                        className="h-4 w-4 text-red-600 cursor-pointer"
+                      />
+                    </div>
+                  </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
