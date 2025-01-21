@@ -12,6 +12,7 @@ import { delay } from "@/utils/common";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import Axios from "@/config/axios";
 
 export default function StaffRegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -73,7 +74,7 @@ export default function StaffRegistrationForm() {
     );
 
     try {
-      const response = await axios.post("/staff-profile", data, {
+      const response = await Axios.post("/staff-profile", data, {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
           "Content-Type": "application/json",
@@ -121,7 +122,7 @@ export default function StaffRegistrationForm() {
       formData.append("user", file[0]);
       try {
         //axios use instead of fetch
-        const response = await axios.post("/user/upload-img", formData, {
+        const response = await Axios.post("/user/upload-img", formData, {
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
             "Content-Type": "multipart/form-data",

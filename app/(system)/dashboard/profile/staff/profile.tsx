@@ -18,7 +18,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Axios from "@/config/axios";
 import { toast } from "@/hooks/use-toast";
-import { getAbsoluteImageUrl } from "@/utils/common";
+import { delay, getAbsoluteImageUrl } from "@/utils/common";
 import { Avatar } from "@nextui-org/react";
 
 export default function StaffProfile() {
@@ -52,20 +52,52 @@ export default function StaffProfile() {
       });
       const data = await response.data;
       setStaffData(data);
+      setPhotoPreview(getAbsoluteImageUrl(data.image) || "");
     };
     fetchStaffProfile();
   }, [session]);
 
-  const [profileImage, setProfileImage] = useState<string>("/placeholder.svg");
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  // upload profile image
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files;
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append("user", file[0]);
+      try {
+        //axios use instead of fetch
+        const response = await Axios.post("/user/upload-img", formData, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        const imageUrl = response.data.path;
+        console.log(imageUrl);
+        if (imageUrl) {
+          toast({
+            title: "Success",
+            description: "Image uploaded successfully!",
+          });
+          await delay(3000);
+          setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with your request.",
+          });
+        }
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
+      }
     }
   };
 
@@ -193,7 +225,7 @@ export default function StaffProfile() {
             <div className="flex flex-col items-center -mt-20 mb-8">
               <div className="relative">
                 <Avatar
-                  src={getAbsoluteImageUrl(staffData.image)}
+                  src={photoPreview || "/users/generalUser.png"}
                   className="w-32 h-32 border-4 border-white shadow-lg"
                 ></Avatar>
                 <label
