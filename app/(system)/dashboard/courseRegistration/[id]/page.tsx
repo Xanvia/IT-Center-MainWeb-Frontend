@@ -10,14 +10,37 @@ import {
   DollarSign,
   GraduationCap,
 } from "lucide-react";
-//import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
-// import { Course } from "../newCourseData";
 import { type LucideIcon } from "lucide-react";
-import { Course } from "@/utils/types";
-//import { courses } from "../newCourseData";
+import { useSession } from "next-auth/react";
+import axios from "@/config/axios";
+
+interface Course {
+  id: string;
+  courseCode: string;
+  courseName: string;
+  description: string;
+  images: string;
+  duration: string;
+  fees: number;
+  startingDate: string;
+  endingDate: string;
+  audience: string;
+  instructor: string;
+  studentLimit: number;
+  registrationDeadline: string;
+}
+
+interface Student {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  studentId: string;
+  image: string;
+}
 
 function InfoItem({
   icon: Icon,
@@ -43,6 +66,8 @@ export default function CourseDetailPage() {
   const { id } = useParams();
   //const course = courses.find((c: { id: string | string[] }) => c.id === id);
   const [course, setCourse] = useState<Course | null>(null);
+  const { data: session } = useSession();
+  const [student, setStudent] = useState<Student | null>(null);
 
   // Fetch course details when the component mounts
   useEffect(() => {
@@ -68,6 +93,69 @@ export default function CourseDetailPage() {
       fetchCourse();
     }
   }, [id]);
+
+  // Fetch student data
+  useEffect(() => {
+    const fetchStudent = async () => {
+      if (session?.access_token) {
+        try {
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/me`,
+            {
+              headers: {
+                Authorization: `Bearer ${session.access_token}`,
+              },
+            }
+          );
+          setStudent(response.data);
+        } catch (error) {
+          toast({
+            description: "Failed to fetch student data.",
+          });
+        }
+      }
+    };
+
+    fetchStudent();
+  }, [session]);
+
+  // Handle "Request to Enroll" button click
+  const handleRequestEnroll = async () => {
+    if (!student || !course) {
+      toast({
+        description: "Student or course information is missing.",
+      });
+      return;
+    }
+
+    const registrationData = {
+      student: student.id,
+      courseId: course.id,
+      registrationDate: new Date().toISOString().split("T")[0], // Format as YYYY-MM-DD
+    };
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/registration-records`,
+        registrationData,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      console.log("response data", response);
+      if (response.status === 201) {
+        toast({ description: "Successfully enrolled in the course!" });
+      } else {
+        toast({ description: "Failed to enroll in the course." });
+      }
+    } catch (error) {
+      toast({
+        description: "An error occurred during enrollment.",
+      });
+    }
+  };
 
   if (!course) {
     return <div>Course not found</div>;
@@ -118,6 +206,11 @@ export default function CourseDetailPage() {
                 />
                 <InfoItem
                   icon={Calendar}
+                  label="Registration Deadline"
+                  value={course.registrationDeadline}
+                />
+                <InfoItem
+                  icon={Calendar}
                   label="Start Date"
                   value={course.startingDate}
                 />
@@ -150,6 +243,7 @@ export default function CourseDetailPage() {
               <Button
                 className="w-full mt-6 bg-maroon text-white hover:bg-gray-600"
                 aria-label="Register for Course"
+                onClick={handleRequestEnroll}
               >
                 <Calendar className="mr-2 h-4 w-4" />
                 Request for Enroll
