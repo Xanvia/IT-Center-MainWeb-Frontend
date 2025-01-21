@@ -29,7 +29,7 @@ export const aboutus: aboutUs[] = [
 const Home: React.FC = () => {
   return (
     <div className="bg-white">
-      <div className="flex justify-between items-start px-40">
+      <div className="flex text-justify items-start px-40">
         <Pictures
           imageUrl="/aboutus/aboutus.jpg"
           heading="About Us"

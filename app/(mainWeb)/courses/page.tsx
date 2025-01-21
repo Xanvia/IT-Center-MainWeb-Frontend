@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, Input } from "@nextui-org/react";
 import { Search } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import CourseCard, { Course } from "./CourseCardMain";
+import CourseCard, { Course } from "./courseCardMain";
 
 export default function CourseRegistration() {
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
