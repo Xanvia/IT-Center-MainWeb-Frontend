@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ReservationRequest, ReservationStatus } from "@/utils/types";
 import Axios from "@/config/axios";
 import { useSession } from "next-auth/react";
+import { toast } from "@/hooks/use-toast";
 
 export default function ReservationsPage() {
   const { data: session } = useSession();
@@ -33,8 +34,13 @@ export default function ReservationsPage() {
       });
 
       setReservations(reservations.filter((res) => res.id !== id));
+      toast({ description: "Reservation deleted successfully." });
     } catch (error) {
       console.error("Failed to delete reservation", error);
+      toast({
+        description: "Failed to delete reservation.",
+        variant: "destructive",
+      });
     }
   };
 

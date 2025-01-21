@@ -77,7 +77,9 @@ export default function AdminCourses() {
   if (status === "loading") {
     return (
       <div className="p-4">
-        <h1 className="text-2xl font-semibold mb-4">Manage Courses</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-600">
+          Manage Courses
+        </h1>
         {/* centered loading spinner */}
         <div className="flex justify-center items-center h-20 animate-spin">
           <Loader />
@@ -90,7 +92,9 @@ export default function AdminCourses() {
   ) {
     return (
       <div className="p-4">
-        <h1 className="text-2xl font-semibold mb-4">Manage Courses</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-600">
+          Manage Courses
+        </h1>
         <div className="grid gap-4">
           <p>Sorry :( You are not Authorized to view this page.</p>
         </div>
@@ -100,7 +104,9 @@ export default function AdminCourses() {
     return (
       <div className="container mx-auto p-4">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Manage Courses</h1>
+          <h1 className="text-2xl font-bold mb-6 text-gray-600">
+            Manage Courses
+          </h1>
           <Button className="bg-maroon" onClick={() => setIsModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Add Course
           </Button>

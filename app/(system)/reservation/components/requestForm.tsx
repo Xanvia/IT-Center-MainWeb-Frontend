@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { format, isSameDay } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Loader } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   date: z
@@ -121,7 +122,11 @@ export function ReservationForm({
       );
       router.push("/reservation/my-reservations");
     } catch (error) {
-      console.log("something went wrong!");
+      console.log(error);
+      toast({
+        variant: "destructive",
+        description: "Something went wrong! Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -131,7 +136,12 @@ export function ReservationForm({
     const fetchEvents = async () => {
       try {
         const response = await Axios.get(
-          `/reservations/${reservationId}/records`
+          `/reservations/${reservationId}/records`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.access_token}`,
+            },
+          }
         );
         const data = await response.data;
         console.log(data);
@@ -150,6 +160,10 @@ export function ReservationForm({
         );
       } catch (error) {
         console.error(error);
+        toast({
+          variant: "destructive",
+          description: "Something went wrong! Please try again.",
+        });
       }
     };
 
@@ -450,6 +464,11 @@ export function ReservationForm({
             </Dialog>
           </form>
         </Form>
+        <div className={`${loading ? "block" : "hidden"}`}>
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-[999]">
+            <Loader className="text-gray-200 animate-spin h-10 w-10" />
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
