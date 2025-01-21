@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { Loader, Send } from "lucide-react";
 
@@ -31,18 +31,19 @@ import {
 import { useSession } from "next-auth/react";
 import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
+import { string } from "zod";
 
 // Mock data for charts
 const courseRegistrations = [
-  { name: "Mathematics", total: 120 },
-  { name: "Physics", total: 85 },
-  { name: "Chemistry", total: 70 },
-  { name: "Biology", total: 90 },
-  { name: "Computer Science", total: 110 },
+  { code: "Mathematics", total: 120 },
+  { code: "Physics", total: 85 },
+  { code: "Chemistry", total: 70 },
+  { code: "Biology", total: 90 },
+  { code: "Computer Science", total: 110 },
 ];
 
 const monthlyRegistrations = [
-  { name: "Jan", total: 45 },
+  { month: "Jan", count: 45 },
   { name: "Feb", total: 52 },
   { name: "Mar", total: 38 },
   { name: "Apr", total: 60 },
@@ -69,6 +70,24 @@ const faqs = [
   },
 ];
 
+type userData = {
+  students: number;
+  staff: number;
+  users: number;
+};
+
+type courseData = {
+  totalCourses: number;
+  totalStudents: {
+    code: string;
+    total: number;
+  }[];
+  totalStudentsLast6Months: {
+    month: string;
+    count: number;
+  }[];
+};
+
 export default function AdminAnalysis() {
   const [notificationSubject, setNotificationSubject] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
@@ -76,6 +95,52 @@ export default function AdminAnalysis() {
     "STUDENT" | "ALL" | "STAFF"
   >("STUDENT");
   const { data: session, status } = useSession();
+
+  const [userData, setUserData] = useState<userData>({
+    students: 0,
+    staff: 0,
+    users: 0,
+  });
+
+  const [courseData, setCourseData] = useState<courseData>({
+    totalCourses: 0,
+    totalStudents: [
+      {
+        code: "CSC1002",
+        total: 5,
+      },
+      {
+        code: "CSC1003",
+        total: 8,
+      },
+    ],
+    totalStudentsLast6Months: [
+      {
+        month: "January",
+        count: 2,
+      },
+      {
+        month: "December",
+        count: 5,
+      },
+      {
+        month: "November",
+        count: 3,
+      },
+      {
+        month: "October",
+        count: 7,
+      },
+      {
+        month: "September",
+        count: 8,
+      },
+      {
+        month: "August",
+        count: 2,
+      },
+    ],
+  });
 
   const handleSendNotification = async () => {
     // Implement the logic to send notifications here
@@ -122,6 +187,38 @@ export default function AdminAnalysis() {
     setNotificationMessage("");
   };
 
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const response = await Axios.get("/user/stats", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    const getCourseData = async () => {
+      try {
+        const response = await Axios.get("/courses/stats", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+        setCourseData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    if (session) {
+      getUserData();
+      getCourseData();
+    }
+  }, [session]);
+
   if (status === "loading") {
     return (
       <div className="p-4">
@@ -164,7 +261,7 @@ export default function AdminAnalysis() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,234</div>
+              <div className="text-2xl font-bold">{userData.students}</div>
             </CardContent>
           </Card>
           <Card>
@@ -172,7 +269,7 @@ export default function AdminAnalysis() {
               <CardTitle className="text-sm font-medium">Total Staff</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">56</div>
+              <div className="text-2xl font-bold">{userData.staff}</div>
             </CardContent>
           </Card>
           <Card>
@@ -180,7 +277,7 @@ export default function AdminAnalysis() {
               <CardTitle className="text-sm font-medium">Total Users</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,290</div>
+              <div className="text-2xl font-bold">{userData.users}</div>
             </CardContent>
           </Card>
           <Card>
@@ -190,7 +287,9 @@ export default function AdminAnalysis() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">25</div>
+              <div className="text-2xl font-bold">
+                {courseData.totalCourses}
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -203,9 +302,9 @@ export default function AdminAnalysis() {
             </CardHeader>
             <CardContent className="pl-2">
               <ResponsiveContainer width="100%" height={350}>
-                <BarChart data={courseRegistrations}>
+                <BarChart data={courseData.totalStudents}>
                   <XAxis
-                    dataKey="name"
+                    dataKey="code"
                     stroke="#888888"
                     fontSize={12}
                     tickLine={false}
@@ -229,9 +328,9 @@ export default function AdminAnalysis() {
             </CardHeader>
             <CardContent className="pl-2">
               <ResponsiveContainer width="100%" height={350}>
-                <BarChart data={monthlyRegistrations}>
+                <BarChart data={courseData.totalStudentsLast6Months}>
                   <XAxis
-                    dataKey="name"
+                    dataKey="month"
                     stroke="#888888"
                     fontSize={12}
                     tickLine={false}
@@ -244,7 +343,7 @@ export default function AdminAnalysis() {
                     axisLine={false}
                     tickFormatter={(value) => `${value}`}
                   />
-                  <Bar dataKey="total" fill="#A04747" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="count" fill="#A04747" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
