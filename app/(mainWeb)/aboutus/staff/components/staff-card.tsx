@@ -41,7 +41,7 @@ export function StaffCard({ staff }: StaffCardProps) {
 
           </div>
           <div className="text-right">
-            <span className="text-sm text-muted-foreground">Ext {staff.extNo}</span>
+            <span className="text-sm text-muted-foreground">{staff.extNo}</span>
           </div>
         </div>
       </CardContent>
