@@ -23,6 +23,7 @@ import { Avatar } from "@nextui-org/react";
 import Axios from "@/config/axios";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { getAbsoluteImageUrl } from "@/utils/common";
 
 // Types
 type RequestState =
@@ -276,9 +277,15 @@ export default function AdminDashboard() {
                         <TableCell>
                           <Avatar
                             showFallback
-                            src={student.profileImage}
+                            src={getAbsoluteImageUrl(student.profileImage)}
                             name={student.name}
+                            className="cursor-pointer"
                             size="md"
+                            onClick={() =>
+                              router.push(
+                                `/dashboard/profile/student/${student.studentId}`
+                              )
+                            }
                           ></Avatar>
                         </TableCell>
                         <TableCell>{student.name}</TableCell>
