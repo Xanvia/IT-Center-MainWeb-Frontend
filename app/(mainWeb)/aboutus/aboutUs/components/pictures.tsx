@@ -26,7 +26,7 @@ const Pictures: React.FC<PicturesProps> = ({
 
         <div className="pt-8">
           <Link href={"/aboutus/staff"}>
-            <button className="bg-yellow-200 hover:bg-maroon text-gray-900 hover:text-yellow-200 font-bold py-2 px-4 border border-yellow-200 rounded-lg sm:inline-block block w-52 md:w-auto">
+            <button className="bg-yellow-200 hover:bg-maroon text-maroon hover:text-yellow-200 font-bold py-2 px-4 border border-maroon rounded-lg sm:inline-block block w-52 md:w-auto">
               Learn More
             </button>
           </Link>
