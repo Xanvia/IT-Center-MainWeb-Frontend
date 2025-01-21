@@ -1,6 +1,6 @@
 import React from "react";
 import ReqServicesForm from "./form";
-import { introductionPara, services, serviceTypes } from "./pageDate";
+import { introductionPara, services, serviceTypes } from "./pageData";
 
 const Home: React.FC = () => {
   return (
