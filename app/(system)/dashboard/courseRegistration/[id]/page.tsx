@@ -71,6 +71,7 @@ export default function CourseDetailPage() {
   const { data: session, status } = useSession();
   const [student, setStudent] = useState<Student | null>(null);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   // Fetch course details when the component mounts
   useEffect(() => {
@@ -138,6 +139,7 @@ export default function CourseDetailPage() {
     };
 
     try {
+      setLoading(true);
       const response = await Axios.post(
         `/registration-records`,
         registrationData,
@@ -149,12 +151,10 @@ export default function CourseDetailPage() {
       );
 
       console.log("response data", response);
-      if (response.status === 201) {
-        toast({ description: "Successfully enrolled in the course!" });
-      }
+      toast({ description: "Successfully enrolled in the course!" });
       router.push("/dashboard/enrolledCourses");
     } catch (error: any) {
-      if (error.response.data.code === "ER_DUP_ENTRY") {
+      if (error?.response?.data?.code === "ER_DUP_ENTRY") {
         toast({
           variant: "destructive",
           description: "You Have already Enrolled for this course!",
@@ -167,6 +167,8 @@ export default function CourseDetailPage() {
           description: "An error occurred during enrollment.",
         });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -255,6 +257,7 @@ export default function CourseDetailPage() {
                   className="w-full mt-6 bg-maroon text-white hover:bg-gray-600"
                   aria-label="Register for Course"
                   onClick={handleRequestEnroll}
+                  disabled={session?.user.role !== "STUDENT" || loading}
                 >
                   <Calendar className="mr-2 h-4 w-4" />
                   Request for Enroll
@@ -268,6 +271,11 @@ export default function CourseDetailPage() {
             Course Description
           </h2>
           <p className="text-gray-600">{course.description}</p>
+        </div>
+        <div className={`${loading ? "block" : "hidden"}`}>
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <Loader className="text-gray-200 animate-spin h-10 w-10" />
+          </div>
         </div>
       </main>
     );
