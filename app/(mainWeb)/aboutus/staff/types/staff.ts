@@ -17,16 +17,3 @@ export interface StaffMember {
   image:string
 }
   
-/*
-{
-        id: string
-        displayName: string
-        title: string
-        designation: string
-        nominal: string
-        extNo: string
-        requestBy: string
-        emails: string[]
-        telephones: string[]
-    }
-* */  
