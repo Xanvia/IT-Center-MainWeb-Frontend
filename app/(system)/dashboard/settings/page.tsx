@@ -23,7 +23,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Avatar } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Camera, Loader } from "lucide-react";
 import { delay, getAbsoluteImageUrl } from "@/utils/common";
 import Axios from "@/config/axios";
@@ -31,9 +31,8 @@ import { toast } from "@/hooks/use-toast";
 
 export default function AccountSettings() {
   const [user, setUser] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-    avatar: "/placeholder.svg?height=100&width=100",
+    name: "",
+    email: "",
   });
   const { data: session, status } = useSession();
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
@@ -44,6 +43,10 @@ export default function AccountSettings() {
     new: "",
     confirm: "",
   });
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/auth/signin" });
+  };
 
   const handleProfileUpdate = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -87,20 +90,94 @@ export default function AccountSettings() {
     }
   };
 
-  const handlePasswordChange = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the password change request to your backend
-    console.log("Password change requested:", passwords);
+  const handleSave = async () => {
+    try {
+      await Axios.put(`/user`, user, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+      toast({
+        title: "Success",
+        description: "Profile updated successfully!",
+      });
+      handleSignOut();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
+    }
   };
 
-  const handleDeleteAccount = () => {
-    // Here you would typically send the account deletion request to your backend
-    console.log("Account deletion requested");
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (passwords.new !== passwords.confirm) {
+      toast({
+        variant: "destructive",
+        title: "Passwords don't match",
+        description: "Please make sure your new passwords match.",
+      });
+      return;
+    }
+
+    try {
+      await Axios.put(
+        `/user/password`,
+        {
+          current: passwords.current,
+          new: passwords.new,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      handleSignOut();
+      toast({
+        title: "Success",
+        description: "Password changed successfully!",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem changing your password.",
+      });
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await Axios.delete(`/user`, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+      toast({
+        title: "Success",
+        description: "Account deleted successfully!",
+      });
+      handleSignOut();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem deleting your account.",
+      });
+    }
   };
 
   useEffect(() => {
     if (session?.user) {
       setPhotoPreview(getAbsoluteImageUrl(session.user.image) || null);
+      setUser({
+        name: session.user.name,
+        email: session.user.email,
+      });
     }
   }, [session]);
 
@@ -178,7 +255,9 @@ export default function AccountSettings() {
                       }
                     />
                   </div>
-                  <Button type="submit">Save</Button>
+                  <Button type="submit" onClick={() => handleSave()}>
+                    Save
+                  </Button>
                 </div>
               </div>
             </form>
