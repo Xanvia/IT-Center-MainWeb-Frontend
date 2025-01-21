@@ -17,9 +17,9 @@ import {
   introductionPara,
   projectDetails,
 } from "@/constants/homePageData";
-import { Key, useEffect, useState } from "react";
-import CourseCard, { Course } from "./courses/courseCardMain";
+import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
+import CourseCard, { Course } from "./courses/courseCardMain";
 
 export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);

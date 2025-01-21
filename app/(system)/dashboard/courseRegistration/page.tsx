@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo, Key, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, Input } from "@nextui-org/react";
-import { Search } from "lucide-react";
 import CourseCard from "./courseCard";
 import { toast } from "@/hooks/use-toast";
+import { Search } from "lucide-react";
 
 interface Course {
   id: string;
@@ -23,18 +23,9 @@ interface Course {
 }
 
 export default function CourseRegistration() {
-  //const [searchQuery, setSearchQuery] = useState("");
-  const [courses, setCourses] = useState<Course[]>([]);
-
-  {
-    /* 
-    const filteredCourses = useMemo(() => {
-    return courses.filter((course: { courseName: string }) =>
-      course.courseName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery]);
-    */
-  }
+  const [searchQuery, setSearchQuery] = useState(""); // Search query state
+  const [courses, setCourses] = useState<Course[]>([]); // Original courses from backend
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]); // Courses to display
 
   // Fetch Courses from the server at the start
   useEffect(() => {
@@ -46,7 +37,8 @@ export default function CourseRegistration() {
         );
         if (result.ok) {
           const data = await result.json();
-          setCourses(data);
+          setCourses(data); // Save original courses
+          setFilteredCourses(data); // Initially display all courses
         } else {
           toast({ description: "Failed to fetch courses" });
         }
@@ -58,27 +50,43 @@ export default function CourseRegistration() {
     fetchCourses();
   }, []);
 
+  // Update displayed courses whenever searchQuery changes
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      // Show all courses when searchQuery is empty
+      setFilteredCourses(courses);
+    } else {
+      // Filter courses by searchQuery
+      setFilteredCourses(
+        courses.filter((course) =>
+          course.courseName.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    }
+  }, [searchQuery, courses]);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold my-4 mt-2 text-center text-maroon">
         Course Registration
       </h1>
 
-      {/*// Add a search bar to filter courses*/}
+      {/* Search Bar */}
       <div className="shadow-lg rounded-lg p-6 bg-white">
-        {/* <div className="mb-6">
+        <div className="mb-6">
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search courses..."
+            placeholder="Search courses by name..."
             startContent={<Search className="text-default-400" />}
             value={searchQuery}
-            onValueChange={setSearchQuery}
+            onValueChange={(value) => setSearchQuery(value)}
           />
-        </div>*/}
+        </div>
 
+        {/* Display Courses */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => (
+          {filteredCourses.map((course) => (
             <Link
               href={`/dashboard/courseRegistration/${course.id}`}
               key={course.id}
