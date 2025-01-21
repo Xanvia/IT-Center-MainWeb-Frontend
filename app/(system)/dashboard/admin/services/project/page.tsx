@@ -15,56 +15,55 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Axios from "@/config/axios";
 
 interface Project {
   id: string;
-  name: string;
+  title: string;
   description: string;
-  imageUrl: string;
+  images: {
+    id: string;
+    path: string;
+  }[];
   date: string;
 }
 
 export default function InteractiveProjectRow() {
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: "1",
-      name: "Project Alpha",
-      description:
-        "A cutting-edge web application for task management. This project aims to revolutionize how teams collaborate and manage their workflows.",
-      imageUrl: "/common/mainWeb.jpg",
-      date: "2023-06-15",
-    },
-  ]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const { data: session, status } = useSession();
 
   const [isAdding, setIsAdding] = useState(false);
   const [viewingProject, setViewingProject] = useState<Project | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [newProject, setNewProject] = useState({
+  const [newProject, setNewProject] = useState<Project>({
+    id: "",
     title: "",
     description: "",
-    images: "",
+    images: [{ id: "", path: "" }],
     date: "",
   });
 
+  useEffect(() => {
+    if (!session) return;
+    const fetchProjects = async () => {
+      try {
+        const response = await Axios.get("/contents/projects", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
 
-useEffect(() => {
-  const fetchProjects = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/projects");
-      if (response.ok) {
-        const fetchedProjects = await response.json();
-        setProjects(fetchedProjects);
-      } else {
-        console.error("Failed to fetch projects");
+        const fetcheddata = response.data;
+        console.log(fetcheddata);
+        setProjects(fetcheddata);
+      } catch (error) {
+        console.error("Error while fetching Logs:", error);
       }
-    } catch (error) {
-      console.error("Error while fetching projects:", error);
-    }
-  };
+    };
 
-  fetchProjects();
-}, []);
-
+    fetchProjects();
+  }, [session]);
 
   //addProject function
   const addProject = async () => {
@@ -77,41 +76,53 @@ useEffect(() => {
       };
 
       try {
+        setIsAdding(true);
         // Send POST request to server
-        const response = await fetch("http://localhost:3001/projects", {
-          method: "POST",
+        const response = await Axios.post("contents/projects", projectData, {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(projectData),
         });
 
-        if (response.ok) {
-          const savedProject = await response.json(); // Assuming the server returns the saved project
-          setProjects([...projects, savedProject]);
-          setNewProject({ title: "", description: "", images: "", date: "" });
-          setIsAdding(false);
-        } else {
-          // Handle errors if needed
-          const res = await response.json();
-          console.error("Failed to add project:", res);
-        }
+        const savedProject = await response.data; // Assuming the server returns the saved project
+        setProjects([...projects, savedProject]);
+        setNewProject({
+          id: "",
+          title: "",
+          description: "",
+          images: [{ id: "", path: "" }],
+          date: "",
+        });
+        setIsAdding(false);
       } catch (error) {
         console.error("Error while adding project:", error);
+        setIsAdding(false);
       }
     }
   };
 
-  const removeProject = (id: string) => {
-    setProjects(projects.filter((project) => project.id !== id));
+  const removeProject = async (id: string) => {
+    try {
+      // Send DELETE request to server
+      await Axios.delete(`contents/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      setProjects(projects.filter((project) => project.id !== id));
+    } catch (error) {
+      console.error("Error while removing project:", error);
+    }
   };
 
   const startEditing = () => {
     if (viewingProject) {
       setNewProject({
-        title: viewingProject.name,
+        id: viewingProject.id,
+        title: viewingProject.title,
         description: viewingProject.description,
-        images: viewingProject.imageUrl,
+        images: viewingProject.images,
         date: viewingProject.date,
       });
       setIsEditing(true);
@@ -130,34 +141,30 @@ useEffect(() => {
       const updatedProject = {
         ...viewingProject,
         ...newProject,
-        imageUrl: newProject.images || viewingProject.imageUrl,
+        images: newProject.images || viewingProject.images,
       };
 
       try {
         // Send PUT request to server
-        const response = await fetch(
-          `http://localhost:3001/projects/${viewingProject.id}`,
+        const response = await Axios.put(
+          `/contents/${viewingProject.id}`,
+          updatedProject,
           {
-            method: "PUT",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${session?.access_token}`,
             },
-            body: JSON.stringify(updatedProject),
           }
         );
 
-        if (response.ok) {
-          const savedProject = await response.json();
-          setProjects(
-            projects.map((project) =>
-              project.id === savedProject.id ? savedProject : project
-            )
-          );
-          setViewingProject(savedProject);
-          setIsEditing(false);
-        } else {
-          console.error("Failed to update project:", response.statusText);
-        }
+        const savedProject = await response.data;
+        setProjects(
+          projects.map((project) =>
+            project.id === savedProject.id ? savedProject : project
+          )
+        );
+        setViewingProject(savedProject);
+        setIsEditing(false);
       } catch (error) {
         console.error("Error while updating project:", error);
       }
@@ -178,8 +185,12 @@ useEffect(() => {
           <Card key={project.id} className="flex flex-col h-[400px]">
             <div className="h-[200px] relative">
               <img
-                src={project.imageUrl}
-                alt={project.name}
+                src={
+                  project.images && project.images[0]
+                    ? project.images[0].path
+                    : ""
+                }
+                alt={project.title}
                 className="w-full h-full object-cover"
               />
               <Button
@@ -194,7 +205,7 @@ useEffect(() => {
             </div>
             <CardContent className="p-4 flex-grow overflow-hidden">
               <h3 className="font-bold text-lg mb-2">
-                {truncateText(project.name, 30)}
+                {truncateText(project.title, 30)}
               </h3>
               <p className="text-gray-600 text-sm mb-4">
                 {truncateText(project.description, 100)}
@@ -286,7 +297,7 @@ useEffect(() => {
             </div>
             <div>
               <Label htmlFor="newProjectImage">Image</Label>
-              <Input
+              {/* <Input
                 id="newProjectImage"
                 type="file"
                 accept="image/*"
@@ -303,7 +314,7 @@ useEffect(() => {
                     reader.readAsDataURL(file);
                   }
                 }}
-              />
+              /> */}
             </div>
             <DialogFooter>
               <Button type="submit">Add Project</Button>
@@ -324,14 +335,18 @@ useEffect(() => {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
-              {isEditing ? "Edit Project" : viewingProject?.name}
+              {isEditing ? "Edit Project" : viewingProject?.title}
             </DialogTitle>
           </DialogHeader>
           {viewingProject && !isEditing && (
             <div className="space-y-4">
               <img
-                src={viewingProject.imageUrl}
-                alt={viewingProject.name}
+                src={
+                  viewingProject.images && viewingProject.images[0]
+                    ? viewingProject.images[0].path
+                    : ""
+                }
+                alt={viewingProject.title}
                 className="w-full h-48 object-cover rounded-md"
               />
               <p className="text-sm text-gray-600">
@@ -394,7 +409,7 @@ useEffect(() => {
               </div>
               <div>
                 <Label htmlFor="editProjectImage">Project Image</Label>
-                <Input
+                {/* <Input
                   id="editProjectImage"
                   type="file"
                   accept="image/*"
@@ -411,7 +426,7 @@ useEffect(() => {
                       reader.readAsDataURL(file);
                     }
                   }}
-                />
+                /> */}
               </div>
             </form>
           )}
