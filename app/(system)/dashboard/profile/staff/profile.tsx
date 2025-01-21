@@ -1,6 +1,5 @@
 "use client";
 
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -39,17 +38,6 @@ export default function StaffProfile() {
   });
   const { data: session } = useSession();
   const router = useRouter();
-
-  // // Delete a reservation
-  // const handleDeleteReservation = async (id: string) => {
-  //   try {
-  //     await Axios.delete(`/reservations/${id}`);
-  //     toast({ description: "Reservation deleted successfully" });
-  //   } catch (error) {
-  //     toast({ description: "Failed to delete reservation" });
-  //   }
-  //   setReservations(reservations.filter((r) => r.id !== id));
-  // };
 
   useEffect(() => {
     if (!session?.access_token) {
@@ -172,15 +160,15 @@ export default function StaffProfile() {
   const handleSave = async () => {
     // Save the updated staff profile
     try {
-      await Axios.patch(
-        `/staff-profile/${staffData?.staffProfile.id}`,
-        staffData.staffProfile,
-        {
-          headers: {
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-        }
-      );
+      const data: any = staffData?.staffProfile;
+      // make emails and phonenumbers as string array
+      data.emails = data.emails.map((email: any) => email.email);
+      data.telephones = data.telephones.map((phone: any) => phone.phoneNumber);
+      await Axios.patch(`/staff-profile/${data.id}`, data, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
       toast({
         title: "Success",
         description: "User has updeted succesfully!",
