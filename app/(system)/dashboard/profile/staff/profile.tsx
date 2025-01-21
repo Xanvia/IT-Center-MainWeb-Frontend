@@ -1,6 +1,5 @@
 "use client";
 
-import { Avatar } from "@heroui/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,10 +19,13 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Axios from "@/config/axios";
 import { toast } from "@/hooks/use-toast";
+import { getAbsoluteImageUrl } from "@/utils/common";
+import { Avatar } from "@nextui-org/react";
 
 export default function StaffProfile() {
   const [staffData, setStaffData] = useState<staffProfileData>({
     email: "",
+    image: "",
     staffProfile: {
       id: "",
       displayName: "",
@@ -167,20 +169,24 @@ export default function StaffProfile() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Save the updated staff profile
     try {
-      Axios.put(`/staff-profile/${staffData?.staffProfile.id}`, staffData, {
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
+      await Axios.patch(
+        `/staff-profile/${staffData?.staffProfile.id}`,
+        staffData.staffProfile,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
       toast({
         title: "Success",
         description: "User has updeted succesfully!",
       });
     } catch (error) {
-      console.error("Error updeting student:", error);
+      console.error("Error updeting staff:", error);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -190,7 +196,7 @@ export default function StaffProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-[80vh] bg-white">
       <div className="h-48 bg-[#862727]" />
 
       <div className="max-w-3xl mx-auto px-4 -mt-24">
@@ -198,10 +204,10 @@ export default function StaffProfile() {
           <CardContent className="p-6">
             <div className="flex flex-col items-center -mt-20 mb-8">
               <div className="relative">
-                <Avatar className="w-32 h-32 border-4 border-white shadow-lg">
-                  <AvatarImage src={profileImage} />
-                  <AvatarFallback>SK</AvatarFallback>
-                </Avatar>
+                <Avatar
+                  src={getAbsoluteImageUrl(staffData.image)}
+                  className="w-32 h-32 border-4 border-white shadow-lg"
+                ></Avatar>
                 <label
                   htmlFor="profile-upload"
                   className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-lg cursor-pointer"
