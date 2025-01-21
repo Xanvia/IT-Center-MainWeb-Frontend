@@ -14,24 +14,25 @@ import {
   Wind,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface RoomDetails {
+  id: string;
   name: string;
   description: string;
   images: string[];
   seatLimit: number;
   noOfComputers?: number;
   availableSoftwares?: string;
-  Equipment: string;
+  equipment: string;
   isAC: boolean;
-  specialities: string;
   location: string;
   feeRatePerHour: number;
   bestCase: string;
 }
 
 const sampleRoom: RoomDetails = {
+  id: "1",
   name: "Tech Hub Conference Room",
   description:
     "A modern, fully-equipped conference room perfect for tech meetings and presentations.",
@@ -43,19 +44,20 @@ const sampleRoom: RoomDetails = {
   seatLimit: 20,
   noOfComputers: 5,
   availableSoftwares: "Microsoft Office Suite, Adobe Creative Cloud, Zoom",
-  Equipment: "4K Projector, Surround Sound System, Interactive Whiteboard",
+  equipment: "4K Projector, Surround Sound System, Interactive Whiteboard",
   isAC: true,
-  specialities:
-    "Soundproof walls, Adjustable lighting, High-speed fiber internet",
   location: "Building A, 2nd Floor",
   feeRatePerHour: 75.0,
   bestCase:
     "Tech Hub Conference Room is a modern, fully-equipped conference room perfect for tech meetings and presentations.",
 };
 
-export default function Component() {
+export default function Component({ params }: { params: { id: string } }) {
+  const slug = params.id;
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const room = sampleRoom;
+  const [room, setRoom] = useState<RoomDetails>(sampleRoom);
+  const router = useRouter();
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -68,6 +70,19 @@ export default function Component() {
       prevIndex === 0 ? room.images.length - 1 : prevIndex - 1
     );
   };
+
+  useEffect(() => {
+    const fetchRoom = async () => {
+      try {
+        const response = await Axios.get(`/reservations/${slug}`);
+        const data = await response.data;
+        setRoom(data);
+      } catch (error) {
+        return sampleRoom;
+      }
+    };
+    fetchRoom();
+  }, [slug]);
 
   return (
     <main className="flex-grow container mx-auto py-8">
@@ -133,7 +148,7 @@ export default function Component() {
                 <InfoItem
                   icon={Package}
                   label="Equipment"
-                  value={room.Equipment}
+                  value={room.equipment}
                 />
                 <InfoItem
                   icon={Wind}
@@ -154,6 +169,9 @@ export default function Component() {
               <Button
                 className="w-full mt-6 bg-yellow-500 text-maroon-900 hover:bg-yellow-600"
                 aria-label="Request to Reserve"
+                onClick={() =>
+                  router.push(`/reservation/room/${room.id}/reserve`)
+                }
               >
                 <Calendar className="mr-2 h-4 w-4" />
                 Request to Reserve
@@ -179,6 +197,8 @@ export default function Component() {
 }
 
 import { LucideIcon } from "lucide-react";
+import Axios from "@/config/axios";
+import { useRouter } from "next/navigation";
 
 function InfoItem({
   icon: Icon,

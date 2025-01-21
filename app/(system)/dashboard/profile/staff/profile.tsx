@@ -1,299 +1,368 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import { useForm, Controller } from "react-hook-form";
-import { PenSquare, Camera, Check, X, Plus } from "lucide-react";
+
+import { Avatar } from "@heroui/avatar";
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Mail, Phone, Trash2, Upload } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { staffProfileData } from "@/utils/types";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import Axios from "@/config/axios";
+import { toast } from "@/hooks/use-toast";
 
-type FieldType = {
-  label: string;
-  name: string;
-  value: string;
-  isEditing: boolean;
-};
+export default function StaffProfile() {
+  const [staffData, setStaffData] = useState<staffProfileData>({
+    email: "",
+    staffProfile: {
+      id: "",
+      displayName: "",
+      title: "",
+      designation: "",
+      nominal: "",
+      extNo: "",
+      emails: [{ email: "" }],
+      telephones: [{ phoneNumber: "" }],
+    },
+  });
+  const { data: session } = useSession();
+  const router = useRouter();
 
-type FormData = {
-  displayName: string;
-  title?: string;
-  designation: string;
-  nominal: string;
-  extNo: string;
-  isApproved?: boolean;
-  emails: { id: string; email: string }[];
-  telephones: { id: string; phoneNumber: string }[];
-};
-
-export default function Component() {
-  const [data, setData] = useState<FormData | null>(null);
-  const [fields, setFields] = useState<FieldType[]>([]); // Set fields to empty initially
-  const { control, handleSubmit, setValue } = useForm<FormData>();
+  // // Delete a reservation
+  // const handleDeleteReservation = async (id: string) => {
+  //   try {
+  //     await Axios.delete(`/reservations/${id}`);
+  //     toast({ description: "Reservation deleted successfully" });
+  //   } catch (error) {
+  //     toast({ description: "Failed to delete reservation" });
+  //   }
+  //   setReservations(reservations.filter((r) => r.id !== id));
+  // };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3001/staff-profile/8d5d9ab6-6394-4378-a9f2-fab7f0922de3`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const result = await response.json();
-        setData(result);
-      } catch (error: any) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // Update fields when data is fetched
-  useEffect(() => {
-    if (data) {
-      setFields([
-        {
-          label: "Staff Name",
-          name: "staffName",
-          value: data.displayName || "",
-          isEditing: false,
-        },
-        {
-          label: "Designation",
-          name: "designation",
-          value: data.designation || "",
-          isEditing: false,
-        },
-        {
-          label: "Nominal",
-          name: "nominal",
-          value: data.nominal || "",
-          isEditing: false,
-        },
-        {
-          label: "Ext No",
-          name: "extNo",
-          value: data.extNo || "",
-          isEditing: false,
-        },
-        {
-          label: "Email",
-          name: "email",
-          value: data.emails[0].email || "",
-          isEditing: false,
-        },
-        {
-          label: "Phone No",
-          name: "phoneNo",
-          value: data.telephones[0].phoneNumber || "",
-          isEditing: false,
-        },
-      ]);
-
-      // Set form default values
-      // setValue("displayName", data.displayName);
-      // setValue("designation", data.designation);
-      // setValue("nominal", data.nominal);
-      // setValue("extNo", data.extNo);
-      // setValue("emails", data.emails);
-      // setValue("telephones", data.telephones);
+    if (!session?.access_token) {
+      return;
     }
-  }, [data, setValue]);
+    // Fetch staffProfile from the server
+    const fetchStaffProfile = async () => {
+      const response = await Axios.get(`/user/staff/me`, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+      const data = await response.data;
+      setStaffData(data);
+    };
+    fetchStaffProfile();
+  }, [session]);
 
-  const [profileImage, setProfileImage] = useState("/users/generalUser.png");
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [profileImage, setProfileImage] = useState<string>("/placeholder.svg");
 
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfileImage(e.target?.result as string);
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const toggleEdit = (index: number) => {
-    setFields(
-      fields.map((field, i) =>
-        i === index ? { ...field, isEditing: !field.isEditing } : field
-      )
-    );
+  const handleInputChange = (field: string, value: string) => {
+    setStaffData((prev) => ({
+      ...prev,
+      staffProfile: {
+        ...prev!.staffProfile,
+        [field]: value,
+      },
+    }));
   };
 
-  const handleChange = (name: string, newValue: string) => {
-    setFields(
-      fields.map((field) =>
-        field.name === name ? { ...field, value: newValue } : field
-      )
-    );
-    setValue(name as keyof FormData, newValue);
+  const handleEmailChange = (index: number, value: string) => {
+    setStaffData((prev) => ({
+      ...prev,
+      staffProfile: {
+        ...prev!.staffProfile,
+        emails: prev!.staffProfile.emails.map((email, i) =>
+          i === index ? { email: value } : email
+        ),
+      },
+    }));
   };
 
-  const handleSave = (index: number) => {
-    toggleEdit(index);
+  const handlePhoneChange = (index: number, value: string) => {
+    setStaffData((prev) => ({
+      ...prev,
+      staffProfile: {
+        ...prev!.staffProfile,
+        telephones: prev!.staffProfile.telephones.map((phone, i) =>
+          i === index ? { phoneNumber: value } : phone
+        ),
+      },
+    }));
   };
 
-  const onSubmit = async (data: FormData) => {
-    console.log("Submitting profile data:", data);
-    const res = await fetch(
-      `http://localhost:3001/staff-profile/8d5d9ab6-6394-4378-a9f2-fab7f0922de3`,
-      {
-        method: "PATCH",
-        body: JSON.stringify({
-          displayName: data.displayName,
-          designation: data.designation,
-          nominal: data.nominal,
-          extNo: data.extNo,
-        }),
-        headers: {
-          "Content-Type": "application/json",
+  const removeEmail = (index: number) => {
+    if (staffData?.staffProfile.emails ?? [].length > 1) {
+      //{(staffData?.staffProfile.emails??[]).length < 2 &&
+      setStaffData((prev) => ({
+        ...prev,
+        staffProfile: {
+          ...prev!.staffProfile,
+          emails: prev!.staffProfile.emails.filter((_, i) => i !== index),
         },
-        mode: "cors",
-      }
-    );
-
-    const user = await res.json();
-    if (!res.ok) {
-      alert("update failed");
-      return;
+      }));
     }
-    alert("Update Success");
+  };
+
+  const removeTelephone = (index: number) => {
+    if (staffData?.staffProfile.telephones ?? [].length > 1) {
+      //{(staffData?.staffProfile.emails??[]).length < 2 &&
+      setStaffData((prev) => ({
+        ...prev,
+        staffProfile: {
+          ...prev!.staffProfile,
+          telephones: prev!.staffProfile.telephones.filter(
+            (_, i) => i !== index
+          ),
+        },
+      }));
+    }
+  };
+
+  const addEmail = () => {
+    if (staffData?.staffProfile.emails ?? [].length < 2) {
+      ////{(staffData?.staffProfile.emails??[]).length < 2 &&
+      setStaffData((prev) => ({
+        ...prev,
+        staffProfile: {
+          ...prev!.staffProfile,
+          emails: [...prev!.staffProfile.emails, { email: "" }],
+        },
+      }));
+    }
+  };
+
+  const addTelephone = () => {
+    if (staffData?.staffProfile.telephones ?? [].length < 2) {
+      //{(staffData?.staffProfile.emails??[]).length < 2 &&
+      setStaffData((prev) => ({
+        ...prev,
+        staffProfile: {
+          ...prev!.staffProfile,
+          telephones: [...prev!.staffProfile.telephones, { phoneNumber: "" }],
+        },
+      }));
+    }
+  };
+
+  const handleSave = () => {
+    // Save the updated staff profile
+    try {
+      Axios.put(`/staff-profile/${staffData?.staffProfile.id}`, staffData, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+      toast({
+        title: "Success",
+        description: "User has updeted succesfully!",
+      });
+    } catch (error) {
+      console.error("Error updeting student:", error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
+    }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden"
-    >
-      <div className="bg-red-900 h-32"></div>
-      <div className="relative px-4 pt-16 pb-8">
-        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
-          <div className="relative w-32 h-32 bg-muted rounded-full overflow-hidden group">
-            <Image
-              src={profileImage}
-              alt="Staff profile picture"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-full"
-            />
-            <div
-              className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-              onClick={handleImageClick}
-            >
-              <Camera className="text-white" size={24} />
+    <div className="min-h-screen bg-white">
+      <div className="h-48 bg-[#862727]" />
+
+      <div className="max-w-3xl mx-auto px-4 -mt-24">
+        <Card className="shadow-lg">
+          <CardContent className="p-6">
+            <div className="flex flex-col items-center -mt-20 mb-8">
+              <div className="relative">
+                <Avatar className="w-32 h-32 border-4 border-white shadow-lg">
+                  <AvatarImage src={profileImage} />
+                  <AvatarFallback>SK</AvatarFallback>
+                </Avatar>
+                <label
+                  htmlFor="profile-upload"
+                  className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-lg cursor-pointer"
+                >
+                  <Upload className="h-5 w-5" />
+                </label>
+                <Input
+                  id="profile-upload"
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </div>
+
+              <div className="mt-4 text-center">
+                <p className="text-sm text-muted-foreground">
+                  Staff Email: {staffData?.email}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Ext No: {staffData?.staffProfile.extNo}
+                </p>
+              </div>
             </div>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageChange}
-              accept="image/*"
-              className="hidden"
-            />
-            <div className="absolute bottom-0 right-0 bg-green-500 rounded-full p-1">
-              <div className="w-3 h-3 bg-white rounded-full"></div>
-            </div>
-          </div>
-        </div>
-        <h2 className="text-2xl font-bold text-center mb-1">
-          {fields[0]?.value || "Add Name"}
-        </h2>
-        <p className="text-muted-foreground text-center mb-6">
-          {fields[1]?.value || "Add designation"}
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {fields.map((field, index) => (
-            <div key={index} className="relative">
-              <Label
-                htmlFor={field.name}
-                className="block text-sm font-medium text-foreground mb-1"
-              >
-                {field.label}
-              </Label>
-              <Controller
-                name={field.name as keyof FormData}
-                control={control}
-                defaultValue={field.value} // Ensure default value is set
-                render={({ field: { value, onChange } }) => (
-                  <div className="flex">
-                    {field.isEditing ? (
-                      <>
+
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="displayName">Display Name</Label>
+                  <Input
+                    id="displayName"
+                    value={staffData?.staffProfile.displayName}
+                    onChange={(e) =>
+                      handleInputChange("displayName", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="title">Title</Label>
+                  <Select
+                    value={staffData?.staffProfile.title}
+                    onValueChange={(value) => handleInputChange("title", value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select title" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="DR">DR</SelectItem>
+                      <SelectItem value="MR">MR</SelectItem>
+                      <SelectItem value="MRS">MRS</SelectItem>
+                      <SelectItem value="MISS">MISS</SelectItem>
+                      <SelectItem value="REV">REV</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="designation">Designation</Label>
+                  <Input
+                    id="designation"
+                    value={staffData?.staffProfile.designation}
+                    onChange={(e) =>
+                      handleInputChange("designation", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="nominal">Nominal</Label>
+                  <Input
+                    id="nominal"
+                    value={staffData?.staffProfile.nominal}
+                    onChange={(e) =>
+                      handleInputChange("nominal", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <Label>Email Addresses</Label>
+                  {(staffData?.staffProfile.emails ?? []).length < 2 && (
+                    <Button variant="outline" size="sm" onClick={addEmail}>
+                      Add Email
+                    </Button>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  <div className="flex-1 grid grid-cols-2 gap-2">
+                    {staffData?.staffProfile.emails.map((email, index) => (
+                      <div key={index} className="flex gap-2">
                         <Input
-                          type="text"
-                          id={field.name}
-                          value={value as string}
-                          onChange={(e: any) => {
-                            onChange(e);
-                            handleChange(field.name, e.target.value);
-                          }}
-                          className="w-full"
-                          placeholder={`Enter ${field.label}`}
+                          value={email.email}
+                          onChange={(e) =>
+                            handleEmailChange(index, e.target.value)
+                          }
                         />
-                        <button
-                          type="button"
-                          onClick={() => handleSave(index)}
-                          className="ml-2 text-green-600 hover:text-green-800"
-                          aria-label="Save"
-                        >
-                          <Check size={20} />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => toggleEdit(index)}
-                          className="ml-2 text-destructive hover:text-destructive/80"
-                          aria-label="Cancel"
-                        >
-                          <X size={20} />
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        {value ? (
-                          <Input
-                            type="text"
-                            id={field.name}
-                            value={value as string}
-                            readOnly
-                            className="w-full bg-muted"
-                          />
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => toggleEdit(index)}
-                            className="w-full bg-muted text-muted-foreground border border-input rounded-md py-2 px-3 text-left hover:bg-muted/80 focus:outline-none focus:ring-2 focus:ring-ring"
+                        {staffData?.staffProfile.emails.length > 1 && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeEmail(index)}
+                            className="hover:bg-destructive hover:text-destructive-foreground"
                           >
-                            <Plus size={16} className="inline-block mr-2" />
-                            {field.label}
-                          </button>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         )}
-                        {value && (
-                          <button
-                            type="button"
-                            onClick={() => toggleEdit(index)}
-                            className="ml-2 text-muted-foreground hover:text-muted-foreground/80"
-                            aria-label="Edit"
-                          >
-                            <PenSquare size={20} />
-                          </button>
-                        )}
-                      </>
-                    )}
+                      </div>
+                    ))}
                   </div>
-                )}
-              />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <Label>Phone Numbers</Label>
+                  {(staffData?.staffProfile.telephones ?? []).length < 2 && (
+                    <Button variant="outline" size="sm" onClick={addTelephone}>
+                      Add Phone
+                    </Button>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  <div className="flex-1 grid grid-cols-2 gap-2">
+                    {staffData?.staffProfile.telephones.map((phone, index) => (
+                      <div key={index} className="flex gap-2">
+                        <Input
+                          value={phone.phoneNumber}
+                          onChange={(e) =>
+                            handlePhoneChange(index, e.target.value)
+                          }
+                        />
+                        {staffData?.staffProfile.telephones.length > 1 && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeTelephone(index)}
+                            className="hover:bg-destructive hover:text-destructive-foreground"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end ">
+                <Button
+                  onClick={() => handleSave()}
+                  className="hover:bg-[#3a3a3a] bg-[#862727] text-white"
+                >
+                  Save Changes
+                </Button>
+              </div>
             </div>
-          ))}
-        </div>
-        <div className="mt-6 flex justify-end">
-          <Button type="submit">Save changes</Button>
-        </div>
+          </CardContent>
+        </Card>
       </div>
-    </form>
+    </div>
   );
 }

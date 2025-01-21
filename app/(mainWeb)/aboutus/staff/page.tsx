@@ -1,76 +1,48 @@
-import React from "react";
-import { StaffCard } from "./staffCard";
+'use client'
+import { StaffSection } from "../staff/components/staff-section"
+import { categorizeStaffByExtension, groupStaffByCategory } from "./utils/sort-staff"
+import type { StaffMember } from "./types/staff"
+import { useState, useEffect } from "react";
+import { getSession, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import Axios from "@/config/axios";
+import { toast } from "@/hooks/use-toast";
 
-export default function contact() {
-  return (
-    <div className="p-10">
-      <h1 className=" from-red-700 to-gray-800 bg-clip-text text-transparent bg-gradient-to-t font-bold md:text-3xl sm:text-lg text-center gird">
-        Our Staff Members
-      </h1>
-      <div className="flex justify-center mt-1">
-        <div className="bg-yellow-600 h-1 md:w-36 rounded-md"></div>
-      </div>
-      {/* Admin Section */}
-      <div className="py-10">
-        <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
-          ADMINISTRATION
-        </h2>
-        <br />
-        <div className=" flex flex-row justify-center">
-          <StaffCard />
-        </div>
-        <div className=" py-10 grid lg:grid-cols-2 gap-5 md:grid-cols-1 ">
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
+// Example staff data - replace with your actual data source
+export default function StaffsPage() {
+  const [StaffMembers, setStaffMembers] = useState<StaffMember[]>([]);
+  const router = useRouter();
 
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
-        </div>
+  useEffect(() => {
+    const fetchStaffs = async () => {
+      try {
+        // Simulated API call
+        const response = await Axios.get("/staff-profile/profile");
+        const data = await response.data;
+        setStaffMembers(data);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description:
+            "There was a problem with our System. Try Again Later...",
+        });
+      }
+    };
+    fetchStaffs();
+  }, []);
+
+    const categorizedStaff = categorizeStaffByExtension(StaffMembers)
+    const groupedStaff = groupStaffByCategory(categorizedStaff)
+
+    return (
+      <div className="container mx-auto py-12 space-y-12">
+        {Object.entries(groupedStaff).map(([category, staff]) => (
+          <StaffSection key={category} title={category} staff={staff} />
+        ))}
       </div>
-      {/* Instructors Section */}
-      <div className="  py-10">
-        <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
-          INSTRUCTORS
-        </h2>
-        <br />
-        <div className=" py-10 grid lg:grid-cols-3 gap-10 sm:grid-cols-1">
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
-        </div>
-      </div>
-      {/* Other-staff Section */}
-      <div className="  py-10">
-        <h2 className=" font-sans md:text-xl sm:text-lg text-base text-center">
-          OTHER STAFF
-        </h2>
-        <br />
-        <div className=" py-10 grid lg:grid-cols-3 gap-10 sm:grid-cols-1">
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
-          <div className=" justify-center flex">
-            <StaffCard />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+    )
+  }
+
+

@@ -11,6 +11,7 @@ import { Reservation } from "@/utils/types";
 import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
 import { delay } from "@/utils/common";
+import { useSession } from "next-auth/react";
 
 interface ReservationModalProps {
   reservation?: Reservation | null;
@@ -37,6 +38,7 @@ export default function ReservationModal({
     location: "",
     feeRatePerHour: 0,
   });
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (reservation) {
@@ -57,6 +59,9 @@ export default function ReservationModal({
           {
             method: "POST",
             body: formData,
+            headers: {
+              Authorization: `Bearer ${session?.access_token}`,
+            },
           }
         );
         if (result.ok) {
@@ -73,9 +78,11 @@ export default function ReservationModal({
               ),
             ],
           }));
+          toast({ description: "Images uploaded successfully" });
         }
       } catch (error) {
         console.error(error);
+        toast({ description: "Failed to upload images" });
       }
     }
   };
@@ -107,12 +114,20 @@ export default function ReservationModal({
     let res;
     try {
       if (reservation) {
-        res = await Axios.put(url, convertedFormData);
+        res = await Axios.put(url, convertedFormData, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
         console.log(res.data);
         onSave(formData);
       } else {
         const { id, ...data } = convertedFormData;
-        res = await Axios.post(url, data);
+        res = await Axios.post(url, data, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
         console.log(res.data);
         onSave(res.data);
       }

@@ -1,21 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StaffFormData, staffRegSchema } from "@/schemas/staffRegSchema";
-import { Select, SelectItem } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
+import axios from "@/config/axios";
+import { AxiosError } from "axios";
+import { PlusCircle, MinusCircle } from "lucide-react";
+import { delay } from "@/utils/common";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 export default function StaffRegistrationForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
+  const { data: session } = useSession();
+  const router = useRouter();
   const {
+    register,
     control,
     handleSubmit,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm<StaffFormData>({
     resolver: zodResolver(staffRegSchema),
     defaultValues: {
-      emails: [{ value: "" }],
-      telephones: [{ value: "" }],
+      emails: [{ email: "" }],
+      telephones: [{ telephone: "" }],
+      requestBy: "",
     },
   });
 
@@ -37,293 +53,340 @@ export default function StaffRegistrationForm() {
     name: "telephones",
   });
 
-  // State for success or error messages
-  const [message, setMessage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const onSubmit = async (data: StaffFormData) => {
-    setIsSubmitting(true); // Disable the submit button during submission
-    setMessage(null); // Reset message state before submission
+  const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+    setSubmitSuccess(null);
+    console.log("Form data:", data);
+
+    // Ensure requestBy is set
+    if (!data.requestBy && session?.user?.email) {
+      data.requestBy = session.user.email;
+    }
+
+    // change email and telephone object array to string arrays
+    data.emails = data.emails.map((email: any) => email.email);
+    data.telephones = data.telephones.map(
+      (telephone: any) => telephone.telephone
+    );
 
     try {
-      const response = await fetch("http://localhost:3001/staff-profile", {
-        method: "POST",
+      const response = await axios.post("/staff-profile", data, {
         headers: {
+          Authorization: `Bearer ${session?.access_token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        // Handle error response (e.g., validation errors, server errors)
-        const errorMessage = `Failed to submit: ${response.statusText}`;
-        setMessage(errorMessage);
-        console.error(errorMessage);
-        setIsSubmitting(false); // Re-enable submit button
-        return;
-      }
-
-      // Assuming the API returns a success message or created resource data
-      const result = await response.json();
-      console.log("Staff registration successful:", result);
-      setMessage("Staff registration successful!");
-
-      // You can add additional logic here, like resetting the form
+      console.log("API response:", response.data);
+      toast({
+        title: "Success",
+        description: "Staff Registeration Request Sent successfully!",
+      });
+      reset(); // Reset the form
+      router.push("/dashboard");
     } catch (error) {
-      // Handle any network errors
-      console.error("An error occurred during submission:", error);
-      setMessage("An error occurred during submission.");
+      console.error("API error:", error);
+      if (error instanceof AxiosError) {
+        console.error("Error response:", error.response?.data);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description:
+            error.response?.data?.message ||
+            "An error occurred while submitting the form.",
+        });
+      } else {
+        setSubmitError("An unexpected error occurred.");
+      }
     } finally {
-      setIsSubmitting(false); // Re-enable submit button
+      setIsSubmitting(false);
+    }
+  };
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      setValue("requestBy", session.user.email);
+    }
+  }, [session, setValue]);
+
+  // upload profile image
+  const handlePhotoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files;
+    if (file) {
+      const formData = new FormData();
+      formData.append("user", file[0]);
+      try {
+        //axios use instead of fetch
+        const response = await axios.post("/user/upload-img", formData, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        const imageUrl = response.data.path;
+        console.log(imageUrl);
+        if (imageUrl) {
+          toast({
+            title: "Success",
+            description: "Image uploaded successfully!",
+          });
+          await delay(3000);
+          setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with your request.",
+          });
+        }
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
+      }
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-8 max-w-4xl mx-auto p-4"
-    >
-      <div className="card bg-base-100 shadow-xl">
-        <div className="card-body">
-          <h1 className="text-2xl font-bold text-center pb-8">
-            Staff Registration
-          </h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <h1 className="text-2xl font-bold text-center pb-8">
+        Staff Registration
+      </h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Title</span>
+            </label>
             <Controller
               name="title"
               control={control}
               render={({ field }) => (
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Title</span>
-                  </label>
-                  <Select
-                    {...field}
-                    placeholder="Select a title"
-                    className="max-w-xs"
-                  >
-                    <SelectItem key="DR" value="DR">
-                      DR
-                    </SelectItem>
-                    <SelectItem key="MR" value="MR">
-                      MR
-                    </SelectItem>
-                    <SelectItem key="MRS" value="MRS">
-                      MRS
-                    </SelectItem>
-                    <SelectItem key="MISS" value="MISS">
-                      MISS
-                    </SelectItem>
-                    <SelectItem key="REV" value="REV">
-                      REV
-                    </SelectItem>
-                  </Select>
-                  {errors.title && (
-                    <span className="text-error text-sm">
-                      {errors.title.message}
-                    </span>
-                  )}
-                </div>
+                <select className="select select-bordered w-full" {...field}>
+                  <option value="">Select a title</option>
+                  {["DR", "MR", "MRS", "MISS", "REV"].map((title) => (
+                    <option key={title} value={title}>
+                      {title}
+                    </option>
+                  ))}
+                </select>
               )}
             />
-            <Controller
-              name="displayName"
-              control={control}
-              render={({ field }) => (
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Display Name</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter display name"
-                    className="input input-bordered w-full"
-                    {...field}
-                  />
-                  {errors.displayName && (
-                    <span className="text-error text-sm">
-                      {errors.displayName.message}
-                    </span>
-                  )}
-                </div>
-              )}
-            />
-
-            <Controller
-              name="designation"
-              control={control}
-              render={({ field }) => (
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Designation</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter designation"
-                    className="input input-bordered w-full"
-                    {...field}
-                  />
-                  {errors.designation && (
-                    <span className="text-error text-sm">
-                      {errors.designation.message}
-                    </span>
-                  )}
-                </div>
-              )}
-            />
-
-            <Controller
-              name="nominal"
-              control={control}
-              render={({ field }) => (
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Nominal</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter nominal"
-                    className="input input-bordered w-full"
-                    {...field}
-                  />
-                  {errors.nominal && (
-                    <span className="text-error text-sm">
-                      {errors.nominal.message}
-                    </span>
-                  )}
-                </div>
-              )}
-            />
-
-            <Controller
-              name="extNo"
-              control={control}
-              render={({ field }) => (
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Extension Number</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter extension number"
-                    className="input input-bordered w-full"
-                    {...field}
-                  />
-                  {errors.extNo && (
-                    <span className="text-error text-sm">
-                      {errors.extNo.message}
-                    </span>
-                  )}
-                </div>
-              )}
-            />
+            {errors.title && (
+              <span className="text-error text-sm">{errors.title.message}</span>
+            )}
           </div>
 
-          <div className="mt-4">
+          <div className="form-control">
             <label className="label">
-              <span className="label-text">Email</span>
+              <span className="label-text">Display Name</span>
+            </label>
+            <input
+              {...register("displayName")}
+              type="text"
+              className="input input-bordered w-full"
+              placeholder="Enter your display name"
+            />
+            {errors.displayName && (
+              <span className="text-error text-sm">
+                {errors.displayName.message}
+              </span>
+            )}
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Designation</span>
+            </label>
+            <input
+              {...register("designation")}
+              type="text"
+              className="input input-bordered w-full"
+              placeholder="Enter your designation"
+            />
+            {errors.designation && (
+              <span className="text-error text-sm">
+                {errors.designation.message}
+              </span>
+            )}
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Nominal</span>
+            </label>
+            <input
+              {...register("nominal")}
+              type="text"
+              className="input input-bordered w-full"
+              placeholder="Enter your nominal"
+            />
+            {errors.nominal && (
+              <span className="text-error text-sm">
+                {errors.nominal.message}
+              </span>
+            )}
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Extension Number</span>
+            </label>
+            <input
+              {...register("extNo")}
+              type="text"
+              className="input input-bordered w-full"
+              placeholder="Enter your extension number"
+            />
+            {errors.extNo && (
+              <span className="text-error text-sm">{errors.extNo.message}</span>
+            )}
+          </div>
+        </div>
+
+        <div className="form-control mt-4">
+          <label className="label">
+            <span className="label-text">Profile Photo</span>
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handlePhotoUpload}
+            className="file-input file-input-bordered w-full"
+          />
+          {photoPreview && (
+            <div className="mt-4">
+              <Image
+                src={photoPreview}
+                alt="Profile Photo"
+                width={100}
+                height={100}
+                className="rounded-lg h-28 w-auto"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="label">
+              <span className="label-text">Emails</span>
             </label>
             {emailFields.map((field, index) => (
               <div key={field.id} className="flex items-center space-x-2 mb-2">
-                <Controller
-                  name={`emails.${index}.value`}
-                  control={control}
-                  render={({ field }) => (
-                    <div className="form-control flex-grow">
-                      <input
-                        {...field}
-                        type="email"
-                        placeholder={`Enter email address ${index + 1}`}
-                        className="input input-bordered w-full"
-                      />
-                      {errors.emails?.[index]?.value && (
-                        <span className="text-error text-sm">
-                          {errors.emails[index].value.message}
-                        </span>
-                      )}
-                    </div>
-                  )}
+                <input
+                  {...register(`emails.${index}.email`)}
+                  type="email"
+                  className="input input-bordered w-full flex-grow"
+                  placeholder="Enter email address"
                 />
                 {index > 0 && (
                   <button
                     type="button"
-                    className="btn btn-error btn-sm text-white"
                     onClick={() => removeEmail(index)}
+                    className="p-2 text-red-500 hover:text-red-700 focus:outline-none"
                   >
-                    Remove
+                    <MinusCircle className="h-5 w-5" />
                   </button>
                 )}
               </div>
             ))}
+            {errors.emails && (
+              <span className="text-error text-sm">
+                {errors.emails.message}
+              </span>
+            )}
             {emailFields.length < 2 && (
               <button
                 type="button"
+                onClick={() => appendEmail({ email: "" })}
                 className="btn btn-primary btn-sm mt-2 bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
-                onClick={() => appendEmail({ value: "" })}
               >
+                <PlusCircle className="h-5 w-5 mr-2" />
                 Add Email
               </button>
             )}
           </div>
 
-          <div className="mt-4">
+          <div>
             <label className="label">
-              <span className="label-text">Telephone</span>
+              <span className="label-text">Telephones</span>
             </label>
             {telephoneFields.map((field, index) => (
               <div key={field.id} className="flex items-center space-x-2 mb-2">
-                <Controller
-                  name={`telephones.${index}.value`}
-                  control={control}
-                  render={({ field }) => (
-                    <div className="form-control flex-grow">
-                      <input
-                        {...field}
-                        type="tel"
-                        placeholder={`Enter telephone number ${index + 1}`}
-                        className="input input-bordered w-full"
-                      />
-                      {errors.telephones?.[index]?.value && (
-                        <span className="text-error text-sm">
-                          {errors.telephones[index].value.message}
-                        </span>
-                      )}
-                    </div>
-                  )}
+                <input
+                  {...register(`telephones.${index}.telephone`)}
+                  type="tel"
+                  className="input input-bordered w-full flex-grow"
+                  placeholder="Enter telephone number"
                 />
                 {index > 0 && (
                   <button
                     type="button"
-                    className="btn btn-error btn-sm text-white"
                     onClick={() => removeTelephone(index)}
+                    className="p-2 text-red-500 hover:text-red-700 focus:outline-none"
                   >
-                    Remove
+                    <MinusCircle className="h-5 w-5" />
                   </button>
                 )}
               </div>
             ))}
+            {errors.telephones && (
+              <span className="text-error text-sm">
+                {errors.telephones.message}
+              </span>
+            )}
             {telephoneFields.length < 2 && (
               <button
                 type="button"
+                onClick={() => appendTelephone({ telephone: "" })}
                 className="btn btn-primary btn-sm mt-2 bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
-                onClick={() => appendTelephone({ value: "" })}
               >
+                <PlusCircle className="h-5 w-5 mr-2" />
                 Add Telephone
               </button>
             )}
           </div>
         </div>
-      </div>
 
-      <button
-        type="submit"
-        className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
-        disabled={isSubmitting} // Disable button while submitting
-      >
-        {isSubmitting ? "Submitting..." : "Submit Registration"}
-      </button>
+        <input type="hidden" {...register("requestBy")} />
 
-      {message && <p className="mt-4 text-center">{message}</p>}
-    </form>
+        {submitError && (
+          <div
+            className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
+            role="alert"
+          >
+            <p className="font-bold">Error</p>
+            <p>{submitError}</p>
+          </div>
+        )}
+
+        {submitSuccess && (
+          <div
+            className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4"
+            role="alert"
+          >
+            <p className="font-bold">Success</p>
+            <p>{submitSuccess}</p>
+          </div>
+        )}
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="btn btn-primary w-full bg-maroon hover:bg-gray-600 border-maroon hover:border-gray-700 text-white"
+          >
+            {isSubmitting ? "Submitting..." : "Submit Registration"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

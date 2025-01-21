@@ -4,20 +4,47 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { DateRange } from "react-day-picker";
-
-// Mock data for booked slots
-const bookedSlots = [
-  { date: new Date(2024, 10, 15), slot: "morning" },
-  { date: new Date(2024, 10, 15), slot: "afternoon" },
-  { date: new Date(2024, 10, 18), slot: "morning" },
-  { date: new Date(2024, 10, 20), slot: "afternoon" },
-];
+import { useEffect, useState } from "react";
+import Axios from "@/config/axios";
+import { Event } from "@/utils/types";
+import { addOneDaytoDateString } from "@/utils/common";
 
 export default function ReservationCalendar({
   setDate,
+  reservationId,
 }: {
   setDate: (date: DateRange | undefined) => void;
+  reservationId: string;
 }) {
+  const [events, setEvents] = useState<Event[]>([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await Axios.get(
+          `/reserve-records/reservation/${reservationId}`
+        );
+        const data = await response.data;
+        console.log("blaaaaaa", data);
+        setEvents(
+          data.map((event: any) => ({
+            title: event.eventName,
+            start: event.startingDate,
+            end:
+              event.endingDate === event.startingDate
+                ? event.endingDate
+                : addOneDaytoDateString(event.endingDate),
+            color: event.timeSlot === "FULLDAY" ? "#ff9f1c" : "#ff9fac",
+          }))
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEvents();
+  }, [reservationId]);
+
   return (
     <div className="m-8 p-2 grid ">
       <div>
@@ -30,26 +57,9 @@ export default function ReservationCalendar({
             start: new Date().toISOString().split("T")[0], // Today's date
           }}
           eventContent={renderEventContent}
-          events={
-            [
-              // {
-              //   title: "SIRED",
-              //   start: "2024-11-26",
-              //   end: "2024-11-28",
-              //   display: "background",
-              //   color: "#ff9fac",
-              // },
-              // {
-              //   title: "SIREDD",
-              //   start: "2024-11-31",
-              //   end: "2024-11-26",
-              //   display: "background",
-              //   color: "#ff9f1c",
-              // },
-            ]
-          }
+          events={events}
           select={function (info) {
-            console.log(info);
+            console.log("infooo", info);
             const endDate = new Date(info.end);
             endDate.setDate(endDate.getDate() - 1);
             setDate({ from: info.start, to: endDate });
@@ -65,7 +75,7 @@ export default function ReservationCalendar({
 function renderEventContent(eventInfo: any) {
   return (
     <>
-      <i className="text-sm ">{eventInfo.event.title}</i>
+      <i className="text-sm ">{eventInfo.event.title.slice(0, 15)}</i>
     </>
   );
 }

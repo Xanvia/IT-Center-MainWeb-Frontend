@@ -6,7 +6,7 @@ import { authOptions } from "@/config/nextAuth";
 export default async function profile() {
   const session = await getServerSession(authOptions);
   const role = session?.user.role;
-  if (role === "STAFF") {
+  if (role === "STAFF" || role === "ADMIN" || role === "S_ADMIN") {
     return <Staffprofile />;
   } else if (role === "STUDENT") {
     return <Studentprofile />;

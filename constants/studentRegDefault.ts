@@ -1,33 +1,31 @@
 export const DefaultStudentRegValues = {
-  personalDetails: {
-    title: "",
-    fullName: "",
-    nameWithInitials: "",
-    nationalIdCardNo: "",
-    phoneNumber: "",
-    postalAddress: "",
-  },
-  educationalQualifications: {
-    olevel: {
-      english: "",
-      mathematics: "",
-      science: "",
-    },
-    alevel: [
+  title: "",
+  fullName: "",
+  nameWithIntials: "",
+  dateOfBirth: "",
+  nationalIdCardNo: "",
+  phoneNumber: "",
+  address: "",
+  education: {
+    englishOL: "",
+    mathematicsOL: "",
+    scienceOL: "",
+    aLevelResults: [
       { subject: "", grade: "" },
       { subject: "", grade: "" },
       { subject: "", grade: "" },
       { subject: "", grade: "" },
     ],
   },
-  higherEducationalQualifications: [
-    { qualification: "", dateAwarded: "", institute: "" },
+  higherEdu: [
+    { FOQualification: "", date: "", institute: "" },
   ],
-  otherQualifications: "",
-  employmentDetails: {
-    institute: "",
+  otherQualification: "",
+  employment: {
+    institution: "",
     designation: "",
     officeAddress: "",
-    officeTelephone: "",
+    officePhone: "",
   },
 };
+

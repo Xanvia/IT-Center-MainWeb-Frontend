@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react";
 
-interface Log {
+interface Project {
   id: string;
   name: string;
   description: string;
@@ -23,150 +23,165 @@ interface Log {
   date: string;
 }
 
-export default function InteractiveLogRow() {
-  const [logs, setLogs] = useState<Log[]>([
+export default function InteractiveProjectRow() {
+  const [projects, setProjects] = useState<Project[]>([
     {
-      id: "vvb",
-      name: "Log Alpha",
+      id: "1",
+      name: "Project Alpha",
       description:
-        "A cutting-edge web application for task management. This log aims to revolutionize how teams collaborate and manage their workflows.",
-      imageUrl: "/placeholder.svg?height=200&width=300",
+        "A cutting-edge web application for task management. This project aims to revolutionize how teams collaborate and manage their workflows.",
+      imageUrl: "/common/mainWeb.jpg",
       date: "2023-06-15",
     },
   ]);
 
   const [isAdding, setIsAdding] = useState(false);
-  const [viewingLog, setViewingLog] = useState<Log | null>(null);
+  const [viewingProject, setViewingProject] = useState<Project | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [newLog, setNewLog] = useState({
-    id: "",
+  const [newProject, setNewProject] = useState({
     title: "",
     description: "",
     images: "",
     date: "",
   });
 
-  //addLog function
-  const addLog = async () => {
-    if (newLog.title && newLog.description && newLog.date) {
+  //addProject function
+  const addProject = async () => {
+    if (newProject.title && newProject.description && newProject.date) {
+      // Prepare the new project data
+      const projectData = {
+        title: newProject.title,
+        description: newProject.description,
+        date: newProject.date,
+      };
+
       try {
-        const response = await fetch("/api/logs", {
-          // Adjust the endpoint accordingly
+        // Send POST request to server
+        const response = await fetch("http://localhost:3001/projects", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            title: newLog.title,
-            description: newLog.description,
-            images: newLog.images || "/placeholder.svg?height=200&width=300",
-            date: newLog.date,
-          }),
+          body: JSON.stringify(projectData),
         });
 
-        if (!response.ok) {
-          throw new Error("Failed to add log");
+        if (response.ok) {
+          const savedProject = await response.json(); // Assuming the server returns the saved project
+          setProjects([...projects, savedProject]);
+          setNewProject({ title: "", description: "", images: "", date: "" });
+          setIsAdding(false);
+        } else {
+          // Handle errors if needed
+          const res = await response.json();
+          console.error("Failed to add project:", res);
         }
-
-        const data = await response.json(); // Assuming the server responds with the created log
-        setLogs([...logs, { ...data, id: Date.now() }]); // Use the id from the server if provided
-        setNewLog({ id: "", title: "", description: "", images: "", date: "" });
-        setIsAdding(false);
       } catch (error) {
-        console.error(error);
+        console.error("Error while adding project:", error);
       }
     }
   };
 
-  const removeLog = (id: string) => {
-    setLogs(logs.filter((log) => log.id !== id));
+  const removeProject = (id: string) => {
+    setProjects(projects.filter((project) => project.id !== id));
   };
 
   const startEditing = () => {
-    if (viewingLog) {
-      setNewLog({
-        id: "one",
-        title: viewingLog.name,
-        description: viewingLog.description,
-        images: viewingLog.imageUrl,
-        date: viewingLog.date,
+    if (viewingProject) {
+      setNewProject({
+        title: viewingProject.name,
+        description: viewingProject.description,
+        images: viewingProject.imageUrl,
+        date: viewingProject.date,
       });
       setIsEditing(true);
     }
   };
 
-  //saveEdit function
+  //saveEdit
+
   const saveEdit = async () => {
-    if (viewingLog && newLog.title && newLog.description && newLog.date) {
+    if (
+      viewingProject &&
+      newProject.title &&
+      newProject.description &&
+      newProject.date
+    ) {
+      const updatedProject = {
+        ...viewingProject,
+        ...newProject,
+        imageUrl: newProject.images || viewingProject.imageUrl,
+      };
+
       try {
-        const response = await fetch(`/api/logs/${viewingLog.id}`, {
-          // Adjust the endpoint accordingly
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: newLog.title,
-            description: newLog.description,
-            imageUrl: newLog.images || viewingLog.imageUrl,
-            date: newLog.date,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to update log");
-        }
-
-        const data = await response.json(); // Assuming the server responds with the updated log
-        setLogs(
-          logs.map((log) => (log.id === viewingLog.id ? { ...data } : log))
+        // Send PUT request to server
+        const response = await fetch(
+          `http://localhost:3001/projects/${viewingProject.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedProject),
+          }
         );
-        setViewingLog({ ...data }); // Update the viewing log with the new data
-        setIsEditing(false);
+
+        if (response.ok) {
+          const savedProject = await response.json();
+          setProjects(
+            projects.map((project) =>
+              project.id === savedProject.id ? savedProject : project
+            )
+          );
+          setViewingProject(savedProject);
+          setIsEditing(false);
+        } else {
+          console.error("Failed to update project:", response.statusText);
+        }
       } catch (error) {
-        console.error(error);
+        console.error("Error while updating project:", error);
       }
     }
   };
 
   const truncateText = (text: string, maxLength: number) => {
+    if (!text) return;
     if (text.length <= maxLength) return text;
     return text.substr(0, maxLength) + "...";
   };
 
   return (
-    <div className="max-w-7xl mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Logs</h2>
+    <div className="max-w-7xl mx-auto  p-6 bg-gray-100 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6">Projects</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {logs.map((log) => (
-          <Card key={log.id} className="flex flex-col h-[400px]">
+        {projects.map((project) => (
+          <Card key={project.id} className="flex flex-col h-[400px]">
             <div className="h-[200px] relative">
               <img
-                src={log.imageUrl}
-                alt={log.name}
+                src={project.imageUrl}
+                alt={project.name}
                 className="w-full h-full object-cover"
               />
               <Button
                 variant="destructive"
                 size="icon"
                 className="absolute top-2 right-2"
-                onClick={() => removeLog(log.id)}
+                onClick={() => removeProject(project.id)}
               >
                 <X className="h-4 w-4" />
-                <span className="sr-only">Remove log</span>
+                <span className="sr-only">Remove project</span>
               </Button>
             </div>
             <CardContent className="p-4 flex-grow overflow-hidden">
               <h3 className="font-bold text-lg mb-2">
-                {truncateText(log.name, 30)}
+                {truncateText(project.name, 30)}
               </h3>
               <p className="text-gray-600 text-sm mb-4">
-                {truncateText(log.description, 100)}
+                {truncateText(project.description, 100)}
               </p>
               <div className="space-y-2">
                 <p className="text-gray-500 text-sm flex items-center">
                   <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
-                  {log.date || (
+                  {project.date || (
                     <span className="text-red-500 flex items-center">
                       <AlertCircle className="w-4 h-4 mr-1" /> Date not set
                     </span>
@@ -178,10 +193,10 @@ export default function InteractiveLogRow() {
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => setViewingLog(log)}
+                onClick={() => setViewingProject(project)}
               >
                 <Eye className="w-4 h-4 mr-2" />
-                View Log
+                View Project
               </Button>
             </CardFooter>
           </Card>
@@ -191,7 +206,7 @@ export default function InteractiveLogRow() {
           onClick={() => setIsAdding(true)}
         >
           <PlusCircle className="w-12 h-12 text-gray-400 mb-4" />
-          <p className="text-gray-500 text-center">Add a new log</p>
+          <p className="text-gray-500 text-center">Add a new project</p>
         </Card>
       </div>
 
@@ -203,53 +218,55 @@ export default function InteractiveLogRow() {
       >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add New Log</DialogTitle>
+            <DialogTitle>Add New Project</DialogTitle>
           </DialogHeader>
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              addLog();
+              addProject();
             }}
             className="space-y-4"
           >
             <div>
-              <Label htmlFor="newLogName">Log Name</Label>
+              <Label htmlFor="newProjectName">Project Name</Label>
               <Input
-                id="newLogName"
-                value={newLog.title}
+                id="newProjectName"
+                value={newProject.title}
                 onChange={(e) =>
-                  setNewLog({ ...newLog, title: e.target.value })
+                  setNewProject({ ...newProject, title: e.target.value })
                 }
-                placeholder="Enter log name"
+                placeholder="Enter project name"
                 required
               />
             </div>
             <div>
-              <Label htmlFor="newLogDescription">Description</Label>
+              <Label htmlFor="newProjectDescription">Description</Label>
               <Textarea
-                id="newLogDescription"
-                value={newLog.description}
+                id="newProjectDescription"
+                value={newProject.description}
                 onChange={(e) =>
-                  setNewLog({ ...newLog, description: e.target.value })
+                  setNewProject({ ...newProject, description: e.target.value })
                 }
-                placeholder="Enter log description"
+                placeholder="Enter project description"
                 required
               />
             </div>
             <div>
-              <Label htmlFor="newLogDate">Date</Label>
+              <Label htmlFor="newProjectDate"> Date</Label>
               <Input
-                id="newLogDate"
+                id="newProjectDate"
                 type="date"
-                value={newLog.date}
-                onChange={(e) => setNewLog({ ...newLog, date: e.target.value })}
+                value={newProject.date}
+                onChange={(e) =>
+                  setNewProject({ ...newProject, date: e.target.value })
+                }
                 required
               />
             </div>
             <div>
-              <Label htmlFor="newLogImage">Log Image</Label>
+              <Label htmlFor="newProjectImage">Image</Label>
               <Input
-                id="newLogImage"
+                id="newProjectImage"
                 type="file"
                 accept="image/*"
                 onChange={(e) => {
@@ -257,8 +274,8 @@ export default function InteractiveLogRow() {
                   if (file) {
                     const reader = new FileReader();
                     reader.onloadend = () => {
-                      setNewLog({
-                        ...newLog,
+                      setNewProject({
+                        ...newProject,
                         images: reader.result as string,
                       });
                     };
@@ -268,17 +285,17 @@ export default function InteractiveLogRow() {
               />
             </div>
             <DialogFooter>
-              <Button type="submit">Add Log</Button>
+              <Button type="submit">Add Project</Button>
             </DialogFooter>
           </form>
         </DialogContent>
       </Dialog>
 
       <Dialog
-        open={viewingLog !== null}
+        open={viewingProject !== null}
         onOpenChange={(open) => {
           if (!open) {
-            setViewingLog(null);
+            setViewingProject(null);
             setIsEditing(false);
           }
         }}
@@ -286,20 +303,22 @@ export default function InteractiveLogRow() {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
-              {isEditing ? "Edit Log" : viewingLog?.name}
+              {isEditing ? "Edit Project" : viewingProject?.name}
             </DialogTitle>
           </DialogHeader>
-          {viewingLog && !isEditing && (
+          {viewingProject && !isEditing && (
             <div className="space-y-4">
               <img
-                src={viewingLog.imageUrl}
-                alt={viewingLog.name}
+                src={viewingProject.imageUrl}
+                alt={viewingProject.name}
                 className="w-full h-48 object-cover rounded-md"
               />
-              <p className="text-sm text-gray-600">{viewingLog.description}</p>
+              <p className="text-sm text-gray-600">
+                {viewingProject.description}
+              </p>
               <p className="text-sm text-gray-500 flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
-                {viewingLog.date || (
+                {viewingProject.date || (
                   <span className="text-red-500">Date not set</span>
                 )}
               </p>
@@ -314,45 +333,48 @@ export default function InteractiveLogRow() {
               className="space-y-4"
             >
               <div>
-                <Label htmlFor="editLogName">Log Name</Label>
+                <Label htmlFor="editProjectName">Project Name</Label>
                 <Input
-                  id="editLogName"
-                  value={newLog.title}
+                  id="editProjectName"
+                  value={newProject.title}
                   onChange={(e) =>
-                    setNewLog({ ...newLog, title: e.target.value })
+                    setNewProject({ ...newProject, title: e.target.value })
                   }
-                  placeholder="Enter log name"
+                  placeholder="Enter project name"
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="editLogDescription">Description</Label>
+                <Label htmlFor="editProjectDescription">Description</Label>
                 <Textarea
-                  id="editLogDescription"
-                  value={newLog.description}
+                  id="editProjectDescription"
+                  value={newProject.description}
                   onChange={(e) =>
-                    setNewLog({ ...newLog, description: e.target.value })
+                    setNewProject({
+                      ...newProject,
+                      description: e.target.value,
+                    })
                   }
-                  placeholder="Enter log description"
+                  placeholder="Enter project description"
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="editLogDate">Log Date</Label>
+                <Label htmlFor="editProjectDate">Project Date</Label>
                 <Input
-                  id="editLogDate"
+                  id="editProjectDate"
                   type="date"
-                  value={newLog.date}
+                  value={newProject.date}
                   onChange={(e) =>
-                    setNewLog({ ...newLog, date: e.target.value })
+                    setNewProject({ ...newProject, date: e.target.value })
                   }
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="editLogImage">Log Image</Label>
+                <Label htmlFor="editProjectImage">Project Image</Label>
                 <Input
-                  id="editLogImage"
+                  id="editProjectImage"
                   type="file"
                   accept="image/*"
                   onChange={(e) => {
@@ -360,8 +382,8 @@ export default function InteractiveLogRow() {
                     if (file) {
                       const reader = new FileReader();
                       reader.onloadend = () => {
-                        setNewLog({
-                          ...newLog,
+                        setNewProject({
+                          ...newProject,
                           images: reader.result as string,
                         });
                       };
@@ -376,7 +398,7 @@ export default function InteractiveLogRow() {
             {!isEditing && (
               <Button onClick={startEditing}>
                 <Edit className="w-4 h-4 mr-2" />
-                Edit Log
+                Edit Project
               </Button>
             )}
             {isEditing && (
