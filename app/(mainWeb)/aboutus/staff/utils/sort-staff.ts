@@ -1,3 +1,4 @@
+import { SortAsc } from "lucide-react"
 import type { StaffMember } from "../types/staff"
 
 export function categorizeStaffByExtension(staff: StaffMember[]): StaffMember[] {
@@ -15,19 +16,23 @@ export function categorizeStaffByExtension(staff: StaffMember[]): StaffMember[] 
 }
 
 export function groupStaffByCategory(staff: StaffMember[]) {
-  
-  return staff.reduce(
-    (acc, member) => {
-      if (!member.category) return acc
-      if (!acc[member.category]) {
-        acc[member.category] = []
-      }
-      acc[member.category].push(member)
-      return acc
-    },
-    {} as Record<string, StaffMember[]>,
-    
-  )
-  
+  return staff.reduce((acc, member) => {
+    if (!member.category) return acc
+    if (!acc[member.category]) {
+      acc[member.category] = []
+    }
+    acc[member.category].push(member)
+    return acc
+  }, {} as Record<string, StaffMember[]>)
 }
 
+export function sortStaffByExtension(groupedStaff: Record<string, StaffMember[]>) {
+  Object.keys(groupedStaff).forEach(category => {
+    groupedStaff[category].sort((a, b) => {
+      const extA = Number.parseInt(a.extNo.split("ST")[1])
+      const extB = Number.parseInt(b.extNo.split("ST")[1])
+      return extA - extB
+    })
+  })
+  return groupedStaff
+}

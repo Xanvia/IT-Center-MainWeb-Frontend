@@ -6,12 +6,13 @@ export interface StaffMember {
   nominal: string
   extNo: string
   requestBy: string
-  emails: string[]
+  emails: {
+    id: string,
+    phoneNumber: string
+}[]
   telephones: {
-    
       id: string,
       phoneNumber: string
-  
   }[]
   category?: "ADMINISTRATION" | "INSTRUCTORS" | "OTHER STAFF"
   image:string
