@@ -2,6 +2,8 @@
 
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 
+// Course card interface : Main web pages
+
 export interface Course {
   id: string;
   courseCode: string;

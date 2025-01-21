@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useMemo, Key, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, Input } from "@nextui-org/react";
 import { Search } from "lucide-react";
-import CourseCard, { Course } from "./CourseCard";
+import CourseCard, { Course } from "./courseCardMain";
 import { toast } from "@/hooks/use-toast";
 
 export default function CourseRegistration() {
