@@ -144,6 +144,8 @@ export default function InteractiveProjectRow() {
         images: newProject.images || viewingProject.images,
       };
 
+      console.log(updatedProject);
+
       try {
         // Send PUT request to server
         const response = await Axios.put(
