@@ -9,13 +9,15 @@ import {
   BookOpen,
   DollarSign,
   GraduationCap,
+  Loader,
 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { type LucideIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import axios from "@/config/axios";
+import Axios from "@/config/axios";
 
 interface Course {
   id: string;
@@ -66,8 +68,9 @@ export default function CourseDetailPage() {
   const { id } = useParams();
   //const course = courses.find((c: { id: string | string[] }) => c.id === id);
   const [course, setCourse] = useState<Course | null>(null);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [student, setStudent] = useState<Student | null>(null);
+  const router = useRouter();
 
   // Fetch course details when the component mounts
   useEffect(() => {
@@ -135,8 +138,8 @@ export default function CourseDetailPage() {
     };
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/registration-records`,
+      const response = await Axios.post(
+        `/registration-records`,
         registrationData,
         {
           headers: {
@@ -144,120 +147,119 @@ export default function CourseDetailPage() {
           },
         }
       );
+
       console.log("response data", response);
       if (response.status === 201) {
         toast({ description: "Successfully enrolled in the course!" });
-      } else {
-        toast({ description: "Failed to enroll in the course." });
       }
+      router.push("/dashboard/enrolledCourses");
     } catch (error) {
       toast({
+        variant: "destructive",
         description: "An error occurred during enrollment.",
       });
     }
   };
 
-  if (!course) {
+  if (status === "loading") {
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4 text-maroon">Loading...</h1>
+        {/* centered loading spinner */}
+        <div className="flex justify-center items-center h-20 animate-spin">
+          <Loader />
+        </div>
+      </div>
+    );
+  } else if (!course) {
     return <div>Course not found</div>;
-  }
-
-  return (
-    <main className="flex-grow container mx-auto py-3">
-      <div className="grid md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 h-full flex flex-col justify-between">
-          <h1 className="text-2xl font-bold mb-4 text-maroon">
-            {course.courseName}
-          </h1>
-          <div className="relative h-max sm:h-96">
-            <img
-              src={course.images[0]}
-              alt={course.courseName}
-              //layout="fill"
-              //objectFit="cover"
-              className="rounded-lg h-full"
-            />
-            {/*
-        <Image
-              src={course.images[0]}
-              alt={course.courseName}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg h-full"
-            />
-             */}
+  } else
+    return (
+      <main className="flex-grow container mx-auto py-3">
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 h-full flex flex-col justify-between">
+            <h1 className="text-2xl font-bold mb-4 text-maroon">
+              {course.courseName}
+            </h1>
+            <div className="relative h-max sm:h-96">
+              <img
+                src={course.images[0]}
+                alt={course.courseName}
+                className="rounded-lg h-full object-cover"
+              />
+            </div>
+          </div>
+          <div className="md:col-span-1">
+            <Card className="w-full max-w-md">
+              <CardContent className="p-6">
+                <h2 className="text-xl font-semibold mb-4 text-maroon">
+                  Course Info
+                </h2>
+                <div className="space-y-4">
+                  <InfoItem
+                    icon={BookOpen}
+                    label="Course Code"
+                    value={course.courseCode}
+                  />
+                  <InfoItem
+                    icon={Clock}
+                    label="Duration"
+                    value={course.duration}
+                  />
+                  <InfoItem
+                    icon={Calendar}
+                    label="Registration Deadline"
+                    value={course.registrationDeadline}
+                  />
+                  <InfoItem
+                    icon={Calendar}
+                    label="Start Date"
+                    value={course.startingDate}
+                  />
+                  <InfoItem
+                    icon={Calendar}
+                    label="End Date"
+                    value={course.endingDate}
+                  />
+                  <InfoItem
+                    icon={Users}
+                    label="Target Audience"
+                    value={course.audience}
+                  />
+                  <InfoItem
+                    icon={GraduationCap}
+                    label="Instructor"
+                    value={course.instructor || "TBA"}
+                  />
+                  <InfoItem
+                    icon={Users}
+                    label="Student Limit"
+                    value={course.studentLimit}
+                  />
+                  <InfoItem
+                    icon={DollarSign}
+                    label="Course Fee"
+                    value={`Rs. ${course.fees}.00`}
+                  />
+                </div>
+                <Button
+                  className="w-full mt-6 bg-maroon text-white hover:bg-gray-600"
+                  aria-label="Register for Course"
+                  onClick={handleRequestEnroll}
+                >
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Request for Enroll
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
-        <div className="md:col-span-1">
-          <Card className="w-full max-w-md">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4 text-maroon">
-                Course Info
-              </h2>
-              <div className="space-y-4">
-                <InfoItem
-                  icon={BookOpen}
-                  label="Course Code"
-                  value={course.courseCode}
-                />
-                <InfoItem
-                  icon={Clock}
-                  label="Duration"
-                  value={course.duration}
-                />
-                <InfoItem
-                  icon={Calendar}
-                  label="Registration Deadline"
-                  value={course.registrationDeadline}
-                />
-                <InfoItem
-                  icon={Calendar}
-                  label="Start Date"
-                  value={course.startingDate}
-                />
-                <InfoItem
-                  icon={Calendar}
-                  label="End Date"
-                  value={course.endingDate}
-                />
-                <InfoItem
-                  icon={Users}
-                  label="Target Audience"
-                  value={course.audience}
-                />
-                <InfoItem
-                  icon={GraduationCap}
-                  label="Instructor"
-                  value={course.instructor || "TBA"}
-                />
-                <InfoItem
-                  icon={Users}
-                  label="Student Limit"
-                  value={course.studentLimit}
-                />
-                <InfoItem
-                  icon={DollarSign}
-                  label="Course Fee"
-                  value={`Rs. ${course.fees}.00`}
-                />
-              </div>
-              <Button
-                className="w-full mt-6 bg-maroon text-white hover:bg-gray-600"
-                aria-label="Register for Course"
-                onClick={handleRequestEnroll}
-              >
-                <Calendar className="mr-2 h-4 w-4" />
-                Request for Enroll
-              </Button>
-            </CardContent>
-          </Card>
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4 text-maroon">
+            Course Description
+          </h2>
+          <p className="text-gray-600">{course.description}</p>
         </div>
-      </div>
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-4 text-maroon">
-          Course Description
-        </h2>
-        <p className="text-gray-600">{course.description}</p>
-      </div>
-    </main>
-  );
+      </main>
+    );
 }

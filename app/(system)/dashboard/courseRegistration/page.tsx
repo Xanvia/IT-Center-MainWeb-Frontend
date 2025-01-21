@@ -6,6 +6,7 @@ import CourseCard from "./courseCard";
 import { toast } from "@/hooks/use-toast";
 import { Loader, Search } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface Course {
   id: string;
@@ -28,6 +29,7 @@ export default function CourseRegistration() {
   const [courses, setCourses] = useState<Course[]>([]); // Original courses from backend
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]); // Courses to display
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   // Fetch Courses from the server at the start
   useEffect(() => {
@@ -79,10 +81,7 @@ export default function CourseRegistration() {
         </div>
       </div>
     );
-  } else if (
-    session?.user?.role !== "ADMIN" &&
-    session?.user?.role !== "S_ADMIN"
-  ) {
+  } else if (session?.user?.role === "USER") {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-6 text-gray-600">
@@ -116,8 +115,10 @@ export default function CourseRegistration() {
           {/* Display Courses */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course) => (
-              <Link
-                href={`/dashboard/courseRegistration/${course.id}`}
+              <div
+                onClick={() =>
+                  router.push(`/dashboard/courseRegistration/${course.id}`)
+                }
                 key={course.id}
               >
                 <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
@@ -130,7 +131,7 @@ export default function CourseRegistration() {
                     fees={course.fees}
                   />
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>

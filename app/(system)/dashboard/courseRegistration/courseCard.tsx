@@ -20,7 +20,7 @@ export default function CourseCard({
   fees,
 }: CourseCardProps) {
   return (
-    <Card className="w-80 h-[300px] rounded-lg overflow-hidden">
+    <Card className="w-80 h-[22rem] rounded-lg overflow-hidden">
       <CardHeader className="p-2">
         <div className="w-full h-40 overflow-hidden rounded-sm">
           <img
