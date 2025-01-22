@@ -50,7 +50,7 @@ export default function InteractiveProjectRow() {
     id: "",
     title: "",
     description: "",
-    images: [{ id: "", path: "" }],
+    images: [],
     date: "",
   });
 
@@ -121,7 +121,7 @@ export default function InteractiveProjectRow() {
           id: "",
           title: "",
           description: "",
-          images: [{ id: "", path: "" }],
+          images: [],
           date: "",
         });
         setIsAdding(false);
@@ -195,6 +195,13 @@ export default function InteractiveProjectRow() {
         );
         setViewingProject(savedProject);
         setIsEditing(false);
+        setNewProject({
+          id: "",
+          title: "",
+          description: "",
+          images: [],
+          date: "",
+        });
         toast({ description: "Project updated successfully" });
       } catch (error) {
         console.error("Error while updating project:", error);
