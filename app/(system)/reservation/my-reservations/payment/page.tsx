@@ -148,7 +148,7 @@ const PaymentPage = () => {
 
           {/* Additional information */}
           <p className="text-xs text-center text-gray-500 mt-4">
-            Secure payment powered by Matercard
+            Secure payment powered by Mastercard
           </p>
         </div>
       </div>
