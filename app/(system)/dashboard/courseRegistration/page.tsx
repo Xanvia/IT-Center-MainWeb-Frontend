@@ -81,17 +81,6 @@ export default function CourseRegistration() {
         </div>
       </div>
     );
-  } else if (session?.user?.role === "USER") {
-    return (
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-6 text-gray-600">
-          Course Registration
-        </h1>
-        <div className="grid gap-4">
-          <p>Sorry :( You are not Authorized to view this page.</p>
-        </div>
-      </div>
-    );
   } else
     return (
       <div className="container mx-auto px-4 py-4">
