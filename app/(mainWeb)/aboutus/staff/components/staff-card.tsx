@@ -1,8 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { Avatar } from "@heroui/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Mail, Phone } from "lucide-react"
 import type { StaffMember } from "../types/staff"
+import { getAbsoluteImageUrl } from "@/utils/common";
+import { Avatar } from "@nextui-org/react";
 
 interface StaffCardProps {
   staff: StaffMember
@@ -16,9 +17,9 @@ export function StaffCard({ staff }: StaffCardProps) {
       <CardContent className="p-6">
         <div className="flex flex-col gap-4">
           <div className="flex gap-4">
-            <Avatar className="h-16 w-16">
-              <AvatarImage src={staff.image} alt={staff.name} />
-              <AvatarFallback>{staff.name.charAt(0)}</AvatarFallback>
+            <Avatar className="h-16 w-16"
+            src={getAbsoluteImageUrl(staff.image)}
+            fallback={<AvatarFallback>{staff.name}</AvatarFallback>}>
             </Avatar>
             <div className="flex items-center space-x-1">
               <h3 className="text-sm font-medium text-muted-foreground">{staff.staffProfile.title}.</h3>
