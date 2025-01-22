@@ -17,6 +17,8 @@ import {
 import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Axios from "@/config/axios";
+import { delay } from "@/utils/common";
+import { toast } from "@/hooks/use-toast";
 
 interface Project {
   id: string;
@@ -44,7 +46,47 @@ export default function InteractiveProjectRow() {
     date: "",
   });
 
-  
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (files && files.length > 0) {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("content", files[i]);
+      }
+      try {
+        const result = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/contents/upload`,
+          {
+            method: "POST",
+            body: formData,
+            headers: {
+              Authorization: `Bearer ${session?.access_token}`,
+            },
+          }
+        );
+        if (result.ok) {
+          const data = await result.json();
+          console.log(data);
+          await delay(3000);
+          setNewProject((prev) => ({
+            ...prev,
+            images: [
+              ...(prev.images || []),
+              ...data.paths.map((path: string) => ({
+                id: crypto.randomUUID(),
+                path: `${process.env.NEXT_PUBLIC_BACKEND_URL}/${path}`,
+              })),
+            ],
+          }));
+          toast({ description: "Images uploaded successfully" });
+        }
+      } catch (error) {
+        console.error(error);
+        toast({ description: "Failed to upload images" });
+      }
+    }
+  };
+
   //addProject function
   const addProject = async () => {
     console.log("hehehehe");
@@ -54,6 +96,7 @@ export default function InteractiveProjectRow() {
         title: newProject.title,
         description: newProject.description,
         date: newProject.date,
+        images: newProject.images.map((image) => image.path),
       };
 
       try {
@@ -301,24 +344,39 @@ export default function InteractiveProjectRow() {
             </div>
             <div>
               <Label htmlFor="newProjectImage">Image</Label>
-              {/* <Input
-                id="newProjectImage"
+              <div className="flex m-1 space-x-2 overflow-auto">
+                {newProject.images.map((image, index) => (
+                  <div key={index} className="relative ">
+                    <img
+                      src={image.path}
+                      alt={`image:${index}`}
+                      className="h-20"
+                    />
+                    <div className="absolute top-0 right-1">
+                      <p
+                        className=" text-red-500 cursor-pointer text-sm font-bold"
+                        onClick={() =>
+                          setNewProject((prev) => ({
+                            ...prev,
+                            images: prev.images.filter(
+                              (img) => img.id !== image.id
+                            ),
+                          }))
+                        }
+                      >
+                        x
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Input
+                id="image"
+                name="image"
                 type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                      setNewProject({
-                        ...newProject,
-                        images: reader.result as string,
-                      });
-                    };
-                    reader.readAsDataURL(file);
-                  }
-                }}
-              /> */}
+                onChange={handleImageChange}
+                multiple
+              />
             </div>
             <DialogFooter>
               <Button type="submit">Add Project</Button>
