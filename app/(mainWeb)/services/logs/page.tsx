@@ -1,61 +1,39 @@
+"use client";
 
-"use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Log {
   id: number;
-  name: string;
+  title: string;
   description: string;
-  image: string;
+  image: {
+    path: string;
+    id: string;
+  }[];
+  date: string;
 }
 
-const logs: Log[] = [
-  {
-    id: 1,
-    name: "System Update",
-    description: "Details about the recent system update.",
-    image: "/logjpg/im1.jpg"
+export default function LogsShowcase() {
+  const [logs, setLogs] = useState<Log[]>([]);
+  const [selectedLog, setSelectedLog] = useState<Log | null>(null);
 
-  },
-  {
-    id: 2,
-    name: "Server Maintenance",
-    description: "Information about scheduled server maintenance.",
-    image: "/logjpg/im1.jpg"
-
-  },
-  {
-    id: 3,
-    name: "Bug Fix",
-    description: "Summary of fixed bugs in the latest patch.",
-    image:  "/logjpg/im1.jpg"
-
-  },
-  {
-    id: 4,
-    name: "Bug Fix",
-    description: "Summary of fixed bugs in the latest patch.",
-    image:  "/logjpg/im1.jpg"
-
-  },
-  {
-    id: 5,
-    name: "Bug Fix",
-    description: "Summary of fixed bugs in the latest patch.",
-    image:  "/logjpg/im1.jpg"
-
-  },
-  {
-    id: 6,
-    name: "Bug Fix",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis feugiat quam sit amet magna condimentum, et egestas felis tempor. Praesent maximus euismod erat, sit amet gravida tortor viverra a. Fusce at molestie orci, sed lacinia velit. Donec vel ullamcorper ex. Maecenas at dapibus mauris. Aliquam commodo, magna quis pellentesque aliquet, dolor dui consectetur mauris, at vestibulum dui justo non est. Pellentesque pellentesque urna id erat tempor facilisis. Proin ut ligula non diam varius aliquet. Donec consequat erat magna, interdum molestie ipsum euismod vel",
-    image:  "/logjpg/im1.jpg"
-
-  },
-];
-
-const LogPage: React.FC = () => {
-  const [selectedLog, setSelectedLog] = useState<Log>(logs[0]);
+  useEffect(() => {
+    const fetchedLogs = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/contents/logs`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch projects");
+        }
+        const data: Log[] = await response.json();
+        setLogs(data);
+      } catch (error) {
+        console.error("Error fetching logs:", error);
+      }
+    };
+    fetchedLogs();
+  }, []);
 
   return (
     <div className="flex h-screen p-4 space-x-4">
@@ -69,7 +47,7 @@ const LogPage: React.FC = () => {
               onClick={() => setSelectedLog(log)}
               className="p-2 bg-white rounded-lg shadow cursor-pointer hover:bg-gray-200"
             >
-              {log.name}
+              {log.title}
             </li>
           ))}
         </ul>
@@ -79,10 +57,10 @@ const LogPage: React.FC = () => {
       <div className="w-2/3 bg-gray-50 rounded-lg p-4 shadow-lg">
         {selectedLog ? (
           <div>
-            <h2 className="text-xl font-bold mb-4">{selectedLog.name}</h2>
+            <h2 className="text-xl font-bold mb-4">{selectedLog.title}</h2>
             <img
-              src={selectedLog.image}
-              alt={selectedLog.name}
+              src={selectedLog.image[0]?.path}
+              alt={selectedLog.id.toString()}
               className="w-full h-64 object-cover rounded-lg mb-4"
             />
             <p>{selectedLog.description}</p>
@@ -93,7 +71,4 @@ const LogPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default LogPage;
-
+}
