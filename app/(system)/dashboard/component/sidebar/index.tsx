@@ -23,9 +23,9 @@ import {
 import { FaUserCog } from "react-icons/fa";
 import { PiStudentBold } from "react-icons/pi";
 import { GrUserManager } from "react-icons/gr";
-import { RiAdminFill } from "react-icons/ri";
 import { BiSolidReport } from "react-icons/bi";
 import { BookOpen, BookUser, SwatchBook } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -37,6 +37,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
+  const { data: session } = useSession();
 
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
@@ -136,7 +137,11 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </Tab>
               </li>
               {/* Enrolled Courses */}
-              <li>
+              <li
+                className={`${
+                  session?.user?.role === "USER" ? "hidden" : "block"
+                }`}
+              >
                 <Tab pathname="/dashboard/enrolledCourses">
                   <div className="flex justify-center w-5">
                     <MdOutlineSchool size={20} />
@@ -145,21 +150,27 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </Tab>
               </li>
             </ul>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-gray-100">
-              PROFILE
-            </h3>
+            <div
+              className={`${
+                session?.user?.role === "USER" ? "hidden" : "block"
+              }`}
+            >
+              <h3 className="mb-4 ml-4 text-sm font-semibold text-gray-100">
+                PROFILE
+              </h3>
 
-            <ul className="mb-6 flex flex-col gap-1.5 font-medium">
-              {/* Profile */}
-              <li>
-                <Tab pathname="/dashboard/profile">
-                  <div className="flex justify-center w-5">
-                    <MdPhonelinkSetup size={22} />
-                  </div>
-                  Profile
-                </Tab>
-              </li>
-            </ul>
+              <ul className="mb-6 flex flex-col gap-1.5 font-medium">
+                {/* Profile */}
+                <li>
+                  <Tab pathname="/dashboard/profile">
+                    <div className="flex justify-center w-5">
+                      <MdPhonelinkSetup size={22} />
+                    </div>
+                    Profile
+                  </Tab>
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* <!-- Others Group --> */}
@@ -190,7 +201,14 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           </div>
 
           {/* admin options  */}
-          <div>
+          <div
+            className={`${
+              session?.user?.role === "ADMIN" ||
+              session?.user.role === "S_ADMIN"
+                ? "block"
+                : "hidden"
+            }`}
+          >
             <h3 className="mb-4 ml-4 text-sm font-semibold text-gray-100">
               ADMIN
             </h3>
