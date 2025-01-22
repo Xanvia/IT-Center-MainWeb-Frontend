@@ -518,12 +518,8 @@ export default function InteractiveProjectRow() {
             )}
             {isEditing && (
               <div className="flex space-x-2">
-                <Button type="submit">Save Changes</Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsEditing(false)}
-                >
+                <Button onClick={saveEdit}>Save Changes</Button>
+                <Button variant="outline" onClick={() => setIsEditing(false)}>
                   Cancel
                 </Button>
               </div>
