@@ -44,29 +44,10 @@ export default function InteractiveProjectRow() {
     date: "",
   });
 
-  useEffect(() => {
-    if (!session) return;
-    const fetchProjects = async () => {
-      try {
-        const response = await Axios.get("/contents/projects", {
-          headers: {
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-        });
-
-        const fetcheddata = response.data;
-        console.log(fetcheddata);
-        setProjects(fetcheddata);
-      } catch (error) {
-        console.error("Error while fetching Logs:", error);
-      }
-    };
-
-    fetchProjects();
-  }, [session]);
-
+  
   //addProject function
   const addProject = async () => {
+    console.log("hehehehe");
     if (newProject.title && newProject.description && newProject.date) {
       // Prepare the new project data
       const projectData = {
@@ -178,6 +159,27 @@ export default function InteractiveProjectRow() {
     if (text.length <= maxLength) return text;
     return text.substr(0, maxLength) + "...";
   };
+
+  useEffect(() => {
+    if (!session) return;
+    const fetchProjects = async () => {
+      try {
+        const response = await Axios.get("/contents/projects", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+
+        const fetcheddata = response.data;
+        console.log(fetcheddata);
+        setProjects(fetcheddata);
+      } catch (error) {
+        console.error("Error while fetching Logs:", error);
+      }
+    };
+
+    fetchProjects();
+  }, [session]);
 
   return (
     <div className="max-w-7xl mx-auto  p-6 bg-gray-100 rounded-lg shadow-md">
