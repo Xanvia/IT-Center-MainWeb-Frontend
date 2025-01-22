@@ -13,7 +13,7 @@ export const mainLinkData: mainLinkDataTypes[] = [
     imgsrc: "/animation/courses.json",
     options: {},
     description:
-      "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      "Offers diverse IT-related courses to enhance skills in programming, networking, and developing for all levels.",
   },
   {
     url: "/reservation",
@@ -21,7 +21,7 @@ export const mainLinkData: mainLinkDataTypes[] = [
     imgsrc: "/animation/reservation.json",
     options: { scale: "110%", transform: "translateX(-0.75rem)" },
     description:
-      "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      "Book IT center labs equipped with state-of-the-art resources for practical sessions, workshops, and personal projects.",
   },
   {
     url: "/consultation",
@@ -29,7 +29,7 @@ export const mainLinkData: mainLinkDataTypes[] = [
     imgsrc: "/animation/consultation.json",
     options: { scale: "110%", transform: "translateY(1rem)" },
     description:
-      "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      "Provides expert guidance on IT-related topics, career advice, and project development through personalized consultations.",
   },
   {
     url: "/opened",
@@ -37,6 +37,64 @@ export const mainLinkData: mainLinkDataTypes[] = [
     imgsrc: "/animation/opened.json",
     options: { scale: "150%" },
     description:
-      "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      "An online platform delivering flexible, self-paced courses to learn IT skills anytime, anywhere with certified instructors.",
   },
 ];
+
+export type footerLinksTypes = {
+  url: string;
+  id: string;
+};
+
+export const footerServicesLinks: footerLinksTypes[] = [
+  {
+    url: "/services/projects",
+    id: "Projects",
+  },
+  {
+    url: "/services/consultations",
+    id: "Consultations",
+  },
+  {
+    url: "/services/logs",
+    id: "Logs",
+  },
+  {
+    url: "/news",
+    id: "News",
+  }
+] 
+
+export const footerOurLinks : footerLinksTypes[] = [
+  {
+    url: "/reservation",
+    id: "Reservations",
+  },
+  {
+    url: "/opened",
+    id: "O P E N E D",
+  },
+  {
+    url: "/dashboard/courseRegistration",
+    id: "Course Registartion",
+  },
+  {
+    url: "/aboutus/staff",
+    id: "Staff",
+  }
+]
+
+export const footerOtherLinks : footerLinksTypes[] = [
+  {
+    url: "/auth/signin",
+    id: "Login",
+  },
+  {
+    url: "https://www.pdn.ac.lk/",
+    id: "University of Peradeniya",
+  },
+  {
+    url: "https://www.google.com/maps?ll=7.260475,80.608469&z=12&t=m&hl=en-US&gl=US&mapclient=embed",
+    id: "View in Map",
+  }
+]

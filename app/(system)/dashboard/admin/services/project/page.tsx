@@ -17,6 +17,8 @@ import {
 import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Axios from "@/config/axios";
+import { delay } from "@/utils/common";
+import { toast } from "@/hooks/use-toast";
 
 interface Project {
   id: string;
@@ -44,35 +46,57 @@ export default function InteractiveProjectRow() {
     date: "",
   });
 
-  useEffect(() => {
-    if (!session) return;
-    const fetchProjects = async () => {
-      try {
-        const response = await Axios.get("/contents/projects", {
-          headers: {
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-        });
-
-        const fetcheddata = response.data;
-        console.log(fetcheddata);
-        setProjects(fetcheddata);
-      } catch (error) {
-        console.error("Error while fetching Logs:", error);
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (files && files.length > 0) {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("content", files[i]);
       }
-    };
-
-    fetchProjects();
-  }, [session]);
+      try {
+        const result = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/contents/upload`,
+          {
+            method: "POST",
+            body: formData,
+            headers: {
+              Authorization: `Bearer ${session?.access_token}`,
+            },
+          }
+        );
+        if (result.ok) {
+          const data = await result.json();
+          console.log(data);
+          await delay(3000);
+          setNewProject((prev) => ({
+            ...prev,
+            images: [
+              ...(prev.images || []),
+              ...data.paths.map((path: string) => ({
+                id: crypto.randomUUID(),
+                path: `${process.env.NEXT_PUBLIC_BACKEND_URL}/${path}`,
+              })),
+            ],
+          }));
+          toast({ description: "Images uploaded successfully" });
+        }
+      } catch (error) {
+        console.error(error);
+        toast({ description: "Failed to upload images" });
+      }
+    }
+  };
 
   //addProject function
   const addProject = async () => {
+    console.log("hehehehe");
     if (newProject.title && newProject.description && newProject.date) {
       // Prepare the new project data
       const projectData = {
         title: newProject.title,
         description: newProject.description,
         date: newProject.date,
+        images: newProject.images.map((image) => image.path),
       };
 
       try {
@@ -130,7 +154,6 @@ export default function InteractiveProjectRow() {
   };
 
   //saveEdit
-
   const saveEdit = async () => {
     if (
       viewingProject &&
@@ -139,15 +162,13 @@ export default function InteractiveProjectRow() {
       newProject.date
     ) {
       const updatedProject = {
-        ...viewingProject,
-        ...newProject,
-        images: newProject.images || viewingProject.images,
+        title: newProject.title,
+        description: newProject.description,
+        date: newProject.date,
+        images: newProject.images.map((image) => image.path),
       };
 
-      console.log(updatedProject);
-
       try {
-        // Send PUT request to server
         const response = await Axios.put(
           `/contents/${viewingProject.id}`,
           updatedProject,
@@ -167,8 +188,13 @@ export default function InteractiveProjectRow() {
         );
         setViewingProject(savedProject);
         setIsEditing(false);
+        toast({ description: "Project updated successfully" });
       } catch (error) {
         console.error("Error while updating project:", error);
+        toast({
+          description: "Failed to update project",
+          variant: "destructive",
+        });
       }
     }
   };
@@ -178,6 +204,27 @@ export default function InteractiveProjectRow() {
     if (text.length <= maxLength) return text;
     return text.substr(0, maxLength) + "...";
   };
+
+  useEffect(() => {
+    if (!session) return;
+    const fetchProjects = async () => {
+      try {
+        const response = await Axios.get("/contents/projects", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+
+        const fetcheddata = response.data;
+        console.log(fetcheddata);
+        setProjects(fetcheddata);
+      } catch (error) {
+        console.error("Error while fetching Logs:", error);
+      }
+    };
+
+    fetchProjects();
+  }, [session]);
 
   return (
     <div className="max-w-7xl mx-auto  p-6 bg-gray-100 rounded-lg shadow-md">
@@ -299,24 +346,39 @@ export default function InteractiveProjectRow() {
             </div>
             <div>
               <Label htmlFor="newProjectImage">Image</Label>
-              {/* <Input
-                id="newProjectImage"
+              <div className="flex m-1 space-x-2 overflow-auto">
+                {newProject.images.map((image, index) => (
+                  <div key={index} className="relative ">
+                    <img
+                      src={image.path}
+                      alt={`image:${index}`}
+                      className="h-20"
+                    />
+                    <div className="absolute top-0 right-1">
+                      <p
+                        className=" text-red-500 cursor-pointer text-sm font-bold"
+                        onClick={() =>
+                          setNewProject((prev) => ({
+                            ...prev,
+                            images: prev.images.filter(
+                              (img) => img.id !== image.id
+                            ),
+                          }))
+                        }
+                      >
+                        x
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Input
+                id="image"
+                name="image"
                 type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                      setNewProject({
-                        ...newProject,
-                        images: reader.result as string,
-                      });
-                    };
-                    reader.readAsDataURL(file);
-                  }
-                }}
-              /> */}
+                onChange={handleImageChange}
+                multiple
+              />
             </div>
             <DialogFooter>
               <Button type="submit">Add Project</Button>
@@ -411,24 +473,39 @@ export default function InteractiveProjectRow() {
               </div>
               <div>
                 <Label htmlFor="editProjectImage">Project Image</Label>
-                {/* <Input
-                  id="editProjectImage"
+                <div className="flex m-1 space-x-2 overflow-auto">
+                  {newProject.images.map((image, index) => (
+                    <div key={index} className="relative ">
+                      <img
+                        src={image.path}
+                        alt={`image:${index}`}
+                        className="h-20"
+                      />
+                      <div className="absolute top-0 right-1">
+                        <p
+                          className=" text-red-500 cursor-pointer text-sm font-bold"
+                          onClick={() =>
+                            setNewProject((prev) => ({
+                              ...prev,
+                              images: prev.images.filter(
+                                (img) => img.id !== image.id
+                              ),
+                            }))
+                          }
+                        >
+                          x
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <Input
+                  id="image"
+                  name="image"
                   type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setNewProject({
-                          ...newProject,
-                          images: reader.result as string,
-                        });
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                /> */}
+                  onChange={handleImageChange}
+                  multiple
+                />
               </div>
             </form>
           )}

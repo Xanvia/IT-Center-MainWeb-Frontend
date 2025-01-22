@@ -43,7 +43,9 @@ const cardData = [
 export default function App() {
   return (
     <>
-      <div className="flex justify-center w-auto text-2xl p-4">Directors</div>
+      <div className="flex justify-center w-auto text-xl p-4 font-semibold">
+        Directors
+      </div>
       <div className="flex justify-center items-center gap-6 p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {cardData.map((card) => (
