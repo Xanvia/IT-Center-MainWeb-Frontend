@@ -9,12 +9,22 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   const isAdmin = () =>
-    session?.user.role === "ADMIN" || session?.user.role === "S_ADMIN";
+    session !== null &&
+    (session?.user.role === "ADMIN" || session?.user.role === "S_ADMIN");
+
+  const isUser = () => session !== null && session?.user.role === "USER";
+  const isStaffOrStudent = () =>
+    session !== null &&
+    (session?.user.role === "STAFF" || session?.user.role === "STUDENT");
 
   const primaryShortcuts = shortcuts.filter((s) => s.primary);
-  const secondaryShortcuts = shortcuts.filter(
-    (s) => !s.primary && (!s.adminOnly || isAdmin())
+  const userShortcuts = shortcuts.filter(
+    (s) =>
+      (s.userOnly && isUser()) ||
+      (s.staffStuOnly && isStaffOrStudent() && s.name === "Profile")
   );
+  const adminShortcuts = shortcuts.filter((s) => isAdmin());
+
   return (
     <main className="">
       <h1 className="font-rubik text-5xl my-5 text-gray-600">
@@ -45,22 +55,43 @@ export default async function Home() {
         ))}
       </div>
 
-      {/* Secondary shortcuts */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
-        {secondaryShortcuts.map((shortcut) => (
-          <Link key={shortcut.name} href={shortcut.href} passHref>
-            <Card isPressable className="w-full h-full">
-              <CardBody className="items-center my-2">
-                <shortcut.icon size={64} />
-              </CardBody>
+      {/* User shortcuts */}
+      {isUser() && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+          {userShortcuts.map((shortcut) => (
+            <Link key={shortcut.name} href={shortcut.href} passHref>
+              <Card isPressable className="w-full h-full">
+                <CardBody className="items-center my-2">
+                  <shortcut.icon size={64} />
+                </CardBody>
 
-              <CardFooter className="flex-col items-center p-2">
-                <p className="text-sm text-center">{shortcut.name}</p>
-              </CardFooter>
-            </Card>
-          </Link>
-        ))}
-      </div>
+                <CardFooter className="flex-col items-center p-2">
+                  <p className="text-sm text-center">{shortcut.name}</p>
+                </CardFooter>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Admin shortcuts */}
+      {isAdmin() && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+          {adminShortcuts.map((shortcut) => (
+            <Link key={shortcut.name} href={shortcut.href} passHref>
+              <Card isPressable className="w-full h-full">
+                <CardBody className="items-center my-2">
+                  <shortcut.icon size={64} />
+                </CardBody>
+
+                <CardFooter className="flex-col items-center p-2">
+                  <p className="text-sm text-center">{shortcut.name}</p>
+                </CardFooter>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      )}
     </main>
   );
 }
