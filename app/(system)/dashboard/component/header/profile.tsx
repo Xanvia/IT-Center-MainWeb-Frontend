@@ -108,7 +108,7 @@ const DropdownProfile = ({ reservation }: props) => {
       <div
         ref={dropdown}
         onClick={() => setDropdownOpen(!dropdownOpen)}
-        className={`absolute -right-4 sm:right-0 mt-3 overflow-hidden flex w-60 flex-col rounded-sm text-sm font-normal text-gray-700 bg-white shadow-sm dropdown-menu ${
+        className={`absolute -right-4 sm:right-0 mt-3 overflow-hidden flex w-60 flex-col rounded-sm text-sm font-normal text-gray-700 z-30 bg-white shadow-sm dropdown-menu ${
           dropdownOpen ? "border h-56 opacity-100" : "h-0 opacity-0"
         }`}
       >

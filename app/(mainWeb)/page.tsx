@@ -147,7 +147,7 @@ export default function Home() {
             <span className="mr-0 text-2xl text-red-800 hover:text-red-700">
               More courses
             </span>
-            <Link href={"/dashboard/courseRegistration"}>
+            <Link href={"/courses"}>
               <PiArrowRightBold
                 color="maroon"
                 className="group-hover:translate-x-2 duration-300 text-xl"
@@ -194,10 +194,12 @@ export default function Home() {
                 <span className="mr-0 text-xl text-red-800 hover:text-red-700">
                   More projects
                 </span>
-                <PiArrowRightBold
-                  color="maroon"
-                  className="group-hover:translate-x-1 duration-300"
-                />
+                <Link href={"/services/projects"}>
+                  <PiArrowRightBold
+                    color="maroon"
+                    className="group-hover:translate-x-1 duration-300"
+                  />
+                </Link>
               </div>
             </button>
           </div>
@@ -231,10 +233,12 @@ export default function Home() {
             <span className="mr-0 sm:text-2xl text-xl text-red-800 hover:text-red-700">
               More news
             </span>
-            <PiArrowRightBold
-              color="maroon"
-              className="group-hover:translate-x-2 duration-300 text-xl"
-            />
+            <Link href={"/news"}>
+              <PiArrowRightBold
+                color="maroon"
+                className="group-hover:translate-x-2 duration-300 text-xl"
+              />
+            </Link>
           </div>
         </button>
       </div>

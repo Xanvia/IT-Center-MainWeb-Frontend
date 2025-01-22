@@ -103,7 +103,7 @@ export default function InteractiveLogRow() {
         title: newLog.title,
         description: newLog.description,
         date: newLog.date,
-        images: newLog.images.map((image) => image.path),
+        images: newLog.images && newLog.images?.map((image) => image.path),
       };
 
       try {
