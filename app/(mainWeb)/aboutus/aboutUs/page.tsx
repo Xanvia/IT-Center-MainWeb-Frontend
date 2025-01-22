@@ -39,7 +39,10 @@ const Home: React.FC = () => {
       {/* Cards */}
       <div className="grid md:grid-cols-4 sm:grid-cols-2 xs:grid-row gap-4 m-8 justify-center pb-10 px-8 py-8">
         {aboutus.map((item: aboutUs) => (
-          <div className="bg-slate-100 rounded-box mx-6 shadow-md border-1 border-black hover:bg-maroon hover:text-white">
+          <div
+            key={item.id}
+            className="bg-slate-100 rounded-box mx-6 shadow-md border-1 border-black hover:bg-maroon hover:text-white"
+          >
             <p className="text-center justify-center p-3 mx-4">
               {item.description}
             </p>

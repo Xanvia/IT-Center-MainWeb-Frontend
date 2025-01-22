@@ -43,7 +43,7 @@ const Footer = () => {
           <nav className="w-36 md:mx-3">
             <h6 className="footer-title text-yellow-300">Our Services</h6>
             {footerServicesLinks.map((item: footerLinksTypes) => (
-              <Link href={item.url} className="overflow-hidden">
+              <Link key={item.id} href={item.url} className="overflow-hidden">
                 {item.id}
               </Link>
             ))}
@@ -51,7 +51,7 @@ const Footer = () => {
           <nav className="w-48 md:mx-3 ">
             <h6 className="footer-title text-yellow-300">Our Links</h6>
             {footerOurLinks.map((item: footerLinksTypes) => (
-              <Link href={item.url} className="overflow-hidden">
+              <Link key={item.id} href={item.url} className="overflow-hidden">
                 {item.id}
               </Link>
             ))}
@@ -59,7 +59,7 @@ const Footer = () => {
           <nav className="w-44 md:mx-3 ">
             <h6 className="footer-title text-yellow-300">Other Links</h6>
             {footerOtherLinks.map((item: footerLinksTypes) => (
-              <Link href={item.url} className="overflow-hidden">
+              <Link key={item.id} href={item.url} className="overflow-hidden">
                 {item.id}
               </Link>
             ))}
