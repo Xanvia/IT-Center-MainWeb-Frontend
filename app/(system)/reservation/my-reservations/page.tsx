@@ -14,13 +14,16 @@ import { ReservationRequest, ReservationStatus } from "@/utils/types";
 import Axios from "@/config/axios";
 import { useSession } from "next-auth/react";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function ReservationsPage() {
   const { data: session } = useSession();
   const [reservations, setReservations] = useState<ReservationRequest[]>([]);
+  const router = useRouter();
 
   const handlePayment = (id: string) => {
     console.log(`Processing payment for reservation ${id}`);
+    router.push("/reservation/my-reservations/payment");
     // Here you would typically integrate with a payment gateway
   };
 
