@@ -51,6 +51,12 @@ export const shortcuts = [
     staffStuOnly: true,
   },
   {
+    name: "Course Enrollment",
+    icon: BookOpen,
+    href: "/dashboard/enrolledCourses",
+    staffStuOnly: true,
+  },
+  {
     name: "Manage Staff",
     icon: Users,
     href: "/dashboard/admin/users/staff",

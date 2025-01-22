@@ -13,18 +13,18 @@ export default async function Home() {
     session !== null &&
     (session?.user.role === "ADMIN" || session?.user.role === "S_ADMIN");
 
-  const isUser = () => session !== null && session?.user.role === "USER";
+  const isUser = () =>
+    session !== null && session?.user.role === "USER" && !isAdmin();
   const isStaffOrStudent = () =>
     session !== null &&
-    (session?.user.role === "STAFF" || session?.user.role === "STUDENT");
+    (session?.user.role === "STAFF" || session?.user.role === "STUDENT") &&
+    !isAdmin();
 
   const primaryShortcuts = shortcuts.filter((s) => s.primary);
   const userShortcuts = shortcuts.filter(
-    (s) =>
-      (s.userOnly && isUser()) ||
-      (s.staffStuOnly && isStaffOrStudent() && s.name === "Profile")
+    (s) => (s.userOnly && isUser()) || (s.staffStuOnly && isStaffOrStudent())
   );
-  const adminShortcuts = shortcuts.filter((s) => isAdmin());
+  const adminShortcuts = shortcuts.filter((s) => s.adminOnly);
 
   return (
     <main className="">
@@ -57,7 +57,7 @@ export default async function Home() {
       </div>
 
       {/* User shortcuts */}
-      {isUser() && (
+      {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
           {userShortcuts.map((shortcut) => (
             <Link key={shortcut.name} href={shortcut.href} passHref>
@@ -73,7 +73,7 @@ export default async function Home() {
             </Link>
           ))}
         </div>
-      )}
+      }
 
       {/* Admin shortcuts */}
       {isAdmin() && (
