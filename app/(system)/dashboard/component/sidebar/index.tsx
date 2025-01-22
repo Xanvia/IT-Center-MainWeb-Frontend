@@ -37,7 +37,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
@@ -139,7 +139,9 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* Enrolled Courses */}
               <li
                 className={`${
-                  session?.user?.role === "USER" ? "hidden" : "block"
+                  session?.user?.role === "USER" || status === "unauthenticated"
+                    ? "hidden"
+                    : "block"
                 }`}
               >
                 <Tab pathname="/dashboard/enrolledCourses">
@@ -152,7 +154,9 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </ul>
             <div
               className={`${
-                session?.user?.role === "USER" ? "hidden" : "block"
+                session?.user?.role === "USER" || status === "unauthenticated"
+                  ? "hidden"
+                  : "block"
               }`}
             >
               <h3 className="mb-4 ml-4 text-sm font-semibold text-gray-100">
@@ -174,7 +178,9 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           </div>
 
           {/* <!-- Others Group --> */}
-          <div>
+          <div
+            className={`${status === "unauthenticated" ? "hidden" : "block"}`}
+          >
             <h3 className="mb-4 ml-4 text-sm font-semibold text-gray-100">
               OTHERS
             </h3>

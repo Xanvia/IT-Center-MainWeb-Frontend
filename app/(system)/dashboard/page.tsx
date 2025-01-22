@@ -8,7 +8,8 @@ import { authOptions } from "@/config/nextAuth";
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  const isAdmin = () => session?.user.role === "ADMIN";
+  const isAdmin = () =>
+    session?.user.role === "ADMIN" || session?.user.role === "S_ADMIN";
 
   const primaryShortcuts = shortcuts.filter((s) => s.primary);
   const secondaryShortcuts = shortcuts.filter(
@@ -16,7 +17,13 @@ export default async function Home() {
   );
   return (
     <main className="">
-      <h1 className="font-rubik text-5xl my-5 text-gray-600">Good Morning!</h1>
+      <h1 className="font-rubik text-5xl my-5 text-gray-600">
+        {new Date().getHours() < 12
+          ? "Good Morning!"
+          : new Date().getHours() < 18
+          ? "Good Afternoon!"
+          : "Good Evening!"}
+      </h1>
       {/* Primary shortcuts */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
         {primaryShortcuts.map((shortcut) => (
