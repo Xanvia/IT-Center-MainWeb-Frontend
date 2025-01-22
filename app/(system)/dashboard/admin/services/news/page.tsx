@@ -54,23 +54,27 @@ export default function InteractiveNewsRow() {
     id: "",
     title: "",
     description: "",
-    images: [{ id: "", path: "" }],
+    images: [],
     date: "",
     time: "",
     venue: "",
   });
 
+  const formatTime = (time: string) => {
+    const [hours, minutes] = time?.split(":");
+    return `${hours}:${minutes}:00`;
+  };
+
   //addNews function
   const addNews = async () => {
-    console.log("hehehehe");
     if (newNews.title && newNews.description && newNews.date) {
       // Prepare the new news data
       const newsData = {
         title: newNews.title,
         description: newNews.description,
         date: newNews.date,
-        time: newNews.time,
-        venue: newNews.venue,
+        ...(newNews.time && { time: formatTime(newNews.time) }),
+        ...(newNews.venue && { venue: newNews.venue }),
         images: newNews.images.map((image) => image.path),
       };
 
@@ -89,7 +93,7 @@ export default function InteractiveNewsRow() {
           id: "",
           title: "",
           description: "",
-          images: [{ id: "", path: "" }],
+          images: [],
           date: "",
           time: "",
           venue: "",
@@ -180,7 +184,10 @@ export default function InteractiveNewsRow() {
       const updatedNews = {
         ...viewingNews,
         ...newNews,
-        images: newNews.images || viewingNews.images,
+        time: formatTime(newNews.time),
+        images:
+          newNews.images.map((image) => image.path) ||
+          viewingNews.images.map((image) => image.path),
       };
 
       console.log(updatedNews);
@@ -399,7 +406,6 @@ export default function InteractiveNewsRow() {
                   onChange={(e) =>
                     setNewNews({ ...newNews, time: e.target.value })
                   }
-                  required
                 />
               </div>
               <div>
@@ -411,7 +417,6 @@ export default function InteractiveNewsRow() {
                     setNewNews({ ...newNews, venue: e.target.value })
                   }
                   placeholder="Enter news venue"
-                  required
                 />
               </div>
               <div>

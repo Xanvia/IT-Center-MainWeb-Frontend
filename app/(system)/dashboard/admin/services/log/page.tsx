@@ -50,7 +50,7 @@ export default function InteractiveLogRow() {
     id: "",
     title: "",
     description: "",
-    images: [{ id: "", path: "" }],
+    images: [],
     date: "",
   });
 
@@ -121,7 +121,7 @@ export default function InteractiveLogRow() {
           id: "",
           title: "",
           description: "",
-          images: [{ id: "", path: "" }],
+          images: [],
           date: "",
         });
         setIsAdding(false);
@@ -186,6 +186,13 @@ export default function InteractiveLogRow() {
         setLogs(logs.map((log) => (log.id === savedLog.id ? savedLog : log)));
         setViewingLog(savedLog);
         setIsEditing(false);
+        setNewLog({
+          id: "",
+          title: "",
+          description: "",
+          images: [],
+          date: "",
+        });
         toast({ description: "Log updated successfully" });
       } catch (error) {
         console.error("Error while updating log:", error);
