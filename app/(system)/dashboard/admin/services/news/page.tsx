@@ -1,178 +1,208 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
-import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle } from "lucide-react"
+import { useState } from "react";
+import { useEffect } from "react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { PlusCircle, X, Edit, Eye, Calendar, AlertCircle, MapPin, Clock } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Axios from "@/config/axios";
 
 interface News {
-  id: string
-  name: string
-  description: string
-  imageUrl: string
-  date: string
-  time: string
-  venue: string
+  id: string;
+  title: string;
+  description: string;
+  images: {
+    id: string;
+    path: string;
+  }[];
+  date: string;
+  time:string;
+  venue:string;
 }
 
 export default function InteractiveNewsRow() {
-  const [news, setNews] = useState<News[]>([
-    {
-      id: "1",
-      name: "News Alpha",
-      description:
-        "A cutting-edge web application for task management. This news aims to revolutionize how teams collaborate and manage their workflows.",
-      imageUrl: "/common/mainWeb.jpg",
-      date: "2023-06-15",
-      time: "14:00",
-      venue: "Tech Hub, Silicon Valley",
-    },
-  ])
+  const [news, setNews] = useState<News[]>([]);
+  const { data: session, status } = useSession();
 
-  const [isAdding, setIsAdding] = useState(false)
-  const [viewingNews, setViewingNews] = useState<News | null>(null)
-  const [isEditing, setIsEditing] = useState(false)
-  const [newNews, setNewNews] = useState({
+  const [isAdding, setIsAdding] = useState(false);
+  const [viewingNews, setViewingNews] = useState<News | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newNews, setNewNews] = useState<News>({
+    id: "",
     title: "",
     description: "",
-    images: "",
+    images: [{ id: "", path: "" }],
     date: "",
-    time: "",
-    venue: "",
-  })
-  const [error, setError] = useState<string | null>(null)
+    time:"",
+    venue:""
+  });
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/news")
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const fetchedNews = await response.json()
-        setNews(fetchedNews)
-        setError(null)
-      } catch (error) {
-        console.error("Error while fetching news:", error)
-        setError("Failed to fetch news. Please try again later.")
-        setNews([])
-      }
-    }
-
-    fetchNews()
-  }, [])
-
+  
+  //addNews function
   const addNews = async () => {
-    if (newNews.title && newNews.description && newNews.date && newNews.time && newNews.venue) {
+    console.log("hehehehe");
+    if (newNews.title && newNews.description && newNews.date) {
+      // Prepare the new news data
       const newsData = {
         title: newNews.title,
         description: newNews.description,
         date: newNews.date,
-        time: newNews.time,
-        venue: newNews.venue,
-      }
+      };
 
       try {
-        const response = await fetch("http://localhost:3001/news", {
-          method: "POST",
+        setIsAdding(true);
+        // Send POST request to server
+        const response = await Axios.post("contents/news", newsData, {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(newsData),
-        })
+        });
 
-        if (response.ok) {
-          const savedNews = await response.json();
-          if (savedNews) {
-              setNews([...news, savedNews]);
-                } else {
-                console.error("No news returned from the server.");
-                }
-          setNewNews({ title: "", description: "", images: "", date: "", time: "", venue: "" })
-          setIsAdding(false)
-        } else {
-          const res = await response.json()
-          console.error("Failed to add news:", res)
-        }
+        const savedNews = await response.data; // Assuming the server returns the saved news
+        setNews([...news, savedNews]);
+        setNewNews({
+          id: "",
+          title: "",
+          description: "",
+          images: [{ id: "", path: "" }],
+          date: "",
+          time:"",
+          venue:""
+        });
+        setIsAdding(false);
       } catch (error) {
-        console.error("Error while adding news:", error)
+        console.error("Error while adding news:", error);
+        setIsAdding(false);
       }
     }
-  }
+  };
 
-  const removeNews = (id: string) => {
-    setNews(news.filter((news) => news.id !== id))
-  }
+  const removeNews = async (id: string) => {
+    try {
+      // Send DELETE request to server
+      await Axios.delete(`contents/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      setNews(news.filter((news) => news.id !== id));
+    } catch (error) {
+      console.error("Error while removing news:", error);
+    }
+  };
 
   const startEditing = () => {
     if (viewingNews) {
       setNewNews({
-        title: viewingNews.name,
+        id: viewingNews.id,
+        title: viewingNews.title,
         description: viewingNews.description,
-        images: viewingNews.imageUrl,
+        images: viewingNews.images,
         date: viewingNews.date,
-        time: viewingNews.time,
-        venue: viewingNews.venue,
-      })
-      setIsEditing(true)
+        time:viewingNews.time,
+        venue:viewingNews.venue
+      });
+      setIsEditing(true);
     }
-  }
+  };
+
+  //saveEdit
 
   const saveEdit = async () => {
-    if (viewingNews && newNews.title && newNews.description && newNews.date) {
+    if (
+      viewingNews &&
+      newNews.title &&
+      newNews.description &&
+      newNews.date
+    ) {
       const updatedNews = {
         ...viewingNews,
         ...newNews,
-        imageUrl: newNews.images || viewingNews.imageUrl,
-      }
+        images: newNews.images || viewingNews.images,
+      };
+
+      console.log(updatedNews);
 
       try {
-        const response = await fetch(`http://localhost:3001/news/${viewingNews.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedNews),
-        })
+        // Send PUT request to server
+        const response = await Axios.put(
+          `/contents/${viewingNews.id}`,
+          updatedNews,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session?.access_token}`,
+            },
+          }
+        );
 
-        if (response.ok) {
-          const savedNews = await response.json()
-          setNews(news.map((news) => (news.id === savedNews.id ? savedNews : news)))
-          setViewingNews(savedNews)
-          setIsEditing(false)
-        } else {
-          console.error("Failed to update news:", response.statusText)
-        }
+        const savedNews = await response.data;
+        setNews(
+          news.map((news) =>
+            news.id === savedNews.id ? savedNews : news
+          )
+        );
+        setViewingNews(savedNews);
+        setIsEditing(false);
       } catch (error) {
-        console.error("Error while updating news:", error)
+        console.error("Error while updating news:", error);
       }
     }
-  }
+  };
 
   const truncateText = (text: string, maxLength: number) => {
-    if (!text) return
-    if (text.length <= maxLength) return text
-    return text.substr(0, maxLength) + "..."
-  }
+    if (!text) return;
+    if (text.length <= maxLength) return text;
+    return text.substr(0, maxLength) + "...";
+  };
+
+  useEffect(() => {
+    if (!session) return;
+    const fetchNews = async () => {
+      try {
+        const response = await Axios.get("/contents/news", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+
+        const fetcheddata = response.data;
+        console.log(fetcheddata);
+        setNews(fetcheddata);
+      } catch (error) {
+        console.error("Error while fetching Logs:", error);
+      }
+    };
+
+    fetchNews();
+  }, [session]);
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+    <div className="max-w-7xl mx-auto  p-6 bg-gray-100 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">News</h2>
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-          <strong className="font-bold">Error: </strong>
-          <span className="block sm:inline">{error}</span>
-        </div>
-      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {news.map((news) => (
           <Card key={news.id} className="flex flex-col h-[400px]">
             <div className="h-[200px] relative">
-              <img src={news.imageUrl || "/placeholder.svg"} alt={news.name} className="w-full h-full object-cover" />
+              <img
+                src={
+                  news.images && news.images[0]? news.images[0].path: ""
+                }
+                alt={news.title}
+                className="w-full h-full object-cover"
+              />
               <Button
                 variant="destructive"
                 size="icon"
@@ -184,8 +214,12 @@ export default function InteractiveNewsRow() {
               </Button>
             </div>
             <CardContent className="p-4 flex-grow overflow-hidden">
-              <h3 className="font-bold text-lg mb-2">{truncateText(news.name, 30)}</h3>
-              <p className="text-gray-600 text-sm mb-4">{truncateText(news.description, 100)}</p>
+              <h3 className="font-bold text-lg mb-2">
+                {truncateText(news.title, 30)}
+              </h3>
+              <p className="text-gray-600 text-sm mb-4">
+                {truncateText(news.description, 100)}
+              </p>
               <div className="space-y-2">
                 <p className="text-gray-500 text-sm flex items-center">
                   <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
@@ -198,7 +232,11 @@ export default function InteractiveNewsRow() {
               </div>
             </CardContent>
             <CardFooter className="bg-gray-50 p-4 mt-auto">
-              <Button variant="outline" className="w-full" onClick={() => setViewingNews(news)}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setViewingNews(news)}
+              >
                 <Eye className="w-4 h-4 mr-2" />
                 View News
               </Button>
@@ -213,20 +251,21 @@ export default function InteractiveNewsRow() {
           <p className="text-gray-500 text-center">Add a new news</p>
         </Card>
       </div>
+
       <Dialog
         open={isAdding}
         onOpenChange={(open) => {
-          if (!open) setIsAdding(false)
+          if (!open) setIsAdding(false);
         }}
       >
-        <DialogContent className="sm:max-w-[400px]">
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Add New News</DialogTitle>
           </DialogHeader>
           <form
             onSubmit={(e) => {
-              e.preventDefault()
-              addNews()
+              e.preventDefault();
+              addNews();
             }}
             className="space-y-4"
           >
@@ -235,7 +274,9 @@ export default function InteractiveNewsRow() {
               <Input
                 id="newNewsName"
                 value={newNews.title}
-                onChange={(e) => setNewNews({ ...newNews, title: e.target.value })}
+                onChange={(e) =>
+                  setNewNews({ ...newNews, title: e.target.value })
+                }
                 placeholder="Enter news name"
                 required
               />
@@ -245,18 +286,22 @@ export default function InteractiveNewsRow() {
               <Textarea
                 id="newNewsDescription"
                 value={newNews.description}
-                onChange={(e) => setNewNews({ ...newNews, description: e.target.value })}
+                onChange={(e) =>
+                  setNewNews({ ...newNews, description: e.target.value })
+                }
                 placeholder="Enter news description"
                 required
               />
             </div>
             <div>
-              <Label htmlFor="newNewsDate">Date</Label>
+              <Label htmlFor="newNewsDate"> Date</Label>
               <Input
                 id="newNewsDate"
                 type="date"
                 value={newNews.date}
-                onChange={(e) => setNewNews({ ...newNews, date: e.target.value })}
+                onChange={(e) =>
+                  setNewNews({ ...newNews, date: e.target.value })
+                }
                 required
               />
             </div>
@@ -266,7 +311,7 @@ export default function InteractiveNewsRow() {
                 id="newNewsTime"
                 type="time"
                 value={newNews.time}
-                onChange={(e) => setNewNews({ ...newNews, time: e.target.value })}
+                onChange={(e) => setNewNews({...newNews, time: e.target.value})}
                 required
               />
             </div>
@@ -275,31 +320,31 @@ export default function InteractiveNewsRow() {
               <Input
                 id="newNewsVenue"
                 value={newNews.venue}
-                onChange={(e) => setNewNews({ ...newNews, venue: e.target.value })}
-                placeholder="Enter venue"
+                onChange={(e) => setNewNews({...newNews, venue: e.target.value})}
+                placeholder="Enter news venue"
                 required
               />
             </div>
             <div>
               <Label htmlFor="newNewsImage">Image</Label>
-              <Input
+              {/* <Input
                 id="newNewsImage"
                 type="file"
                 accept="image/*"
                 onChange={(e) => {
-                  const file = e.target.files?.[0]
+                  const file = e.target.files?.[0];
                   if (file) {
-                    const reader = new FileReader()
+                    const reader = new FileReader();
                     reader.onloadend = () => {
                       setNewNews({
                         ...newNews,
                         images: reader.result as string,
-                      })
-                    }
-                    reader.readAsDataURL(file)
+                      });
+                    };
+                    reader.readAsDataURL(file);
                   }
                 }}
-              />
+              /> */}
             </div>
             <DialogFooter>
               <Button type="submit">Add News</Button>
@@ -307,46 +352,57 @@ export default function InteractiveNewsRow() {
           </form>
         </DialogContent>
       </Dialog>
+
       <Dialog
         open={viewingNews !== null}
         onOpenChange={(open) => {
           if (!open) {
-            setViewingNews(null)
-            setIsEditing(false)
+            setViewingNews(null);
+            setIsEditing(false);
           }
         }}
       >
-        <DialogContent className="sm:max-w-[400px]">
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{isEditing ? "Edit News" : viewingNews?.name}</DialogTitle>
+            <DialogTitle>
+              {isEditing ? "Edit News" : viewingNews?.title}
+            </DialogTitle>
           </DialogHeader>
           {viewingNews && !isEditing && (
             <div className="space-y-4">
               <img
-                src={viewingNews.imageUrl || "/placeholder.svg"}
-                alt={viewingNews.name}
+                src={
+                  viewingNews.images && viewingNews.images[0]
+                    ? viewingNews.images[0].path
+                    : ""
+                }
+                alt={viewingNews.title}
                 className="w-full h-48 object-cover rounded-md"
               />
-              <p className="text-sm text-gray-600">{viewingNews.description}</p>
-              <p className="text-sm text-gray-500 flex items-center">
-                <Calendar className="w-4 h-4 mr-2" />
-                {viewingNews.date || <span className="text-red-500">Date not set</span>}
+              <p className="text-sm text-gray-600">
+                {viewingNews.description}
               </p>
               <p className="text-sm text-gray-500 flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
-                {viewingNews.time}
+                {viewingNews.date || (
+                  <span className="text-red-500">Date not set</span>
+                )}
               </p>
               <p className="text-sm text-gray-500 flex items-center">
-                <Calendar className="w-4 h-4 mr-2" />
-                {viewingNews.venue}
+                <Clock className="w-4 h-4 mr-2" />
+                {viewingNews.time || <span className="text-red-500">Time not set</span>}
+              </p>
+              <p className="text-sm text-gray-500 flex items-center">
+                <MapPin className="w-4 h-4 mr-2" />
+                {viewingNews.venue || <span className="text-red-500">Venue not set</span>}
               </p>
             </div>
           )}
           {isEditing && (
             <form
               onSubmit={(e) => {
-                e.preventDefault()
-                saveEdit()
+                e.preventDefault();
+                saveEdit();
               }}
               className="space-y-4"
             >
@@ -355,7 +411,9 @@ export default function InteractiveNewsRow() {
                 <Input
                   id="editNewsName"
                   value={newNews.title}
-                  onChange={(e) => setNewNews({ ...newNews, title: e.target.value })}
+                  onChange={(e) =>
+                    setNewNews({ ...newNews, title: e.target.value })
+                  }
                   placeholder="Enter news name"
                   required
                 />
@@ -381,7 +439,9 @@ export default function InteractiveNewsRow() {
                   id="editNewsDate"
                   type="date"
                   value={newNews.date}
-                  onChange={(e) => setNewNews({ ...newNews, date: e.target.value })}
+                  onChange={(e) =>
+                    setNewNews({ ...newNews, date: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -391,7 +451,7 @@ export default function InteractiveNewsRow() {
                   id="editNewsTime"
                   type="time"
                   value={newNews.time}
-                  onChange={(e) => setNewNews({ ...newNews, time: e.target.value })}
+                  onChange={(e) => setNewNews({...newNews, time: e.target.value})}
                   required
                 />
               </div>
@@ -400,31 +460,32 @@ export default function InteractiveNewsRow() {
                 <Input
                   id="editNewsVenue"
                   value={newNews.venue}
-                  onChange={(e) => setNewNews({ ...newNews, venue: e.target.value })}
-                  placeholder="Enter venue"
+                  onChange={(e) => setNewNews({...newNews, venue: e.target.value})}
+                  placeholder="Enter news venue"
                   required
                 />
               </div>
+
               <div>
                 <Label htmlFor="editNewsImage">News Image</Label>
-                <Input
+                {/* <Input
                   id="editNewsImage"
                   type="file"
                   accept="image/*"
                   onChange={(e) => {
-                    const file = e.target.files?.[0]
+                    const file = e.target.files?.[0];
                     if (file) {
-                      const reader = new FileReader()
+                      const reader = new FileReader();
                       reader.onloadend = () => {
                         setNewNews({
                           ...newNews,
                           images: reader.result as string,
-                        })
-                      }
-                      reader.readAsDataURL(file)
+                        });
+                      };
+                      reader.readAsDataURL(file);
                     }
                   }}
-                />
+                /> */}
               </div>
             </form>
           )}
@@ -447,6 +508,5 @@ export default function InteractiveNewsRow() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
-
