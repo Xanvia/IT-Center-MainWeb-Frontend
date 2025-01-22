@@ -154,7 +154,6 @@ export default function InteractiveProjectRow() {
   };
 
   //saveEdit
-
   const saveEdit = async () => {
     if (
       viewingProject &&
@@ -163,15 +162,13 @@ export default function InteractiveProjectRow() {
       newProject.date
     ) {
       const updatedProject = {
-        ...viewingProject,
-        ...newProject,
-        images: newProject.images || viewingProject.images,
+        title: newProject.title,
+        description: newProject.description,
+        date: newProject.date,
+        images: newProject.images.map((image) => image.path),
       };
 
-      console.log(updatedProject);
-
       try {
-        // Send PUT request to server
         const response = await Axios.put(
           `/contents/${viewingProject.id}`,
           updatedProject,
@@ -191,8 +188,13 @@ export default function InteractiveProjectRow() {
         );
         setViewingProject(savedProject);
         setIsEditing(false);
+        toast({ description: "Project updated successfully" });
       } catch (error) {
         console.error("Error while updating project:", error);
+        toast({
+          description: "Failed to update project",
+          variant: "destructive",
+        });
       }
     }
   };
@@ -471,24 +473,39 @@ export default function InteractiveProjectRow() {
               </div>
               <div>
                 <Label htmlFor="editProjectImage">Project Image</Label>
-                {/* <Input
-                  id="editProjectImage"
+                <div className="flex m-1 space-x-2 overflow-auto">
+                  {newProject.images.map((image, index) => (
+                    <div key={index} className="relative ">
+                      <img
+                        src={image.path}
+                        alt={`image:${index}`}
+                        className="h-20"
+                      />
+                      <div className="absolute top-0 right-1">
+                        <p
+                          className=" text-red-500 cursor-pointer text-sm font-bold"
+                          onClick={() =>
+                            setNewProject((prev) => ({
+                              ...prev,
+                              images: prev.images.filter(
+                                (img) => img.id !== image.id
+                              ),
+                            }))
+                          }
+                        >
+                          x
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <Input
+                  id="image"
+                  name="image"
                   type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setNewProject({
-                          ...newProject,
-                          images: reader.result as string,
-                        });
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                /> */}
+                  onChange={handleImageChange}
+                  multiple
+                />
               </div>
             </form>
           )}
@@ -501,8 +518,12 @@ export default function InteractiveProjectRow() {
             )}
             {isEditing && (
               <div className="flex space-x-2">
-                <Button onClick={saveEdit}>Save Changes</Button>
-                <Button variant="outline" onClick={() => setIsEditing(false)}>
+                <Button type="submit">Save Changes</Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsEditing(false)}
+                >
                   Cancel
                 </Button>
               </div>
