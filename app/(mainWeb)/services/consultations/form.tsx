@@ -8,7 +8,7 @@ import { CustomAlert } from "../../components/forms/CustomeAlert";
 export default function ReqServicesForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [service, setService] = useState("");
+  const [serviceType, setServiceType] = useState("");
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -20,7 +20,7 @@ export default function ReqServicesForm() {
     setIsSubmitting(true);
 
     // Form validation
-    if (!name || !email || !service || !description) {
+    if (!name || !email || !serviceType || !description) {
       setAlertMessage("Please fill in all fields");
       setAlertType("error");
       setShowAlert(true);
@@ -28,16 +28,15 @@ export default function ReqServicesForm() {
       return;
     }
 
-    // Format the description as requested
-    const formattedDescription = `(${name}) : (${service}) : (${description})`;
-
     const payload = {
+      name,
       email,
-      description: formattedDescription,
+      serviceType,
+      description,
     };
 
     try {
-      const response = await axios.post("/feedbacks", payload, {
+      const response = await axios.post("/feedbacks/consultation", payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -51,7 +50,7 @@ export default function ReqServicesForm() {
       // Reset form fields
       setName("");
       setEmail("");
-      setService("");
+      setServiceType("");
       setDescription("");
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -91,8 +90,8 @@ export default function ReqServicesForm() {
         <div className="py-4">
           <select
             className="select select-bordered w-full"
-            value={service}
-            onChange={(e) => setService(e.target.value)}
+            value={serviceType}
+            onChange={(e) => setServiceType(e.target.value)}
             required
           >
             <option value="" disabled>

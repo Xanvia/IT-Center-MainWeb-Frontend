@@ -1,5 +1,6 @@
 import React from "react";
 import ReqServicesForm from "./form";
+import { introductionPara, services, serviceTypes } from "./pageData";
 
 const Home: React.FC = () => {
   return (
@@ -18,39 +19,22 @@ const Home: React.FC = () => {
             className="rounded-box shadow-md"
           />
         </figure>
-        <p className="text-center m-10">
-          Information Technology Center established in 2004 to provide ICT
-          related services to the university community. We have expanded our
-          service beyond the university domain by providing consultation for the
-          organizations, institutes or personals who needs to use information
-          technology in achieving their business objectives.
-        </p>
-        <h2 className="text-base text-center pt-10">OUR SERVICES</h2>
+        <p className="text-center m-10">{introductionPara}</p>
+        <h2 className="text-xl text-center pt-10">OUR SERVICES</h2>
         <div className="grid md:grid-cols-4 sm:grid-cols-2 xs:grid-row gap-4 m-8 justify-center pb-10">
-          <div className="bg-slate-100 rounded-box mx-6 shadow-md border-1 border-blue-950 hover:bg-cyan-100">
-            <p className="text-center justify-center p-3 mx-4">
-              Identifying Business Needs
-            </p>
-          </div>
-          <div className="bg-slate-100 rounded-box mx-6 shadow-md border-1 border-blue-950 hover:bg-cyan-100">
-            <p className="text-center justify-center p-3 mx-4">
-              Designing & Implementing IT Solutions
-            </p>
-          </div>
-          <div className="bg-slate-100 rounded-box mx-6 shadow-md border-1 border-blue-950 hover:bg-cyan-100">
-            <p className="text-center justify-center p-3 mx-4">
-              Training Employees on How to use IT Systems
-            </p>
-          </div>
-          <div className="bg-slate-100 rounded-box mx-6 shadow-md border-1 border-blue-950 hover:bg-cyan-100">
-            <p className="text-center justify-center p-3 mx-4">
-              Providing Support for IT Systems
-            </p>
-          </div>
+          {services.map((item: serviceTypes) => (
+            <div className="bg-slate-100 rounded-box mx-6 shadow-md border-1 border-black hover:bg-maroon hover:text-white">
+              <p className="text-center justify-center p-3 mx-4">
+                {item.description}
+              </p>
+            </div>
+          ))}
         </div>
 
         <div className=" border-1 m-14 rounded-box bg-slate-300 shadow-lg p-14">
-          <h2 className="text-base pb-10">REQUESTING SERVICES</h2>
+          <h1 className=" text-xl pb-10 font-semibold">
+            Requesting Service Form
+          </h1>
           <ReqServicesForm />
         </div>
       </div>
