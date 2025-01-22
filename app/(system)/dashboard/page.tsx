@@ -1,9 +1,10 @@
 import React from "react";
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { Card, CardBody, CardFooter } from "@nextui-org/react";
 import Link from "next/link";
 import { shortcuts } from "@/constants/dashboardShortcuts";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/config/nextAuth";
+import Image from "next/image";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -40,11 +41,11 @@ export default async function Home() {
           <Link key={shortcut.name} href={shortcut.href} passHref>
             <Card isPressable className="border-none w-full h-full">
               <Image
-                src={shortcut.visual}
+                src={shortcut.visual || "/common/default.jpg"}
                 alt={`${shortcut.name} illustration`}
                 className="object-cover object-center contrast-75 brightness-90 w-full h-40"
-                height={400}
-                width={400}
+                height={500}
+                width={500}
               />
               <CardFooter className="flex-col items-center p-4">
                 <shortcut.icon className="w-8 h-8 mb-2" />
