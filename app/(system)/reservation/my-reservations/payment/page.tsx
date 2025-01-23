@@ -33,7 +33,7 @@ const PaymentPage = () => {
       console.log("Recaptcha Token: ", token);
       const response = await Axios.post("/payment/initiate", {
         recaptchaToken: token,
-        recordId: "fb150d72-9322-49a1-afe4-d1ccee9064ac", // Replace with dynamic amount
+        recordId: "a5c23a8d-19cb-4e27-a151-c8dac9f02b3c",
         type: "RESERVE",
       });
 
