@@ -24,6 +24,16 @@ import Axios from "@/config/axios";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { getAbsoluteImageUrl } from "@/utils/common";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { toast } from "@/hooks/use-toast";
 
 // Types
 type RequestState =
@@ -38,6 +48,7 @@ type Student = {
   email: string;
   profileImage: string;
   grade: string;
+  batch: string;
   status: RequestState;
   studentId: string;
 };
@@ -52,6 +63,9 @@ export default function AdminDashboard() {
   const [selectedCourse, setSelectedCourse] = useState(courses[0]);
   const [selectedTab, setSelectedTab] = useState<RequestState>("PENDING");
   const [loading, setLoading] = useState(false);
+  const [batches, setBatches] = useState<string[]>([]);
+  const [selectedBatch, setSelectedBatch] = useState("");
+  const [isNewBatch, setIsNewBatch] = useState(false);
 
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -87,13 +101,18 @@ export default function AdminDashboard() {
       );
       setSelectedCourse((prevCourse) => ({
         ...prevCourse,
-
         students: prevCourse.students.map((student) =>
           student.id === studentId ? { ...student, status: newStatus } : student
         ),
       }));
+      toast({
+        description: "Student status updated successfully",
+      });
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        description: "Failed to update student status",
+      });
     } finally {
       setLoading(false);
     }
@@ -133,9 +152,15 @@ export default function AdminDashboard() {
             student.id === studentId ? { ...student, grade: newGrade } : student
           ),
         }));
+        toast({
+          description: "Student grade updated successfully",
+        });
       }
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        description: "Failed to update student grade",
+      });
     } finally {
       setLoading(false);
     }
@@ -164,14 +189,144 @@ export default function AdminDashboard() {
           (student) => student.id !== studentId
         ),
       }));
+      toast({
+        description: "Student removed successfully",
+      });
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        description: "Failed to remove student",
+      });
     }
   };
 
   const filteredStudents = selectedCourse?.students.filter(
     (student) => student.status === selectedTab
   );
+
+  async function approveAll() {
+    if (!selectedBatch) {
+      toast({
+        variant: "destructive",
+        description: "Please select a batch first",
+      });
+      return;
+    }
+    try {
+      setLoading(true);
+
+      await Axios.put(
+        `/registration-records/all/approve`,
+        {
+          courseId: selectedCourse.courseId,
+          status: "PENDING",
+          newStatus: "NOT-PAID",
+          batch: selectedBatch,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+
+      // Update local state
+      setCourses((prevCourses) =>
+        prevCourses.map((course) => ({
+          ...course,
+          students: course.students.map((student) =>
+            student.status === "PENDING"
+              ? { ...student, status: "ENROLLED", batch: selectedBatch }
+              : student
+          ),
+        }))
+      );
+
+      setSelectedCourse((prevCourse) => ({
+        ...prevCourse,
+        students: prevCourse.students.map((student) =>
+          student.status === "PENDING"
+            ? { ...student, status: "ENROLLED", batch: selectedBatch }
+            : student
+        ),
+      }));
+
+      // Reset batch selection
+      setSelectedBatch("");
+      setIsNewBatch(false);
+      toast({
+        description: "All students approved successfully",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: "Failed to approve students",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function completeAll() {
+    if (!selectedBatch) {
+      toast({
+        variant: "destructive",
+        description: "Please select a batch first",
+      });
+      return;
+    }
+    try {
+      setLoading(true);
+
+      await Axios.put(
+        `/registration-records/all/complete`,
+        {
+          courseId: selectedCourse.courseId,
+          status: "ENROLLED",
+          newStatus: "COMPLETED",
+          batch: selectedBatch,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+
+      // Update local state
+      setCourses((prevCourses) =>
+        prevCourses.map((course) => ({
+          ...course,
+          students: course.students.map((student) =>
+            student.status === "ENROLLED" && student.batch === selectedBatch
+              ? { ...student, status: "COMPLETED" }
+              : student
+          ),
+        }))
+      );
+
+      setSelectedCourse((prevCourse) => ({
+        ...prevCourse,
+        students: prevCourse.students.map((student) =>
+          student.status === "ENROLLED" && student.batch === selectedBatch
+            ? { ...student, status: "COMPLETED" }
+            : student
+        ),
+      }));
+
+      setSelectedBatch("");
+      toast({
+        description: "All students marked as completed successfully",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: "Failed to complete All students",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (!session) return;
@@ -182,15 +337,25 @@ export default function AdminDashboard() {
             Authorization: `Bearer ${session?.access_token}`,
           },
         });
-        const data = await response.data;
+        const data: Course[] = await response.data;
         console.log(data);
         setCourses(data);
+
+        // set batches
+        const batchesList = data.map((course) =>
+          course.students.map((student) => student.batch)
+        );
+        const uniqueBatches = [...new Set(batchesList.flat())].filter(Boolean);
+        setBatches(uniqueBatches);
 
         if (data.length > 0) {
           setSelectedCourse(data[0]); // default selected first course
         }
       } catch (error) {
-        console.log(error);
+        toast({
+          variant: "destructive",
+          description: "Something went wrong!",
+        });
       }
     };
 
@@ -251,9 +416,170 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="w-4/5">
-            <h2 className="text-lg font-semibold mb-5">
-              {selectedCourse?.courseName}
-            </h2>
+            <div className="flex justify-between  ">
+              <h2 className="text-lg font-semibold mb-5">
+                {selectedCourse?.courseName}
+              </h2>
+              {selectedTab === "PENDING" && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size={"sm"} variant="outline" onClick={() => {}}>
+                      Approve All
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Are you Sure?</DialogTitle>
+                    </DialogHeader>
+                    <div>
+                      <p className="text-sm">
+                        Are you sure you want to approve all the students?
+                      </p>
+                      {/* Input to get batch before approve with create new batch option */}
+                      <div className="mt-4">
+                        {isNewBatch ? (
+                          <input
+                            type="text"
+                            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                            placeholder="Enter new batch name"
+                            value={selectedBatch}
+                            onChange={(e) => setSelectedBatch(e.target.value)}
+                          />
+                        ) : (
+                          <Select
+                            value={selectedBatch}
+                            onValueChange={(value) => {
+                              if (value === "new") {
+                                setIsNewBatch(true);
+                                setSelectedBatch("");
+                              } else {
+                                setSelectedBatch(value);
+                              }
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Batch" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {batches.map((batch) => (
+                                <SelectItem
+                                  className="cursor-pointer  hover:bg-slate-200"
+                                  key={batch}
+                                  value={batch}
+                                >
+                                  {batch}
+                                </SelectItem>
+                              ))}
+                              <SelectItem
+                                className="cursor-pointer hover:bg-slate-200"
+                                value="new"
+                              >
+                                + Add New Batch
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        )}
+                      </div>
+                      <div className="flex justify-end gap-4 mt-4">
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button
+                              onClick={() => {
+                                approveAll();
+                              }}
+                              type="submit"
+                              className="bg-red-600"
+                            >
+                              Approve All
+                            </Button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <Button
+                              onClick={() => {
+                                setIsNewBatch(false);
+                              }}
+                              type="submit"
+                            >
+                              Cancel
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              )}
+              {selectedTab === "ENROLLED" && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size={"sm"} variant="outline" onClick={() => {}}>
+                      Complete All
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Are you Sure?</DialogTitle>
+                    </DialogHeader>
+                    <div>
+                      <p className="text-sm">
+                        Are you sure you want to complete all the students for
+                        the following batch?
+                      </p>
+                      {/* Input to get batch before approve with create new batch option */}
+                      <div className="mt-4">
+                        <Select
+                          value={selectedBatch}
+                          onValueChange={(value) => {
+                            if (value === "new") {
+                              setIsNewBatch(true);
+                              setSelectedBatch("");
+                            } else {
+                              setSelectedBatch(value);
+                            }
+                          }}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Batch" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {batches.map((batch) => (
+                              <SelectItem
+                                className="cursor-pointer  hover:bg-slate-200"
+                                key={batch}
+                                value={batch}
+                              >
+                                {batch}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex justify-end gap-4 mt-4">
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button
+                              onClick={() => {
+                                completeAll();
+                              }}
+                              type="submit"
+                              className="bg-red-600"
+                            >
+                              Complete All
+                            </Button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <Button onClick={() => {}} type="submit">
+                              Cancel
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </div>
+
             <Tabs
               value={selectedTab}
               onValueChange={(value) => setSelectedTab(value as RequestState)}
@@ -272,6 +598,10 @@ export default function AdminDashboard() {
                       <TableHead>Index</TableHead>
                       <TableHead>Profile</TableHead>
                       <TableHead>Name</TableHead>
+                      {selectedTab !== "PENDING" &&
+                        selectedTab !== "REJECTED" && (
+                          <TableHead>Batch</TableHead>
+                        )}
                       <TableHead>Email</TableHead>
                       <TableHead>Grade</TableHead>
                       <TableHead>Status</TableHead>
@@ -297,6 +627,10 @@ export default function AdminDashboard() {
                           ></Avatar>
                         </TableCell>
                         <TableCell>{student.name}</TableCell>
+                        {selectedTab !== "PENDING" &&
+                          selectedTab !== "REJECTED" && (
+                            <TableCell>{student.batch}</TableCell>
+                          )}
                         <TableCell>{student.email}</TableCell>
                         <TableCell>
                           <Select
