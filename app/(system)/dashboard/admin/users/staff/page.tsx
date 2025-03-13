@@ -283,8 +283,14 @@ const StaffPage: React.FC = () => {
           },
         });
         const data = await response.data;
+        const staffList = response.data.sort((a: any, b: any) => {
+          const extNoA = a.staffProfile?.extNo.match(/\d+/)?.[0] || "0";
+          const extNoB = b.staffProfile?.extNo.match(/\d+/)?.[0] || "0";
+          return Number(extNoA) - Number(extNoB);
+        });
+
         console.log(data);
-        setStaffList(data);
+        setStaffList(staffList);
       } catch (error) {
         console.log(error);
       }

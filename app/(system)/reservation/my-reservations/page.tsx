@@ -13,13 +13,17 @@ import { Button } from "@/components/ui/button";
 import { ReservationRequest, ReservationStatus } from "@/utils/types";
 import Axios from "@/config/axios";
 import { useSession } from "next-auth/react";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function ReservationsPage() {
   const { data: session } = useSession();
   const [reservations, setReservations] = useState<ReservationRequest[]>([]);
+  const router = useRouter();
 
   const handlePayment = (id: string) => {
     console.log(`Processing payment for reservation ${id}`);
+    router.push("/reservation/my-reservations/payment");
     // Here you would typically integrate with a payment gateway
   };
 
@@ -33,8 +37,13 @@ export default function ReservationsPage() {
       });
 
       setReservations(reservations.filter((res) => res.id !== id));
+      toast({ description: "Reservation deleted successfully." });
     } catch (error) {
       console.error("Failed to delete reservation", error);
+      toast({
+        description: "Failed to delete reservation.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -98,7 +107,7 @@ export default function ReservationsPage() {
                       {reservation.eventName}
                     </div>
                     <div className="text-sm text-gray-600">
-                      {reservation.reservation.name}
+                      {reservation.reservation?.name}
                     </div>
                   </div>
                 </TableCell>

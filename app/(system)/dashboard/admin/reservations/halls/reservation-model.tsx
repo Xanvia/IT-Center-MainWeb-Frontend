@@ -148,7 +148,7 @@ export default function ReservationModal({
   };
 
   return (
-    <div className="fixed top-0 bottom-0 right-0 left-20 bg-black bg-opacity-50 flex justify-center items-center overflow-y-auto z-10">
+    <div className="fixed top-0 bottom-0 right-0 left-28 bg-black bg-opacity-50 flex justify-center items-center overflow-y-auto z-10">
       <div className="bg-white p-6 rounded-lg w-full max-w-4xl m-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">
@@ -266,7 +266,7 @@ export default function ReservationModal({
 
                 <div className="flex m-1 space-x-2 overflow-auto">
                   {formData.images.map((image, index) => (
-                    <div className="relative ">
+                    <div key={index} className="relative ">
                       <img
                         src={image}
                         alt={`image:${index}`}

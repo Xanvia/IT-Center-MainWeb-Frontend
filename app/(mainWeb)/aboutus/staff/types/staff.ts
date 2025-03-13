@@ -1,32 +1,51 @@
 export interface StaffMember {
   id: string
-  displayName: string
-  title: string
-  designation: string
-  nominal: string
-  extNo: string
-  requestBy: string
-  emails: string[]
-  telephones: {
-    
-      id: string,
-      phoneNumber: string
-  
-  }[]
+        email: string
+        name: string
+        role: string
+        image: string
+        staffProfile: {
+            id: string
+            title: string
+            designation: string
+            extNo: string
+            emails:
+                {
+                    id: string
+                    email: string
+                }[],
+            telephones:
+                {
+                    id: string
+                    phoneNumber: string
+                }[]
+        }
   category?: "ADMINISTRATION" | "INSTRUCTORS" | "OTHER STAFF"
-  image:string
 }
-  
-/*
+
+/**
 {
         id: string
-        displayName: string
-        title: string
-        designation: string
-        nominal: string
-        extNo: string
-        requestBy: string
-        emails: string[]
-        telephones: string[]
+        email: string
+        name: string
+        role: string
+        image: string
+        staffProfile: {
+            id: string
+            title: string
+            designation: string
+            extNo: string
+            emails:
+                {
+                    id: string
+                    email: string
+                }[],
+            telephones:
+                {
+                    id: string
+                    phoneNumber: string
+                }[]
+        }
     }
-* */  
+ */
+  

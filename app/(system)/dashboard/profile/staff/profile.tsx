@@ -1,7 +1,5 @@
 "use client";
 
-import { Avatar } from "@heroui/avatar";
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -20,10 +18,13 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Axios from "@/config/axios";
 import { toast } from "@/hooks/use-toast";
+import { delay, getAbsoluteImageUrl } from "@/utils/common";
+import { Avatar } from "@nextui-org/react";
 
 export default function StaffProfile() {
   const [staffData, setStaffData] = useState<staffProfileData>({
     email: "",
+    image: "",
     staffProfile: {
       id: "",
       displayName: "",
@@ -38,17 +39,6 @@ export default function StaffProfile() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  // // Delete a reservation
-  // const handleDeleteReservation = async (id: string) => {
-  //   try {
-  //     await Axios.delete(`/reservations/${id}`);
-  //     toast({ description: "Reservation deleted successfully" });
-  //   } catch (error) {
-  //     toast({ description: "Failed to delete reservation" });
-  //   }
-  //   setReservations(reservations.filter((r) => r.id !== id));
-  // };
-
   useEffect(() => {
     if (!session?.access_token) {
       return;
@@ -62,20 +52,52 @@ export default function StaffProfile() {
       });
       const data = await response.data;
       setStaffData(data);
+      setPhotoPreview(getAbsoluteImageUrl(data.image) || "");
     };
     fetchStaffProfile();
   }, [session]);
 
-  const [profileImage, setProfileImage] = useState<string>("/placeholder.svg");
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  // upload profile image
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files;
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append("user", file[0]);
+      try {
+        //axios use instead of fetch
+        const response = await Axios.post("/user/upload-img", formData, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        const imageUrl = response.data.path;
+        console.log(imageUrl);
+        if (imageUrl) {
+          toast({
+            title: "Success",
+            description: "Image uploaded successfully!",
+          });
+          await delay(3000);
+          setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with your request.",
+          });
+        }
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
+      }
     }
   };
 
@@ -167,10 +189,14 @@ export default function StaffProfile() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Save the updated staff profile
     try {
-      Axios.put(`/staff-profile/${staffData?.staffProfile.id}`, staffData, {
+      const data: any = staffData?.staffProfile;
+      // make emails and phonenumbers as string array
+      data.emails = data.emails.map((email: any) => email.email);
+      data.telephones = data.telephones.map((phone: any) => phone.phoneNumber);
+      await Axios.patch(`/staff-profile/${data.id}`, data, {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
         },
@@ -180,7 +206,7 @@ export default function StaffProfile() {
         description: "User has updeted succesfully!",
       });
     } catch (error) {
-      console.error("Error updeting student:", error);
+      console.error("Error updeting staff:", error);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -190,7 +216,7 @@ export default function StaffProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-[80vh] bg-white">
       <div className="h-48 bg-[#862727]" />
 
       <div className="max-w-3xl mx-auto px-4 -mt-24">
@@ -198,10 +224,10 @@ export default function StaffProfile() {
           <CardContent className="p-6">
             <div className="flex flex-col items-center -mt-20 mb-8">
               <div className="relative">
-                <Avatar className="w-32 h-32 border-4 border-white shadow-lg">
-                  <AvatarImage src={profileImage} />
-                  <AvatarFallback>SK</AvatarFallback>
-                </Avatar>
+                <Avatar
+                  src={photoPreview || "/users/generalUser.png"}
+                  className="w-32 h-32 border-4 border-white shadow-lg"
+                ></Avatar>
                 <label
                   htmlFor="profile-upload"
                   className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-lg cursor-pointer"

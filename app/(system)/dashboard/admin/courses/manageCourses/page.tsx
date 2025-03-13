@@ -10,6 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
@@ -77,7 +86,9 @@ export default function AdminCourses() {
   if (status === "loading") {
     return (
       <div className="p-4">
-        <h1 className="text-2xl font-semibold mb-4">Manage Courses</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-600">
+          Manage Courses
+        </h1>
         {/* centered loading spinner */}
         <div className="flex justify-center items-center h-20 animate-spin">
           <Loader />
@@ -90,7 +101,9 @@ export default function AdminCourses() {
   ) {
     return (
       <div className="p-4">
-        <h1 className="text-2xl font-semibold mb-4">Manage Courses</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-600">
+          Manage Courses
+        </h1>
         <div className="grid gap-4">
           <p>Sorry :( You are not Authorized to view this page.</p>
         </div>
@@ -100,7 +113,9 @@ export default function AdminCourses() {
     return (
       <div className="container mx-auto p-4">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Manage Courses</h1>
+          <h1 className="text-2xl font-bold mb-6 text-gray-600">
+            Manage Courses
+          </h1>
           <Button className="bg-maroon" onClick={() => setIsModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Add Course
           </Button>
@@ -151,12 +166,42 @@ export default function AdminCourses() {
                 >
                   Edit
                 </Button>
-                <Button
-                  className="bg-red-700"
-                  onClick={() => handleDeleteCourse(course.id)}
-                >
-                  Delete
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="bg-red-700">Delete</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Delete Course</DialogTitle>
+                    </DialogHeader>
+                    <div>
+                      <p className="text-sm">
+                        Are you sure you want to delete this course?
+                      </p>
+                      <p className="text-sm text-gray-500 mt-2">
+                        {course.courseName}
+                      </p>
+                      <div className="flex justify-end gap-4 mt-4">
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button
+                              onClick={() => handleDeleteCourse(course.id)}
+                              type="submit"
+                              className="bg-red-600"
+                            >
+                              Delete
+                            </Button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <Button type="button" variant="outline">
+                              Cancel
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </CardFooter>
             </Card>
           ))}

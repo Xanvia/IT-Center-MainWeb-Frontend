@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { Link, Input } from "@nextui-org/react";
 import { Search } from "lucide-react";
-import CourseCard, { Course } from "./courseCardMain";
 import { toast } from "@/hooks/use-toast";
+import CourseCard, { Course } from "./courseCardMain";
 
 export default function CourseRegistration() {
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
@@ -50,7 +50,7 @@ export default function CourseRegistration() {
   }, [searchQuery, courses]);
 
   return (
-    <div className="container mx-auto lg:px-28 py-8 md:px-4 md:py-4">
+    <div className=" mx-auto lg:px-28 py-8 md:px-4 md:py-4">
       <h1 className="text-2xl font-bold my-4 mt-4 text-center text-maroon">
         Course Overview
       </h1>
@@ -69,13 +69,13 @@ export default function CourseRegistration() {
         </div>
 
         {/* Display Courses */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 px-2">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
           {filteredCourses.map((course) => (
             <Link
               href={`/dashboard/courseRegistration/${course.id}`}
               key={course.id}
             >
-              <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+              <div className="max-w-sm rounded-lg  border border-gray-200 hover:shadow-md transition-shadow duration-300">
                 <CourseCard
                   image={course.images[0]}
                   courseCode={course.courseCode}

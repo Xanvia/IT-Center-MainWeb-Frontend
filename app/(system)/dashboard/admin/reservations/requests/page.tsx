@@ -34,6 +34,18 @@ import {
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
 import { toast } from "@/hooks/use-toast";
+import { getAbsoluteImageUrl } from "@/utils/common";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 // Types
 type RequestState = "PENDING" | "PAYMENT" | "CONFIRMED" | "REJECTED" | "DONE";
@@ -260,7 +272,7 @@ const ReservationsPage: React.FC = () => {
                       <TableCell>
                         <div className="flex gap-1">
                           <Avatar
-                            src={reservation.user?.image}
+                            src={getAbsoluteImageUrl(reservation.user?.image)}
                             name={reservation.user?.name}
                           />
                           <div>
@@ -458,10 +470,34 @@ const ReservationsPage: React.FC = () => {
                             </DialogContent>
                           </Dialog>
 
-                          <Trash2
-                            onClick={() => deleteReservation(reservation.id)}
-                            className="h-5 w-5 text-red-600 cursor-pointer"
-                          />
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Trash2 className="h-5 w-5 text-red-600 cursor-pointer" />
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently delete record and remove from
+                                  servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className="bg-red-600"
+                                  onClick={() =>
+                                    deleteReservation(reservation.id)
+                                  }
+                                >
+                                  Continue
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
 
                           <Dialog>
                             <DialogTrigger asChild>

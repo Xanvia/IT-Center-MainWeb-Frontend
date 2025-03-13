@@ -56,7 +56,7 @@ export default function Home() {
               Welcome to IT Center
             </h1>
             <h3 className="mt-3 ml-1 text-gray-300 font-sans md:text-xl  sm:text-lg text-base">
-              Empowering your digital journey
+              Empowering your Digital Journey...
             </h3>
           </div>
           <div className="mt-10 md:space-x-5">
@@ -145,9 +145,9 @@ export default function Home() {
         <button>
           <div className="flex items-center justify-center group">
             <span className="mr-0 text-2xl text-red-800 hover:text-red-700">
-              more courses
+              More courses
             </span>
-            <Link href={"/dashboard/courseRegistration"}>
+            <Link href={"/courses"}>
               <PiArrowRightBold
                 color="maroon"
                 className="group-hover:translate-x-2 duration-300 text-xl"
@@ -182,6 +182,7 @@ export default function Home() {
                 Action Plan Tracking system{" "}
               </span>
               <span className="from-red-950 to-red-700 bg-clip-text text-transparent bg-gradient-to-t">
+                {" "}
                 for the University of Peradeniya
               </span>
             </h1>
@@ -191,12 +192,14 @@ export default function Home() {
             <button className="mt-10 flex w-full sm:justify-normal justify-center">
               <div className="flex items-center justify-center text-xl group">
                 <span className="mr-0 text-xl text-red-800 hover:text-red-700">
-                  more projects
+                  More projects
                 </span>
-                <PiArrowRightBold
-                  color="maroon"
-                  className="group-hover:translate-x-1 duration-300"
-                />
+                <Link href={"/services/projects"}>
+                  <PiArrowRightBold
+                    color="maroon"
+                    className="group-hover:translate-x-1 duration-300"
+                  />
+                </Link>
               </div>
             </button>
           </div>
@@ -228,12 +231,14 @@ export default function Home() {
         <button>
           <div className="flex items-center justify-center group mb-10">
             <span className="mr-0 sm:text-2xl text-xl text-red-800 hover:text-red-700">
-              more news
+              More news
             </span>
-            <PiArrowRightBold
-              color="maroon"
-              className="group-hover:translate-x-2 duration-300 text-xl"
-            />
+            <Link href={"/news"}>
+              <PiArrowRightBold
+                color="maroon"
+                className="group-hover:translate-x-2 duration-300 text-xl"
+              />
+            </Link>
           </div>
         </button>
       </div>

@@ -36,6 +36,8 @@ interface EnrollmentRequest {
   course: {
     id: string;
     courseName: string;
+    courseCode: string;
+    fees: number;
   };
 }
 
@@ -44,7 +46,7 @@ export default function EnrollmentRequestsTable() {
     EnrollmentRequest[]
   >([]);
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     if (!session) return;
@@ -70,7 +72,11 @@ export default function EnrollmentRequestsTable() {
     // Implement delete logic here
 
     try {
-      await axios.delete(`/registration-records/${id}`);
+      await axios.delete(`/registration-records/${id}`, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
       toast({ description: "Request deleted successfully" });
     } catch (error) {
       toast({ description: "Failed to delete the request" });
@@ -79,30 +85,45 @@ export default function EnrollmentRequestsTable() {
   };
 
   const handlePayment = async (id: string) => {
-    // Implement payment logic here
+    // Implement payment logic
     console.log("Process payment for:", id);
   };
 
-  if (!session) {
+  if (status === "loading") {
     return (
       <div className="p-4">
-        <h1 className="text-2xl font-semibold mb-4">Enrollment Requests</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-600">
+          Enrolled Courses
+        </h1>
         {/* centered loading spinner */}
         <div className="flex justify-center items-center h-20 animate-spin">
           <Loader />
         </div>
       </div>
     );
+  } else if (session?.user?.role === "USER") {
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-6 text-gray-600">
+          Enrolled Courses
+        </h1>
+        <div className="grid gap-4">
+          <p>Sorry :( You are not Authorized to view this page.</p>
+        </div>
+      </div>
+    );
   } else
     return (
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Enrollment Requests</h1>
-
+        <h1 className="text-2xl font-bold mb-6 text-gray-600">
+          Enrolled Courses
+        </h1>
         <div className="pt-4">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Index</TableHead>
+                <TableHead>Course Code</TableHead>
                 <TableHead>Course Name</TableHead>
                 <TableHead>Request State</TableHead>
                 <TableHead>Result</TableHead>
@@ -114,6 +135,7 @@ export default function EnrollmentRequestsTable() {
               {enrollmentRequests.map((request, index) => (
                 <TableRow key={request.id}>
                   <TableCell>{index + 1}</TableCell>
+                  <TableCell>{request.course.courseCode}</TableCell>
                   <TableCell>{request.course.courseName}</TableCell>
                   <TableCell>{request.status}</TableCell>
                   <TableCell>

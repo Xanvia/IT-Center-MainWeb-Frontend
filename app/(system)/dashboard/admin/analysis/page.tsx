@@ -31,12 +31,22 @@ import {
 import { useSession } from "next-auth/react";
 import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
+import { co } from "@fullcalendar/core/internal-common";
 
 type faqData = {
   id: string;
   email: string;
   description: string;
   isRead: false;
+  createdDate: string;
+};
+
+type consultationData = {
+  id: string;
+  name: string;
+  serviceType: string;
+  email: string;
+  description: string;
   createdDate: string;
 };
 
@@ -67,6 +77,7 @@ export default function AdminAnalysis() {
   const { data: session, status } = useSession();
 
   const [faqData, setFaqData] = useState<faqData[]>([]);
+  const [consultation, setConsultation] = useState<consultationData[]>([]);
 
   const [userData, setUserData] = useState<userData>({
     students: 0,
@@ -126,6 +137,21 @@ export default function AdminAnalysis() {
     } catch (error) {
       console.error("Error deleting FAQ:", error);
       toast({ description: "An error occurred while deleting the FAQ" });
+    }
+  };
+
+  const deleteConst = async (id: string) => {
+    try {
+      await Axios.delete(`/feedbacks/consultation/${id}`, {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+      setConsultation((prevData) => prevData.filter((faq) => faq.id !== id));
+      toast({ description: "Consultation Record deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting record:", error);
+      toast({ description: "An error occurred while deleting the record" });
     }
   };
 
@@ -214,10 +240,24 @@ export default function AdminAnalysis() {
       }
     };
 
+    const getConstData = async () => {
+      try {
+        const response = await Axios.get("/feedbacks/consultation", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+        setConsultation(response.data);
+      } catch (error) {
+        console.error("Error fetching record data:", error);
+      }
+    };
+
     if (session) {
       getUserData();
       getCourseData();
       getFAQData();
+      getConstData();
     }
   }, [session]);
 
@@ -370,6 +410,46 @@ export default function AdminAnalysis() {
                       <p> Sender: {faq.email}</p>
                       <Trash2
                         onClick={() => deleteFAQ(faq.id)}
+                        className="h-4 w-4 text-red-600 cursor-pointer"
+                      />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </CardContent>
+        </Card>
+
+        {/* Consultation Section */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>
+              Consultation Requests{" "}
+              <span className="text-gray-500 pl-1">
+                ({consultation.length})
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Accordion type="single" collapsible className="w-full">
+              {consultation.map((con, index) => (
+                <AccordionItem value={`item-${index}`} key={index}>
+                  <AccordionTrigger>
+                    <div>
+                      <p>Sender: {con.email}</p>
+                      <p className="text-maroon">
+                        Service Type: {con.serviceType}
+                      </p>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="font-bold"> {con.name}</p>
+                        <p className="text-gray-500">{con.description}</p>
+                      </div>
+                      <Trash2
+                        onClick={() => deleteConst(con.id)}
                         className="h-4 w-4 text-red-600 cursor-pointer"
                       />
                     </div>
