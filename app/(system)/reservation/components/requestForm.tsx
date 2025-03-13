@@ -450,6 +450,11 @@ export function ReservationForm({
                   the IT Center. condition applied*
                 </p>
 
+                <p className="text-xs italic text-yellow-600">
+                  If you are from Acedamic staff UOP, this amount will not be
+                  charged. Please contact IT-Center after confirmation.
+                </p>
+
                 <DialogFooter>
                   <Button
                     disabled={loading}

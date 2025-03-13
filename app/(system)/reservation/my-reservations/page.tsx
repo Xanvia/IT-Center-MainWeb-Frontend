@@ -107,7 +107,7 @@ export default function ReservationsPage() {
                       {reservation.eventName}
                     </div>
                     <div className="text-sm text-gray-600">
-                      {reservation.reservation.name}
+                      {reservation.reservation?.name}
                     </div>
                   </div>
                 </TableCell>
