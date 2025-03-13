@@ -1,4 +1,4 @@
-import Bot from "./components/bots/bot";
+import dynamic from "next/dynamic";
 import { Carousel } from "./components/sections/carousal";
 import { MainLink } from "./components/sections/mainLink";
 import { PiArrowRightBold } from "react-icons/pi";
@@ -15,6 +15,11 @@ import {
   projectDetails,
 } from "@/constants/homePageData";
 import CourseSection from "./components/sections/courseSection";
+
+const BotClient = dynamic(
+  () => import("./components/clientComponents/BotClient"),
+  { ssr: false }
+);
 
 export default function Home() {
   return (
@@ -47,7 +52,7 @@ export default function Home() {
 
         {/* bot animation  */}
         <div className="hidden sm:block">
-          <Bot />
+          <BotClient />
         </div>
       </div>
 
