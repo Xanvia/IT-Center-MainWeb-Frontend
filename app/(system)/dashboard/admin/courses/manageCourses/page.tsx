@@ -10,6 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
@@ -157,12 +166,42 @@ export default function AdminCourses() {
                 >
                   Edit
                 </Button>
-                <Button
-                  className="bg-red-700"
-                  onClick={() => handleDeleteCourse(course.id)}
-                >
-                  Delete
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="bg-red-700">Delete</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Delete Course</DialogTitle>
+                    </DialogHeader>
+                    <div>
+                      <p className="text-sm">
+                        Are you sure you want to delete this course?
+                      </p>
+                      <p className="text-sm text-gray-500 mt-2">
+                        {course.courseName}
+                      </p>
+                      <div className="flex justify-end gap-4 mt-4">
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button
+                              onClick={() => handleDeleteCourse(course.id)}
+                              type="submit"
+                              className="bg-red-600"
+                            >
+                              Delete
+                            </Button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <Button type="button" variant="outline">
+                              Cancel
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </CardFooter>
             </Card>
           ))}

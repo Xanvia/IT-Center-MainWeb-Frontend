@@ -683,14 +683,46 @@ export default function AdminDashboard() {
                           </Select>
                         </TableCell>
                         <TableCell>
-                          <Button
-                            variant="destructive"
-                            className="bg-red-700"
-                            size="icon"
-                            onClick={() => deleteStudent(student.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                variant="destructive"
+                                className="bg-red-700"
+                                size="icon"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>Confirmation</DialogTitle>
+                              </DialogHeader>
+                              <div>
+                                <p className="text-sm">
+                                  Are you sure you want to delete this student
+                                  record?
+                                </p>
+                                <div className="flex justify-end gap-4 mt-4">
+                                  <DialogFooter>
+                                    <DialogClose asChild>
+                                      <Button
+                                        onClick={() =>
+                                          deleteStudent(student.id)
+                                        }
+                                        type="submit"
+                                        className="bg-red-600"
+                                      >
+                                        Delete
+                                      </Button>
+                                    </DialogClose>
+                                    <DialogClose asChild>
+                                      <Button type="button">Cancel</Button>
+                                    </DialogClose>
+                                  </DialogFooter>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </TableCell>
                       </TableRow>
                     ))}
