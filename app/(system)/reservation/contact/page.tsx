@@ -1,4 +1,5 @@
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { FaFileDownload } from "react-icons/fa";
 
 export default function ContactPage() {
   return (
@@ -54,6 +55,30 @@ export default function ContactPage() {
                   className="text-yellow-600 hover:text-yellow-800 transition-colors"
                 >
                   info@ceit.pdn.ac.lk
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Manual Reservation Form Section */}
+          <div className="md:col-span-2 bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow mt-4">
+            <div className="flex items-start space-x-4">
+              <FaFileDownload className="text-2xl text-yellow-500 mt-1" />
+              <div>
+                <h2 className="text-xl font-semibold mb-3">
+                  Manual Reservation Form
+                </h2>
+                <p className="text-gray-600 mb-3">
+                  If you prefer to submit your reservation manually, you can
+                  download the form here.
+                </p>
+                <a
+                  href="/forms/reservation-form.pdf"
+                  download
+                  className="inline-flex items-center space-x-2 bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors"
+                >
+                  <FaFileDownload />
+                  <span>Download Reservation Form</span>
                 </a>
               </div>
             </div>
