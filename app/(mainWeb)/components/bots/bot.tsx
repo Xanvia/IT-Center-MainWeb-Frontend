@@ -1,10 +1,14 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { Player } from "@lottiefiles/react-lottie-player";
 
-const Bot = dynamic(() => import("./botComponent"), {
-  ssr: false,
-  loading: () => <div className="w-[500px] h-[500px]"></div>,
-});
-
-export default Bot;
+export default function Bot() {
+  return (
+    <Player
+      autoplay
+      loop
+      src="/animation/bot.json"
+      style={{ height: "350px", width: "350px" }}
+    ></Player>
+  );
+}

@@ -37,6 +37,10 @@ export default function NavBar() {
   // unroll dropdowns by clicking outside
   useEffect(() => {
     let handler = (e: MouseEvent) => {
+      if (typeof document === "undefined") {
+        return null; // Skip during SSR
+      }
+
       if (
         !servicesDropdownRef.current?.contains(e.target as Node) &&
         !aboutDropdownRef.current?.contains(e.target as Node)
