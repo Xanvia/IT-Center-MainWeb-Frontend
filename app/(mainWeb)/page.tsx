@@ -25,25 +25,31 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col overflow-hidden">
       {/* header body */}
-      <div className="bg-maroon h-80 flex flex-row justify-between">
+      <div className="h-96 flex flex-row justify-between" 
+      style={{
+        backgroundImage: "url('http://www.ceit.pdn.ac.lk/images/2.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}>
         <div className="md:ml-20 md:mt-20 ml-5 mt-10">
           <div>
             <h1 className="md:text-5xl sm:text-3xl text-3xl text-white font-rubik">
               Welcome to IT Center
             </h1>
-            <h3 className="mt-3 ml-1 text-gray-300 font-sans md:text-xl  sm:text-lg text-base">
-              Empowering your Digital Journey...
+            <h3 className="mt-3 ml-1 text-yellow-100 font-sans md:text-xl font-semibold sm:text-lg text-base">
+              Empowering your 
+              <span className="text-black"> Digital</span> Journey...
             </h3>
           </div>
           <div className="mt-10 md:space-x-5">
             <Link href={"/dashboard"}>
-              <button className="bg-yellow-200 hover:bg-maroon text-gray-900 hover:text-yellow-200 font-bold py-2 px-4 border border-yellow-200 rounded-lg sm:inline-block block w-52 md:w-auto">
+              <button className="bg-yellow-100 hover:bg-maroon text-maroon border-maroon hover:text-yellow-200 font-bold py-2 px-4 border hover:border-yellow-200 rounded-lg sm:inline-block block w-52 md:w-auto">
                 Dashboard
               </button>
             </Link>
 
             <Link href={"/dashboard/courseRegistration"}>
-              <button className="bg-transparent hover:bg-yellow-200 text-yellow-200 font-semibold hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
+              <button className="backdrop-blur-md hover:bg-yellow-200 text-yellow-200 font-bold hover:border-maroon hover:text-maroon py-2 px-4 border border-yellow-200 hover:border-transparent rounded-lg my-5 md:my-0 w-52 md:w-auto">
                 Course Registration
               </button>
             </Link>
