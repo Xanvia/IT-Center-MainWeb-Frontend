@@ -91,7 +91,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <Image
             width={75}
             height={75}
-            src={"/logo/pera-logo.png"}
+            src={"/logo/ceitlogo.png"}
             alt="Logo"
             priority
           />
