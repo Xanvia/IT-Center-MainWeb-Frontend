@@ -24,7 +24,7 @@ const BotClient = dynamic(
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col overflow-hidden">
-      {/* header body */}
+      {/* header   body */}
       <div className=" w-full">
         <div
           className="h-[21rem] flex flex-row justify-between relative bg-cover bg-center"
