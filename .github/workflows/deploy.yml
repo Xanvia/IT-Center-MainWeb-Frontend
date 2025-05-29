@@ -1,0 +1,19 @@
+name: Deploy App on VM
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build and deploy with Docker Compose
+        run: |
+          docker compose down
+          docker compose up --build -d
