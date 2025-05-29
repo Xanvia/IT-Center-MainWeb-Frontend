@@ -21,7 +21,7 @@ const Contact = () => {
         <p className="text-sm">
           Extention Line - 2900
           <br />
-          info@ceit.pdn.ac.lk/ info.ceit@gs.pdn.ac.lk
+          info@ceit.pdn.ac.lk
           <br />
           www.ceit.pdn.ac.lk
         </p>
