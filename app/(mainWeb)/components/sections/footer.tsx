@@ -68,7 +68,7 @@ const Footer = () => {
         <Contact />
       </div>
       <p className="footer footer-center py-3 text-gray-500 text-sm bg-darkmaroon">
-        Copyright © 2024 - All right reserved by Information Technology Center -
+        Copyright © 2025 - All right reserved by Information Technology Center -
         Developed by @Xanvia
       </p>
     </footer>
