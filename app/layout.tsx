@@ -21,7 +21,7 @@ const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "IT Center | UOP",
-  description: "University of Peradeniya",
+  description: "University of Peradeniya ",
 };
 
 export default function RootLayout({
