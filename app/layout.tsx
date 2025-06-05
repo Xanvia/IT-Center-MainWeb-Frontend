@@ -20,8 +20,8 @@ const rubik = Rubik({
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "IT Center | UOP",
-  description: "University of Peradeniya ",
+  title: "IT Center - UOP",
+  description: "University of Peradeniya",
 };
 
 export default function RootLayout({
