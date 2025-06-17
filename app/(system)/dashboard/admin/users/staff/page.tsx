@@ -404,6 +404,16 @@ const StaffPage: React.FC = () => {
                                   onChange={(e) => setNewExtNo(e.target.value)}
                                   className="w-full p-2 border border-gray-300 rounded-md"
                                 />
+                                <p className="text-xs text-gray-500">
+                                  Ext No should start with ST and be between
+                                  100-300 level:
+                                  <br />• 100 level: Administration (higher
+                                  priority)
+                                  <br />• 200 level: Instructors
+                                  <br />• 300 level: Other staff
+                                  <br />
+                                  Lower numbers indicate higher priority.
+                                </p>
                               </div>
                               <DialogFooter>
                                 <DialogClose asChild>
@@ -603,6 +613,16 @@ const StaffPage: React.FC = () => {
                                   onChange={(e) => setNewExtNo(e.target.value)}
                                   className="w-full p-2 border border-gray-300 rounded-md"
                                 />
+                                <p className="text-xs text-gray-500">
+                                  Ext No should start with ST and be between
+                                  100-300 level:
+                                  <br />• 100 level: Administration (higher
+                                  priority)
+                                  <br />• 200 level: Instructors
+                                  <br />• 300 level: Other staff
+                                  <br />
+                                  Lower numbers indicate higher priority.
+                                </p>
                               </div>
                               <DialogFooter>
                                 <DialogClose asChild>
