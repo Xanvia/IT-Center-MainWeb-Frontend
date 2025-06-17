@@ -1,28 +1,29 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { Mail, Phone } from "lucide-react"
-import type { StaffMember } from "../types/staff"
+import { Card, CardContent } from "@/components/ui/card";
+import { Mail, Phone } from "lucide-react";
+import type { StaffMember } from "../types/staff";
 import { getAbsoluteImageUrl } from "@/utils/common";
 import { Avatar } from "@nextui-org/react";
 
 interface StaffCardProps {
-  staff: StaffMember
+  staff: StaffMember;
 }
 
 export function StaffCard({ staff }: StaffCardProps) {
-
-
   return (
     <Card className="w-full max-w-sm">
       <CardContent className="p-6">
         <div className="flex flex-col gap-4">
           <div className="flex gap-4">
-            <Avatar className="h-16 w-16"
-            src={getAbsoluteImageUrl(staff.image)}
-            fallback={<AvatarFallback>{staff.name}</AvatarFallback>}>
-            </Avatar>
+            <Avatar
+              className="h-16 w-16"
+              src={getAbsoluteImageUrl(staff.image)}
+              name={staff.name.charAt(0)}
+              showFallback
+            />
             <div className="flex items-center space-x-1">
-              <h3 className="text-sm font-medium text-muted-foreground">{staff.staffProfile.title}.</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">
+                {staff.staffProfile.title}.
+              </h3>
               <p className="font-semibold">{staff.name}</p>
               {/* <p className="text-sm text-muted-foreground">{staff.nominal}</p> */}
             </div>
@@ -32,21 +33,21 @@ export function StaffCard({ staff }: StaffCardProps) {
               <Mail className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm">{staff.email}</span>
             </div>
-            {staff.staffProfile.telephones.map((number, index)=> (
+            {staff.staffProfile.telephones.map((number, index) => (
               <div key={index} className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm">{number.phoneNumber}</span>
               </div>
             ))}
             {/* console.log("Telephones:"); */}
-
           </div>
           <div className="text-right">
-            <span className="text-sm text-muted-foreground">{staff.staffProfile.extNo}</span>
+            <span className="text-sm text-muted-foreground">
+              {staff.staffProfile.extNo}
+            </span>
           </div>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-
