@@ -15,6 +15,5 @@ jobs:
 
       - name: Build and deploy with Docker Compose
         run: |
-          cd ..
-          docker compose down
-          docker compose up --build -d
+          docker compose -f ../docker-compose.yml down
+          docker compose -f ../docker-compose.yml up --build -d
