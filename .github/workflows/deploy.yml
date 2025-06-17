@@ -13,7 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Copy latest frontend code to real deployment directory
+        run: |
+          rsync -a --delete ./ /home/itcweb/frontend/
+
       - name: Build and deploy with Docker Compose
         run: |
-          docker compose -f ../docker-compose.yml down
-          docker compose -f ../docker-compose.yml up --build -d
+          cd /home/itcweb/
+          docker compose down
+          docker compose up --build -d
