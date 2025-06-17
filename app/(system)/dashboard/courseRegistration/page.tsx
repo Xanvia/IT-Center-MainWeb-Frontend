@@ -44,9 +44,11 @@ export default function CourseRegistration() {
           setCourses(data); // Save original courses
           setFilteredCourses(data); // Initially display all courses
         } else {
+          console.log("result", result);
           toast({ description: "Failed to fetch courses" });
         }
       } catch (error) {
+        console.log(error);
         toast({ description: "Failed to fetch courses" });
       }
     };
