@@ -52,8 +52,9 @@ export const authOptions: NextAuthOptions = {
 
         const user = await res.json();
         if (!res.ok) {
+          console.log("Error in auth", user);
           if (user.field == "password") throw Error("password");
-          else throw Error("email");
+          else throw Error(user.message);
           // return null;
         }
 

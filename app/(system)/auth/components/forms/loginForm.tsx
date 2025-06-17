@@ -32,8 +32,8 @@ export default function LoginForm() {
           setError("password", { message: "Password does not match!" });
           return;
         }
-        setError("email", { message: "User not found!" });
-        console.log(response);
+        setError("email", { message: response.error });
+        console.log("Error in auth", response.error);
       } else {
         router.push("/dashboard");
       }
@@ -45,8 +45,9 @@ export default function LoginForm() {
     }
   };
 
-  const onSubmitForm: SubmitHandler<loginSchemaType> = (data) =>
+  const onSubmitForm: SubmitHandler<loginSchemaType> = (data) => {
     submitData(data);
+  };
   return (
     <form onSubmit={handleSubmit(onSubmitForm)}>
       <div className="mb-4">
