@@ -5,24 +5,33 @@ import Axios from "./axios";
 
 async function refreshToken(token: JWT) {
   try {
-    const res = await Axios.post(
-      "/auth/refresh",
-      {},
+    const res = await fetch(
+      `${process.env.INTERNAL_BACKEND_URL}/auth/refresh`,
       {
+        method: "POST",
         headers: {
           authorization: `Bearer ${token.refresh_token}`,
-          "Content-type": "application/json",
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({}),
       }
     );
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Refresh token failed:", errorData);
+      throw new Error(errorData?.message || "Token refresh failed");
+    }
+
+    const data = await res.json();
     console.log("refreshed");
-    const response = await res.data;
     return {
       ...token,
-      ...response,
+      ...data,
     };
   } catch (error: any) {
-    console.log("Refresh token error!!!", error.response.data);
+    console.error("Refresh token error!!!", error);
+    return token; // optionally return original token to avoid breaking the session
   }
 }
 
@@ -36,7 +45,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`,
+          `${process.env.INTERNAL_BACKEND_URL}/auth/signin`,
           {
             method: "POST",
             body: JSON.stringify({
