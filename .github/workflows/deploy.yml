@@ -15,7 +15,7 @@ jobs:
 
       - name: Copy latest frontend code to real deployment directory
         run: |
-          rsync -a --delete ./ /home/itcweb/frontend/
+          rsync -a --delete --exclude='.env' ./ /home/itcweb/frontend/
 
       - name: Build and deploy with Docker Compose
         run: |
