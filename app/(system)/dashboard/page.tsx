@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
 import Link from "next/link";
-import { shortcuts } from "@/constants/dashboardShortcuts";
+import { shortcuts } from "@/CONSTANT_DATA/dashboardShortcuts";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/config/nextAuth";
 import Image from "next/image";

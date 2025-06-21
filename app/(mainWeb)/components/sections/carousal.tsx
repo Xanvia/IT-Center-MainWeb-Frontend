@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
-import { Carousalimages } from "@/constants/homePageData";
+import { Carousalimages } from "@/CONSTANT_DATA/homePageData";
 
 interface ArrowProps {
   onClick?: () => void;

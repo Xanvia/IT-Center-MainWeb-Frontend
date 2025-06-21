@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { loginSchema, loginSchemaType } from "../schema/loginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputWithIcon } from "../feilds/InputwithIcon";
-import { EmailIcon, LockIcon } from "@/constants/icons";
+import { EmailIcon, LockIcon } from "@/CONSTANT_DATA/icons";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 

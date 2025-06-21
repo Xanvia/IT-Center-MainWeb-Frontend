@@ -8,7 +8,7 @@ import {
 } from "../schema/registerFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputWithIcon } from "../feilds/InputwithIcon";
-import { EmailIcon, LockIcon, UserIcon } from "@/constants/icons";
+import { EmailIcon, LockIcon, UserIcon } from "@/CONSTANT_DATA/icons";
 import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {

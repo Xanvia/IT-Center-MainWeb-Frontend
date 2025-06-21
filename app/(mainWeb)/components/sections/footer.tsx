@@ -8,7 +8,7 @@ import {
   footerLinksTypes,
   footerOurLinks,
   footerOtherLinks,
-} from "@/constants/mainLinksData";
+} from "@/CONSTANT_DATA/mainLinksData";
 
 const Footer = () => {
   return (

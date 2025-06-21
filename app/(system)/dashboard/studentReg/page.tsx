@@ -5,7 +5,7 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { StudentFormData, formSchema } from "@/schemas/studentRegSchema";
-import { DefaultStudentRegValues } from "@/constants/studentRegDefault";
+import { DefaultStudentRegValues } from "@/CONSTANT_DATA/studentRegDefault";
 import axios from "@/config/axios";
 import { signOut, useSession } from "next-auth/react";
 import { delay } from "@/utils/common";
