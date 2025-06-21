@@ -1,6 +1,6 @@
 "use client";
 
-import { mainLinkData, mainLinkDataTypes } from "@/CONSTANT_DATA/mainLinksData";
+import { mainLinkData, mainLinkDataTypes } from "@/CONSTANT_DATA/B.LinksData";
 import { Player } from "@lottiefiles/react-lottie-player";
 import Image from "next/image";
 import Link from "next/link";

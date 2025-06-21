@@ -8,7 +8,7 @@ import {
   footerLinksTypes,
   footerOurLinks,
   footerOtherLinks,
-} from "@/CONSTANT_DATA/mainLinksData";
+} from "@/CONSTANT_DATA/B.LinksData";
 
 const Footer = () => {
   return (
