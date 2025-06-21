@@ -1,24 +1,7 @@
+import { qA } from "@/CONSTANT_DATA/C.FAQ";
 import React from "react";
 
 export default function FAQ() {
-  interface QAItem {
-    q: string;
-    a: string;
-  }
-  const qA: QAItem[] = [
-    {
-      q: "What services do you offer at the IT center?",
-      a: "We offer a wide range of services including network setup, software development, cyber-security solutions, and IT consulting.",
-    },
-    {
-      q: "How can I stay updated on the latest news and events?",
-      a: "You can visit our news and events section on our website.",
-    },
-    {
-      q: "Do we have any restriction when reserving a lab?",
-      a: "No restrictions. Anyone can request! However the acceptance of a reservation will depend upon many factors...",
-    },
-  ];
   return (
     <div className="bg-lightergray p-6 rounded-lg shadow-lg relative z-10">
       <h2 className="text-2xl font-semibold mb-4">Common Questions</h2>
