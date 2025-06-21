@@ -1,7 +1,7 @@
 import React from "react";
 import Directers from "./components/directors";
 import Pictures from "./components/pictures";
-import { aboutus, aboutUs } from "./data";
+import { aboutus, aboutUs } from "../../../../CONSTANT_DATA/E.AboutUs";
 
 const Home: React.FC = () => {
   return (

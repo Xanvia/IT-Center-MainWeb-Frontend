@@ -24,6 +24,7 @@ CONSTANT_DATA >
     B --> All links including main 4 links and footer links
     C --> FAQ section
     D --> statistic section
+    E --> About Us section static data, Past Directors data
 
 Slider Image update
 

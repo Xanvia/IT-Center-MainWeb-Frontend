@@ -1,44 +1,7 @@
 import React from "react";
 import { Card, CardHeader, Image } from "@nextui-org/react";
 import { ImMail2, ImPhone } from "react-icons/im";
-
-const cardData = [
-  {
-    id: 1,
-    imgSrc: "/aboutus/directors.jpg",
-    name: "Dr. Upul Jayasinghe",
-    edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
-    mail: "director.ceit@gs.pdn.ac.lk",
-    mobno1: "+94 81 2384848/ ",
-    mobno2: "+94 81 2392901",
-  },
-  {
-    id: 2,
-    imgSrc: "/aboutus/directors.jpg",
-    name: "Dr. Upul Jayasinghe",
-    edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
-    mail: "director.ceit@gs.pdn.ac.lk",
-    mobno1: "+94 81 2384848",
-  },
-  {
-    id: 3,
-    imgSrc: "/aboutus/directors.jpg",
-    name: "Dr. Upul Jayasinghe",
-    edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
-    mail: "director.ceit@gs.pdn.ac.lk",
-    mobno1: "+94 81 2384848/ ",
-    mobno2: "+94 81 2392901",
-  },
-  {
-    id: 4,
-    imgSrc: "/aboutus/directors.jpg",
-    name: "Dr. Upul Jayasinghe",
-    edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
-    mail: "director.ceit@gs.pdn.ac.lk",
-    mobno1: "+94 81 2384848/ ",
-    mobno2: "+94 81 2392901",
-  },
-];
+import { pastDirectors } from "@/CONSTANT_DATA/E.AboutUs";
 
 export default function App() {
   return (
@@ -48,7 +11,7 @@ export default function App() {
       </div>
       <div className="flex justify-center items-center gap-6 p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {cardData.map((card) => (
+          {pastDirectors.map((card) => (
             <Card
               key={card.id}
               className="w-[400px] bg-gray-200 shadow-md rounded-lg"
