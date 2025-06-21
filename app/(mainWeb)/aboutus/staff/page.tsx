@@ -42,17 +42,21 @@ export default function StaffsPage() {
   const orderedCategories = ["ADMINISTRATION", "INSTRUCTORS", "OTHER STAFF"];
 
   return (
-    <div className="container mx-auto py-12 space-y-12">
-      {orderedCategories.map(
-        (category) =>
-          sortedGroupedStaff[category] && (
-            <StaffSection
-              key={category}
-              title={category}
-              staff={sortedGroupedStaff[category]}
-            />
-          )
-      )}
+    <div className="bg-gradient-to-b from-slate-50 to-white">
+      <div className="container mx-auto py-16 space-y-20">
+        <div className="space-y-24">
+          {orderedCategories.map(
+            (category) =>
+              sortedGroupedStaff[category] && (
+                <StaffSection
+                  key={category}
+                  title={category}
+                  staff={sortedGroupedStaff[category]}
+                />
+              )
+          )}
+        </div>
+      </div>
     </div>
   );
 }
