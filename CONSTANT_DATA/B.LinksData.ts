@@ -98,3 +98,9 @@ export const footerOtherLinks: footerLinksTypes[] = [
     id: "View in Map",
   },
 ];
+
+export const footerContact = {
+  mobile1: "+94 (0) 81 2384848",
+  mobile2: "+94 (0) 81 2392070",
+  mobile3: "+94 (0) 81 2392900",
+};

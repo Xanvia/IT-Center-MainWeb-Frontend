@@ -1,3 +1,4 @@
+import { footerContact } from "@/CONSTANT_DATA/B.LinksData";
 import React from "react";
 
 const Contact = () => {
@@ -9,11 +10,11 @@ const Contact = () => {
         </div>
         <div className="col-span-2 md:text-right translate-y-4">
           <p className="text-sm">
-            +94 (0) 81 2384848
+            {footerContact.mobile1}
             <br />
-            +94 (0) 81 2392070
+            {footerContact.mobile2}
             <br />
-            +94 (0) 81 2392900
+            {footerContact.mobile3 && footerContact.mobile3}
           </p>
         </div>
       </div>
