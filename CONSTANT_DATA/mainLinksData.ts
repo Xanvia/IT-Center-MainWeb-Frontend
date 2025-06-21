@@ -34,7 +34,7 @@ export const mainLinkData: mainLinkDataTypes[] = [
   {
     url: "/opened",
     id: "O P E N E D",
-    imgsrc: "/animation/opened.json",
+    imgsrc: "/logo/logo-opened.jpg",
     options: { scale: "150%" },
     description:
       "An online platform delivering flexible, self-paced courses to learn IT skills anytime, anywhere with certified instructors.",
@@ -62,10 +62,10 @@ export const footerServicesLinks: footerLinksTypes[] = [
   {
     url: "/news",
     id: "News",
-  }
-] 
+  },
+];
 
-export const footerOurLinks : footerLinksTypes[] = [
+export const footerOurLinks: footerLinksTypes[] = [
   {
     url: "/reservation",
     id: "Reservations",
@@ -81,10 +81,10 @@ export const footerOurLinks : footerLinksTypes[] = [
   {
     url: "/aboutus/staff",
     id: "Staff",
-  }
-]
+  },
+];
 
-export const footerOtherLinks : footerLinksTypes[] = [
+export const footerOtherLinks: footerLinksTypes[] = [
   {
     url: "/auth/signin",
     id: "Login",
@@ -96,5 +96,5 @@ export const footerOtherLinks : footerLinksTypes[] = [
   {
     url: "https://www.google.com/maps?ll=7.260475,80.608469&z=12&t=m&hl=en-US&gl=US&mapclient=embed",
     id: "View in Map",
-  }
-]
+  },
+];

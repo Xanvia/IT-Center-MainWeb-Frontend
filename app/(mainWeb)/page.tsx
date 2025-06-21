@@ -13,7 +13,7 @@ import {
   aboutServicePara,
   introductionPara,
   projectDetails,
-} from "@/CONSTANT_DATA/homePageData";
+} from "@/CONSTANT_DATA/A.homePageData";
 import CourseSection from "./components/sections/courseSection";
 
 const BotClient = dynamic(

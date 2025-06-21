@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { Course } from "@/utils/types";
-import { aboutCoursePara } from "@/CONSTANT_DATA/homePageData";
+import { aboutCoursePara } from "@/CONSTANT_DATA/A.homePageData";
 import Link from "next/link";
 import CourseCard from "../../courses/courseCardMain";
 import { PiArrowRightBold } from "react-icons/pi";
