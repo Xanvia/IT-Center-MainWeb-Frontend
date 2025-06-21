@@ -2,10 +2,15 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import HNewsCard from "../cards/hNewsCard";
+import Axios from "@/config/axios";
+import { News } from "../../news/page";
+import { useRouter } from "next/navigation";
 
 const NewsCards = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isScrolledToEnd, setIsScrolledToEnd] = useState(false);
+  const [news, setNews] = useState<News[]>([]);
+  const router = useRouter();
 
   const handleScroll = () => {
     const scrollContainer = scrollContainerRef.current;
@@ -16,6 +21,16 @@ const NewsCards = () => {
   };
 
   useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const result = await Axios.get("/contents/news");
+        setNews(result.data);
+      } catch (error) {
+        console.error("Failed to fetch news:", error);
+      }
+    };
+    fetchNews();
+
     const scrollContainer = scrollContainerRef.current;
     if (scrollContainer) {
       scrollContainer.addEventListener("scroll", handleScroll);
@@ -35,18 +50,32 @@ const NewsCards = () => {
         className="flex overflow-x-scroll space-x-2 lg:justify-between snap-x snap-mandatory scrollbar-hide touch-pan-x"
         ref={scrollContainerRef}
       >
-        <div className="snap-start">
-          <HNewsCard />
-        </div>
-        <div className="snap-start">
-          <HNewsCard />
-        </div>
-        <div className="snap-start">
-          <HNewsCard />
-        </div>
-        <div className="snap-start">
-          <HNewsCard />
-        </div>
+        {news.length > 0 ? (
+          news.slice(0, 4).map((item, index) => (
+            <div
+              key={index}
+              className="snap-start cursor-pointer"
+              onClick={() => router.push(`/news`)}
+            >
+              <HNewsCard news={item} />
+            </div>
+          ))
+        ) : (
+          <>
+            <div className="snap-start">
+              <HNewsCard />
+            </div>
+            <div className="snap-start">
+              <HNewsCard />
+            </div>
+            <div className="snap-start">
+              <HNewsCard />
+            </div>
+            <div className="snap-start">
+              <HNewsCard />
+            </div>
+          </>
+        )}
       </div>
 
       {/* Right shadow */}
