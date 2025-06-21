@@ -12,9 +12,9 @@ import Link from "next/link";
 import {
   aboutServicePara,
   introductionPara,
-  projectDetails,
 } from "@/CONSTANT_DATA/A.homePageData";
 import CourseSection from "./components/sections/courseSection";
+import ProjectSlider from "./components/sections/ProjectSlider";
 
 const BotClient = dynamic(
   () => import("./components/clientComponents/BotClient"),
@@ -110,50 +110,8 @@ export default function Home() {
         <p className="md:m-10 m-3 md:text-xl text-lg md:mx-20 md:mt-5 text-slate-500 text-center">
           {aboutServicePara}
         </p>
-        <div className="sm:grid grid-cols-11 md:my-10 my-6 flex flex-col-reverse justify-center">
-          <div className="md:mt-5 mt-2 md:mr-4 lg:mr-5 col-span-6">
-            <h1 className="md:text-5xl text-3xl font-rubik">
-              <span className="from-red-950 to-red-700 bg-clip-text text-transparent bg-gradient-to-t">
-                Digitized
-              </span>
-              <span className="md:inline-block from-blue-900 to-blue-600 bg-clip-text text-transparent bg-gradient-to-t py-2">
-                {" "}
-                Action Plan Tracking system{" "}
-              </span>
-              <span className="from-red-950 to-red-700 bg-clip-text text-transparent bg-gradient-to-t">
-                {" "}
-                for the University of Peradeniya
-              </span>
-            </h1>
-            <p className="md:mt-10 mt-7 text-justify text-slate-500 font-medium sm:font-normal">
-              {projectDetails}
-            </p>
-            <button className="mt-10 flex w-full sm:justify-normal justify-center">
-              <div className="flex items-center justify-center text-xl group">
-                <span className="mr-0 text-xl text-red-800 hover:text-red-700">
-                  More projects
-                </span>
-                <Link href={"/services/projects"}>
-                  <PiArrowRightBold
-                    color="maroon"
-                    className="group-hover:translate-x-1 duration-300"
-                  />
-                </Link>
-              </div>
-            </button>
-          </div>
-          <div className="sm:m-4 items-center justify-center flex col-span-5 ">
-            <ImageNU
-              radius="sm"
-              isBlurred
-              src={"/image.png"}
-              height={1024}
-              width={1024}
-              alt="Project Image"
-              className="my-12 h-96 object-cover"
-            />
-          </div>
-        </div>
+
+        <ProjectSlider />
       </section>
 
       {/* Rest of the content remains the same */}

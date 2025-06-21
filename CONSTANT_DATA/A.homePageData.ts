@@ -8,6 +8,11 @@ export const aboutServicePara =
   "Our commitment is to deliver exceptional IT services and projects tailored to your requirements. By combining innovation, technical expertise, and client-focused solutions, we ensure optimal outcomes. Whether it’s software, web development, or technical consultancy, we guarantee quality and reliability in every project we undertake.";
 
 export const projectDetails = `Revolutionizing task management, our Digitized Action Plan Tracking System empowers the University of Peradeniya to monitor, update, and evaluate projects effectively. This user-friendly system streamlines workflows, ensures accountability, and enhances productivity by providing real-time updates and advanced tracking capabilities.`;
+
+// Main Slider images
+
+// Either you can add new images or replace with current names
+// Remember to add into this array
 export const Carousalimages = [
   "/Slide/first.png",
   "/Slide/second.png",
