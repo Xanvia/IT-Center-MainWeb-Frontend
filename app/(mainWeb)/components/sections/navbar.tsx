@@ -36,11 +36,11 @@ export default function NavBar() {
 
   // unroll dropdowns by clicking outside
   useEffect(() => {
-    let handler = (e: MouseEvent) => {
-      if (typeof document === "undefined") {
-        return null; // Skip during SSR
-      }
+    if (typeof document === "undefined") {
+      return; // Skip during SSR
+    }
 
+    let handler = (e: MouseEvent) => {
       if (
         !servicesDropdownRef.current?.contains(e.target as Node) &&
         !aboutDropdownRef.current?.contains(e.target as Node)
@@ -49,6 +49,7 @@ export default function NavBar() {
         setShowAboutDropdown(false);
       }
     };
+
     document.addEventListener("mousedown", handler);
     return () => {
       document.removeEventListener("mousedown", handler);

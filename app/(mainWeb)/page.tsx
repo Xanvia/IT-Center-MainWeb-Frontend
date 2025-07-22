@@ -1,6 +1,4 @@
 import dynamic from "next/dynamic";
-import { Carousel } from "./components/sections/carousal";
-import { MainLink } from "./components/sections/mainLink";
 import { PiArrowRightBold } from "react-icons/pi";
 import { Image as ImageNU } from "@nextui-org/react";
 import Image from "next/image";
@@ -18,6 +16,22 @@ import ProjectSlider from "./components/sections/ProjectSlider";
 
 const BotClient = dynamic(
   () => import("./components/clientComponents/BotClient"),
+  { ssr: false }
+);
+
+const Carousel = dynamic(
+  () =>
+    import("./components/sections/carousal").then((mod) => ({
+      default: mod.Carousel,
+    })),
+  { ssr: false }
+);
+
+const MainLink = dynamic(
+  () =>
+    import("./components/sections/mainLink").then((mod) => ({
+      default: mod.MainLink,
+    })),
   { ssr: false }
 );
 
