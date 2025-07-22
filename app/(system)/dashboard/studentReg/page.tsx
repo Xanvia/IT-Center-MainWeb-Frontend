@@ -92,7 +92,7 @@ export default function StudentRegistrationForm() {
         const response = await axios.post("/user/upload-img", formData, {
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
-            "Content-Type": "multipart/form-data",
+            // Remove Content-Type header to let browser set it automatically
           },
         });
         const imageUrl = response.data.path;
@@ -111,10 +111,18 @@ export default function StudentRegistrationForm() {
           });
         }
       } catch (error: any) {
+        console.error("Student registration image upload error:", error);
+        console.error("Error response:", error.response?.data);
+        console.error("Error status:", error.response?.status);
+
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "There was a problem with your request.";
         toast({
           variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: error.message,
+          title: "Upload Failed",
+          description: `Failed to upload image: ${errorMessage}`,
         });
       } finally {
         setLoading(false);
