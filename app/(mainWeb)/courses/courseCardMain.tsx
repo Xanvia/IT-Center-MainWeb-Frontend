@@ -23,7 +23,7 @@ export default function CourseCard({
   startingDate,
 }: CourseCardProps) {
   return (
-    <Card className="w-96 h-[350px] rounded-lg overflow-hidden md:w-80 lg:w-80 xl:w-96">
+    <Card className="w-96 h-[370px] rounded-lg overflow-hidden md:w-80 lg:w-80 xl:w-96">
       <CardHeader className="p-2">
         <div className="w-full h-48 overflow-hidden rounded-sm">
           <img
@@ -33,8 +33,10 @@ export default function CourseCard({
           />
         </div>
       </CardHeader>
+
       <CardBody className="p-4 flex flex-col">
         <h2 className="text-md font-semibold truncate">{code}</h2>
+
         <p className="text-lg font-medium mt-1 mb-2 line-clamp-2">{name}</p>
         {duration && (
           <p className="text-sm text-gray-600 mb-1">Duration: {duration}</p>

@@ -84,6 +84,7 @@ export default function ProjectSlider() {
                           <CardHeader className="p-0 pb-4">
                             <CardTitle className="text-2xl md:text-3xl lg:text-4xl from-blue-900 to-blue-600 bg-clip-text text-transparent bg-gradient-to-t font-bold leading-tight">
                               {project.title}
+                              {project.images[0].path}
                             </CardTitle>
                           </CardHeader>
                           <CardContent className="p-0">
