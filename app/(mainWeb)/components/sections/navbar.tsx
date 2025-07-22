@@ -123,7 +123,7 @@ export default function NavBar() {
                 Courses
               </Link>
             </li>
-            <li className="relative m-6 md:m-4 z-10">
+            <li className="relative m-6 md:m-4 z-20">
               <div ref={servicesDropdownRef}>
                 <div
                   className={` cursor-pointer flex items-center justify-center ${
@@ -190,7 +190,7 @@ export default function NavBar() {
                 News
               </Link>
             </li>
-            <li className="relative m-6 md:m-4 z-10">
+            <li className="relative m-6 md:m-4 z-20">
               <div ref={aboutDropdownRef}>
                 <div
                   className={` cursor-pointer flex items-center justify-center ${

@@ -24,7 +24,7 @@ export const mainLinkData: mainLinkDataTypes[] = [
       "Book IT center labs equipped with state-of-the-art resources for practical sessions, workshops, and personal projects.",
   },
   {
-    url: "/consultation",
+    url: "/services/consultations",
     id: "Consultation",
     imgsrc: "/animation/consultation.json",
     options: { scale: "110%", transform: "translateY(1rem)" },
@@ -32,7 +32,7 @@ export const mainLinkData: mainLinkDataTypes[] = [
       "Provides expert guidance on IT-related topics, career advice, and project development through personalized consultations.",
   },
   {
-    url: "/opened",
+    url: "https://opened.pdn.ac.lk",
     id: "O P E N E D",
     imgsrc: "/logo/logo-opened.jpg",
     options: { scale: "150%" },
