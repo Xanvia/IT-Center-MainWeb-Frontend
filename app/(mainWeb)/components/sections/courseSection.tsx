@@ -61,11 +61,13 @@ export default function CourseSection() {
             href={`/dashboard/courseRegistration/${course.id}`}
             key={course.id}
           >
-            <div className="max-w-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+            <div className="max-w-md rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300 flex flex-col overflow-hidden">
               <CourseCard
                 image={course.images[0]}
                 courseCode={course.courseCode}
                 courseName={course.courseName}
+                duration={course.duration}
+                startingDate={course.startingDate}
                 id={""}
               />
             </div>

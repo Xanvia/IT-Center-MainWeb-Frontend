@@ -11,17 +11,21 @@ interface CourseCardProps {
   image: string;
   courseCode: string;
   courseName: string;
+  duration?: string;
+  startingDate?: string;
 }
 
 export default function CourseCard({
   image,
   courseCode: code,
   courseName: name,
+  duration,
+  startingDate,
 }: CourseCardProps) {
   return (
-    <Card className="w-96 h-[270px] rounded-lg overflow-hidden md:w-80 lg:w-80 xl:w-96">
+    <Card className="w-96 h-[350px] rounded-lg overflow-hidden md:w-80 lg:w-80 xl:w-96">
       <CardHeader className="p-2">
-        <div className="w-full h-40 overflow-hidden rounded-sm">
+        <div className="w-full h-48 overflow-hidden rounded-sm">
           <img
             src={image || "/placeholder.svg"}
             alt={name}
@@ -32,6 +36,14 @@ export default function CourseCard({
       <CardBody className="p-4 flex flex-col">
         <h2 className="text-md font-semibold truncate">{code}</h2>
         <p className="text-lg font-medium mt-1 mb-2 line-clamp-2">{name}</p>
+        {duration && (
+          <p className="text-sm text-gray-600 mb-1">Duration: {duration}</p>
+        )}
+        {startingDate && startingDate !== "Throughout the year" && (
+          <p className="text-sm text-gray-600 mb-1">
+            Starts: {new Date(startingDate).toLocaleDateString()}
+          </p>
+        )}
         <div className="mt-auto"></div>
       </CardBody>
     </Card>

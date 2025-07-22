@@ -30,5 +30,5 @@ Slider Image update
 
     1. add images into public > Slide folder
     2. rename with existing name or rename with slide number "ex: fourth"
-    3. edit B file
-    4. add new image into the array in file B
+    3. edit A file
+    4. add new image into the array in file A
