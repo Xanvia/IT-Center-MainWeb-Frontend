@@ -38,6 +38,7 @@ export default function ReservationModal({
     location: "",
     feeRatePerHour: 0,
   });
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export default function ReservationModal({
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files && files.length > 0) {
+      setIsUploadingImages(true);
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
         formData.append("reservation", files[i]);
@@ -83,6 +85,8 @@ export default function ReservationModal({
       } catch (error) {
         console.error(error);
         toast({ description: "Failed to upload images" });
+      } finally {
+        setIsUploadingImages(false);
       }
     }
   };
@@ -305,8 +309,12 @@ export default function ReservationModal({
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button className="bg-maroon" type="submit">
-              Save
+            <Button
+              className="bg-maroon"
+              type="submit"
+              disabled={isUploadingImages}
+            >
+              {isUploadingImages ? "Uploading..." : "Save"}
             </Button>
           </div>
         </form>
