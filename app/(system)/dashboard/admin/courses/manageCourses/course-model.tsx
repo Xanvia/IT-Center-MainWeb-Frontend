@@ -186,6 +186,9 @@ export default function CourseModal({
                   value={formData.description}
                   onChange={handleChange}
                   required
+                  placeholder="Enter detailed course description..."
+                  rows={6}
+                  className="resize-y min-h-[120px]"
                 />
               </div>
               <div>
@@ -268,6 +271,9 @@ export default function CourseModal({
                   value={formData.audience}
                   onChange={handleChange}
                   required
+                  placeholder="Describe the target audience for this course..."
+                  rows={4}
+                  className="resize-y min-h-[80px]"
                 />
               </div>
 
