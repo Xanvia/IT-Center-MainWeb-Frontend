@@ -27,7 +27,7 @@ export default function CourseCard({
       <CardHeader className="p-2">
         <div className="w-full h-48 overflow-hidden rounded-sm">
           <img
-            src={image || "/placeholder.svg"}
+            src={image || "/placeholder.jpg"}
             alt={name}
             className="w-full h-full object-cover"
           />
