@@ -1,15 +1,10 @@
 // card.tsx
 
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Course } from "@/utils/types";
 
 // Course card interface : Main web pages
-
-export interface Course {
-  id: string;
-  courseCode: string;
-  courseName: string;
-  images: string;
-}
+export type { Course };
 
 interface CourseCardProps {
   id: string;

@@ -7,6 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { Loader, Search } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { sortCoursesByStartingDate } from "@/utils/common";
 
 interface Course {
   id: string;
@@ -40,9 +41,11 @@ export default function CourseRegistration() {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/courses`
         );
         if (result.ok) {
-          const data = await result.json();
-          setCourses(data); // Save original courses
-          setFilteredCourses(data); // Initially display all courses
+          const data: Course[] = await result.json();
+          // Sort courses by starting date with "Throughout the year" first
+          const sortedCourses = sortCoursesByStartingDate(data);
+          setCourses(sortedCourses); // Save original courses
+          setFilteredCourses(sortedCourses); // Initially display all courses
         } else {
           console.log("result", result);
           toast({ description: "Failed to fetch courses" });
@@ -59,15 +62,16 @@ export default function CourseRegistration() {
   // Update displayed courses whenever searchQuery changes
   useEffect(() => {
     if (searchQuery.trim() === "") {
-      // Show all courses when searchQuery is empty
+      // Show all courses when searchQuery is empty (already sorted)
       setFilteredCourses(courses);
     } else {
-      // Filter courses by searchQuery
-      setFilteredCourses(
-        courses.filter((course) =>
-          course.courseName.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+      // Filter courses by searchQuery and maintain sort order
+      const filtered = courses.filter((course) =>
+        course.courseName.toLowerCase().includes(searchQuery.toLowerCase())
       );
+      // Apply sorting to filtered results
+      const sortedFiltered = sortCoursesByStartingDate(filtered);
+      setFilteredCourses(sortedFiltered);
     }
   }, [searchQuery, courses]);
 

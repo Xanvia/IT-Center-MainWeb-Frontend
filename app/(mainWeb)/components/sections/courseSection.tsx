@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { Course } from "@/utils/types";
 import { aboutCoursePara } from "@/CONSTANT_DATA/A.homePageData";
+import { sortCoursesByStartingDate } from "@/utils/common";
 import Link from "next/link";
 import CourseCard from "../../courses/courseCardMain";
 import { PiArrowRightBold } from "react-icons/pi";
@@ -20,8 +21,10 @@ export default function CourseSection() {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/courses`
         );
         if (result.ok) {
-          const data = await result.json();
-          setCourses(data);
+          const data: Course[] = await result.json();
+          // Sort courses by starting date with "Throughout the year" first
+          const sortedCourses = sortCoursesByStartingDate(data);
+          setCourses(sortedCourses);
         } else {
           toast({ description: "Failed to fetch courses" });
         }

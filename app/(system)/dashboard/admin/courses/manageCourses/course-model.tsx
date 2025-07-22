@@ -29,7 +29,7 @@ export default function CourseModal({
     courseCode: "",
     description: "",
     duration: "",
-    registrationDeadline: "",
+    registrationDeadline: "Throughout the year",
     fees: 0,
     audience: "",
     instructor: "",
@@ -203,13 +203,14 @@ export default function CourseModal({
                 />
               </div>
               <div>
-                <Label htmlFor="studentLimit">Student Limit</Label>
+                <Label htmlFor="studentLimit">Student Limit (Optional)</Label>
                 <Input
                   id="studentLimit"
                   name="studentLimit"
                   type="number"
                   value={formData.studentLimit}
                   onChange={handleChange}
+                  placeholder="Leave empty for no limit"
                 />
               </div>
               <div>
@@ -223,44 +224,50 @@ export default function CourseModal({
                 />
               </div>
               <div>
-                <Label htmlFor="duration">Registered Count</Label>
+                <Label htmlFor="registered">Registered Count (Optional)</Label>
                 <Input
                   id="registered"
                   name="registered"
+                  type="number"
                   value={formData.registered}
                   onChange={handleChange}
+                  placeholder="Current number of registered students"
                 />
               </div>
             </div>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="startingDate">Starting Date</Label>
+                <Label htmlFor="startingDate">Starting Date (Optional)</Label>
                 <Input
                   id="startingDate"
                   name="startingDate"
+                  type="date"
                   value={formData.startingDate}
                   onChange={handleChange}
+                  placeholder="Course start date"
                 />
               </div>
               <div>
-                <Label htmlFor="endingDate">Ending Date</Label>
+                <Label htmlFor="endingDate">End Date (Optional)</Label>
                 <Input
                   id="endingDate"
                   name="endingDate"
+                  type="date"
                   value={formData.endingDate}
                   onChange={handleChange}
-                  required
+                  placeholder="Course end date"
                 />
               </div>
               <div>
                 <Label htmlFor="registrationDeadline">
-                  Registration Deadline
+                  Registration Deadline (Optional)
                 </Label>
                 <Input
                   id="registrationDeadline"
                   name="registrationDeadline"
                   value={formData.registrationDeadline}
                   onChange={handleChange}
+                  placeholder="e.g., Throughout the year, or specific date"
                 />
               </div>
               <div>

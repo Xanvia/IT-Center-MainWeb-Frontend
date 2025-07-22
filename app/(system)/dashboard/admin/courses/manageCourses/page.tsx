@@ -25,6 +25,7 @@ import Axios from "@/config/axios";
 import CourseModal from "./course-model";
 import { useSession } from "next-auth/react";
 import { Course } from "@/utils/types";
+import { sortCoursesByStartingDate } from "@/utils/common";
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -32,18 +33,22 @@ export default function AdminCourses() {
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const { data: session, status } = useSession();
 
-  // Add a new reservation
+  // Add a new course
   const handleAddCourse = (newCourse: Course) => {
-    setCourses([...courses, newCourse]);
+    const updatedCourses = [...courses, newCourse];
+    // Sort courses by starting date with "Throughout the year" first
+    const sortedCourses = sortCoursesByStartingDate(updatedCourses);
+    setCourses(sortedCourses);
   };
 
-  // Edit an existing reservation
+  // Edit an existing course
   const handleEditReservation = (updatedCourse: Course) => {
-    setCourses(
-      courses.map((course) =>
-        course.id === updatedCourse.id ? updatedCourse : course
-      )
+    const updatedCourses = courses.map((course) =>
+      course.id === updatedCourse.id ? updatedCourse : course
     );
+    // Sort courses by starting date with "Throughout the year" first
+    const sortedCourses = sortCoursesByStartingDate(updatedCourses);
+    setCourses(sortedCourses);
   };
 
   // Delete a course
@@ -72,9 +77,11 @@ export default function AdminCourses() {
           },
         });
 
-        const data = await result.data;
+        const data: Course[] = await result.data;
         console.log(data);
-        setCourses(data);
+        // Sort courses by starting date with "Throughout the year" first
+        const sortedCourses = sortCoursesByStartingDate(data);
+        setCourses(sortedCourses);
       } catch (error) {
         toast({ description: "Failed to fetch courses" });
       }
