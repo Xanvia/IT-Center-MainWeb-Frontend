@@ -125,7 +125,7 @@ export default function StaffRegistrationForm() {
         const response = await Axios.post("/user/upload-img", formData, {
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
-            // Remove Content-Type header to let browser set it automatically
+            "Content-Type": "multipart/form-data",
           },
         });
         const imageUrl = response.data.path;
