@@ -63,7 +63,11 @@ export default function CourseSection() {
           >
             <div className="max-w-md rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300 flex flex-col overflow-hidden">
               <CourseCard
-                image={course.images[0]}
+                image={
+                  course.images && course.images[0]
+                    ? course.images[0]
+                    : "/placeholder.jpg"
+                }
                 courseCode={course.courseCode}
                 courseName={course.courseName}
                 duration={course.duration}
