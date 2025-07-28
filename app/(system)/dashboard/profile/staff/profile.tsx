@@ -63,16 +63,16 @@ export default function StaffProfile() {
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = event.target.files;
-    if (file) {
+    const files = event.target.files;
+    if (files && files.length > 0) {
       const formData = new FormData();
-      formData.append("user", file[0]);
+      formData.append("user", files[0]);
       try {
         //axios use instead of fetch
         const response = await Axios.post("/user/upload-img", formData, {
           headers: {
             Authorization: `Bearer ${session?.access_token}`,
-            // Remove Content-Type header to let browser set it automatically
+            "Content-Type": "multipart/form-data",
           },
         });
         const imageUrl = response.data.path;
