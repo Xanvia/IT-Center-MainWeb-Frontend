@@ -5,6 +5,12 @@ import Axios from "./axios";
 
 async function refreshToken(token: JWT) {
   try {
+    // Check if refresh token exists
+    if (!token.refresh_token) {
+      console.error("No refresh token available");
+      return { ...token, error: "RefreshTokenMissing" };
+    }
+
     const res = await fetch(
       `${process.env.INTERNAL_BACKEND_URL}/auth/refresh`,
       {
@@ -20,18 +26,31 @@ async function refreshToken(token: JWT) {
     if (!res.ok) {
       const errorData = await res.json();
       console.error("Refresh token failed:", errorData);
+
+      // If refresh token is invalid, mark for re-authentication
+      if (res.status === 401) {
+        return { ...token, error: "RefreshTokenExpired" };
+      }
+
       throw new Error(errorData?.message || "Token refresh failed");
     }
 
     const data = await res.json();
-    console.log("refreshed");
+    console.log("Token refreshed successfully");
+
     return {
       ...token,
       ...data,
+      error: undefined, // Clear any previous errors
     };
   } catch (error: any) {
-    console.error("Refresh token error!!!", error);
-    return token; // optionally return original token to avoid breaking the session
+    console.error("Refresh token error:", error);
+
+    // Return error state to trigger re-authentication
+    return {
+      ...token,
+      error: "RefreshTokenError",
+    };
   }
 }
 
@@ -44,30 +63,34 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const res = await fetch(
-          `${process.env.INTERNAL_BACKEND_URL}/auth/signin`,
-          {
-            method: "POST",
-            body: JSON.stringify({
-              email: credentials?.email,
-              hashedPassword: credentials?.password,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-            mode: "cors",
+        try {
+          const res = await fetch(
+            `${process.env.INTERNAL_BACKEND_URL}/auth/signin`,
+            {
+              method: "POST",
+              body: JSON.stringify({
+                email: credentials?.email,
+                hashedPassword: credentials?.password,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+              mode: "cors",
+            }
+          );
+
+          const user = await res.json();
+          if (!res.ok) {
+            console.log("Error in auth", user);
+            if (user.field == "password") throw Error("password");
+            else throw Error(user.message);
           }
-        );
 
-        const user = await res.json();
-        if (!res.ok) {
-          console.log("Error in auth", user);
-          if (user.field == "password") throw Error("password");
-          else throw Error(user.message);
-          // return null;
+          return user;
+        } catch (error: any) {
+          console.error("Authentication error:", error);
+          throw error;
         }
-
-        return user;
       },
     }),
     CredentialsProvider({
@@ -100,17 +123,60 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/auth/signin",
+    error: "/auth/signin", // Redirect to sign-in on error
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60, // 24 hours
+  },
+  events: {
+    async signOut(message) {
+      console.log("User signed out:", message);
+    },
+    async session(message) {
+      if (message.token?.error) {
+        console.log(
+          "Session error detected, user will be redirected to sign in"
+        );
+      }
+    },
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) return { ...token, ...user };
+      // If user is signing in for the first time
+      if (user) {
+        return { ...token, ...user };
+      }
 
-      if (new Date().getTime() < token.expiresIn) return token;
+      // Check if token has an error (from refresh failure)
+      if (token.error) {
+        console.log("Token has error, forcing re-authentication:", token.error);
+        return { ...token, error: token.error };
+      }
 
+      // Check if token is still valid (add buffer time)
+      const currentTime = new Date().getTime();
+      const tokenExpiryTime = token.expiresIn as number;
+      const bufferTime = 60 * 1000; // 1 minute buffer
+
+      if (currentTime < tokenExpiryTime - bufferTime) {
+        return token;
+      }
+
+      // Token is about to expire or has expired, try to refresh
+      console.log("Token expired or about to expire, refreshing...");
       return await refreshToken(token);
     },
 
     async session({ token, session }) {
+      // If token has an error, don't return a valid session
+      if (token.error) {
+        console.log(
+          "Session callback: Token error detected, invalidating session"
+        );
+        throw new Error("Token refresh failed");
+      }
+
       session.user = token.user;
       session.access_token = token.access_token;
       session.refresh_token = token.refresh_token;

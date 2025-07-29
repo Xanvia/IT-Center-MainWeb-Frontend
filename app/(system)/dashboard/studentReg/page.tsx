@@ -8,7 +8,7 @@ import { StudentFormData, formSchema } from "@/schemas/studentRegSchema";
 import { DefaultStudentRegValues } from "@/CONSTANT_DATA/studentRegDefault";
 import axios from "@/config/axios";
 import { signOut, useSession } from "next-auth/react";
-import { delay } from "@/utils/common";
+import { delay, getAbsoluteImageUrl } from "@/utils/common";
 import { toast } from "@/hooks/use-toast";
 
 type OLSubject = "englishOL" | "mathematicsOL" | "scienceOL";
@@ -102,7 +102,7 @@ export default function StudentRegistrationForm() {
             description: "Image Uploaded Successfully!",
           });
           await delay(3000);
-          setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
+          setPhotoPreview(getAbsoluteImageUrl(imageUrl) || null);
         } else {
           toast({
             variant: "destructive",

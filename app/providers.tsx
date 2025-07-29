@@ -1,6 +1,38 @@
-// import { Toaster } from "@/components/ui/toaster";
-import { NextUIProvider } from "@nextui-org/react";
+"use client";
 
-export function Providers({ children }: { children: React.ReactNode }) {
-  return <NextUIProvider>{children}</NextUIProvider>;
+import { NextUIProvider } from "@nextui-org/react";
+import { SessionProvider } from "next-auth/react";
+import { useEffect } from "react";
+import { handleAuthError } from "@/utils/auth-error-handler";
+
+export function Providers({
+  children,
+  session,
+}: {
+  children: React.ReactNode;
+  session?: any;
+}) {
+  useEffect(() => {
+    // Global error handler for unhandled promise rejections
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      if (event.reason?.message?.includes("Token refresh failed")) {
+        handleAuthError(event.reason);
+      }
+    };
+
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
+
+    return () => {
+      window.removeEventListener(
+        "unhandledrejection",
+        handleUnhandledRejection
+      );
+    };
+  }, []);
+
+  return (
+    <SessionProvider session={session}>
+      <NextUIProvider>{children}</NextUIProvider>
+    </SessionProvider>
+  );
 }

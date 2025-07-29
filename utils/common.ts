@@ -6,9 +6,55 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getAbsoluteImageUrl(url: string | undefined) {
-  return url?.startsWith("uploads")
-    ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`
-    : url;
+  if (!url) return url;
+
+  // Debug logging in development
+  if (process.env.NODE_ENV === "development") {
+    console.log("🖼️ Processing image URL:", url);
+  }
+
+  // If it's already a full HTTP URL, return as is
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+
+  // If it's an absolute file path, extract the relative part
+  if (url.includes("/uploads/")) {
+    const uploadsIndex = url.indexOf("/uploads/");
+    const relativePath = url.substring(uploadsIndex + 1); // Remove leading slash
+    const finalUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${relativePath}`;
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("🔧 Converted absolute path to relative:", {
+        original: url,
+        extracted: relativePath,
+        final: finalUrl,
+      });
+    }
+
+    return finalUrl;
+  }
+
+  // If it starts with "uploads", it's already a relative path
+  if (url.startsWith("uploads")) {
+    const finalUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`;
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("✅ Using relative uploads path:", {
+        original: url,
+        final: finalUrl,
+      });
+    }
+
+    return finalUrl;
+  }
+
+  // For any other case, return as is (might be a local asset)
+  if (process.env.NODE_ENV === "development") {
+    console.log("➡️ Returning URL unchanged:", url);
+  }
+
+  return url;
 }
 
 export function delay(ms: number) {

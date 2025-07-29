@@ -83,7 +83,7 @@ export default function StaffProfile() {
             description: "Image uploaded successfully!",
           });
           await delay(3000);
-          setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
+          setPhotoPreview(getAbsoluteImageUrl(imageUrl) || null);
         } else {
           toast({
             variant: "destructive",

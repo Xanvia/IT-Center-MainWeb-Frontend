@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import axios from "@/config/axios";
 import { AxiosError } from "axios";
 import { PlusCircle, MinusCircle } from "lucide-react";
-import { delay } from "@/utils/common";
+import { delay, getAbsoluteImageUrl } from "@/utils/common";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
@@ -136,7 +136,7 @@ export default function StaffRegistrationForm() {
             description: "Image uploaded successfully!",
           });
           await delay(3000);
-          setPhotoPreview(process.env.NEXT_PUBLIC_BACKEND_URL + "/" + imageUrl);
+          setPhotoPreview(getAbsoluteImageUrl(imageUrl) || null);
         } else {
           toast({
             variant: "destructive",
