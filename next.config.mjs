@@ -1,10 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Output configuration for better static generation
+  output: "standalone",
   // Enable experimental features for better error reporting
   experimental: {
     // Better error overlay in development
     optimizePackageImports: ["@nextui-org/react"],
+    // Enable static optimization
+    optimizeServerReact: true,
   },
   // Logging configuration
   logging: {

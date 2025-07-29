@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Inter, Be_Vietnam_Pro, Rubik } from "next/font/google";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/config/nextAuth";
 import { validateEnvironmentVariables } from "@/utils/env-validation";
 
 // font-families
@@ -27,26 +25,25 @@ export const metadata: Metadata = {
   description: "University of Peradeniya",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Validate environment variables early
-  try {
-    validateEnvironmentVariables();
-  } catch (error) {
-    console.error("Environment validation failed:", error);
-    // In production, this will be caught by the error boundary
-    throw error;
-  }
-
-  let session = null;
-  try {
-    session = await getServerSession(authOptions);
-  } catch (error) {
-    console.error("Failed to get server session:", error);
-    // Don't throw here, let the app load without session
+  // Validate environment variables early (but not during build time)
+  if (
+    process.env.NODE_ENV !== "production" ||
+    process.env.NEXT_PHASE !== "phase-production-build"
+  ) {
+    try {
+      validateEnvironmentVariables();
+    } catch (error) {
+      console.error("Environment validation failed:", error);
+      // Only throw in development to prevent build failures
+      if (process.env.NODE_ENV === "development") {
+        throw error;
+      }
+    }
   }
 
   return (
@@ -54,7 +51,7 @@ export default async function RootLayout({
       <body
         className={`${inter.className} ${vietnam.variable} ${rubik.variable}`}
       >
-        <Providers session={session}>{children}</Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

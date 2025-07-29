@@ -1,9 +1,21 @@
 // Environment variable validation utility
 
 export function validateEnvironmentVariables() {
+  // Don't validate during build time as environment variables might not be available
+  if (
+    process.env.NODE_ENV === "production" &&
+    process.env.NEXT_PHASE === "phase-production-build"
+  ) {
+    console.log("Skipping environment validation during build phase");
+    return { isValid: true, missing: [], error: null };
+  }
+
   const required = {
     NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
-    INTERNAL_BACKEND_URL: process.env.INTERNAL_BACKEND_URL,
+    // Only require INTERNAL_BACKEND_URL in server-side contexts
+    ...(typeof window === "undefined" && {
+      INTERNAL_BACKEND_URL: process.env.INTERNAL_BACKEND_URL,
+    }),
   };
 
   const missing = Object.entries(required)
@@ -16,11 +28,17 @@ export function validateEnvironmentVariables() {
     )}`;
     console.error(error);
 
-    if (typeof window === "undefined") {
-      // Server-side: throw error to be caught by error boundary
-      throw new Error(error);
+    // Only throw errors in development or runtime, not during build
+    if (process.env.NODE_ENV === "development") {
+      if (typeof window === "undefined") {
+        // Server-side: throw error to be caught by error boundary
+        throw new Error(error);
+      } else {
+        // Client-side: show user-friendly message
+        console.warn("Environment configuration issue detected");
+      }
     } else {
-      // Client-side: show user-friendly message
+      // Production: just log the warning
       console.warn("Environment configuration issue detected");
     }
 

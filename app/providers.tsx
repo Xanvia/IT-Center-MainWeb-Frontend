@@ -5,13 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 import { handleAuthError } from "@/utils/auth-error-handler";
 
-export function Providers({
-  children,
-  session,
-}: {
-  children: React.ReactNode;
-  session?: any;
-}) {
+export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Global error handler for unhandled promise rejections
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
@@ -32,7 +26,6 @@ export function Providers({
 
   return (
     <SessionProvider
-      session={session}
       refetchInterval={30} // Refetch session every 30 seconds
       refetchOnWindowFocus={true} // Refetch when window regains focus
     >
