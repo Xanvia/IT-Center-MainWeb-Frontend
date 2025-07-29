@@ -4,6 +4,7 @@ import { Providers } from "./providers";
 import { Inter, Be_Vietnam_Pro, Rubik } from "next/font/google";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/config/nextAuth";
+import { validateEnvironmentVariables } from "@/utils/env-validation";
 
 // font-families
 const vietnam = Be_Vietnam_Pro({
@@ -31,7 +32,22 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(authOptions);
+  // Validate environment variables early
+  try {
+    validateEnvironmentVariables();
+  } catch (error) {
+    console.error("Environment validation failed:", error);
+    // In production, this will be caught by the error boundary
+    throw error;
+  }
+
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch (error) {
+    console.error("Failed to get server session:", error);
+    // Don't throw here, let the app load without session
+  }
 
   return (
     <html lang="en">

@@ -11,6 +11,12 @@ async function refreshToken(token: JWT) {
       return { ...token, error: "RefreshTokenMissing" };
     }
 
+    // Check if INTERNAL_BACKEND_URL is configured
+    if (!process.env.INTERNAL_BACKEND_URL) {
+      console.error("INTERNAL_BACKEND_URL is not configured");
+      return { ...token, error: "BackendURLMissing" };
+    }
+
     const res = await fetch(
       `${process.env.INTERNAL_BACKEND_URL}/auth/refresh`,
       {
@@ -20,6 +26,8 @@ async function refreshToken(token: JWT) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({}),
+        // Add timeout and retry logic
+        signal: AbortSignal.timeout(10000), // 10 second timeout
       }
     );
 
@@ -64,6 +72,14 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         try {
+          // Check if INTERNAL_BACKEND_URL is configured
+          if (!process.env.INTERNAL_BACKEND_URL) {
+            console.error(
+              "INTERNAL_BACKEND_URL is not configured for authentication"
+            );
+            throw new Error("Server configuration error");
+          }
+
           const res = await fetch(
             `${process.env.INTERNAL_BACKEND_URL}/auth/signin`,
             {
@@ -76,6 +92,8 @@ export const authOptions: NextAuthOptions = {
                 "Content-Type": "application/json",
               },
               mode: "cors",
+              // Add timeout
+              signal: AbortSignal.timeout(15000), // 15 second timeout
             }
           );
 
