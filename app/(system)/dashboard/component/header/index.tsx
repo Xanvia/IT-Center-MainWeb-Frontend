@@ -7,6 +7,7 @@ import Selection from "./selection";
 const Header = (props: {
   sidebarOpen: boolean;
   setSidebarOpen: (arg0: boolean) => void;
+  serverSession?: any;
 }) => {
   return (
     <header className="sticky flex top-0 z-30 w-full bg-white drop-shadow-md dark:bg-primary-dark dark:drop-shadow-none">
@@ -41,7 +42,7 @@ const Header = (props: {
           </div>
         </div>
         <div className="flex items-center gap-3 lg:gap-7">
-          <Selection />
+          <Selection serverSession={props.serverSession} />
         </div>
       </div>
     </header>

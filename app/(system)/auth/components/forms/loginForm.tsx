@@ -35,7 +35,10 @@ export default function LoginForm() {
         setError("email", { message: response.error });
         console.log("Error in auth", response.error);
       } else {
-        router.push("/dashboard");
+        // Add a small delay to ensure session is properly set
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        // Use window.location to ensure a full page reload and fresh session state
+        window.location.href = "/dashboard";
       }
     } catch (error) {
       console.error("Error submitting the form:", error);

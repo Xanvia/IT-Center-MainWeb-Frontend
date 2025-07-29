@@ -1,31 +1,20 @@
-"use client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/config/nextAuth";
+import AuthWrapper from "./component/auth-wrapper";
+import DashboardContent from "./component/dashboard-content";
 
-import { useState } from "react";
-import { Sidebar } from "./component/sidebar";
-import Header from "./component/header";
-import { Toaster } from "@/components/ui/toaster";
-
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const serverSession = await getServerSession(authOptions);
+
   return (
-    <main>
-      <div className="flex h-screen overflow-hidden">
-        {/* Sidebar  */}
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <main>
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-              {children}
-            </div>
-            <Toaster />
-          </main>
-        </div>
-      </div>
-    </main>
+    <AuthWrapper serverSession={serverSession}>
+      <DashboardContent serverSession={serverSession}>
+        {children}
+      </DashboardContent>
+    </AuthWrapper>
   );
 }

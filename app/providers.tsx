@@ -31,7 +31,11 @@ export function Providers({
   }, []);
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider
+      session={session}
+      refetchInterval={30} // Refetch session every 30 seconds
+      refetchOnWindowFocus={true} // Refetch when window regains focus
+    >
       <NextUIProvider>{children}</NextUIProvider>
     </SessionProvider>
   );
