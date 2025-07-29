@@ -51,6 +51,16 @@ export function validateEnvironmentVariables() {
 export function getBackendUrl(): string {
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   if (!url) {
+    // During build time, return a placeholder
+    if (
+      typeof window === "undefined" &&
+      process.env.NODE_ENV === "production"
+    ) {
+      console.warn(
+        "NEXT_PUBLIC_BACKEND_URL not available during build, using placeholder"
+      );
+      return "http://localhost:5100";
+    }
     throw new Error("NEXT_PUBLIC_BACKEND_URL is not configured");
   }
   return url;
@@ -59,6 +69,16 @@ export function getBackendUrl(): string {
 export function getInternalBackendUrl(): string {
   const url = process.env.INTERNAL_BACKEND_URL;
   if (!url) {
+    // During build time, return a placeholder
+    if (
+      typeof window === "undefined" &&
+      process.env.NODE_ENV === "production"
+    ) {
+      console.warn(
+        "INTERNAL_BACKEND_URL not available during build, using placeholder"
+      );
+      return "http://localhost:5100";
+    }
     throw new Error("INTERNAL_BACKEND_URL is not configured");
   }
   return url;
