@@ -1,4 +1,8 @@
 import axios from "axios";
+import {
+  getBackendUrlWithFallback,
+  debugEnvironmentVariables,
+} from "@/utils/env-debug";
 
 // Create axios instance with dynamic baseURL
 const Axios = axios.create({
@@ -13,19 +17,20 @@ Axios.interceptors.request.use(
   (config) => {
     // Set baseURL dynamically if not already set
     if (!config.baseURL) {
-      const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-      if (!baseURL) {
-        // Only throw error in runtime, not during build
-        if (
-          typeof window !== "undefined" ||
-          process.env.NODE_ENV === "development"
-        ) {
-          throw new Error("NEXT_PUBLIC_BACKEND_URL is not configured");
+      try {
+        config.baseURL = getBackendUrlWithFallback();
+      } catch (error) {
+        console.error("Failed to get backend URL:", error);
+        debugEnvironmentVariables();
+
+        // Absolute fallback
+        if (typeof window !== "undefined") {
+          const protocol = window.location.protocol;
+          const hostname = window.location.hostname;
+          config.baseURL = `${protocol}//${hostname}:5100`;
+        } else {
+          config.baseURL = "http://localhost:5100";
         }
-        // During build or server-side, use a placeholder
-        config.baseURL = "http://localhost:5100";
-      } else {
-        config.baseURL = baseURL;
       }
     }
 

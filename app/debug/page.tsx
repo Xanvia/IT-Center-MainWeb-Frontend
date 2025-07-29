@@ -2,30 +2,44 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import {
+  debugEnvironmentVariables,
+  getBackendUrlWithFallback,
+} from "@/utils/env-debug";
 
 interface DebugInfo {
   environment: string;
   backendUrl: string | undefined;
+  fallbackUrl: string;
   userAgent: string;
   timestamp: string;
   sessionStatus: string;
   networkStatus: string;
+  currentUrl: string;
 }
 
 export default function DebugPage() {
   const { data: session, status } = useSession();
   const [debugInfo, setDebugInfo] = useState<DebugInfo | null>(null);
   const [networkTest, setNetworkTest] = useState<string>("Testing...");
+  const [envDebug, setEnvDebug] = useState<any>(null);
 
   useEffect(() => {
+    // Debug environment variables
+    const envVars = debugEnvironmentVariables();
+    setEnvDebug(envVars);
+
     const info: DebugInfo = {
       environment: process.env.NODE_ENV || "unknown",
       backendUrl: process.env.NEXT_PUBLIC_BACKEND_URL,
+      fallbackUrl: getBackendUrlWithFallback(),
       userAgent:
         typeof window !== "undefined" ? window.navigator.userAgent : "server",
       timestamp: new Date().toISOString(),
       sessionStatus: status,
       networkStatus: "unknown",
+      currentUrl:
+        typeof window !== "undefined" ? window.location.href : "server",
     };
 
     setDebugInfo(info);
@@ -33,22 +47,16 @@ export default function DebugPage() {
     // Test network connectivity
     const testNetwork = async () => {
       try {
-        if (process.env.NEXT_PUBLIC_BACKEND_URL) {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/health`,
-            {
-              method: "GET",
-              signal: AbortSignal.timeout(5000),
-            }
-          );
-          setNetworkTest(
-            response.ok
-              ? "Backend reachable"
-              : `Backend error: ${response.status}`
-          );
-        } else {
-          setNetworkTest("Backend URL not configured");
-        }
+        const testUrl = getBackendUrlWithFallback();
+        const response = await fetch(`${testUrl}/health`, {
+          method: "GET",
+          signal: AbortSignal.timeout(5000),
+        });
+        setNetworkTest(
+          response.ok
+            ? "Backend reachable"
+            : `Backend error: ${response.status}`
+        );
       } catch (error) {
         setNetworkTest(
           `Network error: ${
@@ -85,6 +93,12 @@ export default function DebugPage() {
                 {debugInfo.backendUrl || "Not configured"}
               </div>
               <div>
+                <strong>Fallback URL:</strong> {debugInfo.fallbackUrl}
+              </div>
+              <div>
+                <strong>Current URL:</strong> {debugInfo.currentUrl}
+              </div>
+              <div>
                 <strong>Timestamp:</strong> {debugInfo.timestamp}
               </div>
               <div>
@@ -92,6 +106,16 @@ export default function DebugPage() {
                 {debugInfo.userAgent.substring(0, 100)}...
               </div>
             </div>
+          </div>
+
+          {/* Environment Variables Debug */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-4">
+              Environment Variables
+            </h2>
+            <pre className="bg-gray-100 p-3 rounded text-sm overflow-auto">
+              {JSON.stringify(envDebug, null, 2)}
+            </pre>
           </div>
 
           {/* Session Info */}
