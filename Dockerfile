@@ -10,6 +10,21 @@ RUN npm install
 # Copy source code
 COPY . .
 
+# Build Next.js app with environment vars from .env.production
+ARG NEXTAUTH_SECRET
+ARG NEXTAUTH_URL
+ARG NEXT_PUBLIC_BACKEND_URL
+ARG INTERNAL_BACKEND_URL
+ARG NEXT_PUBLIC_SITE_KEY
+
+# These get baked into the build step
+RUN NEXTAUTH_SECRET=$NEXTAUTH_SECRET \
+    NEXTAUTH_URL=$NEXTAUTH_URL \
+    NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL \
+    INTERNAL_BACKEND_URL=$INTERNAL_BACKEND_URL \
+    NEXT_PUBLIC_SITE_KEY=$NEXT_PUBLIC_SITE_KEY \
+    npm run build
+
 # Build the application
 RUN npm run build
 
