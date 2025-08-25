@@ -9,20 +9,94 @@ This is a comprehensive API documentation for the IT Center Backend built with N
 ## Table of Contents
 
 1. [Authentication](#authentication)
-2. [User Management](#user-management)
-3. [Content Management](#content-management)
-4. [Course Management](#course-management)
-5. [Reservations](#reservations)
-6. [Registration Records](#registration-records)
-7. [Reserve Records](#reserve-records)
-8. [Notifications](#notifications)
-9. [Feedbacks](#feedbacks)
-10. [Profiles](#profiles)
-11. [Payments](#payments)
-12. [Email Services](#email-services)
-13. [File Uploads](#file-uploads)
-14. [Authentication & Authorization](#authentication--authorization)
-15. [Error Handling](#error-handling)
+2. [Password Reset Flow](#password-reset-flow)
+3. [User Management](#user-management)
+4. [Content Management](#content-management)
+5. [Course Management](#course-management)
+6. [Reservations](#reservations)
+7. [Registration Records](#registration-records)
+8. [Reserve Records](#reserve-records)
+9. [Notifications](#notifications)
+10. [Feedbacks](#feedbacks)
+11. [Profiles](#profiles)
+12. [Payments](#payments)
+13. [Email Services](#email-services)
+14. [File Uploads](#file-uploads)
+15. [Authentication & Authorization](#authentication--authorization)
+16. [Error Handling](#error-handling)
+
+---
+
+## Password Reset Flow
+
+The password reset feature provides a secure way for users to reset their passwords when they forget them. The flow consists of two main steps:
+
+### Step 1: Request Password Reset
+
+When a user forgets their password, they can request a password reset by providing their email address.
+
+**Process:**
+1. User submits their email address via the forgot password endpoint
+2. System checks if the email exists in the database
+3. If email exists, a unique reset token is generated and stored with an expiration time (1 hour)
+4. An email is sent to the user with a reset link containing the token
+5. The system always returns the same response for security (doesn't reveal if email exists)
+
+### Step 2: Reset Password
+
+The user receives an email with a reset link and can use it to set a new password.
+
+**Process:**
+1. User clicks the reset link or manually enters the token
+2. User provides the token and their new password
+3. System validates the token and checks if it hasn't expired
+4. If valid, the password is updated and the reset token is cleared
+5. A confirmation email is sent to the user
+6. User can now log in with the new password
+
+### Security Features
+
+- **Token Expiration**: Reset tokens expire after 1 hour
+- **One-time Use**: Tokens are cleared after successful password reset
+- **Email Verification**: Reset links are only sent to registered email addresses
+- **No Information Disclosure**: System doesn't reveal if an email exists
+- **Secure Token Generation**: Uses cryptographically secure random tokens
+- **Password Hashing**: New passwords are properly hashed before storage
+- **Password Validation**: Enforces strong password requirements
+- **Logging**: All password reset attempts are logged for security monitoring
+
+### Password Requirements
+
+- Minimum 6 characters
+- At least one uppercase letter
+- At least one lowercase letter  
+- At least one number
+- Special characters are allowed but not required
+
+### Rate Limiting Recommendations
+
+For production deployment, consider implementing rate limiting on the forgot password endpoint to prevent abuse:
+
+- **Per IP**: Maximum 5 requests per hour
+- **Per Email**: Maximum 3 requests per hour
+- **Global**: Consider implementing global rate limits during high traffic
+
+### Example Flow
+
+```
+1. POST /auth/forgot-password
+   Body: { "email": "user@example.com" }
+   
+2. [User receives email with reset link]
+   
+3. POST /auth/reset-password
+   Body: { 
+     "token": "abc123...",
+     "newPassword": "newSecurePassword123"
+   }
+   
+4. [User receives confirmation email]
+```
 
 ---
 
@@ -112,6 +186,64 @@ Authorization: Bearer <refresh_token>
 ```
 Authorization: Bearer <access_token>
 ```
+
+### Forgot Password
+
+**POST** `/auth/forgot-password`
+
+Request a password reset for a user account.
+
+**Request Body:**
+
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "If an account with that email exists, a password reset link has been sent."
+}
+```
+
+**Note:** For security reasons, this endpoint always returns the same message regardless of whether the email exists in the system or not.
+
+### Reset Password
+
+**POST** `/auth/reset-password`
+
+Reset password using the token received via email.
+
+**Request Body:**
+
+```json
+{
+  "token": "reset_token_from_email",
+  "newPassword": "new_secure_password"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "Password has been reset successfully",
+  "user": {
+    "id": "user_id",
+    "email": "user@example.com",
+    "name": "User Name",
+    "role": "USER"
+  }
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request`: Invalid or expired reset token
+- `400 Bad Request`: Password validation failed
 
 ---
 

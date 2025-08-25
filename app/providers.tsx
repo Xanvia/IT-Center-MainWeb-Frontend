@@ -4,6 +4,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 import { handleAuthError } from "@/utils/auth-error-handler";
+import { Toaster } from "@/components/ui/toaster";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -29,7 +30,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       refetchInterval={30} // Refetch session every 30 seconds
       refetchOnWindowFocus={true} // Refetch when window regains focus
     >
-      <NextUIProvider>{children}</NextUIProvider>
+      <NextUIProvider>
+        {children}
+        <Toaster />
+      </NextUIProvider>
     </SessionProvider>
   );
 }

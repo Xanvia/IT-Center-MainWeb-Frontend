@@ -83,6 +83,15 @@ export default function LoginForm() {
         </div>
       </div>
 
+      <div className="mb-5 flex justify-end">
+        <Link 
+          href="/auth/forgot-password" 
+          className="text-sm text-yellow-600 hover:text-yellow-700"
+        >
+          Forgot your password?
+        </Link>
+      </div>
+
       <div className="mb-5">
         <input
           disabled={isSubmitting}
