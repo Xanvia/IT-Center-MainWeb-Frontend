@@ -1,5 +1,5 @@
 # Frontend Dockerfile
-FROM node:20
+FROM node:20 AS builder
 
 WORKDIR /app
 
@@ -21,9 +21,14 @@ ENV NEXT_PUBLIC_SITE_KEY=$NEXT_PUBLIC_SITE_KEY
 # Build the application
 RUN npm run build
 
-# Copy the built artifacts from the builder stage
+# Production stage
+FROM node:20 AS production
+WORKDIR /app
+
+# Copy build artifacts and package files
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/package*.json ./
 
 # Set environment variables
 ENV NODE_ENV=production
