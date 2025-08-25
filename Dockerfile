@@ -21,6 +21,10 @@ ENV NEXT_PUBLIC_SITE_KEY=$NEXT_PUBLIC_SITE_KEY
 # Build the application
 RUN npm run build
 
+# Copy the built artifacts from the builder stage
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
 # Set environment variables
 ENV NODE_ENV=production
 

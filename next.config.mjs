@@ -52,6 +52,13 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+    // Add timeout and error handling for image optimization
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   // Custom webpack configuration for better error handling
   webpack: (config, { dev, isServer }) => {
