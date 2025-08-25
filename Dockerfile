@@ -25,9 +25,6 @@ RUN NEXTAUTH_SECRET=$NEXTAUTH_SECRET \
     NEXT_PUBLIC_SITE_KEY=$NEXT_PUBLIC_SITE_KEY \
     npm run build
 
-# Build the application
-RUN npm run build
-
 # Set environment variables
 ENV NODE_ENV=production
 
