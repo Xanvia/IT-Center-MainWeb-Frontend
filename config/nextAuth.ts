@@ -104,8 +104,6 @@ export const authOptions: NextAuthOptions = {
             console.warn("No backend URL configured, using Docker service fallback for auth");
           }
 
-          console.log(`Attempting authentication with backend URL: ${backendUrl}`);
-
           const res = await fetch(
             `${backendUrl}/auth/signin`,
             {
@@ -167,7 +165,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/auth/signin",
-    error: "/auth/signin", // Redirect to sign-in on error
+    error: "/auth/signin", 
   },
   session: {
     strategy: "jwt",
@@ -176,7 +174,7 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signOut(message) {
-      console.log("User signed out:", message);
+      console.log("User signed out:");
     },
     async session(message) {
       if (message.token?.error) {
