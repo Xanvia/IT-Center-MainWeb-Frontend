@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
+import { getImageUrlForNextJs } from "@/utils/common";
 
 // Define the Project interface
 interface Project {
@@ -87,7 +88,7 @@ export default function ProjectShowcase() {
               >
                 <div className="w-full sm:w-2/5 h-48 sm:h-auto">
                   <Image
-                    src={project.imageUrl}
+                    src={getImageUrlForNextJs(project.imageUrl)}
                     alt={project.title}
                     width={320}
                     height={180}

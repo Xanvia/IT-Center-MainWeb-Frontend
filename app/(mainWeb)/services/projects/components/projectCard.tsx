@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
+import { getImageUrlForNextJs } from "@/utils/common";
 import { useEffect, useState } from "react";
 import Axios from "@/config/axios";
 
@@ -50,7 +51,7 @@ export default function ProjectShowcase() {
               >
                 <div className="w-full sm:w-2/5 h-48 sm:h-auto">
                   <Image
-                    src={project.images && project.images[0].path}
+                    src={getImageUrlForNextJs(project.images?.[0]?.path)}
                     alt={project.title}
                     width={320}
                     height={180}

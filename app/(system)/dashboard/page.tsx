@@ -5,6 +5,7 @@ import { shortcuts } from "@/CONSTANT_DATA/dashboardShortcuts";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/config/nextAuth";
 import Image from "next/image";
+import { getImageUrlForNextJs } from "@/utils/common";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -41,7 +42,7 @@ export default async function Home() {
           <Link key={shortcut.name} href={shortcut.href} passHref>
             <Card isPressable className="border-none w-full h-full">
               <Image
-                src={shortcut.visual || "/common/default.jpg"}
+                src={getImageUrlForNextJs(shortcut.visual) || getImageUrlForNextJs("/common/default.jpg")}
                 alt={`${shortcut.name} illustration`}
                 className="object-cover object-center contrast-75 brightness-90 w-full h-40"
                 height={500}

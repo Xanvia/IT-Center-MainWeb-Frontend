@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import axios from "@/config/axios";
 import { AxiosError } from "axios";
 import { PlusCircle, MinusCircle } from "lucide-react";
-import { delay, getAbsoluteImageUrl } from "@/utils/common";
+import { delay, getAbsoluteImageUrl, getImageUrlForNextJs } from "@/utils/common";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
@@ -272,7 +272,7 @@ export default function StaffRegistrationForm() {
           {photoPreview && (
             <div className="mt-4">
               <Image
-                src={photoPreview}
+                src={getImageUrlForNextJs(photoPreview)}
                 alt="Profile Photo"
                 width={100}
                 height={100}

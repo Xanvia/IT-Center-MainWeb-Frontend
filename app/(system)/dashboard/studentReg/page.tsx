@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { getImageUrlForNextJs } from "@/utils/common";
 import { StudentFormData, formSchema } from "@/schemas/studentRegSchema";
 import { DefaultStudentRegValues } from "@/CONSTANT_DATA/studentRegDefault";
 import axios from "@/config/axios";
@@ -313,7 +314,7 @@ export default function StudentRegistrationForm() {
             {photoPreview && (
               <div className="mt-4">
                 <Image
-                  src={photoPreview || "/placeholder.svg"}
+                  src={getImageUrlForNextJs(photoPreview) || getImageUrlForNextJs("/placeholder.svg")}
                   alt="Profile Photo"
                   width={100}
                   height={100}

@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -9,6 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
+import { getImageUrlForNextJs } from "@/utils/common";
 
 interface props {
   images: string[];
@@ -22,7 +22,7 @@ export const PhotoSlide = ({ images }: props) => {
           <CarouselItem key={index}>
             <div className="p-1">
               <Image
-                src={"http:localhost:3001/uploads" + image}
+                src={getImageUrlForNextJs(image)}
                 alt="log image"
                 height={400}
                 width={600}
