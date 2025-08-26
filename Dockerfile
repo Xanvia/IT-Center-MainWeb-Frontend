@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Copy package files first for better layer caching
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -25,17 +25,25 @@ RUN npm run build
 FROM node:20 AS production
 WORKDIR /app
 
-# Copy build artifacts and package files
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/package*.json ./
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 # Set environment variables
 ENV NODE_ENV=production
+ENV PORT=5000
+ENV HOSTNAME="0.0.0.0"
 
+# Switch to non-root user
+USER nextjs
 
 # Expose port 5000 for frontend
 EXPOSE 5000
 
-# Start the application
-CMD ["npm", "run", "start", "--", "-H", "0.0.0.0", "-p", "5000"]
+
+# Start the application using the standalone server
+CMD ["node", "server.js"]
