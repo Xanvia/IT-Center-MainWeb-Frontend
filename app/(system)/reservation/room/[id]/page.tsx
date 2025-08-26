@@ -96,9 +96,11 @@ export default function Component({ params }: { params: { id: string } }) {
             <Image
               src={getAbsoluteImageUrl(room.images[currentImageIndex]) || "/placeholder.jpg"}
               alt={`${room.name} - Image ${currentImageIndex + 1}`}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg h-full"
+              width={800
+                
+              }
+              height={600}
+              className="rounded-lg h-full object-cover"
             />
             <Button
               variant="outline"
