@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { getAbsoluteImageUrl } from "@/utils/common";
 import { useRouter } from "next/navigation";
@@ -73,7 +72,7 @@ const DropdownProfile = ({ reservation }: props) => {
           </span>
         </span>
 
-        <Image
+        <img
           width={112}
           height={112}
           src={
@@ -81,7 +80,6 @@ const DropdownProfile = ({ reservation }: props) => {
           }
           alt="User"
           className="h-12 w-12 rounded-full object-cover object-top"
-          unoptimized={!!session?.user.image} // Disable optimization for user uploaded images
         />
 
         {!reservation && (

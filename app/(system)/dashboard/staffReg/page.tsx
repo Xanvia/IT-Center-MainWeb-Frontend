@@ -8,7 +8,6 @@ import { useSession } from "next-auth/react";
 import { AxiosError } from "axios";
 import { PlusCircle, MinusCircle } from "lucide-react";
 import { delay, getAbsoluteImageUrl } from "@/utils/common";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import Axios from "@/config/axios";
@@ -270,7 +269,7 @@ export default function StaffRegistrationForm() {
           />
           {photoPreview && (
             <div className="mt-4">
-              <Image
+              <img
                 src={getAbsoluteImageUrl(photoPreview) || "/placeholder.jpg"}
                 alt="Profile Photo"
                 width={100}

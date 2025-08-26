@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import Axios from "@/config/axios";
 import {
@@ -68,13 +67,12 @@ export default function ProjectSlider() {
                   <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-[500px] md:h-[400px]">
                     <div className="flex flex-col md:flex-row h-full">
                       <div className="w-full md:w-1/2 h-48 md:h-full relative">
-                        <Image
+                        <img
                           src={
                             (project.images && project.images[0]?.path) ||
                             "/placeholder.jpg"
                           }
                           alt={project.title}
-                          fill
                           className="object-cover"
                           sizes="(max-width: 768px) 100vw, 50vw"
                         />

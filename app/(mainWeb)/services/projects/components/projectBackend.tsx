@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import Image from "next/image";
 import { getAbsoluteImageUrl } from "@/utils/common";
 import axios from "@/config/axios";
 
@@ -85,7 +84,7 @@ export default function ProjectShowcase() {
                 }`}
               >
                 <div className="w-full sm:w-2/5 h-48 sm:h-auto">
-                  <Image
+                  <img
                     src={getAbsoluteImageUrl(project.imageUrl) || "/placeholder.jpg"}
                     alt={project.title}
                     width={320}

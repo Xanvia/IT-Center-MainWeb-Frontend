@@ -13,7 +13,6 @@ import {
   Users,
   Wind,
 } from "lucide-react";
-import Image from "next/image";
 import { getAbsoluteImageUrl } from "@/utils/common";
 import { useEffect, useState } from "react";
 
@@ -93,7 +92,7 @@ export default function Component({ params }: { params: { id: string } }) {
             {room.name}
           </h1>
           <div className="relative h-max sm:h-96">
-            <Image
+            <img
               src={getAbsoluteImageUrl(room.images[currentImageIndex]) || "http://backend:5100/uploads/reservations/reservation-1737570858614-430496147.jpg"}
               alt={`${room.name} - Image ${currentImageIndex + 1}`}
               width={800

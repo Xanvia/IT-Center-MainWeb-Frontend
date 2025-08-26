@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import { PiArrowRightBold } from "react-icons/pi";
-import { Image as ImageNU } from "@nextui-org/react";
 import Image from "next/image";
 import FAQ from "./components/sections/faq";
 import FAQForm from "./components/forms/faqForm";

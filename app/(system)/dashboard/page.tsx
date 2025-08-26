@@ -4,7 +4,6 @@ import Link from "next/link";
 import { shortcuts } from "@/CONSTANT_DATA/dashboardShortcuts";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/config/nextAuth";
-import Image from "next/image";
 import { getAbsoluteImageUrl } from "@/utils/common";
 
 export default async function Home() {
@@ -41,7 +40,7 @@ export default async function Home() {
         {primaryShortcuts.map((shortcut) => (
           <Link key={shortcut.name} href={shortcut.href} passHref>
             <Card isPressable className="border-none w-full h-full">
-              <Image
+              <img
                 src={getAbsoluteImageUrl(shortcut.visual) || "/placeholder.jpg"}
                 alt={`${shortcut.name} illustration`}
                 className="object-cover object-center contrast-75 brightness-90 w-full h-40"

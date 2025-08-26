@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 import { getAbsoluteImageUrl } from "@/utils/common";
 import { useEffect, useState } from "react";
 import Axios from "@/config/axios";
@@ -50,7 +49,7 @@ export default function ProjectShowcase() {
                 }`}
               >
                 <div className="w-full sm:w-2/5 h-48 sm:h-auto">
-                  <Image
+                  <img
                     src={getAbsoluteImageUrl(project.images?.[0]?.path) || "/placeholder.jpg"}
                     alt={project.title}
                     width={320}

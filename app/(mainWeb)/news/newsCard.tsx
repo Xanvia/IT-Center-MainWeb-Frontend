@@ -1,6 +1,5 @@
 import React from "react";
 import { News } from "./page";
-import Image from "next/image";
 import { getAbsoluteImageUrl } from "@/utils/common";
 
 export const NCard = (news: News) => {
@@ -8,7 +7,7 @@ export const NCard = (news: News) => {
   return (
     <div className="bg-white shadow-xl rounded-lg">
       <figure>
-        <Image
+        <img
           width={600}
           height={600}
           className="rounded-t-lg h-64 object-cover w-full"

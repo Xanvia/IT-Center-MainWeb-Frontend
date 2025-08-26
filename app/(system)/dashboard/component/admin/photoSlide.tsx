@@ -7,7 +7,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Image from "next/image";
 import { getAbsoluteImageUrl } from "@/utils/common";
 
 interface props {
@@ -21,7 +20,7 @@ export const PhotoSlide = ({ images }: props) => {
         {images.map((image, index) => (
           <CarouselItem key={index}>
             <div className="p-1">
-              <Image
+              <img
                 src={getAbsoluteImageUrl(image) || "/placeholder.jpg"}
                 alt="log image"
                 height={400}

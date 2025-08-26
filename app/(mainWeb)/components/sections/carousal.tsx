@@ -4,7 +4,6 @@ import Slider from "react-slick";
 import { useEffect, useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Image from "next/image";
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
 import { Carousalimages } from "@/CONSTANT_DATA/A.homePageData";
 
@@ -94,7 +93,7 @@ export const Carousel: React.FC = () => {
             idx === imgIndex ? "csl-slide csl-activeSlide" : "csl-slide"
           }
         >
-          <Image
+          <img
             height={1024}
             width={1024}
             src={img}
