@@ -82,37 +82,6 @@ export function capitalizeFirstLetter(val: string) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
 
-export function getImageUrlForNextJs(url: string | undefined | null): string {
-  if (!url) return "";
-
-  console.log("Processing image URL for Next.js:", url);
-
-  // If it's already a full HTTP URL, return as is
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
-  }
-
-  // If it's a local asset (starts with /), return as is
-  if (url.startsWith("/")) {
-    return url;
-  }
-
-  // If it contains uploads path, extract and use with backend URL
-  if (url.includes("/uploads/")) {
-    const uploadsIndex = url.indexOf("/uploads/");
-    const relativePath = url.substring(uploadsIndex + 1); // Remove leading slash
-    return `${process.env.INTERNAL_BACKEND_URL}/${relativePath}`;
-  }
-
-  // If it starts with "uploads", it's already a relative path
-  if (url.startsWith("uploads")) {
-    return `${process.env.INTERNAL_BACKEND_URL}/${url}`;
-  }
-
-  // For any other relative path, prepend backend URL
-  return `${process.env.INTERNAL_BACKEND_URL}/${url}`;
-}
-
 /**
  * Sorts courses by starting date with special handling for "Throughout the year" courses.
  * Courses that run "Throughout the year" appear first, followed by courses sorted by starting date.

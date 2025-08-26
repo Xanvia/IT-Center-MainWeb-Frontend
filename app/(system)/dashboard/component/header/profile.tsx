@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
-import { getImageUrlForNextJs } from "@/utils/common";
+import { getAbsoluteImageUrl } from "@/utils/common";
 import { useRouter } from "next/navigation";
 
 interface props {
@@ -77,7 +77,7 @@ const DropdownProfile = ({ reservation }: props) => {
           width={112}
           height={112}
           src={
-            getImageUrlForNextJs(session?.user.image) || "/users/generalUser.png"
+            getAbsoluteImageUrl(session?.user.image) || "/users/generalUser.png"
           }
           alt="User"
           className="h-12 w-12 rounded-full object-cover object-top"

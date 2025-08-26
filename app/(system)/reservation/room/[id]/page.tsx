@@ -14,7 +14,7 @@ import {
   Wind,
 } from "lucide-react";
 import Image from "next/image";
-import { getImageUrlForNextJs } from "@/utils/common";
+import { getAbsoluteImageUrl } from "@/utils/common";
 import { useEffect, useState } from "react";
 
 interface RoomDetails {
@@ -94,7 +94,7 @@ export default function Component({ params }: { params: { id: string } }) {
           </h1>
           <div className="relative h-max sm:h-96">
             <Image
-              src={getImageUrlForNextJs(room.images[currentImageIndex])}
+              src={getAbsoluteImageUrl(room.images[currentImageIndex]) || "/common/default.jpg"}
               alt={`${room.name} - Image ${currentImageIndex + 1}`}
               layout="fill"
               objectFit="cover"

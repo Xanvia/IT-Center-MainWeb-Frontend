@@ -8,7 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import { getImageUrlForNextJs } from "@/utils/common";
+import { getAbsoluteImageUrl } from "@/utils/common";
 
 interface props {
   images: string[];
@@ -22,7 +22,7 @@ export const PhotoSlide = ({ images }: props) => {
           <CarouselItem key={index}>
             <div className="p-1">
               <Image
-                src={getImageUrlForNextJs(image)}
+                src={getAbsoluteImageUrl(image) || "/common/default.jpg"}
                 alt="log image"
                 height={400}
                 width={600}

@@ -1,7 +1,7 @@
 import React from "react";
 import { News } from "./page";
 import Image from "next/image";
-import { getImageUrlForNextJs } from "@/utils/common";
+import { getAbsoluteImageUrl } from "@/utils/common";
 
 export const NCard = (news: News) => {
   console.log(news);
@@ -12,7 +12,7 @@ export const NCard = (news: News) => {
           width={600}
           height={600}
           className="rounded-t-lg h-64 object-cover w-full"
-          src={getImageUrlForNextJs(news?.images?.[0]?.path) || "/common/labReservation.jpg"}
+          src={getAbsoluteImageUrl(news?.images?.[0]?.path) || "/common/labReservation.jpg"}
           alt="Shoes"
         />
       </figure>
