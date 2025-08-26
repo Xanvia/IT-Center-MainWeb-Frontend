@@ -29,12 +29,13 @@ export default function ForgotPasswordForm({ onBackToLogin }: ForgotPasswordForm
 
   const submitData = async (data: ForgotPasswordSchemaType) => {
     try {
+      setIsSubmitted(true);
       await Axios.post("/auth/forgot-password", {
         email: data.email,
       });
       
       setSubmittedEmail(data.email);
-      setIsSubmitted(true);
+      
       
       toast({
         title: "Email sent!",
@@ -53,11 +54,13 @@ export default function ForgotPasswordForm({ onBackToLogin }: ForgotPasswordForm
       setError("root.server", {
         message: "An error occurred. Please try again.",
       });
+    }finally {
+      setIsSubmitted(false);
     }
   };
 
-  const onSubmitForm: SubmitHandler<ForgotPasswordSchemaType> = (data) => {
-    submitData(data);
+  const onSubmitForm: SubmitHandler<ForgotPasswordSchemaType> = async (data) => {
+    await submitData(data);
   };
 
   if (isSubmitted) {
