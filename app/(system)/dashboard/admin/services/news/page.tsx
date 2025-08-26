@@ -134,7 +134,7 @@ export default function InteractiveNewsRow() {
               ...(prev.images || []),
               ...data.paths.map((path: string) => ({
                 id: crypto.randomUUID(),
-                path: `${process.env.NEXT_PUBLIC_BACKEND_URL}/${path}`,
+                path: path,
               })),
             ],
           }));

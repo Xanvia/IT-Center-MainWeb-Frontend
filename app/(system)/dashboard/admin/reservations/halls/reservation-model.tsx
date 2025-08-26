@@ -76,7 +76,7 @@ export default function ReservationModal({
               ...prev.images,
               ...data.files.map(
                 (file: { path: string }) =>
-                  `${process.env.NEXT_PUBLIC_BACKEND_URL}/${file.path}`
+                  file.path
               ),
             ],
           }));

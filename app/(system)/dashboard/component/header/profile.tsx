@@ -77,7 +77,7 @@ const DropdownProfile = ({ reservation }: props) => {
           width={112}
           height={112}
           src={
-            getImageUrlForNextJs(session?.user.image) || "users/generalUser.png"
+            getImageUrlForNextJs(session?.user.image) || "/users/generalUser.png"
           }
           alt="User"
           className="h-12 w-12 rounded-full object-cover object-top"

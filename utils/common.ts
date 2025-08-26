@@ -82,15 +82,10 @@ export function capitalizeFirstLetter(val: string) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
 
-/**
- * Helper function specifically for Next.js Image components
- * Converts image URLs to use the backend URL (http://backend:5100)
- * 
- * @param url - The image URL to process
- * @returns The processed URL with backend domain
- */
 export function getImageUrlForNextJs(url: string | undefined | null): string {
   if (!url) return "";
+
+  console.log("Processing image URL for Next.js:", url);
 
   // If it's already a full HTTP URL, return as is
   if (url.startsWith("http://") || url.startsWith("https://")) {
@@ -106,16 +101,16 @@ export function getImageUrlForNextJs(url: string | undefined | null): string {
   if (url.includes("/uploads/")) {
     const uploadsIndex = url.indexOf("/uploads/");
     const relativePath = url.substring(uploadsIndex + 1); // Remove leading slash
-    return `http://backend:5100/${relativePath}`;
+    return `${process.env.INTERNAL_BACKEND_URL}/${relativePath}`;
   }
 
   // If it starts with "uploads", it's already a relative path
   if (url.startsWith("uploads")) {
-    return `http://backend:5100/${url}`;
+    return `${process.env.INTERNAL_BACKEND_URL}/${url}`;
   }
 
   // For any other relative path, prepend backend URL
-  return `http://backend:5100/${url}`;
+  return `${process.env.INTERNAL_BACKEND_URL}/${url}`;
 }
 
 /**
