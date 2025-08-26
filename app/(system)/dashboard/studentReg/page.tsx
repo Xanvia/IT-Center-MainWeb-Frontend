@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { getAbsoluteImageUrl } from "@/utils/common";
 import { StudentFormData, formSchema } from "@/schemas/studentRegSchema";
 import { DefaultStudentRegValues } from "@/CONSTANT_DATA/studentRegDefault";
 import axios from "@/config/axios";
@@ -314,7 +313,7 @@ export default function StudentRegistrationForm() {
             {photoPreview && (
               <div className="mt-4">
                 <Image
-                  src={getAbsoluteImageUrl(photoPreview) || getAbsoluteImageUrl("/placeholder.svg")}
+                  src={getAbsoluteImageUrl(photoPreview) || "/common/default.jpg"}
                   alt="Profile Photo"
                   width={100}
                   height={100}
