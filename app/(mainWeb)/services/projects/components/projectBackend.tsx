@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import { getImageUrlForNextJs } from "@/utils/common";
+import axios from "@/config/axios";
 
 // Define the Project interface
 interface Project {
@@ -31,11 +32,8 @@ export default function ProjectShowcase() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch("http://localhost:3001/projects");
-        if (!response.ok) {
-          throw new Error("Failed to fetch projects");
-        }
-        const data: Project[] = await response.json();
+        const response = await axios.get("/projects");
+        const data: Project[] = response.data;
         setProjects(data);
         setFilteredProjects(data); // Initially show all projects
       } catch (error) {
