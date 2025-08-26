@@ -77,7 +77,7 @@ const DropdownProfile = ({ reservation }: props) => {
           width={112}
           height={112}
           src={
-            getAbsoluteImageUrl(session?.user.image) || "/users/generalUser.png"
+            getAbsoluteImageUrl(session?.user.image) || "http://backend:5100/uploads/users/user-1753808739167-899277429.png"
           }
           alt="User"
           className="h-12 w-12 rounded-full object-cover object-top"
