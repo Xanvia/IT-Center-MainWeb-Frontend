@@ -86,7 +86,7 @@ export default function ProjectShowcase() {
               >
                 <div className="w-full sm:w-2/5 h-48 sm:h-auto">
                   <Image
-                    src={getAbsoluteImageUrl(project.imageUrl) || "/common/default.jpg"}
+                    src={getAbsoluteImageUrl(project.imageUrl) || "/placeholder.jpg"}
                     alt={project.title}
                     width={320}
                     height={180}

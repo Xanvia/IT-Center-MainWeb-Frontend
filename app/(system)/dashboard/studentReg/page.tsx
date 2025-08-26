@@ -313,7 +313,7 @@ export default function StudentRegistrationForm() {
             {photoPreview && (
               <div className="mt-4">
                 <Image
-                  src={getAbsoluteImageUrl(photoPreview) || "/common/default.jpg"}
+                  src={getAbsoluteImageUrl(photoPreview) || "/placeholder.jpg"}
                   alt="Profile Photo"
                   width={100}
                   height={100}

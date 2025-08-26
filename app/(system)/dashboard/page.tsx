@@ -42,7 +42,7 @@ export default async function Home() {
           <Link key={shortcut.name} href={shortcut.href} passHref>
             <Card isPressable className="border-none w-full h-full">
               <Image
-                src={getAbsoluteImageUrl(shortcut.visual) || "/common/default.jpg"}
+                src={getAbsoluteImageUrl(shortcut.visual) || "/placeholder.jpg"}
                 alt={`${shortcut.name} illustration`}
                 className="object-cover object-center contrast-75 brightness-90 w-full h-40"
                 height={500}

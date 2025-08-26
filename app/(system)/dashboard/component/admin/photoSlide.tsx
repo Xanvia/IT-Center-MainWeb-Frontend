@@ -22,7 +22,7 @@ export const PhotoSlide = ({ images }: props) => {
           <CarouselItem key={index}>
             <div className="p-1">
               <Image
-                src={getAbsoluteImageUrl(image) || "/common/default.jpg"}
+                src={getAbsoluteImageUrl(image) || "/placeholder.jpg"}
                 alt="log image"
                 height={400}
                 width={600}

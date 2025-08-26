@@ -94,7 +94,7 @@ export default function Component({ params }: { params: { id: string } }) {
           </h1>
           <div className="relative h-max sm:h-96">
             <Image
-              src={getAbsoluteImageUrl(room.images[currentImageIndex]) || "/common/default.jpg"}
+              src={getAbsoluteImageUrl(room.images[currentImageIndex]) || "/placeholder.jpg"}
               alt={`${room.name} - Image ${currentImageIndex + 1}`}
               layout="fill"
               objectFit="cover"
