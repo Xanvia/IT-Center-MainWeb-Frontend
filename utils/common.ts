@@ -39,12 +39,12 @@ export function getAbsoluteImageUrl(url: string | undefined) {
   if (url.startsWith("uploads")) {
     const finalUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`;
 
-    if (process.env.NODE_ENV === "development") {
+    
       console.log("✅ Using relative uploads path:", {
         original: url,
         final: finalUrl,
       });
-    }
+    
 
     return finalUrl;
   }
