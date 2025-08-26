@@ -11,14 +11,25 @@ async function refreshToken(token: JWT) {
       return { ...token, error: "RefreshTokenMissing" };
     }
 
-    // Check if INTERNAL_BACKEND_URL is configured
-    if (!process.env.INTERNAL_BACKEND_URL) {
-      console.error("INTERNAL_BACKEND_URL is not configured");
-      return { ...token, error: "BackendURLMissing" };
+    // Determine the backend URL to use
+    let backendUrl = process.env.INTERNAL_BACKEND_URL;
+    
+    // Fallback to NEXT_PUBLIC_BACKEND_URL if INTERNAL_BACKEND_URL is not set
+    if (!backendUrl) {
+      backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+      console.warn("INTERNAL_BACKEND_URL not configured, using NEXT_PUBLIC_BACKEND_URL");
+    }
+    
+    // Final fallback for Docker environments
+    if (!backendUrl) {
+      backendUrl = "http://backend:5100"; // Assuming backend service name is 'backend'
+      console.warn("No backend URL configured, using Docker service fallback");
     }
 
+    console.log(`Attempting token refresh with backend URL: ${backendUrl}`);
+
     const res = await fetch(
-      `${process.env.INTERNAL_BACKEND_URL}/auth/refresh`,
+      `${backendUrl}/auth/refresh`,
       {
         method: "POST",
         headers: {
@@ -32,12 +43,18 @@ async function refreshToken(token: JWT) {
     );
 
     if (!res.ok) {
-      const errorData = await res.json();
+      const errorData = await res.json().catch(() => ({ message: 'Unknown error' }));
       console.error("Refresh token failed:", errorData);
 
       // If refresh token is invalid, mark for re-authentication
       if (res.status === 401) {
         return { ...token, error: "RefreshTokenExpired" };
+      }
+
+      // For network errors, try with different backend URL
+      if (res.status >= 500 || res.status === 0) {
+        console.error("Backend server error, marking token for refresh retry");
+        return { ...token, error: "BackendServerError" };
       }
 
       throw new Error(errorData?.message || "Token refresh failed");
@@ -72,16 +89,25 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         try {
-          // Check if INTERNAL_BACKEND_URL is configured
-          if (!process.env.INTERNAL_BACKEND_URL) {
-            console.error(
-              "INTERNAL_BACKEND_URL is not configured for authentication"
-            );
-            throw new Error("Server configuration error");
+          // Determine the backend URL to use
+          let backendUrl = process.env.INTERNAL_BACKEND_URL;
+          
+          // Fallback to NEXT_PUBLIC_BACKEND_URL if INTERNAL_BACKEND_URL is not set
+          if (!backendUrl) {
+            backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+            console.warn("INTERNAL_BACKEND_URL not configured, using NEXT_PUBLIC_BACKEND_URL for auth");
+          }
+          
+          // Final fallback for Docker environments
+          if (!backendUrl) {
+            backendUrl = "http://backend:5100"; // Assuming backend service name is 'backend'
+            console.warn("No backend URL configured, using Docker service fallback for auth");
           }
 
+          console.log(`Attempting authentication with backend URL: ${backendUrl}`);
+
           const res = await fetch(
-            `${process.env.INTERNAL_BACKEND_URL}/auth/signin`,
+            `${backendUrl}/auth/signin`,
             {
               method: "POST",
               body: JSON.stringify({

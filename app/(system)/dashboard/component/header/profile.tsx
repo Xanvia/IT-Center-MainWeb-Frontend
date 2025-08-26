@@ -81,6 +81,7 @@ const DropdownProfile = ({ reservation }: props) => {
           }
           alt="User"
           className="h-12 w-12 rounded-full object-cover object-top"
+          unoptimized={!!session?.user.image} // Disable optimization for user uploaded images
         />
 
         {!reservation && (

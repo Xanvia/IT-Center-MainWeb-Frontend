@@ -10,11 +10,11 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Accept build args
+# Accept build args - only variables needed at BUILD TIME
 ARG NEXT_PUBLIC_BACKEND_URL
 ARG NEXT_PUBLIC_SITE_KEY
 
-# Set as environment variables for the build
+# Set as environment variables for the build - only public variables are embedded
 ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
 ENV NEXT_PUBLIC_SITE_KEY=$NEXT_PUBLIC_SITE_KEY
 
@@ -37,6 +37,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 ENV NODE_ENV=production
 ENV PORT=5000
 ENV HOSTNAME="0.0.0.0"
+
+# NOTE: Runtime environment variables (INTERNAL_BACKEND_URL, NEXTAUTH_SECRET, NEXTAUTH_URL)
+# should be provided when running the container, not during build time
 
 # Switch to non-root user
 USER nextjs
