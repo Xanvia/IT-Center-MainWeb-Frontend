@@ -81,7 +81,6 @@ export default function InteractiveLogRow() {
             images: [
               ...(prev.images || []),
               ...data.paths.map((path: string) => ({
-                id: crypto.randomUUID(),
                 path: path,
               })),
             ],
