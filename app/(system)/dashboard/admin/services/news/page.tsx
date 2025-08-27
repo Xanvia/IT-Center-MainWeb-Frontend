@@ -61,6 +61,7 @@ export default function InteractiveNewsRow() {
   });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [newsToDelete, setNewsToDelete] = useState<News | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time?.split(":");
@@ -111,6 +112,7 @@ export default function InteractiveNewsRow() {
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files && files.length > 0) {
+      setIsUploading(true);
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
         formData.append("content", files[i]);
@@ -144,6 +146,8 @@ export default function InteractiveNewsRow() {
       } catch (error) {
         console.error(error);
         toast({ description: "Failed to upload images" });
+      } finally {
+        setIsUploading(false);
       }
     }
   };
@@ -464,7 +468,9 @@ export default function InteractiveNewsRow() {
                 />
               </div>
               <DialogFooter>
-                <Button type="submit">Add News</Button>
+                <Button type="submit" disabled={isUploading}>
+                  {isUploading ? "Uploading..." : "Add News"}
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -622,6 +628,16 @@ export default function InteractiveNewsRow() {
                     multiple
                   />
                 </div>
+                <DialogFooter>
+                  <div className="flex space-x-2">
+                    <Button onClick={saveEdit} disabled={isUploading}>
+                      {isUploading ? "Uploading..." : "Save Changes"}
+                    </Button>
+                    <Button variant="outline" onClick={() => setIsEditing(false)}>
+                      Cancel
+                    </Button>
+                  </div>
+                </DialogFooter>
               </form>
             )}
             <DialogFooter>
@@ -631,14 +647,7 @@ export default function InteractiveNewsRow() {
                   Edit News
                 </Button>
               )}
-              {isEditing && (
-                <div className="flex space-x-2">
-                  <Button onClick={saveEdit}>Save Changes</Button>
-                  <Button variant="outline" onClick={() => setIsEditing(false)}>
-                    Cancel
-                  </Button>
-                </div>
-              )}
+              {/* Save Changes button now handled inside the form above when editing */}
             </DialogFooter>
           </DialogContent>
         </Dialog>

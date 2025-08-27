@@ -55,10 +55,12 @@ export default function InteractiveProjectRow() {
   });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files && files.length > 0) {
+      setIsUploading(true);
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
         formData.append("content", files[i]);
@@ -92,6 +94,8 @@ export default function InteractiveProjectRow() {
       } catch (error) {
         console.error(error);
         toast({ description: "Failed to upload images" });
+      } finally {
+        setIsUploading(false);
       }
     }
   };
@@ -425,7 +429,9 @@ export default function InteractiveProjectRow() {
                 />
               </div>
               <DialogFooter>
-                <Button type="submit">Add Project</Button>
+                <Button type="submit" disabled={isUploading}>
+                  {isUploading ? "Uploading..." : "Add Project"}
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -551,6 +557,16 @@ export default function InteractiveProjectRow() {
                     multiple
                   />
                 </div>
+                <DialogFooter>
+                  <div className="flex space-x-2">
+                    <Button onClick={saveEdit} disabled={isUploading}>
+                      {isUploading ? "Uploading..." : "Save Changes"}
+                    </Button>
+                    <Button variant="outline" onClick={() => setIsEditing(false)}>
+                      Cancel
+                    </Button>
+                  </div>
+                </DialogFooter>
               </form>
             )}
             <DialogFooter>
@@ -560,14 +576,7 @@ export default function InteractiveProjectRow() {
                   Edit Project
                 </Button>
               )}
-              {isEditing && (
-                <div className="flex space-x-2">
-                  <Button onClick={saveEdit}>Save Changes</Button>
-                  <Button variant="outline" onClick={() => setIsEditing(false)}>
-                    Cancel
-                  </Button>
-                </div>
-              )}
+              {/* Save Changes button now handled inside the form above when editing */}
             </DialogFooter>
           </DialogContent>
         </Dialog>
