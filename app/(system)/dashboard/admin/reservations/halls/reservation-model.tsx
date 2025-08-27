@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Reservation } from "@/utils/types";
 import { toast } from "@/hooks/use-toast";
+import { getAbsoluteImageUrl } from "@/utils/common";
 import Axios from "@/config/axios";
 import { delay } from "@/utils/common";
 import { useSession } from "next-auth/react";
@@ -272,7 +273,7 @@ export default function ReservationModal({
                   {formData.images.map((image, index) => (
                     <div key={index} className="relative ">
                       <img
-                        src={image}
+                        src={getAbsoluteImageUrl(image) || "/placeholder.jpg"}
                         alt={`image:${index}`}
                         className="h-20"
                       />

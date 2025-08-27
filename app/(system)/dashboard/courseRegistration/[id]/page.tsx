@@ -18,6 +18,7 @@ import { type LucideIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import axios from "@/config/axios";
 import Axios from "@/config/axios";
+import { getAbsoluteImageUrl } from "@/utils/common";
 
 interface Course {
   id: string;
@@ -194,7 +195,7 @@ export default function CourseDetailPage() {
             </h1>
             <div className="relative h-max sm:h-96">
               <img
-                src={course.images[0]}
+                src={getAbsoluteImageUrl(course.images[0]) || "/placeholder.jpg"}
                 alt={course.courseName}
                 className="rounded-lg h-full object-cover"
               />

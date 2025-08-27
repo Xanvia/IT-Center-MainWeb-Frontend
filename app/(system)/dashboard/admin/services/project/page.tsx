@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Axios from "@/config/axios";
-import { delay } from "@/utils/common";
+import { delay, getAbsoluteImageUrl } from "@/utils/common";
 import { toast } from "@/hooks/use-toast";
 
 interface Project {
@@ -53,6 +53,8 @@ export default function InteractiveProjectRow() {
     images: [],
     date: "",
   });
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -141,8 +143,12 @@ export default function InteractiveProjectRow() {
       });
 
       setProjects(projects.filter((project) => project.id !== id));
+      setDeleteDialogOpen(false);
+      setProjectToDelete(null);
     } catch (error) {
       console.error("Error while removing project:", error);
+      setDeleteDialogOpen(false);
+      setProjectToDelete(null);
     }
   };
 
@@ -270,11 +276,7 @@ export default function InteractiveProjectRow() {
             <Card key={project.id} className="flex flex-col h-[400px]">
               <div className="h-[200px] relative">
                 <img
-                  src={
-                    project.images && project.images[0]
-                      ? project.images[0].path
-                      : ""
-                  }
+                  src={getAbsoluteImageUrl(project.images && project.images[0] ? project.images[0].path : "/placeholder.jpg")}
                   alt={project.title}
                   className="w-full h-full object-cover"
                 />
@@ -282,7 +284,10 @@ export default function InteractiveProjectRow() {
                   variant="destructive"
                   size="icon"
                   className="absolute top-2 right-2"
-                  onClick={() => removeProject(project.id)}
+                  onClick={() => {
+                    setProjectToDelete(project);
+                    setDeleteDialogOpen(true);
+                  }}
                 >
                   <X className="h-4 w-4" />
                   <span className="sr-only">Remove project</span>
@@ -389,7 +394,7 @@ export default function InteractiveProjectRow() {
                   {newProject.images.map((image, index) => (
                     <div key={index} className="relative ">
                       <img
-                        src={image.path}
+                        src={getAbsoluteImageUrl(image.path) || "/placeholder.jpg"}
                         alt={`image:${index}`}
                         className="h-20"
                       />
@@ -446,8 +451,8 @@ export default function InteractiveProjectRow() {
                 <img
                   src={
                     viewingProject.images && viewingProject.images[0]
-                      ? viewingProject.images[0].path
-                      : ""
+                      ? getAbsoluteImageUrl(viewingProject.images[0].path)
+                      : "/placeholder.jpg"
                   }
                   alt={viewingProject.title}
                   className="w-full h-48 object-cover rounded-md"
@@ -516,7 +521,7 @@ export default function InteractiveProjectRow() {
                     {newProject.images.map((image, index) => (
                       <div key={index} className="relative ">
                         <img
-                          src={image.path}
+                          src={getAbsoluteImageUrl(image.path) || "/placeholder.jpg"}
                           alt={`image:${index}`}
                           className="h-20"
                         />
@@ -563,6 +568,29 @@ export default function InteractiveProjectRow() {
                   </Button>
                 </div>
               )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Confirm Delete</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p>Are you sure you want to delete this project?</p>
+              <p className="text-red-500 font-bold">{projectToDelete?.title}</p>
+            </div>
+            <DialogFooter>
+              <Button
+                variant="destructive"
+                onClick={() => projectToDelete && removeProject(projectToDelete.id)}
+              >
+                Yes, Delete
+              </Button>
+              <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+                Cancel
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

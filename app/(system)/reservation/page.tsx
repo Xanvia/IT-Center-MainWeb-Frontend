@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Reservation } from "@/utils/types";
 import Axios from "@/config/axios";
 import { useRouter } from "next/navigation";
+import { getAbsoluteImageUrl } from "@/utils/common";
 
 export default function Reservations() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
@@ -48,7 +49,7 @@ export default function Reservations() {
               alt={`Image of ${room.name}`}
               className="w-full h-48 object-cover"
               height="200"
-              src={room.images[0]}
+              src={getAbsoluteImageUrl(room.images[0]) || "/placeholder.jpg"}
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",

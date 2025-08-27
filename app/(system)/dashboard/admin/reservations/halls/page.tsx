@@ -13,6 +13,7 @@ import {
 import ReservationModal from "./reservation-model";
 import { Reservation } from "@/utils/types";
 import { toast } from "@/hooks/use-toast";
+import { getAbsoluteImageUrl } from "@/utils/common";
 import Axios from "@/config/axios";
 import { useSession } from "next-auth/react";
 
@@ -118,7 +119,7 @@ export default function AdminReservations() {
                 alt={`Image of ${reservation.name}`}
                 className="w-full h-48 object-cover"
                 height="200"
-                src={reservation.images[0]}
+                src={getAbsoluteImageUrl(reservation.images[0]) || "/placeholder.jpg"}
                 style={{
                   aspectRatio: "300/200",
                   objectFit: "cover",

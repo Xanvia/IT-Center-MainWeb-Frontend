@@ -1,5 +1,6 @@
 "use client";
 import Axios from "@/config/axios";
+import { getAbsoluteImageUrl } from "@/utils/common";
 import { useEffect, useState } from "react";
 
 type Log = {
@@ -50,7 +51,7 @@ const LogPage: React.FC = () => {
           <div>
             <h2 className="text-xl font-bold mb-4">{selectedLog.title}</h2>
             <img
-              src={selectedLog.images && selectedLog.images[0]?.path}
+              src={selectedLog.images && getAbsoluteImageUrl(selectedLog.images[0]?.path) || "/placeholder.jpg"}
               alt={selectedLog.title}
               className="w-full h-64 object-cover rounded-lg mb-4"
             />

@@ -2,6 +2,7 @@
 
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import { Course } from "@/utils/types";
+import { getAbsoluteImageUrl } from "@/utils/common";
 
 // Course card interface : Main web pages
 export type { Course };
@@ -27,7 +28,7 @@ export default function CourseCard({
       <CardHeader className="p-2">
         <div className="w-full h-48 overflow-hidden rounded-sm">
           <img
-            src={image || "/placeholder.jpg"}
+            src={ getAbsoluteImageUrl(image) || "/placeholder.jpg"}
             alt={name}
             className="w-full h-full object-cover"
           />

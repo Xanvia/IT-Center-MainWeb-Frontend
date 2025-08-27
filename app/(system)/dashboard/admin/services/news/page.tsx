@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Axios from "@/config/axios";
-import { delay } from "@/utils/common";
+import { delay, getAbsoluteImageUrl } from "@/utils/common";
 import { toast } from "@/hooks/use-toast";
 
 interface News {
@@ -59,6 +59,8 @@ export default function InteractiveNewsRow() {
     time: "",
     venue: "",
   });
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [newsToDelete, setNewsToDelete] = useState<News | null>(null);
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time?.split(":");
@@ -156,8 +158,12 @@ export default function InteractiveNewsRow() {
       });
 
       setNews(news.filter((news) => news.id !== id));
+      setDeleteDialogOpen(false);
+      setNewsToDelete(null);
     } catch (error) {
       console.error("Error while removing news:", error);
+      setDeleteDialogOpen(false);
+      setNewsToDelete(null);
     }
   };
 
@@ -274,7 +280,7 @@ export default function InteractiveNewsRow() {
             <Card key={news.id} className="flex flex-col h-[400px]">
               <div className="h-[200px] relative">
                 <img
-                  src={news.images && news.images[0] ? news.images[0].path : ""}
+                  src={getAbsoluteImageUrl(news.images && news.images[0] ? news.images[0].path : "/placeholder.jpg")}
                   alt={news.title}
                   className="w-full h-full object-cover"
                 />
@@ -282,7 +288,10 @@ export default function InteractiveNewsRow() {
                   variant="destructive"
                   size="icon"
                   className="absolute top-2 right-2"
-                  onClick={() => removeNews(news.id)}
+                  onClick={() => {
+                    setNewsToDelete(news);
+                    setDeleteDialogOpen(true);
+                  }}
                 >
                   <X className="h-4 w-4" />
                   <span className="sr-only">Remove news</span>
@@ -424,7 +433,7 @@ export default function InteractiveNewsRow() {
                   {newNews.images.map((image, index) => (
                     <div key={index} className="relative ">
                       <img
-                        src={image.path}
+                        src={getAbsoluteImageUrl(image.path) || "/placeholder.jpg"}
                         alt={`image:${index}`}
                         className="h-20"
                       />
@@ -479,11 +488,7 @@ export default function InteractiveNewsRow() {
             {viewingNews && !isEditing && (
               <div className="space-y-4">
                 <img
-                  src={
-                    viewingNews.images && viewingNews.images[0]
-                      ? viewingNews.images[0].path
-                      : ""
-                  }
+                  src={getAbsoluteImageUrl(viewingNews.images && viewingNews.images[0] ? viewingNews.images[0].path : "/placeholder.jpg")}
                   alt={viewingNews.title}
                   className="w-full h-48 object-cover rounded-md"
                 />
@@ -587,7 +592,7 @@ export default function InteractiveNewsRow() {
                     {newNews.images.map((image, index) => (
                       <div key={index} className="relative ">
                         <img
-                          src={image.path}
+                          src={getAbsoluteImageUrl(image.path) || "/placeholder.jpg"}
                           alt={`image:${index}`}
                           className="h-20"
                         />
@@ -634,6 +639,29 @@ export default function InteractiveNewsRow() {
                   </Button>
                 </div>
               )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Confirm Delete</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p>Are you sure you want to delete this news?</p>
+              <p className="text-red-500 font-bold">{newsToDelete?.title}</p>
+            </div>
+            <DialogFooter>
+              <Button
+                variant="destructive"
+                onClick={() => newsToDelete && removeNews(newsToDelete.id)}
+              >
+                Yes, Delete
+              </Button>
+              <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+                Cancel
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

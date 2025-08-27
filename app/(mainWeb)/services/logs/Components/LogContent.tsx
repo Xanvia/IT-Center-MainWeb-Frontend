@@ -1,3 +1,4 @@
+import { getAbsoluteImageUrl } from '@/utils/common';
 import { Log } from '../data/logs'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -21,7 +22,7 @@ export function LogContent({ selectedLog }: LogContentProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <img
-          src={selectedLog.imageUrl}
+          src={getAbsoluteImageUrl(selectedLog.imageUrl) || "/placeholder.jpg"}
           alt={`Illustration for ${selectedLog.name}`}
           className="mx-auto h-48 w-48 rounded-lg object-cover"
         />

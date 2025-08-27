@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { toast } from "@/hooks/use-toast";
+import { getAbsoluteImageUrl } from "@/utils/common";
 import Axios from "@/config/axios";
 import CourseModal from "./course-model";
 import { useSession } from "next-auth/react";
@@ -134,7 +135,7 @@ export default function AdminCourses() {
                 alt={`Image of ${course.courseName}`}
                 className="w-full h-48 object-cover"
                 height="100"
-                src={course.images[0]}
+                src={getAbsoluteImageUrl(course.images[0]) || "/placeholder.jpg"}
                 style={{
                   aspectRatio: "200/100",
                   objectFit: "cover",

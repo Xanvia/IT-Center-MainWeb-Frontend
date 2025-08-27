@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/carousel";
 import Link from "next/link";
 import { PiArrowRightBold } from "react-icons/pi";
+import { getAbsoluteImageUrl } from "@/utils/common";
 
 type Project = {
   id: string;
@@ -69,7 +70,7 @@ export default function ProjectSlider() {
                       <div className="w-full md:w-1/2 h-48 md:h-full relative">
                         <img
                           src={
-                            (project.images && project.images[0]?.path) ||
+                            (project.images && getAbsoluteImageUrl(project.images[0]?.path)) ||
                             "/placeholder.jpg"
                           }
                           alt={project.title}

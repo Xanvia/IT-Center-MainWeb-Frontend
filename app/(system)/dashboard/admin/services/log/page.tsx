@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Axios from "@/config/axios";
-import { delay } from "@/utils/common";
+import { delay, getAbsoluteImageUrl } from "@/utils/common";
 import { toast } from "@/hooks/use-toast";
 
 interface Log {
@@ -53,6 +53,8 @@ export default function InteractiveLogRow() {
     images: [],
     date: "",
   });
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [logToDelete, setLogToDelete] = useState<Log | null>(null);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -141,8 +143,12 @@ export default function InteractiveLogRow() {
       });
 
       setLogs(logs.filter((log) => log.id !== id));
+      setDeleteDialogOpen(false);
+      setLogToDelete(null);
     } catch (error) {
       console.error("Error while removing log:", error);
+      setDeleteDialogOpen(false);
+      setLogToDelete(null);
     }
   };
 
@@ -261,7 +267,7 @@ export default function InteractiveLogRow() {
             <Card key={log.id} className="flex flex-col h-[400px]">
               <div className="h-[200px] relative">
                 <img
-                  src={log.images && log.images[0] ? log.images[0].path : ""}
+                  src={getAbsoluteImageUrl(log.images && log.images[0] ? log.images[0].path : "/placeholder.jpg")}
                   alt={log.title}
                   className="w-full h-full object-cover"
                 />
@@ -269,7 +275,10 @@ export default function InteractiveLogRow() {
                   variant="destructive"
                   size="icon"
                   className="absolute top-2 right-2"
-                  onClick={() => removeLog(log.id)}
+                  onClick={() => {
+                    setLogToDelete(log);
+                    setDeleteDialogOpen(true);
+                  }}
                 >
                   <X className="h-4 w-4" />
                   <span className="sr-only">Remove log</span>
@@ -376,7 +385,7 @@ export default function InteractiveLogRow() {
                   {newLog.images.map((image, index) => (
                     <div key={index} className="relative ">
                       <img
-                        src={image.path}
+                        src={getAbsoluteImageUrl(image.path) || "/placeholder.jpg"}
                         alt={`image:${index}`}
                         className="h-20"
                       />
@@ -431,11 +440,7 @@ export default function InteractiveLogRow() {
             {viewingLog && !isEditing && (
               <div className="space-y-4">
                 <img
-                  src={
-                    viewingLog.images && viewingLog.images[0]
-                      ? viewingLog.images[0].path
-                      : ""
-                  }
+                  src={getAbsoluteImageUrl(viewingLog.images && viewingLog.images[0] ? viewingLog.images[0].path : "/placeholder.jpg")}
                   alt={viewingLog.title}
                   className="w-full h-48 object-cover rounded-md"
                 />
@@ -503,7 +508,7 @@ export default function InteractiveLogRow() {
                     {newLog.images.map((image, index) => (
                       <div key={index} className="relative ">
                         <img
-                          src={image.path}
+                          src={getAbsoluteImageUrl(image.path) || "/placeholder.jpg"}
                           alt={`image:${index}`}
                           className="h-20"
                         />
@@ -550,6 +555,29 @@ export default function InteractiveLogRow() {
                   </Button>
                 </div>
               )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Confirm Delete</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p>Are you sure you want to delete this log?</p>
+              <p className="text-red-500 font-bold">{logToDelete?.title}</p>
+            </div>
+            <DialogFooter>
+              <Button
+                variant="destructive"
+                onClick={() => logToDelete && removeLog(logToDelete.id)}
+              >
+                Yes, Delete
+              </Button>
+              <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+                Cancel
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

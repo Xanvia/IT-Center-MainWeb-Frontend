@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { getAbsoluteImageUrl } from "@/utils/common";
 import Axios from "@/config/axios";
 import { delay } from "@/utils/common";
 import { Course } from "@/utils/types";
@@ -301,7 +302,7 @@ export default function CourseModal({
                   {formData.images.map((image, index) => (
                     <div className="relative ">
                       <img
-                        src={image}
+                        src={getAbsoluteImageUrl(image) || "/placeholder.jpg"}
                         alt={`image:${index}`}
                         className="h-20"
                       />

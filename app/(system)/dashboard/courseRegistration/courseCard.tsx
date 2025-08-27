@@ -1,5 +1,6 @@
 // card.tsx
 
+import { getAbsoluteImageUrl } from "@/utils/common";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import { Banknote, Calendar } from "lucide-react";
 
@@ -24,7 +25,7 @@ export default function CourseCard({
       <CardHeader className="p-2">
         <div className="w-full h-40 overflow-hidden rounded-sm">
           <img
-            src={image || "/placeholder.jpg"}
+            src={getAbsoluteImageUrl(image) || "/placeholder.jpg"}
             alt={name}
             className="w-full h-full object-cover"
           />
