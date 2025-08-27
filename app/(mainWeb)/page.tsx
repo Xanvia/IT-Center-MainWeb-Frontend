@@ -59,11 +59,11 @@ export default function Home() {
               </h3>
             </div>
             <div className="mt-10 md:space-x-5">
-              <Link href={"/dashboard"}>
+              <a href={"/dashboard"}>
                 <button className="bg-yellow-100 hover:bg-transparent text-maroon border-maroon hover:text-yellow-200 font-bold py-2 px-4 border hover:border-yellow-200 rounded-lg sm:inline-block block w-52 md:w-auto">
                   Dashboard
                 </button>
-              </Link>
+              </a>
 
               <Link href={"/dashboard/courseRegistration"}>
                 <button className="backdrop-blur-md hover:bg-yellow-200 text-yellow-200 font-bold hover:border-transparent hover:text-maroon py-2 px-4 border border-yellow-200 rounded-lg my-5 md:my-0 w-52 md:w-auto">

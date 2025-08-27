@@ -8,7 +8,21 @@ interface props {
 export const SignButtons = ({ reservation }: props) => {
   return (
     <div className="flex gap-2">
-      <div className={reservation ? "pl-5" : ""}>
+      {reservation && (
+        <div className="pl-5">
+          <Link href={"/dashboard"}>
+            <Button
+              className={`text-white  ${
+                reservation ? " bg-yellow-500" : " bg-maroon "
+              }`}
+              size={reservation ? "sm" : "md"}
+            >
+              Dashboard
+            </Button>
+          </Link>
+        </div>
+       )} 
+      <div >
         <Link href={"/auth/signin"}>
           <Button
             className={`text-white sm:block hidden ${
