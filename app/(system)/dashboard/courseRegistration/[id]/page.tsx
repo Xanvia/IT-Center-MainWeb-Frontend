@@ -189,8 +189,8 @@ export default function CourseDetailPage() {
     return (
       <main className="flex-grow container mx-auto py-3">
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="md:col-span-2 h-full flex flex-col justify-between">
-            <h1 className="text-2xl font-bold mb-4 text-maroon">
+          <div className="md:col-span-2 h-full flex flex-col">
+            <h1 className="text-2xl font-bold mb-2 text-maroon">
               {course.courseName}
             </h1>
             <div className="relative h-max sm:h-96">
