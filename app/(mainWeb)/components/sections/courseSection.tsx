@@ -79,17 +79,20 @@ export default function CourseSection() {
         ))}
       </div>
       <button>
+          <Link href={"/courses"}>
+
         <div className="flex items-center justify-center group">
-          <span className="mr-0 text-2xl text-red-800 hover:text-red-700">
+         
+           <span className="mr-0 text-2xl text-red-800 hover:text-red-700">
             More courses
           </span>
-          <Link href={"/courses"}>
             <PiArrowRightBold
               color="maroon"
               className="group-hover:translate-x-2 duration-300 text-xl"
             />
-          </Link>
         </div>
+          </Link>
+
       </button>
     </div>
   );

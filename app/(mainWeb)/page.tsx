@@ -140,17 +140,19 @@ export default function Home() {
         <NewsCards />
 
         <button>
+            <Link href={"/news"}>
+
           <div className="flex items-center justify-center group mb-10">
             <span className="mr-0 sm:text-2xl text-xl text-red-800 hover:text-red-700">
               More news
             </span>
-            <Link href={"/news"}>
               <PiArrowRightBold
                 color="maroon"
                 className="group-hover:translate-x-2 duration-300 text-xl"
               />
-            </Link>
           </div>
+            </Link>
+
         </button>
       </div>
 

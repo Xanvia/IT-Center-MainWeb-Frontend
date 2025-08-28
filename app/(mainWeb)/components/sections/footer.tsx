@@ -59,9 +59,15 @@ const Footer = () => {
           <nav className="w-44 md:mx-3 ">
             <h6 className="footer-title text-yellow-300">Other Links</h6>
             {footerOtherLinks.map((item: footerLinksTypes) => (
-              <Link key={item.id} href={item.url} className="overflow-hidden">
+                <Link
+                key={item.id}
+                href={item.url}
+                className="overflow-hidden"
+                target="_blank"
+                rel="noopener noreferrer"
+                >
                 {item.id}
-              </Link>
+                </Link>
             ))}
           </nav>
         </div>
