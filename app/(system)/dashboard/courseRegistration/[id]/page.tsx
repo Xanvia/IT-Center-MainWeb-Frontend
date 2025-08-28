@@ -25,7 +25,7 @@ interface Course {
   courseCode: string;
   courseName: string;
   description: string;
-  images: string;
+  images: string[];
   duration: string;
   fees: number;
   startingDate: string;
@@ -83,6 +83,7 @@ export default function CourseDetailPage() {
         );
         if (response.ok) {
           const data = await response.json();
+          console.log("Course data:", data);
           setCourse(data);
         } else {
           toast({ description: "Failed to fetch course details." });
@@ -193,13 +194,32 @@ export default function CourseDetailPage() {
             <h1 className="text-2xl font-bold mb-2 text-maroon">
               {course.courseName}
             </h1>
-            <div className="relative h-max sm:h-96">
-              <img
-                src={getAbsoluteImageUrl(course.images[0]) || "/placeholder.jpg"}
-                alt={course.courseName}
-                className="rounded-lg h-full object-cover"
-              />
-            </div>
+            {(() => {
+              const imagesArr: string[] = Array.isArray(course.images) ? course.images : [];
+              return (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 h-max sm:h-96">
+                  {/* Main Image */}
+                  <div className="sm:col-span-2 h-64 sm:h-full relative">
+                    <img
+                      src={getAbsoluteImageUrl(imagesArr[0]) || "/placeholder.jpg"}
+                      alt={course.courseName}
+                      className="rounded-lg w-full h-full object-cover"
+                    />
+                  </div>
+                  {/* Thumbnails */}
+                  <div className="flex flex-col gap-4 sm:col-span-1 h-64 sm:h-full">
+                    {imagesArr.slice(1, 3).map((img: string, idx: number) => (
+                      <img
+                        key={idx}
+                        src={getAbsoluteImageUrl(img) || "/placeholder.jpg"}
+                        alt={`${course.courseName} thumbnail ${idx + 2}`}
+                        className="rounded-lg w-full h-1/2 object-cover"
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
           <div className="md:col-span-1">
             <Card className="w-full max-w-md">
