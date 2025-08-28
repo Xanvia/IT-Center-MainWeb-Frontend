@@ -40,6 +40,7 @@ export default function CourseModal({
     startingDate: "",
     endingDate: "",
   });
+  const [isUploading, setIsUploading] = useState(false);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function CourseModal({
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files && files.length > 0) {
+      setIsUploading(true);
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
         formData.append("course", files[i]);
@@ -85,6 +87,8 @@ export default function CourseModal({
       } catch (error) {
         console.error(error);
         toast({ description: "Failed to upload images" });
+      } finally {
+        setIsUploading(false);
       }
     }
   };
@@ -338,7 +342,7 @@ export default function CourseModal({
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button className="bg-maroon" type="submit">
+            <Button className="bg-maroon" type="submit" disabled={isUploading && !!course}>
               Save
             </Button>
           </div>

@@ -25,37 +25,35 @@ export const aboutus: aboutUs[] = [
 export const pastDirectors = [
   {
     id: 1,
-    imgSrc: "/users/generalUser.png",
-    name: "Dr. Upul Jayasinghe",
-    edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
-    mail: "director.ceit@gs.pdn.ac.lk",
-    mobno1: "+94 81 2384848/ ",
-    mobno2: "+94 81 2392901",
+    imgSrc: "/users/directors/dir1.jpg",
+    name: "Prof. K. M. Liyanage",
+    edu: "B.Sc(Pera), MSc(Japan), PhD(Japan)",
+    department: "Department of Electrical and Electronic Engineering, Faculty of Engineering"
+    
   },
   {
     id: 2,
-    imgSrc: "/users/generalUser.png",
-    name: "Dr. Upul Jayasinghe",
-    edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
-    mail: "director.ceit@gs.pdn.ac.lk",
-    mobno1: "+94 81 2384848",
+    imgSrc: "/users/directors/dir2.jpg",
+    name: "Prof. P. M. K. Alahakoon",
+    edu: "B.Sc(Pera), MSc(Virginia,USA), PhD(Missouri,USA)",
+    department: "Department of Agriculture Engineering, Faculty of Agricultureture"
+    
+    
   },
   {
     id: 3,
-    imgSrc: "/users/generalUser.png",
-    name: "Dr. Upul Jayasinghe",
-    edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
-    mail: "director.ceit@gs.pdn.ac.lk",
-    mobno1: "+94 81 2384848/ ",
-    mobno2: "+94 81 2392901",
+    imgSrc: "/users/directors/dir3.png",
+    name: "Prof. S. R. Kodithuwakku",
+    edu: "B.Sc(Pera), MSc(Thailand), PhD(Australia)",
+    department: "Department of Statistics and Computer Science, Faculty of Science"
+    
   },
   {
     id: 4,
-    imgSrc: "/users/generalUser.png",
-    name: "Dr. Upul Jayasinghe",
-    edu: "Ph.D. (UK), M.Eng. (Thailand), B.Sc(Moratuwa)",
-    mail: "director.ceit@gs.pdn.ac.lk",
-    mobno1: "+94 81 2384848/ ",
-    mobno2: "+94 81 2392901",
+    imgSrc: "/users/directors/dir4.jpg",
+    name: "Dr. J. V. Wijayakulasooriya",
+    edu: "B.Sc(Pera), PhD(UK)",
+    department: "Department of Electrical and Electronic Engineering, Faculty of Engineering"
+   
   },
 ];

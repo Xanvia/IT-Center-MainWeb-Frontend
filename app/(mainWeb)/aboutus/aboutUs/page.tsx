@@ -28,25 +28,27 @@ const Home: React.FC = () => {
       </div>
       {/* Implementation para */}
       <div className="bg-yellow-100 py-10 my-10">
-        <div className="text-center inline ">
-          <div className="headline text-2xl py-4 pb-8 font-semibold">
-            Implementation Details and Career
+        <div className="inline ">
+          <div className="headline text-center text-2xl py-4 pb-8 font-semibold">
+            Origination of Information Technology Center of University of Peradeniya
           </div>
           <div className="px-10 pb-2">
             <p className="px-8">
-              A new two storied building of floor space of 20,000 square feet
-              constructed using the funds available for year 2001 from U.G.C.
-              under its special IT project. The completion of the building was
-              expected in 2002. As promised by the U.G.C. equipment, furniture,
-              services made available from year 2002. The syllabi and other
-              details of the main diploma programme were submitted to the Senet
-              for its approval. Then Since 2003 to present, the Information
-              Technology Center has offered Short Courses, Diploma in basic ITC
-              skills and provided IT facilities for Students of the University
-              of peradeniya.
+                The need for the trained people who have the ability to adapt to changes have brought this concept. Evolving technologies, has always been a challenge faced in any country. In a country like Sri Lanka coping with the increasing importance of information and knowledge base activities in all sectors is a great challenge. Some of the main objectives of building Information Technology Center are mentioned below:
+                <ul className="list-disc pl-8 py-2">
+                  <li>Provide training and promote utilization of modern technologies related to ITC in all sectors of the University.</li>
+                  <li>Provide coordination and communications among ITC related facilities within the University.</li>
+                  <li>Provide advisory services to the public and private sector organizations.</li>
+                  <li>Carry out research and development activities beneficial to the university and the industry.</li>
+                  <li>Enhance the competitiveness of University of Peradeniya as a higher education institute.</li>
+                  <li>Promote public/private sector partnerships in the area of ITC.</li>
+                </ul>
+                <br />
+                <b>Implementation Details and Career</b><br />
+                A new two storied building of floor space of 20,000 square feet constructed using the funds available for year 2001 from U.G.C. under its special IT project. The completion of the building was expected in 2002. As promised by the U.G.C. equipment, furniture, services made available from year 2002. The syllabi and other details of the main diploma programme were submitted to the Senet for its approval. Then since 2003 to present, the Information Technology Center has offered Short Courses, Diploma in basic ITC skills and provided IT facilities for Students of the University of Peradeniya.
             </p>
           </div>
-          <div className=" text-sm underline-offset-4 py-4 px-6 ">
+          <div className="text-center text-sm underline-offset-4 py-4 px-6 ">
             Projects and some important work done by Information Technology
             Center from the beginning is mentioned under Projects.
           </div>

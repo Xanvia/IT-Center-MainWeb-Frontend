@@ -11,6 +11,7 @@ export type News = {
   time: string;
   images: { id: string; path: string }[];
   venue: string;
+  createdAt:string;
 };
 
 const Home: React.FC = () => {
@@ -19,7 +20,12 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchNews = async () => {
       const result = await Axios.get("/contents/news");
-      setNews(result.data);
+      console.log("Fetching news...", result.data);
+    // Sort news by date (latest first)
+      const sortedNews = result.data.sort(
+        (a: News, b: News) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+    setNews(sortedNews);
     };
     fetchNews();
   }, []);

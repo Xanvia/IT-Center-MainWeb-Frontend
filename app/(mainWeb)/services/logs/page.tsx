@@ -1,6 +1,13 @@
 "use client";
 import Axios from "@/config/axios";
 import { getAbsoluteImageUrl } from "@/utils/common";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
 import { useEffect, useState } from "react";
 
 type Log = {
@@ -50,11 +57,32 @@ const LogPage: React.FC = () => {
         {selectedLog ? (
           <div>
             <h2 className="text-xl font-bold mb-4">{selectedLog.title}</h2>
-            <img
-              src={selectedLog.images && getAbsoluteImageUrl(selectedLog.images[0]?.path) || "/placeholder.jpg"}
-              alt={selectedLog.title}
-              className="w-full h-64 object-cover rounded-lg mb-4"
-            />
+            {/* Image Slider */}
+            {selectedLog.images && selectedLog.images.length > 0 ? (
+              <div className="relative mb-4 mx-8">
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {selectedLog.images.map((img) => (
+                      <CarouselItem key={img.id}>
+                        <img
+                          src={getAbsoluteImageUrl(img.path)}
+                          alt={selectedLog.title}
+                          className="w-full h-72 object-cover rounded-lg"
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
+              </div>
+            ) : (
+              <img
+                src={"/placeholder.jpg"}
+                alt={selectedLog.title}
+                className="w-full h-64 object-cover rounded-lg mb-4"
+              />
+            )}
             <p>
               {selectedLog.description}
               <p className="mt-5">{selectedLog.date}</p>

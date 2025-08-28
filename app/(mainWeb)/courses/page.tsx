@@ -84,6 +84,9 @@ export default function CourseRegistration() {
                   image={course.images[0]}
                   courseCode={course.courseCode}
                   courseName={course.courseName}
+                  description={course.description}
+                  duration={course.duration}
+                  startingDate={course.startingDate}
                   id={course.id}
                 />
               </div>

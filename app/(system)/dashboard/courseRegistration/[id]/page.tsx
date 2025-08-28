@@ -263,6 +263,17 @@ export default function CourseDetailPage() {
                   <Calendar className="mr-2 h-4 w-4" />
                   Request for Enroll
                 </Button>
+                {(session?.user.role === "USER" || !session) && (
+                  <div className="mt-4 text-center">
+                    <span className="text-red-600 block">You have to register as a student first.</span>
+                    <a
+                      href="/dashboard/studentReg"
+                      className="text-yellow-600 hover:text-yellow-800"
+                    >
+                      Click here
+                    </a>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

@@ -229,7 +229,7 @@ export default function NavBar() {
                           href="/aboutus/aboutUs"
                           className="text-black  hover:text-gray-500"
                         >
-                          AboutUs
+                          ITCenter
                         </Link>
                       </li>
                     </ul>
